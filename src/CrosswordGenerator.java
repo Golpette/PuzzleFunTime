@@ -4,7 +4,7 @@ import java.util.*;
 public class CrosswordGenerator{
 
 	public static void main(String args[])throws IOException{
-		int crosswordSize = 10;
+		int crosswordSize = 3;
 		int gridSize = crosswordSize + 2;
 		int x = gridSize;     
 		int y = gridSize;
@@ -23,14 +23,14 @@ public class CrosswordGenerator{
 				}
 			}	
 			ArrayList<Entry> entries = new ArrayList<Entry>();
-			for( int trys=0; trys < 10000; trys++){			//Try to fit a word a number of times. Randomly set direction.
+			for( int trys=0; trys < 10000; trys++){
 				Random r = new Random();
 				boolean direction = r.nextBoolean();
 				if(!direction){
-					FitWords.fitEntryAcross(grid, x, y, words, entries);
+					new FitWords(grid, x, y, words, entries, true);
 				}
 				else{
-					FitWords.fitEntryDown(grid, x, y, words, entries);
+					new FitWords(grid, x, y, words, entries, false);
 				}
 			}
 			gridInit = new String[x][y];			//Generate  2 lists of ACROSS and DOWN clues from 'entries' and generate

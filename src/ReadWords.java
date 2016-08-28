@@ -22,7 +22,7 @@ public class ReadWords {
 				
 				//attempting to use delimiters to break up definitions to read random definition
 				
-				int noDefinitions = 0;
+				//int noDefinitions = 0;
 				while(true){
 					String temp = "";
 					try{
@@ -33,7 +33,7 @@ public class ReadWords {
 					}
 					temp = definition;
 					definitions.add(temp);
-					noDefinitions++;
+					//noDefinitions++;
 				}		
 				definitions.add(definition);
 				Word wordObj = new Word(word, definition);		
