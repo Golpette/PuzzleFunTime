@@ -60,7 +60,6 @@ public class DrawProblem extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setVisible(true);
 	}
-
 	
 	protected void paintComponent(Graphics g) {
 		int width = getWidth(), height = getHeight();
@@ -91,9 +90,9 @@ public class DrawProblem extends JComponent implements ActionListener {
 		myFont = new Font("Times New Roman", Font.PLAIN , 12);
 		g.setFont(myFont);
 		int lineNumber = -1;
-		for( int cl=0; cl<cluesACROSS.size(); cl++){
+		for(int cl=0; cl<cluesACROSS.size(); cl++){
 			lineNumber++;
-			y_coord = oy+SITE_LENGTH + (17*( lineNumber +1));
+			y_coord = oy+SITE_LENGTH + (17*(lineNumber + 1));
 			g.drawString(cluesACROSS.get(cl), ox+(x*SITE_LENGTH)+SITE_LENGTH, y_coord);
 		}
 		myFont = new Font("Times New Roman", Font.BOLD , 12);
@@ -102,7 +101,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		g.drawString("DOWN:", ox+(x*SITE_LENGTH)+SITE_LENGTH, startHere);
 		myFont = new Font("Times New Roman", Font.PLAIN , 12);
 		g.setFont(myFont);
-		for( int cl=0; cl<cluesDOWN.size(); cl++){
+		for(int cl=0; cl<cluesDOWN.size(); cl++){
 			y_coord = startHere + (17*(cl+1));
 			g.drawString(cluesDOWN.get(cl), ox+(x*SITE_LENGTH)+SITE_LENGTH, y_coord);
 		}		

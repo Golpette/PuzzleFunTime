@@ -20,7 +20,7 @@ public class ReadWords {
 				String definition = "";
 				scan.useDelimiter(";");
 				
-				//attempting to use delimiters to break up definitions to read random definition
+				//attempt to use delimiters to break up definitions to read random definition
 				
 				//int noDefinitions = 0;
 				while(true){

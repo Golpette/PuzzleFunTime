@@ -22,8 +22,8 @@ public class DrawSolution extends JComponent {
 		this.x = x;
 		this.y = y;
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		frameSizeX = 20*x+20;
-		frameSizeY = 20*y+40;
+		frameSizeX = (x + 1) * squareSize;
+		frameSizeY = (y + 2) * squareSize;
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		area = new JTextArea();
@@ -38,8 +38,8 @@ public class DrawSolution extends JComponent {
 	}
 		
 	protected void paintComponent(Graphics g){
-		int width = x*squareSize;
-		int height = y*squareSize;
+		int width = (x + 1) * squareSize;
+		int height = (y + 3) * squareSize;
 		if(isOpaque()) {
 			g.setColor(getBackground());
 			g.fillRect(0, 0, width, height);

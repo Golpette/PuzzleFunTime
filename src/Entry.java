@@ -9,10 +9,10 @@ public class Entry {
     String word;
     String definition;
    
-   public Entry(int start_x, int start_y, Boolean direction, String word, String definition){
+   public Entry(int start_x, int start_y, Boolean across, String word, String definition){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
-	   this.across = direction;
+	   this.across = across;
 	   this.word = word;
 	   this.definition = definition;
    }
