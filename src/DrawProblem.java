@@ -1,9 +1,11 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * Class to take String[][] grid and paint the crossword as it should look
@@ -29,79 +32,101 @@ import javax.swing.JTextArea;
 public class DrawProblem extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 20;
-	private String[][] gridInit, grid;
-	private ArrayList<String> cluesAcross;
-	private ArrayList<String> cluesDown;	
-	int x,y, frameSizeX, frameSizeY;
+	private String[][] gridInit, grid;	
+	private JTextField [][] boxes;
+	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crossword;
-	JTextArea text;
+	JTextArea text2, text3, textS;
+	JLabel text;
 	JScrollBar vertical;
 	JButton reveal;
 	DrawSolution sol;
-	JScrollPane area;
+	JScrollPane area, area2;
 	String clues;
-	BufferedImage image;
-	JLabel picLabel;
+	Font font, font2;
 	
 	public DrawProblem(String[][] grid_init, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
 		this.gridInit = grid_init;
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
-		this.cluesAcross = cluesAcross;
-		this.cluesDown = cluesDown;
+		
 		sol = new DrawSolution(grid, x, y);
 		panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.fill = GridBagConstraints.BOTH;
 		frameSizeX = 2*(x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
-
-		//image = ImageIO.read(new File("Example_1.jpg"));
-		picLabel = new JLabel(getImage("\\Example_1.jpg"));
-		crossword.add(picLabel);
-		
 		reveal = new JButton("Show Solution");
 		reveal.setOpaque(true);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
-		text = new JTextArea("ACROSS: \n" + getClues(cluesAcross));
-		text.append("\nDOWN: \n" + getClues(cluesDown));
+		boxes = new JTextField [x][y];
+		
+		font = new Font("Times New Roman", Font.BOLD, 12);
+		font2 = new Font("Times New Roman", Font.PLAIN, 12);
+		textS = new JTextArea();
+		text2 = new JTextArea(getClues(cluesAcross));
+		text3 = new JTextArea(getClues(cluesDown));
+		text = new JLabel("<html><b>ACROSS:</b><p>");
+		text2.setFont(font);
+		text3.setFont(font);
+		text2.setEditable(false);
+        text2.setLineWrap(true);
+        text2.setWrapStyleWord(true);
+		text3.setEditable(false);
+        text3.setLineWrap(true);
+        text3.setWrapStyleWord(true);
+		textS.append("ACROSS: \n");
+		text.setText(text.getText() + text2.getText());
+		text.setFont(font2);
+		text.setText(text.getText() + "<p><p><b>DOWN:</b></p><p>" + text3.getText());
+		textS.append(getClues(cluesAcross));
+		textS.append("\nDOWN: \n" + getClues(cluesDown));
+		
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto-crossword!");
-		frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
+		//frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
+		frame.setPreferredSize(new Dimension(1000,600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		text.setEditable(false);
-        text.setLineWrap(true);
-        text.setWrapStyleWord(true);
-		text.setPreferredSize(new Dimension(600, 800));
-		area = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//area = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		area.getVerticalScrollBar().setUnitIncrement(10);
 		
+		//textS.setPreferredSize(new Dimension(600, 800));
+		area = new JScrollPane(textS, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area2 = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		area2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		crossword = new JPanel(new GridLayout(x,y));
 		
-		crossword = new JPanel();
-		
-		c.weightx = 0.5;
-		c.weighty = 0.0;
+		c.weightx = 0;//possibly want this to be dynamic
+		c.weighty = 1.0;
 		c.ipady = (int)(frameSizeY*0.8);
+		c.ipadx = squareSize * x;
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(crossword, c);
-		
-		c.weightx = 0.5;
-		c.weighty = 0.0;
+
+		c.weightx = 0;//possibly want this to be dynamic
+		c.weighty = 1.0;
 		c.ipady = (int)(frameSizeY*0.8);
+		c.ipadx = squareSize * x;
 		c.gridx = 1;
+		c.gridy = 0;
+		panel.add(area2, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.ipady = (int)(frameSizeY*0.8);
+		c.gridx = 2;
 		c.gridy = 0;
 		panel.add(area, c);
 		
-		c.weightx = 0.25;
+		c.weightx = 0.0;
+		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.gridwidth = 2;
+		c.gridwidth = 3;
 		panel.add(reveal, c);
 		
 		frame.setContentPane(panel);
@@ -109,15 +134,9 @@ public class DrawProblem extends JComponent implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	private String getImage(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private String getClues(ArrayList<String> clues) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for(String s: clues){
-			System.out.println(s);
 			stringBuilder.append(s);
 			stringBuilder.append("\n");
 		}
@@ -138,36 +157,17 @@ public class DrawProblem extends JComponent implements ActionListener {
 			for(int qq = 1; qq<y-1; qq++){
 				if (grid[q][qq] == "_") {			
 					g.setColor(Color.BLACK);
-					new DrawRectangle(g, ox+q*sx, oy+qq*sy, squareSize, gridInit[q][qq]);							
+					new DrawRectangle(g, ox+q*sx, oy+qq*sy, squareSize, gridInit[q][qq]);	
 				}
 				if (grid[q][qq] != "_") {
 					g.setColor(Color.WHITE);
 					new DrawRectangle(g, ox+q*sx, oy+qq*sy, squareSize, gridInit[q][qq]);
+					//boxes[q][qq].setBounds(ox+q*sx, oy+qq*sy, squareSize, squareSize);
+					//boxes[q][qq].setVisible(true);
+					//boxes[q][qq].setOpaque(true);
 				}	
 			}					
 		}
-		myFont = new Font("Times New Roman", Font.BOLD, 12);
-		g.setFont(myFont);
-		g.drawString("ACROSS:", ox+(x*squareSize)+squareSize, oy+squareSize);
-		int y_coord = 0;
-		myFont = new Font("Times New Roman", Font.PLAIN , 12);
-		g.setFont(myFont);
-		int lineNumber = -1;
-		for(int cl = 0; cl < cluesAcross.size(); cl++){
-			lineNumber++;
-			y_coord = oy+squareSize + (17*(lineNumber + 1));
-			g.drawString(cluesAcross.get(cl), ox+(x*squareSize)+squareSize, y_coord);
-		}
-		myFont = new Font("Times New Roman", Font.BOLD , 12);
-		g.setFont(myFont);
-		int startHere = y_coord + 25;
-		g.drawString("DOWN:", ox+(x*squareSize)+squareSize, startHere);
-		myFont = new Font("Times New Roman", Font.PLAIN , 12);
-		g.setFont(myFont);
-		for(int cl = 0; cl < cluesDown.size(); cl++){
-			y_coord = startHere + (17*(cl+1));
-			g.drawString(cluesDown.get(cl), ox+(x*squareSize)+squareSize, y_coord);
-		}		
 	}
 
 	public void actionPerformed(ActionEvent e) {

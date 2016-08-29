@@ -15,7 +15,6 @@ public class DrawSolution extends JComponent {
 	private String[][] grid;
 	JFrame frame;
 	Font font;
-	JTextArea area;
 	
 	public DrawSolution(String[][] grid,int x, int y){
 		this.grid = grid;
@@ -26,10 +25,6 @@ public class DrawSolution extends JComponent {
 		frameSizeY = (y + 2) * squareSize;
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		area = new JTextArea();
-		area.setEditable(false);
-		area.setLineWrap(true);
-		area.setWrapStyleWord(true);
 		frame = new JFrame("Auto-crossword solution!  (I bet you're cheating...) ");
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
