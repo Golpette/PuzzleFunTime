@@ -94,6 +94,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		crossword.setBackground(new Color(255,255,255,255));
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(0,0,200,200);
+		transparentLayer.setOpaque(false);
 		transparentLayer.setForeground(new Color(255,255,255,255));
 		setOpaque(true);
 		setBackground(Color.WHITE);
@@ -101,6 +102,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		//frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
 		frame.setPreferredSize(new Dimension(1000,400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBackground(new Color(255,255,255,255));
 		
 		//textS.setPreferredSize(new Dimension(600, 800));
 		area = new JScrollPane(textS, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -115,8 +117,9 @@ public class DrawProblem extends JComponent implements ActionListener {
 				
 				clueNumbers[i][j] = new JLabel();
 				clueNumbers[i][j].setBackground(new Color(255,255,255,255));
+				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
-				clueNumbers[i][j].setOpaque(true);
+				clueNumbers[i][j].setOpaque(false);
 				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
 				transparentLayer.add(clueNumbers[i][j]);
 			}
@@ -125,18 +128,17 @@ public class DrawProblem extends JComponent implements ActionListener {
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				boxes[i][j] = new JTextField();
-				boxes[i][j].getText().toUpperCase();
-				boxes[i][j].setVisible(true);
-				boxes[i][j].setOpaque(true);
+				
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1));
-				boxes[i][j].setBackground(new Color(255,255,255, 255));
+				//boxes[i][j].setBackground(new Color(255,255,255, 255));
 				if(grid[j+1][i+1] == "_"){
 					//boxes[i][j].setBackground(Color.BLACK);
-					boxes[i][j].setBackground(new Color(0, 0, 0, 100));
+					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
 					boxes[i][j].setEnabled(false);
 				}else{
 					boxes[i][j].setBackground(new Color(255, 255, 255, 100));
+					boxes[i][j].setOpaque(false);
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
@@ -151,35 +153,19 @@ public class DrawProblem extends JComponent implements ActionListener {
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(200,200));
-		
-//		c.weightx = 0;
-//		c.weighty = 1.0;
-//		c.ipady = (int)(frameSizeY*0.5);
-//		c.ipadx = 200;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		panel.add(crossword, c);
 
-		c.weightx = 0;
+		c.weightx = 1.0;
 		c.weighty = 1.0;
-		c.ipady = (int)(frameSizeY*0.5);
+		c.ipady = (int)(frameSizeY*0.8);	//doesn't seem to do anything
 		c.ipadx = 200;
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(layer, c);
-		
-		c.weightx = 0;
-		c.weighty = 1.0;
-		c.ipady = (int)(frameSizeY*0.8);
-		c.ipadx = squareSize * x;
-		c.gridx = 2;
-		c.gridy = 0;
-		panel.add(area2, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.ipady = (int)(frameSizeY*0.8);
-		c.gridx = 3;
+		c.gridx = 1;
 		c.gridy = 0;
 		panel.add(area, c);
 		
@@ -237,14 +223,14 @@ public class DrawProblem extends JComponent implements ActionListener {
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if(boxes[i][j].getText().equals("")){
-							boxes[i][j].setForeground(Color.BLACK);
+							boxes[i][j].setForeground(new Color(0,0,0,255));
 							//boxes[i][j].setBackground(new Color(255,255,255,255));
 						}
 						else if(boxes[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
-							boxes[i][j].setForeground(Color.GREEN);
+							boxes[i][j].setForeground(new Color(0,255,0,255));
 							//boxes[i][j].setBackground(new Color(255,255,255, 255));
 						}else{
-							boxes[i][j].setForeground(Color.RED);
+							boxes[i][j].setForeground(new Color(255,0,0,255));
 							//boxes[i][j].setBackground(new Color(255,255,255, 255));
 						}
 					}
@@ -254,7 +240,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 				reveal.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
-						boxes[i][j].setForeground(Color.BLACK);
+						boxes[i][j].setForeground(new Color(0,0,0,255));
 					}
 				}
 			}
