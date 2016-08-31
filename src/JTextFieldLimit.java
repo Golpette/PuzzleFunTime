@@ -6,7 +6,7 @@ class JTextFieldLimit extends PlainDocument {
 
 	private static final long serialVersionUID = 1L;
 	private int limit;
-
+	String goodChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	JTextFieldLimit(int limit) {
 		super();
 		this.limit = limit;
@@ -22,7 +22,9 @@ class JTextFieldLimit extends PlainDocument {
 			return;
 
 		if ((getLength() + str.length()) <= limit) {
-			super.insertString(offset, str.toUpperCase(), attr);
+			if(goodChars.contains(str)){
+				super.insertString(offset, str.toUpperCase(), attr);
+			}
 		}
 	}
 }

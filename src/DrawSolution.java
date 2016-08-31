@@ -11,15 +11,16 @@ public class DrawSolution extends JComponent {
 	private static final long serialVersionUID = 1L;
 	int x,y;
 	int frameSizeX, frameSizeY;
-	private int squareSize = 20;
+	private int squareSize;
 	private String[][] grid;
 	JFrame frame;
 	Font font;
 	
-	public DrawSolution(String[][] grid,int x, int y){
+	public DrawSolution(String[][] grid,int x, int y, int squareSize){
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
+		this.squareSize = squareSize;
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		frameSizeX = (x + 1) * squareSize;
 		frameSizeY = (y + 2) * squareSize;
