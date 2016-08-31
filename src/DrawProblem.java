@@ -29,7 +29,7 @@ import javax.swing.border.Border;
  */
 public class DrawProblem extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 20;
+	private static int squareSize = 30;
 	private String[][] gridInit, grid;	
 	private JTextField [][] boxes;
 	int x, y, frameSizeX, frameSizeY;
@@ -54,7 +54,6 @@ public class DrawProblem extends JComponent implements ActionListener {
 		
 		sol = new DrawSolution(grid, x, y);
 		panel = new JPanel(new GridBagLayout());
-		//panel.setBackground(new Color(255,255,255,255));
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		frameSizeX = 2*(x + 1) * squareSize;
@@ -89,13 +88,13 @@ public class DrawProblem extends JComponent implements ActionListener {
 		layer = new JLayeredPane();
 		clueNumbers = new JLabel [x-2][y-2];
 		crossword = new JPanel(new GridLayout(x-2,y-2));
-		crossword.setBounds(0,0,200,200);
+		crossword.setBounds(0,0,squareSize*(x-2),squareSize*(y-2));
 		crossword.setOpaque(false);
-		crossword.setBackground(new Color(255,255,255,255));
+		//crossword.setBackground(new Color(255,255,255,255));
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer.setBounds(0,0,200,200);
+		transparentLayer.setBounds(0,0,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
-		transparentLayer.setForeground(new Color(255,255,255,255));
+		//transparentLayer.setForeground(new Color(255,255,255,255));
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto-crossword!");
@@ -121,6 +120,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 				clueNumbers[i][j].setVisible(true);
 				clueNumbers[i][j].setOpaque(false);
 				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
+				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
 				transparentLayer.add(clueNumbers[i][j]);
 			}
 		}
