@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -6,25 +5,24 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 /**
  * Class to take String[][] grid and paint the crossword as it should look
@@ -35,24 +33,28 @@ public class DrawProblem extends JComponent implements ActionListener {
 	private String[][] gridInit, grid;	
 	private JTextField [][] boxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crossword;
+	JPanel panel, crossword, transparentLayer;
 	JTextArea text2, text3, textS;
 	JLabel text;
+	JLabel [][] clueNumbers;
 	JScrollBar vertical;
 	JButton reveal;
 	DrawSolution sol;
 	JScrollPane area, area2;
 	String clues;
 	Font font, font2;
+	Rectangle r;
+	JLayeredPane layer;
 	
-	public DrawProblem(String[][] grid_init, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
-		this.gridInit = grid_init;
+	public DrawProblem(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+		this.gridInit = gridInit;
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
 		
 		sol = new DrawSolution(grid, x, y);
 		panel = new JPanel(new GridBagLayout());
+		//panel.setBackground(new Color(255,255,255,255));
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		frameSizeX = 2*(x + 1) * squareSize;
@@ -61,7 +63,8 @@ public class DrawProblem extends JComponent implements ActionListener {
 		reveal.setOpaque(true);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
-		boxes = new JTextField [x][y];
+		boxes = new JTextField [x-2][y-2];
+		r = new Rectangle(20,20);
 		
 		font = new Font("Times New Roman", Font.BOLD, 12);
 		font2 = new Font("Times New Roman", Font.PLAIN, 12);
@@ -83,12 +86,20 @@ public class DrawProblem extends JComponent implements ActionListener {
 		text.setText(text.getText() + "<p><p><b>DOWN:</b></p><p>" + text3.getText());
 		textS.append(getClues(cluesAcross));
 		textS.append("\nDOWN: \n" + getClues(cluesDown));
-		
+		layer = new JLayeredPane();
+		clueNumbers = new JLabel [x-2][y-2];
+		crossword = new JPanel(new GridLayout(x-2,y-2));
+		crossword.setBounds(0,0,200,200);
+		crossword.setOpaque(false);
+		crossword.setBackground(new Color(255,255,255,255));
+		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
+		transparentLayer.setBounds(0,0,200,200);
+		transparentLayer.setForeground(new Color(255,255,255,255));
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto-crossword!");
 		//frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
-		frame.setPreferredSize(new Dimension(1000,600));
+		frame.setPreferredSize(new Dimension(1000,400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//textS.setPreferredSize(new Dimension(600, 800));
@@ -96,28 +107,79 @@ public class DrawProblem extends JComponent implements ActionListener {
 		area2 = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		crossword = new JPanel(new GridLayout(x,y));
 		
-		c.weightx = 0;//possibly want this to be dynamic
-		c.weighty = 1.0;
-		c.ipady = (int)(frameSizeY*0.8);
-		c.ipadx = squareSize * x;
-		c.gridx = 0;
-		c.gridy = 0;
-		panel.add(crossword, c);
+		Border border = BorderFactory.createLineBorder(Color.BLACK);	
+		
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				
+				clueNumbers[i][j] = new JLabel();
+				clueNumbers[i][j].setBackground(new Color(255,255,255,255));
+				clueNumbers[i][j].setVisible(true);
+				clueNumbers[i][j].setOpaque(true);
+				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
+				transparentLayer.add(clueNumbers[i][j]);
+			}
+		}
+		
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				boxes[i][j] = new JTextField();
+				boxes[i][j].getText().toUpperCase();
+				boxes[i][j].setVisible(true);
+				boxes[i][j].setOpaque(true);
+				boxes[i][j].setBorder(border);
+				boxes[i][j].setDocument(new JTextFieldLimit(1));
+				boxes[i][j].setBackground(new Color(255,255,255, 255));
+				if(grid[j+1][i+1] == "_"){
+					//boxes[i][j].setBackground(Color.BLACK);
+					boxes[i][j].setBackground(new Color(0, 0, 0, 100));
+					boxes[i][j].setEnabled(false);
+				}else{
+					boxes[i][j].setBackground(new Color(255, 255, 255, 100));
+				}
+				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
+				boxes[i][j].setFont(font2);
+				crossword.add(boxes[i][j]);
+				crossword.setMaximumSize(new Dimension(400,300));
+				crossword.setMinimumSize(new Dimension(100,100));
+			}
+		}
+		layer.setBackground(new Color(255, 255, 255, 255));
+		layer.add(transparentLayer, new Integer(0));
+		layer.add(crossword, new Integer(1));
+		layer.setVisible(true);
+		layer.setOpaque(true);
+		layer.setPreferredSize(new Dimension(200,200));
+		
+//		c.weightx = 0;
+//		c.weighty = 1.0;
+//		c.ipady = (int)(frameSizeY*0.5);
+//		c.ipadx = 200;
+//		c.gridx = 0;
+//		c.gridy = 0;
+//		panel.add(crossword, c);
 
-		c.weightx = 0;//possibly want this to be dynamic
+		c.weightx = 0;
+		c.weighty = 1.0;
+		c.ipady = (int)(frameSizeY*0.5);
+		c.ipadx = 200;
+		c.gridx = 1;
+		c.gridy = 0;
+		panel.add(layer, c);
+		
+		c.weightx = 0;
 		c.weighty = 1.0;
 		c.ipady = (int)(frameSizeY*0.8);
 		c.ipadx = squareSize * x;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 0;
 		panel.add(area2, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.ipady = (int)(frameSizeY*0.8);
-		c.gridx = 2;
+		c.gridx = 3;
 		c.gridy = 0;
 		panel.add(area, c);
 		
@@ -142,7 +204,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		}
 		return stringBuilder.toString();
 	}
-
+	
 	protected void paintComponent(Graphics g) {
 		int width = getWidth(), height = getHeight();
 		if(isOpaque()) {
@@ -162,9 +224,6 @@ public class DrawProblem extends JComponent implements ActionListener {
 				if (grid[q][qq] != "_") {
 					g.setColor(Color.WHITE);
 					new DrawRectangle(g, ox+q*sx, oy+qq*sy, squareSize, gridInit[q][qq]);
-					//boxes[q][qq].setBounds(ox+q*sx, oy+qq*sy, squareSize, squareSize);
-					//boxes[q][qq].setVisible(true);
-					//boxes[q][qq].setOpaque(true);
 				}	
 			}					
 		}
@@ -175,9 +234,29 @@ public class DrawProblem extends JComponent implements ActionListener {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
 				reveal.setText("Hide Solution");
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						if(boxes[i][j].getText().equals("")){
+							boxes[i][j].setForeground(Color.BLACK);
+							//boxes[i][j].setBackground(new Color(255,255,255,255));
+						}
+						else if(boxes[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
+							boxes[i][j].setForeground(Color.GREEN);
+							//boxes[i][j].setBackground(new Color(255,255,255, 255));
+						}else{
+							boxes[i][j].setForeground(Color.RED);
+							//boxes[i][j].setBackground(new Color(255,255,255, 255));
+						}
+					}
+				}
 			}
 			else{
 				reveal.setText("Show Solution");
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						boxes[i][j].setForeground(Color.BLACK);
+					}
+				}
 			}
 		}
 	}

@@ -10,7 +10,6 @@ public class DrawRectangle {
 		g.fillRect( x, y, r, r );
 		g.setColor(Color.black);
 		g.drawRect( x, y, r, r );
-		
 		g.drawString( s, x+2, y+(r/2));
 	}
 	

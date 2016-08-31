@@ -4,7 +4,7 @@ import java.util.*;
 public class CrosswordGenerator{
 
 	public static void main(String args[])throws IOException{
-		int crosswordSize = 15;
+		int crosswordSize = 5;
 		int gridSize = crosswordSize + 2;
 		int x = gridSize;     
 		int y = gridSize;
