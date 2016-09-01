@@ -4,7 +4,7 @@ import java.util.*;
 public class WordSearchGenerator{
 
 	public static void main(String args[])throws IOException{
-		int crosswordSize = 20;
+		int crosswordSize = 10;
 		int gridSize = crosswordSize + 2;
 		int x = gridSize;     
 		int y = gridSize;
@@ -13,10 +13,8 @@ public class WordSearchGenerator{
 		ArrayList<String> acrossClues = new ArrayList<String>();
 		ArrayList<String> downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
-		words = ReadWords.getWordsandDefs("words_cambridge.txt");
-		boolean connected = false;			// Create grids until you find a connected one!  
-	//	while(!connected){					// Actual 'active' grid is 2 shorter in each direction 
-			grid = new String[x][y];		// (edges kept blank for simplicity in later methods)
+		words = ReadWords.getWordsandDefs("words_cambridge.txt");		
+			grid = new String[x][y];		
 			for(int i = 0; i < y; i++){
 				for( int j = 0; j < x; j++){
 					grid[i][j] = "_";
@@ -33,8 +31,8 @@ public class WordSearchGenerator{
 					new FitWords(grid, x, y, words, entries, false);
 				}
 			}
-			gridInit = new String[x][y];			//Generate  2 lists of ACROSS and DOWN clues from 'entries' and generate
-			for(int i=0; i<y; i++){					//a 'grid_init' to hold the clue indices.  REFRESH grid_init.
+			gridInit = new String[x][y];			
+			for(int i=0; i<y; i++){					
 				for( int j=0; j<x; j++){
 					gridInit[i][j] = "";
 				}
@@ -60,8 +58,6 @@ public class WordSearchGenerator{
 					}				
 				}
 			}	
-			//connected = HoshenKopelman.isConnected(grid, x, y);
-		//}
 		new DrawWordSearch(gridInit, grid, x, y, acrossClues, downClues);
 	}
 }
