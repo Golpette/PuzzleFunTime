@@ -9,7 +9,6 @@ public class WordSearchGenerator{
 		int x = gridSize;     
 		int y = gridSize;
 		String[][] grid = new String[x][y];
-		String[][] gridInit = new String[x][y];
 		ArrayList<String> acrossClues = new ArrayList<String>();
 		ArrayList<String> downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
@@ -31,12 +30,6 @@ public class WordSearchGenerator{
 					new FitWords(grid, x, y, words, entries, false);
 				}
 			}
-			gridInit = new String[x][y];			
-			for(int i=0; i<y; i++){					
-				for( int j=0; j<x; j++){
-					gridInit[i][j] = "";
-				}
-			}
 			acrossClues.clear();
 			downClues.clear();
 			int problemNumber = 0;
@@ -47,7 +40,6 @@ public class WordSearchGenerator{
 						if(entries.get(current).getX() == j && entries.get(current).getY() == i){
 							if(!twoOnSameSite){problemNumber++;}
 							twoOnSameSite=true;
-							gridInit[j][i] = Integer.toString(problemNumber);
 							if(entries.get(current).isAcross()){
 								acrossClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
 							}
@@ -58,6 +50,6 @@ public class WordSearchGenerator{
 					}				
 				}
 			}	
-		new DrawWordSearch(gridInit, grid, x, y, acrossClues, downClues);
+		new DrawWordSearch(grid, x, y, acrossClues, downClues);
 	}
 }

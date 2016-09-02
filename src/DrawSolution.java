@@ -13,20 +13,27 @@ public class DrawSolution extends JComponent {
 	int frameSizeX, frameSizeY;
 	private int squareSize;
 	private String[][] grid;
+	String puzzle, title;
 	JFrame frame;
 	Font font;
 	
-	public DrawSolution(String[][] grid,int x, int y, int squareSize){
+	public DrawSolution(String[][] grid,int x, int y, int squareSize, String puzzle){
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
 		this.squareSize = squareSize;
+		this.puzzle = puzzle;
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		frameSizeX = (x + 1) * squareSize;
 		frameSizeY = (y + 2) * squareSize;
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		frame = new JFrame("Auto-crossword solution!  (I bet you're cheating...) ");
+		if(puzzle.equals("Crossword")){
+			title = "Auto Crossword Solution!";
+		}else if (puzzle.equals("Word Search")){
+			title = "Auto Word Search Solution!";
+		}
+		frame = new JFrame(title);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);

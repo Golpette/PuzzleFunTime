@@ -51,7 +51,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		//font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		font = new Font("Times New Roman", Font.BOLD, 8);
 		font2 = new Font("Times New Roman", Font.PLAIN, 12);
-		sol = new DrawSolution(grid, x, y, squareSize);
+		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -80,7 +80,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		transparentLayer.setOpaque(false);
 		setOpaque(true);
 		setBackground(Color.WHITE);
-		JFrame frame = new JFrame("Auto-crossword!");
+		JFrame frame = new JFrame("Auto Crossword");
 		frame.setPreferredSize(new Dimension(1000,400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
