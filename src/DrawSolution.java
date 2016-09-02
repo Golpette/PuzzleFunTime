@@ -34,6 +34,7 @@ public class DrawSolution extends JComponent {
 			title = "Auto Word Search Solution!";
 		}
 		frame = new JFrame(title);
+		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
