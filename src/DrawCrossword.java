@@ -26,7 +26,7 @@ import javax.swing.border.Border;
 /**
  * Class to take String[][] grid and paint the crossword as it should look
  */
-public class DrawProblem extends JComponent implements ActionListener {
+public class DrawCrossword extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;
 	private String[][] grid;	
@@ -35,6 +35,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 	JPanel panel, crossword, transparentLayer;
 	JTextArea text;
 	JLabel [][] clueNumbers;
+	ArrayList<JButton> hints;
 	JScrollBar vertical;
 	JButton reveal;
 	DrawSolution sol;
@@ -42,14 +43,13 @@ public class DrawProblem extends JComponent implements ActionListener {
 	String clues;
 	Font font, font2;
 	Rectangle r;
-	JLayeredPane layer;
+	JLayeredPane layer, clue;
 	
-	public DrawProblem(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
-		//font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		font = new Font("Times New Roman", Font.BOLD, 8);
+		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		font2 = new Font("Times New Roman", Font.PLAIN, 12);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		panel = new JPanel(new GridBagLayout());
@@ -62,8 +62,8 @@ public class DrawProblem extends JComponent implements ActionListener {
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 		boxes = new JTextField [x-2][y-2];
+		hints = new ArrayList<JButton>();
 		r = new Rectangle(20,20);
-		//need to put numbers into separate text field.
 		text = new JTextArea();
 		text.append("\n\nACROSS: \n");
 		text.append(getClues(cluesAcross));
@@ -79,6 +79,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
+		clue = new JLayeredPane();
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto Crossword");
@@ -88,6 +89,8 @@ public class DrawProblem extends JComponent implements ActionListener {
 		frame.setBackground(new Color(255,255,255,255));
 		area = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		area.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		area.setOpaque(false);
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		
@@ -126,35 +129,43 @@ public class DrawProblem extends JComponent implements ActionListener {
 				crossword.setMinimumSize(new Dimension(100,100));
 			}
 		}
+		
 		layer.setBackground(new Color(255, 255, 255, 255));
 		layer.add(transparentLayer, new Integer(0));
 		layer.add(crossword, new Integer(1));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(200,200));
-		layer.setMinimumSize(new Dimension(squareSize*(x-1),600));
-		layer.setMaximumSize(new Dimension(squareSize*(x+1),200));
+		layer.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
+		layer.setMaximumSize(frame.getSize());
 
+		clue.setBackground(new Color(255, 255, 255, 255));
+		clue.add(area, new Integer(0));
+		clue.setVisible(true);
+		clue.setOpaque(true);
+		//clue.setPreferredSize(new Dimension(200,200));
+		//clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
+		//clue.setMaximumSize(frame.getSize());
+		
+		
 		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
-		c.weighty = 0.0;
-		c.ipady = (int)(frameSizeY*0.8);	//doesn't seem to do anything
+		c.weighty = 1.0;
 		c.ipadx = squareSize*2;
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(layer, c);
 		
 		if(frame.getWidth() > squareSize*x ){
-			c.weightx = frame.getWidth()/(squareSize*x);
+			//c.weightx = frame.getWidth()/(squareSize*x);
 		}else{
-			c.weightx = 1;
+			//c.weightx = 1;
 		}
 		
-		c.weighty = 0.0;
+		c.weighty = 1.0;
 		//c.ipadx = 1;
-		c.ipady = (int)(frameSizeY*0.8);
 		c.gridx = 1;
 		c.gridy = 0;
-		panel.add(area, c);
+		panel.add(clue, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;

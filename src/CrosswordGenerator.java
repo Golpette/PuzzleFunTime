@@ -77,6 +77,6 @@ public class CrosswordGenerator{
 			}	
 			connected = HoshenKopelman.isConnected(grid, x, y);
 		}
-		new DrawProblem(gridInit, grid, x, y, acrossClues, downClues);
+		new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues);
 	}
 }

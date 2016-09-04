@@ -36,6 +36,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JLayeredPane layer;
 	JLabel [][] numbers;
 	int[][] grid;
+	String[][] grid2;
 	GridBagConstraints c;
 	JButton reveal;
 	DrawSolution sol;
@@ -48,6 +49,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
+		sol = new DrawSolution(grid2, x, y, squareSize, "Crossword");
 		fullGrid = new ArrayList<String>();
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		panel = new JPanel(new GridBagLayout());
@@ -61,14 +63,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
-		//reveal.setOpaque(true);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
-		//transparentLayer.setBackground(Color.RED);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -108,24 +108,27 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
-			buttonPushed = !buttonPushed;
-				if(buttonPushed){
-					for (int i = 0; i < x-1; i++){
-						for (int j = 0; j < y-1; j++){
-							if(!(grid[i][j] == 0)){
-								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
-								numbers[j-1][i-1].setOpaque(true);
-								numbers[j-1][i-1].setBackground(Color.GREEN);
-							}
+			sol.frame.setVisible(!sol.frame.isVisible());
+			if(sol.frame.isVisible()){
+				reveal.setText("Hide Solution");
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						if(numbers[i][j].getText().equals("")){
+							numbers[i][j].setForeground(new Color(0,0,0,255));
+						}
+						else if(numbers[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
+							numbers[i][j].setForeground(new Color(0,255,0,255));
+						}else{
+							numbers[i][j].setForeground(new Color(255,0,0,255));
+						}
 					}
 				}
-			}else{
-				for (int i = 0; i < x-1; i++){
-					for (int j = 0; j < y-1; j++){
-						if(!(grid[i][j] == 0)){
-							//letters[j-1][i-1].setForeground(Color.BLACK);
-							numbers[j-1][i-1].setBackground(new Color(255,255,255,255));
-						}
+			}
+			else{
+				reveal.setText("Show Solution");
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						numbers[i][j].setForeground(new Color(0,0,0,255));
 					}
 				}
 			}
