@@ -44,7 +44,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	Random rand;
 	boolean buttonPushed;
 	
-	public DrawSudoku(int[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
 		this.x = x;
 		this.y = y;
 		this.grid = grid;

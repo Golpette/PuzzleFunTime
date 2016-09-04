@@ -3,31 +3,42 @@ import java.util.*;
 
 public class CrosswordGenerator{
 
-	public static void main(String args[])throws IOException{
-		
-	//public CrosswordGenerator() throws IOException{
-		int crosswordSize = 10;
-		int gridSize = crosswordSize + 2;
-		int x = gridSize;     
-		int y = gridSize;
-		String[][] grid = new String[x][y];
-		String[][] gridInit = new String[x][y];
-		ArrayList<String> acrossClues = new ArrayList<String>();
-		ArrayList<String> downClues = new ArrayList<String>();
-		ArrayList<Word> words = new ArrayList<Word>();
+	int crosswordSize;
+	int gridSize;
+	int x;     
+	int y;
+	Random r;
+	String[][] grid;
+	String[][] gridInit;
+	ArrayList<String> acrossClues; 
+	ArrayList<String> downClues;
+	ArrayList<Word> words;
+	ArrayList<Entry> entries;
+	boolean connected, direction;	
+	
+	public CrosswordGenerator(int crosswordSize) throws IOException{
+		this.crosswordSize = crosswordSize;
+		gridSize = crosswordSize + 2;
+		x = gridSize;     
+		y = gridSize;
+		grid = new String[x][y];
+		gridInit = new String[x][y];
+		acrossClues = new ArrayList<String>();
+		downClues = new ArrayList<String>();
+		words = new ArrayList<Word>();
 		words = ReadWords.getWordsandDefs("words_cambridge.txt");
-		boolean connected = false;			// Create grids until you find a connected one!  
-		while(!connected){					// Actual 'active' grid is 2 shorter in each direction 
-			grid = new String[x][y];		// (edges kept blank for simplicity in later methods)
+		connected = false;			 
+		while(!connected){					
+			grid = new String[x][y];
 			for(int i = 0; i < y; i++){
 				for( int j = 0; j < x; j++){
 					grid[i][j] = "_";
 				}
 			}	
-			ArrayList<Entry> entries = new ArrayList<Entry>();
-			for( int trys=0; trys < 10000; trys++){
-				Random r = new Random();
-				boolean direction = r.nextBoolean();
+			entries = new ArrayList<Entry>();
+			for(int trys=0; trys < 10000; trys++){
+				r = new Random();
+				direction = r.nextBoolean();
 				if(!direction){
 					new FitWords(grid, x, y, words, entries, true);
 				}
@@ -35,9 +46,9 @@ public class CrosswordGenerator{
 					new FitWords(grid, x, y, words, entries, false);
 				}
 			}
-			gridInit = new String[x][y];			//Generate  2 lists of ACROSS and DOWN clues from 'entries' and generate
-			for(int i=0; i<y; i++){					//a 'grid_init' to hold the clue indices.  REFRESH grid_init.
-				for( int j=0; j<x; j++){
+			gridInit = new String[x][y];			
+			for(int i=0; i<y; i++){
+				for(int j=0; j<x; j++){
 					gridInit[i][j] = "";
 				}
 			}
@@ -47,10 +58,12 @@ public class CrosswordGenerator{
 			for(int i = 1; i < y-1; i++){
 				for(int j = 1; j < x-1; j++){
 					boolean twoOnSameSite = false;
-					for(int current=0; current <entries.size(); current++){
+					for(int current = 0; current < entries.size(); current++){
 						if(entries.get(current).getX() == j && entries.get(current).getY() == i){
-							if(!twoOnSameSite){problemNumber++;}
-							twoOnSameSite=true;
+							if(!twoOnSameSite){
+								problemNumber++;
+							}
+							twoOnSameSite = true;
 							gridInit[j][i] = Integer.toString(problemNumber);
 							if(entries.get(current).isAcross()){
 								acrossClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());

@@ -3,14 +3,23 @@ import java.util.*;
 
 public class WordSearchGenerator{
 
-	public static void main(String args[])throws IOException{
-		int crosswordSize = 15;
-		int gridSize = crosswordSize + 2;
-		int x = gridSize;     
-		int y = gridSize;
-		String[][] grid = new String[x][y];
-		ArrayList<String> acrossClues = new ArrayList<String>();
-		ArrayList<String> downClues = new ArrayList<String>();
+	int wordsearchSize;
+	int gridSize;
+	int x;     
+	int y;
+	String[][] grid;
+	ArrayList<String> acrossClues;
+	ArrayList<String> downClues;
+	ArrayList<Word> words;	
+	
+	public WordSearchGenerator(int wordsearchSize) throws IOException{
+		this.wordsearchSize = wordsearchSize;
+		gridSize = wordsearchSize + 2;
+		x = gridSize;     
+		y = gridSize;
+		grid = new String[x][y];
+		acrossClues = new ArrayList<String>();
+		downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
 		words = ReadWords.getWordsandDefs("words_cambridge.txt");		
 			grid = new String[x][y];		

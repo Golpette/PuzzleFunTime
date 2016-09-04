@@ -1,11 +1,10 @@
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -16,9 +15,13 @@ import javax.swing.SwingConstants;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 
-	CrosswordGenerator crossword;
-	WordSearchGenerator wordsearch;
-	SudokuGenerator sudoku;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public CrosswordGenerator crossword;
+	public WordSearchGenerator wordsearch;
+	public SudokuGenerator sudoku;
 	JFrame frame;
 	JPanel panel;
 	JButton cwd, wds, sud;
@@ -26,9 +29,6 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	Font font, font2;
 	
 	public PuzzleLoader() throws IOException {
-		
-		wordsearch = new WordSearchGenerator();
-		sudoku = new SudokuGenerator(); 
 		font = new Font("Times New Roman", Font.BOLD, 36);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		intro = new JLabel("Welcome to puzzle solver!");
@@ -38,12 +38,15 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		cwd = new JButton("Crossword");
 		cwd.setFont(font2);
 		cwd.setHorizontalAlignment(SwingConstants.CENTER);
+		cwd.addActionListener(this);
 		wds = new JButton("Word Search");
 		wds.setFont(font2);
 		wds.setHorizontalAlignment(SwingConstants.CENTER);
+		wds.addActionListener(this);
 		sud = new JButton("Sudoku");
 		sud.setFont(font2);
 		sud.setHorizontalAlignment(SwingConstants.CENTER);
+		sud.addActionListener(this);
 		
 		frame = new JFrame("Auto Puzzle Generator");
 		frame.setSize(1000, 400);
@@ -83,7 +86,6 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridwidth = 1;
 		panel.add(sud, c);
 		
-
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);		
@@ -97,7 +99,25 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == cwd){
-			crossword = new CrosswordGenerator();
+			try {
+				crossword = new CrosswordGenerator(10);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == wds){
+			try {
+				wordsearch = new WordSearchGenerator(15);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == sud){
+			try {
+				sudoku = new SudokuGenerator(9);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 }
