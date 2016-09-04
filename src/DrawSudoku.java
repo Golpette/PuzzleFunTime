@@ -27,35 +27,33 @@ import javax.swing.border.Border;
 /**
  * Class to draw a word search
  */
-public class DrawWordSearch extends JComponent implements ActionListener {
+public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 40;	
+	private static int squareSize = 30;	
 	int x, y;
 	JFrame frame;
 	JPanel panel, transparentLayer;
 	JLayeredPane layer;
-	JLabel [][] letters;
-	String[][] grid;
+	JLabel [][] numbers;
+	int[][] grid;
 	GridBagConstraints c;
 	JButton reveal;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
-	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	Font font;
 	Random rand;
 	boolean buttonPushed;
 	
-	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+	public DrawSudoku(int[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
 		fullGrid = new ArrayList<String>();
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		layer = new JLayeredPane();
-		letters = new JLabel [x-2][y-2];
+		numbers = new JLabel [x-2][y-2];
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
@@ -74,28 +72,17 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
-				letters[i][j] = new JLabel();
-				letters[i][j].setFont(font);
-				letters[i][j].setForeground(Color.BLACK);
-				letters[i][j].setBorder(border);
-//				letters[i][j].setVisible(true);
-				//letters[i][j].setOpaque(false);
-				if(grid[j+1][i+1] != "_"){
-					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
-				}else{
-					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
-				}
-				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
-				letters[i][j].setVerticalAlignment(JTextField.CENTER);
-				transparentLayer.add(letters[i][j]);
+				numbers[i][j] = new JLabel();
+				numbers[i][j].setFont(font);
+				numbers[i][j].setForeground(Color.BLACK);
+				numbers[i][j].setBorder(border);
+				numbers[i][j].setHorizontalAlignment(JTextField.CENTER);
+				numbers[i][j].setVerticalAlignment(JTextField.CENTER);
+				transparentLayer.add(numbers[i][j]);
 			}
 		}
-		
-//		layer.setBackground(new Color(255, 255, 255, 255));
-//		layer.setBackground(Color.blue);
+
 		layer.add(transparentLayer);
-//		layer.setVisible(true);
-		//layer.setOpaque(true);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -114,7 +101,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
-//		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);
@@ -126,19 +112,19 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				if(buttonPushed){
 					for (int i = 0; i < x-1; i++){
 						for (int j = 0; j < y-1; j++){
-							if(!grid[i][j].equals("_")){
+							if(!(grid[i][j] == 0)){
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
-								letters[j-1][i-1].setOpaque(true);
-								letters[j-1][i-1].setBackground(Color.GREEN);
+								numbers[j-1][i-1].setOpaque(true);
+								numbers[j-1][i-1].setBackground(Color.GREEN);
 							}
 					}
 				}
 			}else{
 				for (int i = 0; i < x-1; i++){
 					for (int j = 0; j < y-1; j++){
-						if(!grid[i][j].equals("_")){
+						if(!(grid[i][j] == 0)){
 							//letters[j-1][i-1].setForeground(Color.BLACK);
-							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
+							numbers[j-1][i-1].setBackground(new Color(255,255,255,255));
 						}
 					}
 				}

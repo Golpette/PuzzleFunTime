@@ -4,6 +4,8 @@ import java.util.*;
 public class CrosswordGenerator{
 
 	public static void main(String args[])throws IOException{
+		
+	//public CrosswordGenerator() throws IOException{
 		int crosswordSize = 10;
 		int gridSize = crosswordSize + 2;
 		int x = gridSize;     

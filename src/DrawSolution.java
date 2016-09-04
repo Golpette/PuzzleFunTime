@@ -24,8 +24,8 @@ public class DrawSolution extends JComponent {
 		this.squareSize = squareSize;
 		this.puzzle = puzzle;
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		frameSizeX = (x + 1) * squareSize;
-		frameSizeY = (y + 2) * squareSize;
+		frameSizeX = (x) * squareSize+(squareSize/2);
+		frameSizeY = (y + 1) * squareSize;
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		if(puzzle.equals("Crossword")){

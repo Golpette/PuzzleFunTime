@@ -1,34 +1,29 @@
 import java.io.*;
 import java.util.*;
 
-public class WordSearchGenerator{
+public class SudokuGenerator{
 
 	public static void main(String args[])throws IOException{
-		int crosswordSize = 15;
+		int crosswordSize = 9;
 		int gridSize = crosswordSize + 2;
 		int x = gridSize;     
 		int y = gridSize;
-		String[][] grid = new String[x][y];
+		int[][] grid = new int[x][y];
 		ArrayList<String> acrossClues = new ArrayList<String>();
 		ArrayList<String> downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
 		words = ReadWords.getWordsandDefs("words_cambridge.txt");		
-			grid = new String[x][y];		
+			grid = new int[x][y];		
 			for(int i = 0; i < y; i++){
 				for( int j = 0; j < x; j++){
-					grid[i][j] = "_";
+					grid[i][j] = 0;
 				}
 			}	
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			for( int trys=0; trys < 10000; trys++){
 				Random r = new Random();
 				boolean direction = r.nextBoolean();
-				if(!direction){
-					new FitWords(grid, x, y, words, entries, true);
-				}
-				else{
-					new FitWords(grid, x, y, words, entries, false);
-				}
+				
 			}
 			acrossClues.clear();
 			downClues.clear();
@@ -50,6 +45,6 @@ public class WordSearchGenerator{
 					}				
 				}
 			}	
-		new DrawWordSearch(grid, x, y, acrossClues, downClues);
+		new DrawSudoku(grid, x, y, acrossClues, downClues);
 	}
 }

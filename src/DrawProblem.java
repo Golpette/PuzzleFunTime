@@ -75,12 +75,14 @@ public class DrawProblem extends JComponent implements ActionListener {
 		crossword = new JPanel(new GridLayout(x-2,y-2));
 		crossword.setBounds(squareSize, squareSize ,squareSize*(x-2),squareSize*(y-2));
 		crossword.setOpaque(false);
+		//crossword.setPreferredSize(new Dimension(300,200));
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto Crossword");
+		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(1000,400));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
@@ -130,17 +132,25 @@ public class DrawProblem extends JComponent implements ActionListener {
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(200,200));
+		layer.setMinimumSize(new Dimension(squareSize*(x-1),600));
+		layer.setMaximumSize(new Dimension(squareSize*(x+1),200));
 
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
+		c.weighty = 0.0;
 		c.ipady = (int)(frameSizeY*0.8);	//doesn't seem to do anything
-		c.ipadx = 200;
+		c.ipadx = squareSize*2;
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(layer, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		if(frame.getWidth() > squareSize*x ){
+			c.weightx = frame.getWidth()/(squareSize*x);
+		}else{
+			c.weightx = 1;
+		}
+		
+		c.weighty = 0.0;
+		//c.ipadx = 1;
 		c.ipady = (int)(frameSizeY*0.8);
 		c.gridx = 1;
 		c.gridy = 0;
@@ -151,7 +161,7 @@ public class DrawProblem extends JComponent implements ActionListener {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.gridwidth = 3;
+		c.gridwidth = 2;
 		panel.add(reveal, c);
 		
 		frame.setContentPane(panel);
