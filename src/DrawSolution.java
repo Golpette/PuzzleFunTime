@@ -36,7 +36,7 @@ public class DrawSolution extends JComponent {
 		frame = new JFrame(title);
 		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 		frame.pack();
 	}

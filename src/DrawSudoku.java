@@ -99,7 +99,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setContentPane(panel);
 		frame.pack();
