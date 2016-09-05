@@ -1,6 +1,7 @@
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,39 +21,50 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
 	JFrame frame;
-	JPanel panel;
+	JPanel panel, panel1;
 	JButton generate;
 	JLabel intro;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	Font font, font2;
 	String puzzle;
-	int size;
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
 		font = new Font("Times New Roman", Font.BOLD, 36);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
+		panel1 = new JPanel(new GridBagLayout());
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
-		size = 3;
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(1000, 400);
 		model = new SpinnerNumberModel(10, 3, 30, 1);
 		spinner = new JSpinner(model);
-		
+		intro = new JLabel("Set " + puzzle + " Size");
+		intro.setFont(font);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		c.ipadx = 10;
+		panel1.add(intro, c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		c.ipadx = 10;
+		panel1.add(spinner, c);
+		
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.ipady = (int)(frame.getHeight()*0.8);
-		panel.add(intro, c);
+		panel.add(panel1, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -73,14 +85,14 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		if(e.getSource() == generate){
 			if(puzzle.equals("Crossword")){
 				try {
-					crossword = new CrosswordGenerator(size);
+					crossword = new CrosswordGenerator((Integer)spinner.getValue());
 				}catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
 			if(puzzle.equals("WordSearch")){
 				try {
-					wordsearch = new WordSearchGenerator(size);
+					wordsearch = new WordSearchGenerator((Integer)spinner.getValue());
 				}catch (IOException e1) {
 					e1.printStackTrace();
 				}
