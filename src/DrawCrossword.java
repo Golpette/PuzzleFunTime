@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -43,16 +44,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	DrawSolution sol;
 	JScrollPane area;
 	String clues;
-	Font font, font2;
+	Font font, font2, font3;
 	Rectangle r;
 	JLayeredPane layer;
+	Random rand;
+	ArrayList<Entry> entries;
 	
-	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
+		this.entries = entries;
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		font2 = new Font("Times New Roman", Font.PLAIN, 12);
+		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font3 = new Font("Times New Roman", Font.PLAIN, 20);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		panel = new JPanel(new GridBagLayout());
 		clue = new JPanel(new GridBagLayout());
@@ -61,6 +66,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frameSizeX = 2*(x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
 		reveal.setOpaque(true);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
@@ -86,14 +92,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
-		frame.setPreferredSize(new Dimension(1000,400));
+		frame.setPreferredSize(new Dimension(600,400));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
 		area = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		area.setOpaque(false);
-		
+		rand = new Random();
 		Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		
 		for (int i = 0; i < x-2; i++){
@@ -143,7 +149,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					boxes[i][j].setOpaque(false);
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-				boxes[i][j].setFont(font2);
+				boxes[i][j].setFont(font3);
 
 				
 				crossword.add(boxes[i][j]);
@@ -192,7 +198,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 10;
+		//c.ipady = 10;
 		c.gridwidth = 2;
 		panel.add(reveal, c);
 		
@@ -210,6 +216,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		return stringBuilder.toString();
 	}
 
+	public String shuffleString(String string){
+		ArrayList<Character> letters = new ArrayList<Character>();
+		letters.clear();
+		StringBuilder str = new StringBuilder(string.length());
+		for (Character c: string.toCharArray()){
+			letters.add(c);
+		}
+		while (letters.size() >= 1){
+			char temp = letters.remove(rand.nextInt(letters.size()));
+			str.append(temp);
+			}
+		return str.toString();
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
 			sol.frame.setVisible(!sol.frame.isVisible());
@@ -239,7 +259,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 		for(JButton h: hints){
 			if(e.getSource()== h){
-				h.setText("this is the hint");
+				h.setText(shuffleString(entries.get(0).getWord()));		//need to set this to the corresponding word anagramised
+				//h.setText(shuffleString(h.getText()));
 			}else{
 				h.setText("Hint");
 			}

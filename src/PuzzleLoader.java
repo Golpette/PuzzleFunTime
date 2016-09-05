@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -45,7 +46,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		sud.addActionListener(this);
 		
 		frame = new JFrame("Auto Puzzle Generator");
-		frame.setSize(1000, 400);
+		frame.setPreferredSize(new Dimension(500,400));
+		frame.setSize(500, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -62,7 +64,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 10;
+		c.ipady = 40;
 		c.gridwidth = 1;
 		panel.add(cwd, c);
 		
@@ -70,7 +72,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 1;
-		c.ipady = 10;
+		c.ipady = 40;
 		c.gridwidth = 1;
 		panel.add(wds, c);
 		
@@ -78,7 +80,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 1.0;
 		c.gridx = 2;
 		c.gridy = 1;
-		c.ipady = 10;
+		c.ipady = 40;
 		c.gridwidth = 1;
 		panel.add(sud, c);
 		

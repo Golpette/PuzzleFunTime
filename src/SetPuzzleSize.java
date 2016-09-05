@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,6 +42,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		generate.addActionListener(this);
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(1000, 400);
+		frame.setPreferredSize(new Dimension(500,400));
 		model = new SpinnerNumberModel(10, 3, 30, 1);
 		spinner = new JSpinner(model);
 		intro = new JLabel("Set " + puzzle + " Size");
@@ -70,7 +72,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 10;
+		c.ipady = 40;
 		c.gridwidth = 1;
 		panel.add(generate, c);
 		
