@@ -85,7 +85,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		frame.pack();
 		frame.setVisible(true);		
 	
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main (String [] args) throws IOException{
