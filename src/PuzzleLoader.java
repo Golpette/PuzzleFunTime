@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -14,10 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;

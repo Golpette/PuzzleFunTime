@@ -32,9 +32,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private String[][] grid;	
 	private JTextField [][] boxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crossword, transparentLayer;
+	JPanel panel, crossword, clue, transparentLayer;
+	GridBagConstraints c;
 	JTextArea text;
 	JLabel [][] clueNumbers;
+	ArrayList<JLabel> nums;
 	ArrayList<JButton> hints;
 	JScrollBar vertical;
 	JButton reveal;
@@ -43,7 +45,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	String clues;
 	Font font, font2;
 	Rectangle r;
-	JLayeredPane layer, clue;
+	JLayeredPane layer;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
 		this.grid = grid;
@@ -53,7 +55,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		font2 = new Font("Times New Roman", Font.PLAIN, 12);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		panel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		clue = new JPanel(new GridBagLayout());
+		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		frameSizeX = 2*(x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
@@ -79,7 +82,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
-		clue = new JLayeredPane();
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		JFrame frame = new JFrame("Auto Crossword");
@@ -103,6 +105,26 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setOpaque(false);
 				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
 				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
+				
+				if(!gridInit[j+1][i+1].equals("")){
+					JButton hint = new JButton("Hint");
+					JLabel num = new JLabel(gridInit[j+1][i+1]);
+					
+					hint.addActionListener(this);
+					hints.add(hint);
+					
+					c.weightx = 0.0;
+					c.weighty = 0.0;
+					c.gridx = 0;
+					c.gridy = i;
+					clue.add(num, c);
+					
+					c.weightx = 0.0;
+					c.weighty = 0.0;
+					c.gridx = 1;
+					c.gridy = i;
+					clue.add(hint, c);
+				}
 				transparentLayer.add(clueNumbers[i][j]);
 			}
 		}
@@ -139,14 +161,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
 		layer.setMaximumSize(frame.getSize());
 
-		clue.setBackground(new Color(255, 255, 255, 255));
-		clue.add(area, new Integer(0));
-		clue.setVisible(true);
-		clue.setOpaque(true);
+//		clue.setBackground(new Color(255, 255, 255, 255));
+//		clue.add(area, new Integer(0));
+//		clue.setVisible(true);
+//		clue.setOpaque(true);
 		//clue.setPreferredSize(new Dimension(200,200));
 		//clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
 		//clue.setMaximumSize(frame.getSize());
-		
 		
 		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
 		c.weighty = 1.0;
@@ -216,5 +237,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			}
 		}
+		for(JButton h: hints){
+			if(e.getSource()== h){
+				h.setText("this is the hint");
+			}else{
+				h.setText("Hint");
+			}
+		}
+		
 	}
 }

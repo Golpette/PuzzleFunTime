@@ -12,7 +12,7 @@ public class FitWords {
 		int init_y = (int) (Math.random() * (yLength - 2) + 1);
 		if (grid[init_x][init_y - 1].equals("_") && grid[init_x - 1][init_y].equals("_")) {
 			String toWorkWith = "";
-			String toWorkWith2 = "";
+			//String toWorkWith2 = "";
 			if (across) {
 				int maxPossLength = (xLength - 1) - init_x;
 				for (int i = 0; i < maxPossLength; i++) {
@@ -62,7 +62,10 @@ public class FitWords {
 			if (!word.equals("")) {
 				boolean seenBefore = false;
 				for (int j = 0; j < entries.size(); j++) {
-					if (entries.get(j).getWord().equals(word)) {
+					//if (entries.get(j).getWord().equals(word)) {
+					//	seenBefore = true;
+					//}
+					if(word.toLowerCase().contains(entries.get(j).getWord().toLowerCase())){
 						seenBefore = true;
 					}
 				}
