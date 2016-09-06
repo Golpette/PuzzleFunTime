@@ -259,7 +259,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 		for(JButton h: hints){
 			if(e.getSource()== h){
-				h.setText(shuffleString(entries.get(0).getWord()));		//need to set this to the corresponding word anagramised
+				h.setText(shuffleString(entries.get(hints.indexOf(h)).getWord()));		//need to set this to the corresponding word anagramised
 				//h.setText(shuffleString(h.getText()));
 			}else{
 				h.setText("Hint");
