@@ -25,7 +25,8 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 /**
- * Class to take String[][] grid and paint the crossword as it should look
+ * Class to take String[][] grid and paint the crossword as it should look complete with 
+ * all the required components: The clues, grid, clue numbers, solution button, hints etc
  */
 public class DrawCrossword extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -33,74 +34,49 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private String[][] grid;	
 	private JTextField [][] boxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crossword, clue, transparentLayer;
-	GridBagConstraints c;
+	JPanel panel, crosswordGrid, clue, clueNums, main;
+	JLayeredPane layer;
+	JScrollPane area;
 	JTextArea text;
+	JButton reveal;
 	JLabel [][] clueNumbers;
+	GridBagConstraints c;
 	ArrayList<JLabel> nums;
 	ArrayList<JButton> hints;
-	JScrollBar vertical;
-	JButton reveal;
-	DrawSolution sol;
-	JScrollPane area;
-	String clues;
-	Font font, font2, font3;
-	Rectangle r;
-	JLayeredPane layer;
-	Random rand;
 	ArrayList<Entry> entries;
+	DrawSolution sol;
+	Font font, font2, font3;
+	Random rand;
+	Border border;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
+		JFrame frame = new JFrame("Auto Crossword");
+		frame.setSize(1000, 400);
+		frame.setPreferredSize(new Dimension(600,400));
+		frame.setBackground(new Color(255,255,255,255));
+		
 		this.grid = grid;
 		this.x = x;
 		this.y = y;
 		this.entries = entries;
+		
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		font3 = new Font("Times New Roman", Font.PLAIN, 20);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
-		panel = new JPanel(new GridBagLayout());
-		clue = new JPanel(new GridBagLayout());
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
 		frameSizeX = 2*(x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
-		reveal = new JButton("Show Solution");
-		reveal.setFont(font2);
-		reveal.setOpaque(true);
-		reveal.setEnabled(true);
-		reveal.addActionListener(this);
-		boxes = new JTextField [x-2][y-2];
-		hints = new ArrayList<JButton>();
-		r = new Rectangle(20,20);
-		text = new JTextArea();
-		text.append("\n\nACROSS: \n");
-		text.append(getClues(cluesAcross));
-		text.append("\nDOWN: \n" + getClues(cluesDown));
-		//text.setLineWrap(true);	//Not sure what to do about this - which looks better?
-		text.setWrapStyleWord(true);
-		layer = new JLayeredPane();
-		clueNumbers = new JLabel [x-2][y-2];
-		crossword = new JPanel(new GridLayout(x-2,y-2));
-		crossword.setBounds(squareSize, squareSize ,squareSize*(x-2),squareSize*(y-2));
-		crossword.setOpaque(false);
-		//crossword.setPreferredSize(new Dimension(300,200));
-		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer.setOpaque(false);
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		JFrame frame = new JFrame("Auto Crossword");
-		frame.setSize(1000, 400);
-		frame.setPreferredSize(new Dimension(600,400));
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBackground(new Color(255,255,255,255));
-		area = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		area.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		area.setOpaque(false);
 		rand = new Random();
-		Border border = BorderFactory.createLineBorder(Color.BLACK);	
+		
+		/*
+		 * This is where the transparentLayer to hold all the clue numbers is created.
+		 * It sets all the cells with question numbers with the correct number in the 
+		 * top left corner of a GridLayout cell.
+		 */
+		clueNums = new JPanel(new GridLayout(x-2, y-2));
+		clueNums.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		clueNums.setOpaque(false);
+		clueNumbers = new JLabel [x-2][y-2];
 		
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -111,29 +87,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setOpaque(false);
 				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
 				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
-				
-				if(!gridInit[j+1][i+1].equals("")){
-					JButton hint = new JButton("Hint");
-					JLabel num = new JLabel(gridInit[j+1][i+1]);
-					
-					hint.addActionListener(this);
-					hints.add(hint);
-					
-					c.weightx = 0.0;
-					c.weighty = 0.0;
-					c.gridx = 0;
-					c.gridy = i;
-					clue.add(num, c);
-					
-					c.weightx = 0.0;
-					c.weighty = 0.0;
-					c.gridx = 1;
-					c.gridy = i;
-					clue.add(hint, c);
-				}
-				transparentLayer.add(clueNumbers[i][j]);
+				clueNums.add(clueNumbers[i][j]);
 			}
 		}
+		/*
+		 * This is where all the crossword boxes are filled black or provide
+		 * a useable JTextfield.  This is layered on top of the transparentLayer
+		 */
+		crosswordGrid = new JPanel(new GridLayout(x-2,y-2));
+		crosswordGrid.setBounds(squareSize, squareSize ,squareSize*(x-2),squareSize*(y-2));
+		crosswordGrid.setOpaque(false);
+		boxes = new JTextField [x-2][y-2];
+		border = BorderFactory.createLineBorder(Color.BLACK);	
 		
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -152,47 +117,127 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				boxes[i][j].setFont(font3);
 
 				
-				crossword.add(boxes[i][j]);
-				crossword.setMaximumSize(new Dimension(400,300));
-				crossword.setMinimumSize(new Dimension(100,100));
+				crosswordGrid.add(boxes[i][j]);
+				crosswordGrid.setMaximumSize(new Dimension(400,300));
+				crosswordGrid.setMinimumSize(new Dimension(100,100));
 			}
 		}
 		
+		/*
+		 * This is the JLayeredPane layer which holds the actual crossword.
+		 * It is composed of two layers crosswordGrid and clueNums which are both 
+		 * GridLayout JPanels which are layered one on top of the other.
+		 */
+		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
-		layer.add(transparentLayer, new Integer(0));
-		layer.add(crossword, new Integer(1));
+		layer.add(clueNums, new Integer(0));
+		layer.add(crosswordGrid, new Integer(1));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(200,200));
 		layer.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
 		layer.setMaximumSize(frame.getSize());
 
-//		clue.setBackground(new Color(255, 255, 255, 255));
-//		clue.add(area, new Integer(0));
-//		clue.setVisible(true);
-//		clue.setOpaque(true);
-		//clue.setPreferredSize(new Dimension(200,200));
-		//clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
-		//clue.setMaximumSize(frame.getSize());
+		
+		/*
+		 * This is the GridBagLayout clue which holds all the clue components:
+		 * The numbers and clues in a JTextArea and the hints in a JPanel
+		 */
+		clue = new JPanel(new GridBagLayout());
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		
+		text = new JTextArea();
+		text.append("\n\nACROSS: \n");
+		text.append(getClues(cluesAcross));
+		text.append("\nDOWN: \n" + getClues(cluesDown));
+		text.setOpaque(false);
+		//text.setLineWrap(true);	//Not sure what to do about this - which looks better?
+		text.setWrapStyleWord(true);
+		hints = new ArrayList<JButton>();
+		
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				if(!gridInit[j+1][i+1].equals("")){
+					JButton hint = new JButton("Hint");  //try JLabels
+		
+					hint.addActionListener(this);
+					hints.add(hint);
+					
+					c.weightx = 0.0;
+					c.weighty = 0.0;
+					c.gridx = 0;
+					c.gridy = i;
+					clue.add(text, c);
+					
+					c.weightx = 0.0;
+					c.weighty = 0.0;
+					c.gridx = 1;
+					c.gridy = i;
+					clue.add(hint, c);
+				}	
+			}
+		}
+		clue.setBackground(new Color(255, 255, 255, 255));
+		//clue.add(area, new Integer(0));
+		clue.setVisible(true);
+		clue.setOpaque(true);
+		clue.setPreferredSize(new Dimension(200,200));
+		clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
+		clue.setMaximumSize(frame.getSize());
+		
+		
+		/*
+		 * This is the layout of the GridBagLayout panel main which holds all the crossword
+		 * components.  There are two components inside it: A JLayeredPane and a GridBagLayout
+		 */
+		main = new JPanel(new GridBagLayout());
 		
 		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
 		c.weighty = 1.0;
 		c.ipadx = squareSize*2;
 		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(layer, c);
+		main.add(layer, c);
 		
-		if(frame.getWidth() > squareSize*x ){
-			//c.weightx = frame.getWidth()/(squareSize*x);
-		}else{
-			//c.weightx = 1;
-		}
+		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
+		c.weighty = 1.0;
+		c.ipadx = squareSize*2;
+		c.gridx = 0;
+		c.gridy = 0;
+		main.add(clue, c);
+		
+		
+		/*
+		 * This is the largest area of the GUI which holds the 
+		 * crossword and clues pane and makes them scrollable.
+		 */
+		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		area.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		area.setOpaque(false);
+		
+		/*
+		 * This is the button which generates a solution for the given crossword
+		 * bringing up a new GUI instance with the filled in grid on being pressed.
+		 */
+		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
+		reveal.setOpaque(true);
+		reveal.setEnabled(true);
+		reveal.addActionListener(this);
+		
+		/*
+		 * This is the panel for the main area of the program.
+		 * It holds two components:  A JScrollPane and a JButton
+		 */
+		panel = new JPanel(new GridBagLayout());
 		
 		c.weighty = 1.0;
 		//c.ipadx = 1;
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(clue, c);
+		panel.add(area, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
@@ -202,6 +247,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.gridwidth = 2;
 		panel.add(reveal, c);
 		
+		/*Overall JFrame to hold all components
+		 * This has the main panel assigned to it
+		 */
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);
