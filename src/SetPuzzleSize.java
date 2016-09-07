@@ -23,7 +23,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	public SudokuGenerator sudoku;
 	JFrame frame;
 	JPanel panel, panel1;
-	JButton generate;
+	JButton generate, back;
 	JLabel intro;
 	SpinnerNumberModel model;
 	JSpinner spinner;
@@ -40,8 +40,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
+		back = new JButton("Back");
+		back.setFont(font2);
+		back.setHorizontalAlignment(SwingConstants.CENTER);
+		back.addActionListener(this);
 		frame = new JFrame("Set Puzzle Size");
-		frame.setSize(1000, 400);
+		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
 		model = new SpinnerNumberModel(10, 3, 30, 1);
 		spinner = new JSpinner(model);
@@ -53,10 +57,17 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 0;
 		c.ipadx = 10;
+		c.ipadx = 100;
+		//c.gridwidth = 2;
+		panel1.add(back, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		c.ipadx = 10;
 		panel1.add(intro, c);
 		
 		c.gridx = 1;
-		c.gridy = 0;
+		c.gridy = 1;
 		c.ipadx = 10;
 		panel1.add(spinner, c);
 		
@@ -69,10 +80,10 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		panel.add(panel1, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		//c.weighty = ;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 40;
+		c.ipady = (int)(frame.getHeight()*0.2);
 		c.gridwidth = 1;
 		panel.add(generate, c);
 		
@@ -99,7 +110,10 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-		
+		}
+		if(e.getSource() == back){
+			System.out.println("Is this visible"+ this.isVisible());
+			
 		}
 	}
 }

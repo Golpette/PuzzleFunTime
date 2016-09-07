@@ -90,6 +90,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
+		
 		/*
 		 * This is where all the crossword boxes are filled black or provide
 		 * a useable JTextfield.  This is layered on top of the transparentLayer
@@ -134,9 +135,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer.add(crosswordGrid, new Integer(1));
 		layer.setVisible(true);
 		layer.setOpaque(true);
-		layer.setPreferredSize(new Dimension(200,200));
+		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
-		layer.setMaximumSize(frame.getSize());
+		//layer.setMaximumSize(frame.getSize());
 
 		
 		/*
@@ -151,38 +152,50 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		text.append("\n\nACROSS: \n");
 		text.append(getClues(cluesAcross));
 		text.append("\nDOWN: \n" + getClues(cluesDown));
-		text.setOpaque(false);
+		//text.setVisible(true);
+		//text.setOpaque(true);
 		//text.setLineWrap(true);	//Not sure what to do about this - which looks better?
 		text.setWrapStyleWord(true);
 		hints = new ArrayList<JButton>();
+		
+		
 		
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				if(!gridInit[j+1][i+1].equals("")){
 					JButton hint = new JButton("Hint");  //try JLabels
-		
+		            hint.setOpaque(true);
+		            hint.setVisible(true);
 					hint.addActionListener(this);
+					//hint.setBounds(0, 0, 100, 20);
+//					hint.setPreferredSize(new Dimension(100,20));
+//					hint.setMinimumSize(new Dimension(squareSize*4,squareSize));
+//					hint.setMaximumSize(frame.getSize());
 					hints.add(hint);
-					
-					c.weightx = 0.0;
-					c.weighty = 0.0;
-					c.gridx = 0;
-					c.gridy = i;
-					clue.add(text, c);
-					
-					c.weightx = 0.0;
-					c.weighty = 0.0;
-					c.gridx = 1;
-					c.gridy = i;
-					clue.add(hint, c);
 				}	
 			}
 		}
+		for (JButton b: hints){
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			c.gridx = 1;
+			c.gridy = hints.indexOf(b);
+			clue.add(b, c);
+		}
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = hints.size();
+		clue.add(text, c);
+		
 		clue.setBackground(new Color(255, 255, 255, 255));
 		//clue.add(area, new Integer(0));
-		clue.setVisible(true);
-		clue.setOpaque(true);
-		clue.setPreferredSize(new Dimension(200,200));
+		//clue.setVisible(true);
+		//clue.setOpaque(true);
+		//clue.setPreferredSize(new Dimension(200,200));
+		clue.setBounds(200, 0, 400, 400) ;
 		clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
 		clue.setMaximumSize(frame.getSize());
 		
@@ -192,18 +205,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * components.  There are two components inside it: A JLayeredPane and a GridBagLayout
 		 */
 		main = new JPanel(new GridBagLayout());
+		main.setOpaque(true);
+		main.setVisible(true);
 		
-		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
+		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
 		c.weighty = 1.0;
-		c.ipadx = squareSize*2;
+		//c.ipadx = squareSize*2;
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
 		
-		c.weightx = frame.getWidth()/(frame.getWidth()-squareSize*x);
+		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
 		c.weighty = 1.0;
-		c.ipadx = squareSize*2;
-		c.gridx = 0;
+		//c.ipadx = squareSize*2;
+		c.gridx = 1;
 		c.gridy = 0;
 		main.add(clue, c);
 		
@@ -214,8 +229,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		area.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		area.setOpaque(false);
+		//area.setBounds(0,0,frame.getWidth(), 500);
+		area.setOpaque(true);
+		area.setVisible(true);
 		
 		/*
 		 * This is the button which generates a solution for the given crossword
@@ -232,7 +248,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * It holds two components:  A JScrollPane and a JButton
 		 */
 		panel = new JPanel(new GridBagLayout());
-		
+		panel.setOpaque(true);
+		panel.setVisible(true);
 		c.weighty = 1.0;
 		//c.ipadx = 1;
 		c.gridx = 0;

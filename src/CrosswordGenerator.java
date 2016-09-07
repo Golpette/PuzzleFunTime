@@ -15,6 +15,7 @@ public class CrosswordGenerator{
 	ArrayList<Word> words;
 	ArrayList<Entry> entries;
 	boolean connected, direction;	
+	DrawCrossword crossword;
 	
 	public CrosswordGenerator(int crosswordSize) throws IOException{
 		this.crosswordSize = crosswordSize;
@@ -77,6 +78,6 @@ public class CrosswordGenerator{
 			}	
 			connected = HoshenKopelman.isConnected(grid, x, y);
 		}
-		new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries);
+		crossword = new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries);
 	}
 }
