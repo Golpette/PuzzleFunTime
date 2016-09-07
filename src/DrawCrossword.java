@@ -40,6 +40,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JTextArea text;
 	JButton reveal;
 	JLabel [][] clueNumbers;
+	JLabel [] cluesDown, cluesAcross;
 	GridBagConstraints c;
 	ArrayList<JLabel> nums;
 	ArrayList<JButton> hints;
@@ -51,8 +52,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		JFrame frame = new JFrame("Auto Crossword");
-		frame.setSize(1000, 400);
-		frame.setPreferredSize(new Dimension(600,400));
+		frame.setSize(500, 400);
+		frame.setPreferredSize(new Dimension(500,400));
 		frame.setBackground(new Color(255,255,255,255));
 		
 		this.grid = grid;
@@ -176,10 +177,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}
 		for (JButton b: hints){
-			c.weightx = 1.0;
-			c.weighty = 1.0;
+			//c.weightx = 1.0;
+			//c.weighty = 1.0;
 			c.gridx = 1;
 			c.gridy = hints.indexOf(b);
+			c.gridheight = 1/hints.size();
 			clue.add(b, c);
 		}
 		
@@ -187,7 +189,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.gridheight = hints.size();
+		//c.gridheight = hints.size();		//This is funny...
 		clue.add(text, c);
 		
 		clue.setBackground(new Color(255, 255, 255, 255));
@@ -195,9 +197,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		//clue.setVisible(true);
 		//clue.setOpaque(true);
 		//clue.setPreferredSize(new Dimension(200,200));
-		clue.setBounds(200, 0, 400, 400) ;
-		clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
-		clue.setMaximumSize(frame.getSize());
+		//clue.setBounds(200, 0, 400, 400) ;
+//		clue.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
+//		clue.setMaximumSize(frame.getSize());
 		
 		
 		/*
@@ -205,18 +207,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * components.  There are two components inside it: A JLayeredPane and a GridBagLayout
 		 */
 		main = new JPanel(new GridBagLayout());
-		main.setOpaque(true);
-		main.setVisible(true);
+//		main.setOpaque(true);
+//		main.setVisible(true);
 		
-		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
-		c.weighty = 1.0;
+//		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
+//		c.weighty = 0.2;
 		//c.ipadx = squareSize*2;
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
 		
-		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
-		c.weighty = 1.0;
+//		c.weightx = 0.5;		//frame.getWidth()/(frame.getWidth()-squareSize*x);
+//		c.weighty = 0.2;
 		//c.ipadx = squareSize*2;
 		c.gridx = 1;
 		c.gridy = 0;
@@ -230,8 +232,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		//area.setBounds(0,0,frame.getWidth(), 500);
-		area.setOpaque(true);
-		area.setVisible(true);
+		///area.setOpaque(true);
+		//area.setVisible(true);
 		
 		/*
 		 * This is the button which generates a solution for the given crossword
@@ -239,8 +241,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		reveal = new JButton("Show Solution");
 		reveal.setFont(font2);
-		reveal.setOpaque(true);
-		reveal.setEnabled(true);
+//		reveal.setOpaque(true);
+//		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 		
 		/*
@@ -248,20 +250,21 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * It holds two components:  A JScrollPane and a JButton
 		 */
 		panel = new JPanel(new GridBagLayout());
-		panel.setOpaque(true);
-		panel.setVisible(true);
+//		panel.setOpaque(true);
+//		panel.setVisible(true);
+		
 		c.weighty = 1.0;
-		//c.ipadx = 1;
+		c.ipadx = 1;
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(area, c);
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		//c.ipady = 10;
-		c.gridwidth = 2;
+		c.ipady = 0;
+		//c.gridwidth = 2;
 		panel.add(reveal, c);
 		
 		/*Overall JFrame to hold all components
