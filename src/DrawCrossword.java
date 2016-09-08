@@ -52,6 +52,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Random rand;
 	Border border;
 	Color clear;
+	JLabel hintD;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		JFrame frame = new JFrame("Auto Crossword");
@@ -182,13 +183,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			//down.mouseEnter(evt, x, y)
 			//down.setBackground(new Color(255,255,255,255));
 			cluesDwn.add(down);
+			//cluesDwn.add(hintD);
 		}
 		
 		for(JLabel j: cluesAcr){
 			c.weightx = 1;
 			c.weighty = 0;
 			c.gridx = 0;
-			c.gridy = cluesAcr.indexOf(j);
+			//c.gridy = cluesAcr.indexOf(j);
 			clue.add(j, c);
 		}
 		
@@ -196,7 +198,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c.weightx = 1;
 			c.weighty = 0;
 			c.gridx = 0;
-			c.gridy = cluesAcr.indexOf(k);
+			//c.gridy = cluesAcr.indexOf(k);
 			clue.add(k, c);
 		}
 		//text.setLineWrap(true);	//Not sure what to do about this - which looks better?
@@ -242,7 +244,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * components.  There are two components inside it: A JLayeredPane and a GridBagLayout
 		 */
 		main = new JPanel(new GridBagLayout());
+		main.setBackground(clear);
 
+		
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
@@ -272,7 +276,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * It holds two components:  A JScrollPane and a JButton
 		 */
 		panel = new JPanel(new GridBagLayout());
-		
+		//panel.setBackground(clear);
+
 		c.weighty = 1.0;
 		c.ipadx = 1;
 		c.gridx = 0;
@@ -289,9 +294,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		/*Overall JFrame to hold all components
 		 * This has the main panel assigned to it
 		 */
+		//frame.setBackground(clear);
+
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 
 	
@@ -312,7 +320,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				if(arg0.getSource() == j){
 					System.out.println("entered " + j.getText());
 					//if(entries.indexOf()){
-						JLabel hintD = new JLabel("hello");
+				//	String str = 
+						hintD = new JLabel("hello");
+						hintD.setVisible(true);
 						//cluesDwn.add(cluesDwn.indexOf(j)+1, hintD);
 					//}
 					
