@@ -39,7 +39,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	String[][] grid2;
 	GridBagConstraints c;
 	JButton reveal;
-	DrawSolution sol;
+	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
 	Font font, font2;
 	Random rand;
@@ -51,7 +51,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
-		sol = new DrawSolution(grid2, x, y, squareSize, "Crossword");
+		sol = new DrawSudokuSolution(grid2, x, y, squareSize, "Crossword");
 		fullGrid = new ArrayList<String>();
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
@@ -100,7 +100,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		frame = new JFrame("Auto Word Search");
-		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)));
+		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+3)));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setContentPane(panel);

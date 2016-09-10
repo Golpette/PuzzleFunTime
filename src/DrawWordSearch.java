@@ -100,6 +100,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(new Color(255, 255, 255, 255));
+		
 		clues.setVisible(true);
 		clues.setOpaque(true);
 		
@@ -141,7 +142,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		frame = new JFrame("Auto Word Search");
-		//frame.setPreferredSize(new Dimension(squareSize*(x+1)+squareSize/2,squareSize*(y+2)));
+		frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setContentPane(panel);
 		frame.pack();
