@@ -41,17 +41,18 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JButton reveal;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
-	Font font;
+	Font font, font2;
 	Random rand;
 	boolean buttonPushed;
 	
 	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
+		font = new Font("Times New Roman", Font.BOLD, 36);
+		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
 		sol = new DrawSolution(grid2, x, y, squareSize, "Crossword");
 		fullGrid = new ArrayList<String>();
-		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		layer = new JLayeredPane();
@@ -63,6 +64,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 

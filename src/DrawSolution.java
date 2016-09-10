@@ -23,7 +23,6 @@ public class DrawSolution extends JComponent {
 		this.y = y;
 		this.squareSize = squareSize;
 		this.puzzle = puzzle;
-		//font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 4);
 		font = new Font("Times New Roman", Font.PLAIN, 20);
 		frameSizeX = (x) * squareSize+(squareSize/2);
 		frameSizeY = (y + 1) * squareSize;
@@ -37,7 +36,6 @@ public class DrawSolution extends JComponent {
 		frame = new JFrame(title);
 		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

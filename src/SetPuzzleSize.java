@@ -54,21 +54,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		c.ipadx = 10;
-//		c.ipadx = 100;
-//		//c.gridwidth = 2;
-//		panel1.add(back, c);
-		
 		c.gridx = 0;
 		c.gridy = 1;
-		//c.ipadx = 10;
 		panel1.add(intro, c);
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		//c.ipadx = 10;
 		panel1.add(spinner, c);
 		
 		
@@ -79,12 +70,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.ipady = (int)(frame.getHeight()*0.8);
 		panel.add(panel1, c);
 		
-		c.weightx = 1.0;
-		//c.weighty = ;
+		c.weightx = 0.0;
+		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = (int)(frame.getHeight()*0.1);
-		c.gridwidth = 1;
+		c.ipady = 10;
+		//c.gridwidth = 1;
 		panel.add(generate, c);
 		
 		frame.setContentPane(panel);

@@ -56,8 +56,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		allClues = new ArrayList<JLabel>();
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
-		panel = new JPanel(new GridBagLayout());
-		panel.setOpaque(false);
+	
 		layer = new JLayeredPane();
 		letters = new JLabel [x-2][y-2];
 		c = new GridBagConstraints();
@@ -91,17 +90,42 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 		
+		layer.setBackground(new Color(255, 255, 255, 255));
+		layer.setVisible(true);
+		layer.setOpaque(true);
+		layer.setPreferredSize(new Dimension(500,500));
+//		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
+//		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.add(transparentLayer);
+		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
+		clues.setBackground(new Color(255, 255, 255, 255));
+		clues.setVisible(true);
+		clues.setOpaque(true);
 		
 		for(Entry entry: entries){
 			JLabel temp = new JLabel(entry.getWord());
 			clues.add(temp);
 		}
 		
-		main = new JPanel(new GridLayout(1,2));
-		main.add(layer);
-		main.add(clues);
+		main = new JPanel(new GridBagLayout());
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		main.add(layer, c);
+
+		c.weightx = 0.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.ipady = 10;
+		main.add(clues, c);
+		
+		
+		panel = new JPanel(new GridBagLayout());
+		panel.setOpaque(false);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -117,7 +141,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		frame = new JFrame("Auto Word Search");
-		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)));
+		//frame.setPreferredSize(new Dimension(squareSize*(x+1)+squareSize/2,squareSize*(y+2)));
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setContentPane(panel);
 		frame.pack();
