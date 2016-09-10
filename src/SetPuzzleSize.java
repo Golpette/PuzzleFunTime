@@ -47,7 +47,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
-		model = new SpinnerNumberModel(10, 3, 30, 1);
+		model = new SpinnerNumberModel(5, 3, 30, 1);
 		spinner = new JSpinner(model);
 		intro = new JLabel("Set " + puzzle + " Size");
 		intro.setFont(font);

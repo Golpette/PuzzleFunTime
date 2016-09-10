@@ -42,22 +42,21 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JTextArea text;
 	JButton reveal;
 	JLabel [][] clueNumbers;
-	ArrayList<JLabel> cluesDwn, cluesAcr;
+	ArrayList<JLabel> cluesDwn, cluesAcr, hints;
 	GridBagConstraints c;
 	ArrayList<JLabel> nums;
-	ArrayList<JButton> hints;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
 	Font font, font2, font3;
 	Random rand;
 	Border border;
 	Color clear;
-	JLabel hintD;
+	JLabel hintD, hintA;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(500, 400);
-		frame.setPreferredSize(new Dimension(500,400));
+		frame.setPreferredSize(new Dimension(600,400));
 		frame.setBackground(new Color(255,255,255,255));
 		
 		cluesDwn = new ArrayList<JLabel>();
@@ -77,7 +76,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frameSizeY = (y + 4) * squareSize;
 		rand = new Random();
 		
-		/*
+		/**
 		 * This is where the transparentLayer to hold all the clue numbers is created.
 		 * It sets all the cells with question numbers with the correct number in the 
 		 * top left corner of a GridLayout cell.
@@ -100,7 +99,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}
 		
-		/*
+		/**
 		 * This is where all the crossword boxes are filled black or provide
 		 * a useable JTextfield.  This is layered on top of the transparentLayer
 		 */
@@ -133,7 +132,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}
 		
-		/*
+		/**
 		 * This is the JLayeredPane layer which holds the actual crossword.
 		 * It is composed of two layers crosswordGrid and clueNums which are both 
 		 * GridLayout JPanels which are layered one on top of the other.
@@ -146,10 +145,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x-1),squareSize*(x-1)));
-		//layer.setMaximumSize(frame.getSize());
-
 		
-		/*
+		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JPanel
 		 */
@@ -157,40 +154,39 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
+		hints = new ArrayList<JLabel>();
 		
 		JLabel first = new JLabel("Across");
 		cluesAcr.add(first);
-		//text = new JTextArea();
-		//text.append("\n\nACROSS: \n");
 		for (String s: cluesAcross){
 			JLabel across = new JLabel(s);
+			hintA = new JLabel("HINT");
+			hintA.setForeground(Color.GREEN);
+			hintA.setVisible(false);
+			hints.add(hintA);
 			mouseActionlabel(across);
+			mouseActionlabel(hintA);
 			cluesAcr.add(across);
-			
-			//text.append(s+"\n");
-		}
-		
-		
-		
+			cluesAcr.add(hintA);
+			}
 		
 		JLabel second = new JLabel("Down");
-		cluesDwn.add(second);
-		//text.append("\nDOWN: \n");		
+		cluesDwn.add(second);	
 		for (String s: cluesDown){
-			//text.append(s+"\n");
 			JLabel down = new JLabel(s);
+			hintD = new JLabel("HINT");
+			hintD.setForeground(Color.GREEN);
+			hintD.setVisible(false);
+			hints.add(hintD);
 			mouseActionlabel(down);
-			//down.mouseEnter(evt, x, y)
-			//down.setBackground(new Color(255,255,255,255));
 			cluesDwn.add(down);
-			//cluesDwn.add(hintD);
+			cluesDwn.add(hintD);
 		}
 		
 		for(JLabel j: cluesAcr){
 			c.weightx = 1;
 			c.weighty = 0;
 			c.gridx = 0;
-			//c.gridy = cluesAcr.indexOf(j);
 			clue.add(j, c);
 		}
 		
@@ -198,55 +194,16 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c.weightx = 1;
 			c.weighty = 0;
 			c.gridx = 0;
-			//c.gridy = cluesAcr.indexOf(k);
 			clue.add(k, c);
 		}
-		//text.setLineWrap(true);	//Not sure what to do about this - which looks better?
-		//text.setWrapStyleWord(true);
-		hints = new ArrayList<JButton>();
 		
-		
-//		
-//		for (int i = 0; i < x-2; i++){
-//			for (int j = 0; j < y-2; j++){
-//				if(!gridInit[j+1][i+1].equals("")){
-//					JButton hint = new JButton("Hint");  //try JLabels
-//		            hint.setOpaque(true);
-//		            hint.setVisible(true);
-//					hint.addActionListener(this);
-//					//hint.setBounds(0, 0, 100, 20);
-////					hint.setPreferredSize(new Dimension(100,20));
-////					hint.setMinimumSize(new Dimension(squareSize*4,squareSize));
-////					hint.setMaximumSize(frame.getSize());
-//					hints.add(hint);
-//				}	
-//			}
-//		}
-//		for (JButton b: hints){
-//			//c.weightx = 1.0;
-//			//c.weighty = 1.0;
-//			c.gridx = 1;
-//			c.gridy = hints.indexOf(b);
-//			c.gridheight = 1/hints.size();
-//			clue.add(b, c);
-//		}
-		
-//		c.weightx = 1.0;
-//		c.weighty = 1.0;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		//c.gridheight = hints.size();		//This is funny...
-//		clue.add(text, c);
-//		clue.setBackground(new Color(255, 255, 255, 255));
-		
-		/*
+		/**
 		 * This is the layout of the GridBagLayout panel main which holds all the crossword
 		 * components.  There are two components inside it: A JLayeredPane and a GridBagLayout
 		 */
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
 
-		
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
@@ -255,15 +212,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.gridy = 0;
 		main.add(clue, c);
 		
-		
-		/*
+		/**
 		 * This is the largest area of the GUI which holds the 
 		 * crossword and clues pane and makes them scrollable.
 		 */
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
-		/*
+		
+		/**
 		 * This is the button which generates a solution for the given crossword
 		 * bringing up a new GUI instance with the filled in grid on being pressed.
 		 */
@@ -271,12 +228,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		reveal.setFont(font2);
 		reveal.addActionListener(this);
 		
-		/*
+		/**
 		 * This is the panel for the main area of the program.
 		 * It holds two components:  A JScrollPane and a JButton
 		 */
 		panel = new JPanel(new GridBagLayout());
-		//panel.setBackground(clear);
 
 		c.weighty = 1.0;
 		c.ipadx = 1;
@@ -291,71 +247,84 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.ipady = 0;
 		panel.add(reveal, c);
 		
-		/*Overall JFrame to hold all components
+		/**
+		 * Overall JFrame to hold all components
 		 * This has the main panel assigned to it
 		 */
-		//frame.setBackground(clear);
 
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);
-		
 	}
 
-	
 	void mouseActionlabel(JLabel l){
 		l.addMouseListener(new MouseListener()
 		{
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			for(JLabel j: cluesDwn){
-				if(arg0.getSource() == j){
-					System.out.println("entered " + j.getText());
-					//if(entries.indexOf()){
-				//	String str = 
-						hintD = new JLabel("hello");
-						hintD.setVisible(true);
-						//cluesDwn.add(cluesDwn.indexOf(j)+1, hintD);
-					//}
-					
-				}
-			}
+		public void mouseClicked(MouseEvent e) {
 			for(JLabel k: cluesAcr){
-				if(arg0.getSource() == k){
-					System.out.println("entered " + k.getText());
-					//if(entries.indexOf()){
-						JLabel hintA = new JLabel("hello");
-						//cluesDwn.add(cluesDwn.indexOf(j)+1, hintD);
+				if(e.getSource() == k){
+					k.setText("BOOM");
+				}
+			}
+			for(JLabel j: cluesDwn){
+				if(e.getSource() == j){
+					j.setText("BOOM");
+				}
+			}
+		}
+
+		public void mouseEntered(MouseEvent e) {
+			for(JLabel k: cluesAcr){
+				if(e.getSource() == k){
+					if(!hints.contains(k)){
+					System.out.println("label entered");
+
+					//if((cluesAcr.indexOf(k))%2 == 0){
+						cluesAcr.get(cluesAcr.indexOf(k)+1).setVisible(true);
 					//}
-					
+					}
+				}
+			}
+			for(JLabel j: cluesDwn){
+				if(e.getSource() == j){
+					cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
 				}
 			}
 			
 		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
+//still need to refine
+		public void mouseExited(MouseEvent e) {
+			for(JLabel k: cluesAcr){
+				if(e.getSource() == k){
+					for(JLabel hint: hints){
+						hint.setVisible(false);
+						//hint.setText("Hint");
+						cluesDwn.get(cluesDwn.indexOf(k)+1).setVisible(true);
+					}
+						hintA.setVisible(false);
+				}
+			}
+			for(JLabel j: cluesDwn){
+				if(e.getSource() == j){
+					if(!hints.contains(j)){
+						System.out.println("label in hints exited");
+						//hintD.setVisible(false);
+					for(JLabel hint: hints){
+						hint.setVisible(false);
+						//hint.setText("Hint");
+						cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
+					}
+				}
+			}
+		}
 		}
 
-		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 		});
@@ -402,15 +371,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
-		}
-		for(JButton h: hints){
-			if(e.getSource()== h){
-				h.setText(shuffleString(entries.get(hints.indexOf(h)).getWord()));		//need to set this to the corresponding word anagramised
-				//h.setText(shuffleString(h.getText()));
-			}else{
-				h.setText("Hint");
-			}
-		}
-		
+		}		
 	}
 }
