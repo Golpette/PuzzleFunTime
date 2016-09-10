@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
@@ -61,38 +62,33 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		panel.add(intro, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 40;
+		c.ipady = 0;
 		c.gridwidth = 1;
 		panel.add(cwd, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 1;
 		c.gridy = 1;
-		c.ipady = 40;
+		c.ipady = 0;
 		c.gridwidth = 1;
 		panel.add(wds, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 1;
-		c.ipady = 40;
+		c.ipady = 0;
 		c.gridwidth = 1;
 		panel.add(sud, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
-	
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	public static void main (String [] args) throws IOException{
-		PuzzleLoader puzzle = new PuzzleLoader();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -128,6 +124,14 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		}
+	}
+	
+	public static void main (String [] args){
+		try {
+			new PuzzleLoader();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

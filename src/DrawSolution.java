@@ -40,6 +40,7 @@ public class DrawSolution extends JComponent {
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 	}
 		
 	protected void paintComponent(Graphics g){

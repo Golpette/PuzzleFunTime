@@ -32,7 +32,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	private static int squareSize = 40;	
 	int x, y;
 	JFrame frame;
-	JPanel panel, transparentLayer;
+	JPanel panel, transparentLayer, main, clues;
 	JLayeredPane layer;
 	JLabel [][] letters;
 	String[][] grid;
@@ -40,16 +40,20 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	JButton reveal;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
+	ArrayList<Entry> entries;
+	ArrayList<JLabel> allClues;
 	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	Font font;
 	Random rand;
 	boolean buttonPushed;
 	
-	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown) throws IOException{
+	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
+		this.entries = entries;
 		fullGrid = new ArrayList<String>();
+		allClues = new ArrayList<JLabel>();
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		panel = new JPanel(new GridBagLayout());
@@ -63,14 +67,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
-		//reveal.setOpaque(true);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
-		//transparentLayer.setBackground(Color.RED);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -78,8 +80,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				letters[i][j].setFont(font);
 				letters[i][j].setForeground(Color.BLACK);
 				letters[i][j].setBorder(border);
-//				letters[i][j].setVisible(true);
-				//letters[i][j].setOpaque(false);
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
@@ -91,17 +91,23 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 		
-//		layer.setBackground(new Color(255, 255, 255, 255));
-//		layer.setBackground(Color.blue);
 		layer.add(transparentLayer);
-//		layer.setVisible(true);
-		//layer.setOpaque(true);
+		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
+		
+		for(Entry entry: entries){
+			JLabel temp = new JLabel(entry.getWord());
+			clues.add(temp);
+		}
+		
+		main = new JPanel(new GridLayout(1,2));
+		main.add(layer);
+		main.add(clues);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(layer, c);
+		panel.add(main, c);
 
 		c.weightx = 0.0;
 		c.weighty = 0.0;
@@ -112,11 +118,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)));
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
-//		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setContentPane(panel);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

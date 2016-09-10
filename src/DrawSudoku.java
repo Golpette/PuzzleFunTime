@@ -103,6 +103,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setContentPane(panel);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

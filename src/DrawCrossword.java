@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -54,9 +52,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JLabel hintD, hintA;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
+		frameSizeX = 2*(x + 1) * squareSize;
+		frameSizeY = (y + 4) * squareSize;
+		
 		JFrame frame = new JFrame("Auto Crossword");
-		frame.setSize(500, 400);
-		frame.setPreferredSize(new Dimension(600,400));
+		frame.setSize(1000, 400);
+		frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
 		frame.setBackground(new Color(255,255,255,255));
 		
 		cluesDwn = new ArrayList<JLabel>();
@@ -76,8 +77,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		font3 = new Font("Times New Roman", Font.PLAIN, 20);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
-		frameSizeX = 2*(x + 1) * squareSize;
-		frameSizeY = (y + 4) * squareSize;
 		rand = new Random();
 		
 		/**
@@ -154,15 +153,17 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
-		 * The numbers and clues in a JTextArea and the hints in a JPanel
+		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */
 		clue = new JPanel(new GridBagLayout());
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
+		//clue.setBounds(0, 0, 200, 200);
 		hints = new ArrayList<JLabel>();
 		
 		JLabel first = new JLabel("Across");
+		first.setFont(font2);
 		cluesAcr.add(first);
 		for (String s: cluesAcross){
 			JLabel across = new JLabel(s);
@@ -176,6 +177,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		
 		JLabel second = new JLabel("Down\n");
+		second.setFont(font2);
 		cluesDwn.add(second);	
 		for (String s: cluesDown){
 			JLabel down = new JLabel(s);
@@ -209,10 +211,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
 
+		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
 		
+		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		main.add(clue, c);
@@ -222,6 +226,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * crossword and clues pane and makes them scrollable.
 		 */
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area.getVerticalScrollBar().setUnitIncrement(8);
+		area.getHorizontalScrollBar().setUnitIncrement(8);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
 		
@@ -259,6 +265,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		frame.setContentPane(panel);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
@@ -272,12 +279,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for(Entry ent: entries){
 						if(ent.isAcross()){
 							if(ent.getEntryAcross() == hints.indexOf(k)){
-								k.setText(shuffleString(ent.word).toUpperCase());
+								k.setText("     " + shuffleString(ent.word).toUpperCase());
 							}
 						}
 						else{
 							if(ent.getEntryDown() == hints.indexOf(k)-(cluesAcr.size()/2)){
-								k.setText(shuffleString(ent.word).toUpperCase());
+								k.setText("     " + shuffleString(ent.word).toUpperCase());
 							}
 						}
 					}					
@@ -288,20 +295,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		public void mouseEntered(MouseEvent e) {
 			for(JLabel i: hints){
 				if(e.getSource() == i){
-					i.setText("HINT");
+					i.setText("     HINT");
 				}
 			}
 			for(JLabel j: cluesAcr){
 				if(e.getSource() == j){
 					if(!hints.contains(j)){
-						cluesAcr.get(cluesAcr.indexOf(j)+1).setText("HINT");
+						cluesAcr.get(cluesAcr.indexOf(j)+1).setText("     HINT");
 					}
 				}
 			}			
 			for(JLabel k: cluesDwn){
 				if(e.getSource() == k){
 					if(!hints.contains(k)){
-						cluesDwn.get(cluesDwn.indexOf(k)+1).setText("HINT");
+						cluesDwn.get(cluesDwn.indexOf(k)+1).setText("     HINT");
 					}
 				}
 			}

@@ -59,6 +59,6 @@ public class WordSearchGenerator{
 					}				
 				}
 			}	
-		new DrawWordSearch(grid, x, y, acrossClues, downClues);
+		new DrawWordSearch(grid, x, y, acrossClues, downClues, entries);
 	}
 }
