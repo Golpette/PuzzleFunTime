@@ -160,9 +160,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesAcr.add(first);
 		for (String s: cluesAcross){
 			JLabel across = new JLabel(s);
-			hintA = new JLabel("HINT");
+			hintA = new JLabel(" ");
 			hintA.setForeground(Color.GREEN);
-			hintA.setVisible(false);
 			hints.add(hintA);
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
@@ -174,11 +173,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesDwn.add(second);	
 		for (String s: cluesDown){
 			JLabel down = new JLabel(s);
-			hintD = new JLabel("HINT");
+			hintD = new JLabel(" ");
 			hintD.setForeground(Color.GREEN);
-			hintD.setVisible(false);
 			hints.add(hintD);
 			mouseActionlabel(down);
+			mouseActionlabel(hintD);
 			cluesDwn.add(down);
 			cluesDwn.add(hintD);
 		}
@@ -262,62 +261,79 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		{
 
 		public void mouseClicked(MouseEvent e) {
-			for(JLabel k: cluesAcr){
+			for(JLabel k: hints){
 				if(e.getSource() == k){
 					k.setText("BOOM");
-				}
-			}
-			for(JLabel j: cluesDwn){
-				if(e.getSource() == j){
-					j.setText("BOOM");
 				}
 			}
 		}
 
 		public void mouseEntered(MouseEvent e) {
-			for(JLabel k: cluesAcr){
+			for(JLabel i: hints){
+				if(e.getSource() == i){
+					i.setText("HintAll");
+				}
+			}
+			for(JLabel j: cluesAcr){
+				if(e.getSource() == j){
+					if(!hints.contains(j)){
+						cluesAcr.get(cluesAcr.indexOf(j)+1).setText("HintA");
+					}
+				}
+			}			
+			for(JLabel k: cluesDwn){
 				if(e.getSource() == k){
 					if(!hints.contains(k)){
-					System.out.println("label entered");
-
-					//if((cluesAcr.indexOf(k))%2 == 0){
-						cluesAcr.get(cluesAcr.indexOf(k)+1).setVisible(true);
-					//}
+						cluesDwn.get(cluesDwn.indexOf(k)+1).setText("HintD");
 					}
 				}
 			}
-			for(JLabel j: cluesDwn){
+		}
+
+		public void mouseExited(MouseEvent e) {
+			
+			for(JLabel i: hints){
+				if(e.getSource() == i){
+					i.setText(" ");
+				}
+			}
+			for(JLabel j: cluesAcr){
 				if(e.getSource() == j){
-					cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
+					if(!hints.contains(j)){
+						cluesAcr.get(cluesAcr.indexOf(j)+1).setText(" ");
+					}
+				}
+			}			
+			for(JLabel k: cluesDwn){
+				if(e.getSource() == k){
+					if(!hints.contains(k)){
+						cluesDwn.get(cluesDwn.indexOf(k)+1).setText(" ");
+					}
 				}
 			}
 			
-		}
-//still need to refine
-		public void mouseExited(MouseEvent e) {
-			for(JLabel k: cluesAcr){
-				if(e.getSource() == k){
-					for(JLabel hint: hints){
-						hint.setVisible(false);
-						//hint.setText("Hint");
-						cluesDwn.get(cluesDwn.indexOf(k)+1).setVisible(true);
-					}
-						hintA.setVisible(false);
-				}
-			}
-			for(JLabel j: cluesDwn){
-				if(e.getSource() == j){
-					if(!hints.contains(j)){
-						System.out.println("label in hints exited");
-						//hintD.setVisible(false);
-					for(JLabel hint: hints){
-						hint.setVisible(false);
-						//hint.setText("Hint");
-						cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
-					}
-				}
-			}
-		}
+//			for(JLabel k: cluesAcr){
+//				if(e.getSource() == k){
+//					for(JLabel hint: hints){
+//						//hint.setVisible(false);
+//						hint.setText(" ");
+//						cluesDwn.get(cluesDwn.indexOf(k)+1).setVisible(true);
+//					}
+//						hintA.setVisible(false);
+//				}
+//			}
+//			for(JLabel j: cluesDwn){
+//				if(e.getSource() == j){
+//					if(!hints.contains(j)){
+//						//hintD.setVisible(false);
+//					for(JLabel hint: hints){
+//						//hint.setVisible(false);
+//						hint.setText(" ");
+//						cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
+//					}
+//				}
+//			}
+//		}
 		}
 
 		public void mousePressed(MouseEvent arg0) {
