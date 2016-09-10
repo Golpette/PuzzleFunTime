@@ -8,6 +8,8 @@ public class Entry {
     Boolean across;
     String word;
     String definition;
+    int clue_number;
+    int entryAcross, entryDown;
    
    public Entry(int start_x, int start_y, Boolean across, String word, String definition){
 	   this.start_x = start_x;
@@ -15,6 +17,9 @@ public class Entry {
 	   this.across = across;
 	   this.word = word;
 	   this.definition = definition;
+	   clue_number = 0;
+	   entryAcross = 0;
+	   entryDown = 0;
    }
    
    public String toString(){
@@ -39,5 +44,29 @@ public class Entry {
    
    public String getDefinition(){
 	   return this.definition;
+   }
+   
+   public int getClueNumber(){
+	   return this.clue_number;
+   }
+   
+   public int getEntryAcross(){
+	   return this.entryAcross;
+   }
+   
+   public int getEntryDown(){
+	   return this.entryDown;
+   }
+   
+   public void setClueNumber(int clue){
+	   this.clue_number = clue;
+   }
+   
+   public void setEntryAcross(int entry){
+	   this.entryAcross = entry;
+   }
+   
+   public void setEntryDown(int entry){
+	   this.entryDown = entry;
    }
 }

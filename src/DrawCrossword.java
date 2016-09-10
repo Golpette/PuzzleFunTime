@@ -50,7 +50,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Font font, font2, font3;
 	Random rand;
 	Border border;
-	Color clear;
+	Color clear, red, green, blue, black;
 	JLabel hintD, hintA;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
@@ -62,6 +62,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesDwn = new ArrayList<JLabel>();
 		cluesAcr = new ArrayList<JLabel>();
 		clear = new Color(255,255,255,255);
+		red = new Color(255,0,0,255);
+		green = new Color(0,255,0,255);
+		blue = new Color(0,0,255,255);
+		black = new Color(0,0,0,255);
 		
 		this.grid = grid;
 		this.x = x;
@@ -93,7 +97,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
 				clueNumbers[i][j].setOpaque(false);
-				clueNumbers[i][j].setText(gridInit[j+1][i+1]);
+				if(!gridInit[j+1][i+1].equals("_")){
+					clueNumbers[i][j].setText(gridInit[j+1][i+1]);
+				}
 				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
 				clueNums.add(clueNumbers[i][j]);
 			}
@@ -169,7 +175,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			cluesAcr.add(hintA);
 			}
 		
-		JLabel second = new JLabel("Down");
+		JLabel second = new JLabel("Down\n");
 		cluesDwn.add(second);	
 		for (String s: cluesDown){
 			JLabel down = new JLabel(s);
@@ -263,7 +269,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		public void mouseClicked(MouseEvent e) {
 			for(JLabel k: hints){
 				if(e.getSource() == k){
-					k.setText("BOOM");
+					for(Entry ent: entries){
+						if(ent.isAcross()){
+							if(ent.getEntryAcross() == hints.indexOf(k)){
+								k.setText(shuffleString(ent.word).toUpperCase());
+							}
+						}
+						else{
+							if(ent.getEntryDown() == hints.indexOf(k)-(cluesAcr.size()/2)){
+								k.setText(shuffleString(ent.word).toUpperCase());
+							}
+						}
+					}					
 				}
 			}
 		}
@@ -271,20 +288,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		public void mouseEntered(MouseEvent e) {
 			for(JLabel i: hints){
 				if(e.getSource() == i){
-					i.setText("HintAll");
+					i.setText("HINT");
 				}
 			}
 			for(JLabel j: cluesAcr){
 				if(e.getSource() == j){
 					if(!hints.contains(j)){
-						cluesAcr.get(cluesAcr.indexOf(j)+1).setText("HintA");
+						cluesAcr.get(cluesAcr.indexOf(j)+1).setText("HINT");
 					}
 				}
 			}			
 			for(JLabel k: cluesDwn){
 				if(e.getSource() == k){
 					if(!hints.contains(k)){
-						cluesDwn.get(cluesDwn.indexOf(k)+1).setText("HintD");
+						cluesDwn.get(cluesDwn.indexOf(k)+1).setText("HINT");
 					}
 				}
 			}
@@ -311,29 +328,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
-			
-//			for(JLabel k: cluesAcr){
-//				if(e.getSource() == k){
-//					for(JLabel hint: hints){
-//						//hint.setVisible(false);
-//						hint.setText(" ");
-//						cluesDwn.get(cluesDwn.indexOf(k)+1).setVisible(true);
-//					}
-//						hintA.setVisible(false);
-//				}
-//			}
-//			for(JLabel j: cluesDwn){
-//				if(e.getSource() == j){
-//					if(!hints.contains(j)){
-//						//hintD.setVisible(false);
-//					for(JLabel hint: hints){
-//						//hint.setVisible(false);
-//						hint.setText(" ");
-//						cluesDwn.get(cluesDwn.indexOf(j)+1).setVisible(true);
-//					}
-//				}
-//			}
-//		}
 		}
 
 		public void mousePressed(MouseEvent arg0) {
@@ -345,7 +339,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 		});
 		}
-	
 	
 	public String shuffleString(String string){
 		ArrayList<Character> letters = new ArrayList<Character>();
@@ -369,12 +362,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if(boxes[i][j].getText().equals("")){
-							boxes[i][j].setForeground(new Color(0,0,0,255));
+							boxes[i][j].setForeground(black);
 						}
 						else if(boxes[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
-							boxes[i][j].setForeground(new Color(0,255,0,255));
+							boxes[i][j].setForeground(green);
 						}else{
-							boxes[i][j].setForeground(new Color(255,0,0,255));
+							boxes[i][j].setForeground(red);
 						}
 					}
 				}

@@ -56,6 +56,8 @@ public class CrosswordGenerator{
 			acrossClues.clear();
 			downClues.clear();
 			int problemNumber = 0;
+			int entryAcross = 0;
+			int entryDown = 0;
 			for(int i = 1; i < y-1; i++){
 				for(int j = 1; j < x-1; j++){
 					boolean twoOnSameSite = false;
@@ -66,11 +68,16 @@ public class CrosswordGenerator{
 							}
 							twoOnSameSite = true;
 							gridInit[j][i] = Integer.toString(problemNumber);
+							entries.get(current).setClueNumber(problemNumber);	//add clue number to entry
 							if(entries.get(current).isAcross()){
 								acrossClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
+								entries.get(current).setEntryAcross(entryAcross);
+								entryAcross++;
 							}
 							else{
 								downClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
+								entries.get(current).setEntryDown(entryDown);
+								entryDown++;
 							}						
 						}
 					}				
