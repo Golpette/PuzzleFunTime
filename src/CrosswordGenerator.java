@@ -17,6 +17,8 @@ public class CrosswordGenerator{
 	boolean connected, direction;	
 	DrawCrossword crossword;
 	
+    int count_fails=0;
+	
 	public CrosswordGenerator(int crosswordSize) throws IOException{
 		this.crosswordSize = crosswordSize;
 		gridSize = crosswordSize + 2;
@@ -42,9 +44,11 @@ public class CrosswordGenerator{
 				direction = r.nextBoolean();
 				if(!direction){
 					new FitWords(grid, x, y, words, entries, "crossword", true);
+					//new FitWords_forceConnection(grid, x, y, words, entries, true);
 				}
 				else{
 					new FitWords(grid, x, y, words, entries, "crossword", false);
+					//new FitWords_forceConnection(grid, x, y, words, entries, false);
 				}
 			}
 			gridInit = new String[x][y];			
@@ -84,7 +88,12 @@ public class CrosswordGenerator{
 				}
 			}	
 			connected = HoshenKopelman.isConnected(grid, x, y);
+			if(!connected){ count_fails++; }
+			
 		}
+		
+		System.out.println( count_fails );
 		crossword = new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries);
+		
 	}
 }
