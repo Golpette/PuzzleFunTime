@@ -332,17 +332,23 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										}
 										boxes[i][j+1].requestFocus();
 									}else if(boxes[i+1][j].isEnabled()){
-										boxes[i+1][j].setText("");
+										if(boxes[i+1][j].getText().equals("")){
+											boxes[i+1][j].setText("");
+										}
 										boxes[i+1][j].requestFocus();	
 									}
 								}else if(j < x-3){
 									if(boxes[i][j+1].isEnabled()){
-										boxes[i][j+1].setText("");
+										if(boxes[i][j+1].getText().equals("")){
+											boxes[i][j+1].setText("");
+										}
 										boxes[i][j+1].requestFocus();
 									}
 								}else if(i < y-3){
 									if(boxes[i+1][j].isEnabled()){
-										boxes[i+1][j].setText("");
+										if(boxes[i+1][j].getText().equals("")){
+											boxes[i+1][j].setText("");
+										}
 										boxes[i+1][j].requestFocus();
 									}
 								}
@@ -352,13 +358,25 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							System.out.println("Pressed Backspace");
 							//boxes[i][j].
 							boxes[i][j].setText("");
-							if(j > 0){
+							if(j > 0 && i > 0){
 								if(boxes[i][j-1].isEnabled() && !boxes[i][j-1].getText().equals("")){
 									boxes[i][j-1].requestFocus();
 								}else if(boxes[i-1][j].isEnabled() && !boxes[i-1][j].getText().equals("")){
 									boxes[i-1][j].requestFocus();
 								}else if(boxes[i][j-1].isEnabled()){
 									boxes[i][j-1].requestFocus();
+								}else if(boxes[i-1][j].isEnabled()){
+									boxes[i-1][j].requestFocus();
+								}
+							}else if(j > 0){
+								if(boxes[i][j-1].isEnabled() && !boxes[i][j-1].getText().equals("")){
+									boxes[i][j-1].requestFocus();
+								}else if(boxes[i][j-1].isEnabled()){
+									boxes[i][j-1].requestFocus();
+								}
+							}else if(i > 0){
+								if(boxes[i-1][j].isEnabled() && !boxes[i-1][j].getText().equals("")){
+									boxes[i-1][j].requestFocus();
 								}else if(boxes[i-1][j].isEnabled()){
 									boxes[i-1][j].requestFocus();
 								}
