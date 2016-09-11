@@ -320,6 +320,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 //						System.out.println("Keycode: "+e.getKeyCode());
 						//for(int a = e.getKeyCode();a< e.getKeyCode() ;a++){//not proper at all
 							if(65 <= e.getKeyCode() && e.getKeyCode() <= 90){
+								boxes[i][j].setText(Character.toString(e.getKeyChar()));
+								System.out.println("Keycode: "+ Character.toString(e.getKeyChar()));
 								if(j < x-3){
 									if(boxes[i][j+1].isEnabled()){
 										boxes[i][j+1].requestFocus();
