@@ -52,6 +52,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Border border;
 	Color clear, red, green, blue, black;
 	JLabel hintD, hintA;
+	ArrayList<KeyEvent> keys;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		frameSizeX = 2*(x + 1) * squareSize;
@@ -61,6 +62,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(frameSizeX,frameSizeY));
 		frame.setBackground(new Color(255,255,255,255));
+		
+		keys = new ArrayList<KeyEvent>();
 		
 		cluesDwn = new ArrayList<JLabel>();
 		cluesAcr = new ArrayList<JLabel>();
@@ -283,27 +286,89 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					if(e.getSource() == boxes[i][j]){
 						if(e.getKeyCode() == KeyEvent.VK_UP){
 							System.out.println("Pressed Up");
-							if(boxes[i-1][j].isEnabled()){
-								boxes[i-1][j].requestFocus();
+							if(i > 0){
+								if(boxes[i-1][j].isEnabled()){
+									boxes[i-1][j].requestFocus();
+								}
 							}
-							
 						}
 						if(e.getKeyCode() == KeyEvent.VK_DOWN){
 							System.out.println("Pressed Down");
-							if(boxes[i+1][j].isEnabled()){
-								boxes[i+1][j].requestFocus();
+							if(i < x - 3){
+								if(boxes[i+1][j].isEnabled()){
+									boxes[i+1][j].requestFocus();
+								}
 							}
-							
 						}
 						if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 							System.out.println("Pressed Right");
-							//boxes[i][j+1].setText("A");
-							boxes[i][j+1].requestFocus();
+							if(j < y-3){
+								if(boxes[i][j+1].isEnabled()){
+									boxes[i][j+1].requestFocus();
+								}
+							}
 						}
 						if(e.getKeyCode() == KeyEvent.VK_LEFT){
 							System.out.println("Pressed Left");
-							//boxes[i][j-1].setText("A");
-							boxes[i][j-1].requestFocus();
+							if(j > 0){
+								if(boxes[i][j-1].isEnabled()){
+									boxes[i][j-1].requestFocus();
+								}
+							}
+						}
+//						int b = e.getKeyCode();
+//						System.out.println("Keycode: "+e.getKeyCode());
+						//for(int a = e.getKeyCode();a< e.getKeyCode() ;a++){//not proper at all
+							if(65 <= e.getKeyCode() && e.getKeyCode() <= 90){
+								if(j < x-3){
+									if(boxes[i][j+1].isEnabled()){
+										boxes[i][j+1].requestFocus();
+									}
+								}else if (boxes[i+1][j].isEnabled()){
+										boxes[i+1][j].requestFocus();								
+								}else if(i < y-3){
+									if(boxes[i][j+1].isEnabled()){
+										boxes[i][j+1].requestFocus();
+									}else if (boxes[i+1][j].isEnabled()){
+										boxes[i+1][j].requestFocus();
+									}
+								}
+								
+						//}
+						}
+						
+						if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+							System.out.println("Pressed Backspace");
+							boxes[i][j].setText("");
+							if(j > 0){
+								if(boxes[i][j-1].isEnabled() && !boxes[i][j-1].getText().equals("")){
+									boxes[i][j-1].requestFocus();
+								}else if(boxes[i-1][j].isEnabled() && !boxes[i-1][j].getText().equals("")){
+									boxes[i-1][j].requestFocus();
+								}else if(boxes[i][j-1].isEnabled()){
+									boxes[i][j-1].requestFocus();
+								}else if(boxes[i-1][j].isEnabled()){
+									boxes[i-1][j].requestFocus();
+								}
+							}
+							else if(boxes[i-1][j].isEnabled()){
+								boxes[i-1][j].requestFocus();
+							
+							}
+//							else{
+//								while(i > 0 || j > 0){
+//									if(i > 0){
+//										if(boxes[i--][j].isEnabled()){
+//											boxes[i--][j].requestFocus();
+//										}
+//									}
+//									else if(j > 0){
+//										if(boxes[i][j--].isEnabled()){
+//											boxes[i][j--].requestFocus();
+//										}
+//									}
+//								}
+//							}
 						}
 					}
 				}
