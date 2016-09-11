@@ -4,12 +4,17 @@ import java.util.ArrayList;
  * It takes as input some 'toWorkWith' string in grid that could potentially fit
  * a word, subject to the constraints of the letters already present, and tries
  * to find the **biggest** word that satisfies these constraints.
+ 
+ *
+ * To Andy: I added boolean biggestFirst into fitWord() so we have option of fitting the 
+ * biggest possible word into the space, or a word of a random (allowed) size
+ *
  */
 
 public class Search {
 
 	// Given a "toWorkWith" String, search word list for suitable entries
-	public Search(ArrayList<Word> wordlist, String toWorkWith) {
+	public Search(ArrayList<Word> wordlist, String toWorkWith) {               //is this totally redundant now?? 
 		String wordFound = "";
 		String definition = "";
 		String hold = toWorkWith;
@@ -129,7 +134,15 @@ public class Search {
 		word_and_def[1] = definition;
 	}
 
-	public static String[] findWord(ArrayList<Word> wordlist, String toWorkWith) {
+	
+	
+	
+	
+	
+	
+	
+	
+	public static String[] findWord(ArrayList<Word> wordlist, String toWorkWith, boolean biggestFirst) {
 		String wordFound = "";
 		String definition = "";
 		String hold = toWorkWith;
@@ -142,8 +155,22 @@ public class Search {
 			}
 		}
 		possSizes.add(hold.length());
+		
 		while (possSizes.size() > 0) {
-			int size = possSizes.get(possSizes.size() - 1);
+			
+            // Steve: don't always choose biggest word --------------------
+            int size;
+            int rndm_sz=0;
+            if(biggestFirst){ //choose biggest possible word
+                size = possSizes.get(possSizes.size() - 1);
+            }
+            else{  // Choose random word size to fit:
+                rndm_sz = (int)(Math.random()*possSizes.size()) ;   // this needs to be removed from list if it fails
+                size = possSizes.get( rndm_sz  );
+            }      
+            //-------------------------------------------------------------	
+			
+            
 			String hold_2 = "";
 			for (int j = 0; j < size; j++) {
 				hold_2 = hold_2 + hold.charAt(j);
@@ -215,13 +242,19 @@ public class Search {
 				}
 			} 
 			if (possSizes.size() != 0) {
-				possSizes.remove(possSizes.size() - 1);
+				
+                // Steve:  remove the appropriate failed size -----------------
+                if(biggestFirst){
+            		possSizes.remove(possSizes.size() - 1);
+                }else{
+                    possSizes.remove( rndm_sz );
+                }//--------------------------------------------------				
+				
 			}
 		}
 		word_and_def[0] = wordFound;
 		word_and_def[1] = definition;
 		return word_and_def;
-//		return wordFound;
 
 	}
 }

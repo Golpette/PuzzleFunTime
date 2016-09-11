@@ -33,10 +33,10 @@ public class WordSearchGenerator{
 				Random r = new Random();
 				boolean direction = r.nextBoolean();
 				if(!direction){
-					new FitWords(grid, x, y, words, entries, true);
+					new FitWords(grid, x, y, words, entries, "wordsearch", true);
 				}
 				else{
-					new FitWords(grid, x, y, words, entries, false);
+					new FitWords(grid, x, y, words, entries, "wordsearch", false);
 				}
 			}
 			acrossClues.clear();

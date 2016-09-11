@@ -41,10 +41,10 @@ public class CrosswordGenerator{
 				r = new Random();
 				direction = r.nextBoolean();
 				if(!direction){
-					new FitWords(grid, x, y, words, entries, true);
+					new FitWords(grid, x, y, words, entries, "crossword", true);
 				}
 				else{
-					new FitWords(grid, x, y, words, entries, false);
+					new FitWords(grid, x, y, words, entries, "crossword", false);
 				}
 			}
 			gridInit = new String[x][y];			
