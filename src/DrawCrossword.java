@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.text.DefaultEditorKit;
 
 /**
  * Class to take String[][] grid and paint the crossword as it should look complete with 
@@ -53,6 +55,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Color clear, red, green, blue, black;
 	JLabel hintD, hintA;
 	ArrayList<KeyEvent> keys;
+	Action action;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException{
 		frameSizeX = 2*(x + 1) * squareSize;
@@ -122,6 +125,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				boxes[i][j] = new JTextField();	//need new layout to resize letters in boxes
+				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
+				action.setEnabled(false);
 				boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1));
@@ -316,31 +321,36 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 							}
 						}
-//						int b = e.getKeyCode();
-//						System.out.println("Keycode: "+e.getKeyCode());
-						//for(int a = e.getKeyCode();a< e.getKeyCode() ;a++){//not proper at all
 							if(65 <= e.getKeyCode() && e.getKeyCode() <= 90){
+								boxes[i][j].setForeground(black);
 								boxes[i][j].setText(Character.toString(e.getKeyChar()));
 								System.out.println("Keycode: "+ Character.toString(e.getKeyChar()));
-								if(j < x-3){
+								if(j < x-3 && i < y-3){
 									if(boxes[i][j+1].isEnabled()){
+										if(boxes[i][j+1].getText().equals("")){
+											boxes[i][j+1].setText("");
+										}
+										boxes[i][j+1].requestFocus();
+									}else if(boxes[i+1][j].isEnabled()){
+										boxes[i+1][j].setText("");
+										boxes[i+1][j].requestFocus();	
+									}
+								}else if(j < x-3){
+									if(boxes[i][j+1].isEnabled()){
+										boxes[i][j+1].setText("");
 										boxes[i][j+1].requestFocus();
 									}
-								}else if (boxes[i+1][j].isEnabled()){
-										boxes[i+1][j].requestFocus();								
 								}else if(i < y-3){
-									if(boxes[i][j+1].isEnabled()){
-										boxes[i][j+1].requestFocus();
-									}else if (boxes[i+1][j].isEnabled()){
+									if(boxes[i+1][j].isEnabled()){
+										boxes[i+1][j].setText("");
 										boxes[i+1][j].requestFocus();
 									}
 								}
-								
-						//}
-						}
+							}
 						
 						if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
 							System.out.println("Pressed Backspace");
+							//boxes[i][j].
 							boxes[i][j].setText("");
 							if(j > 0){
 								if(boxes[i][j-1].isEnabled() && !boxes[i][j-1].getText().equals("")){
