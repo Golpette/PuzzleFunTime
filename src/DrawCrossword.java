@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -126,6 +128,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}else{
 					boxes[i][j].setBackground(new Color(255, 255, 255, 100));
 					boxes[i][j].setOpaque(false);
+					keyActionTextField(boxes[i][j]);
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font3);
@@ -269,6 +272,66 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	void keyActionTextField(JTextField l){
+
+		l.addKeyListener(new KeyListener(){
+			
+	
+		public void keyPressed(KeyEvent e) {
+			for (int i = 0; i < x-2; i++){
+				for (int j = 0; j < y-2; j++){
+					if(e.getSource() == boxes[i][j]){
+						if(e.getKeyCode() == KeyEvent.VK_UP){
+							System.out.println("Pressed Up");
+							if(boxes[i-1][j].isEnabled()){
+								boxes[i-1][j].requestFocus();
+							}
+							
+						}
+						if(e.getKeyCode() == KeyEvent.VK_DOWN){
+							System.out.println("Pressed Down");
+							if(boxes[i+1][j].isEnabled()){
+								boxes[i+1][j].requestFocus();
+							}
+							
+						}
+						if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+							System.out.println("Pressed Right");
+							//boxes[i][j+1].setText("A");
+							boxes[i][j+1].requestFocus();
+						}
+						if(e.getKeyCode() == KeyEvent.VK_LEFT){
+							System.out.println("Pressed Left");
+							//boxes[i][j-1].setText("A");
+							boxes[i][j-1].requestFocus();
+						}
+					}
+				}
+			}
+		}
+
+		public void keyReleased(KeyEvent e) {
+			if(e.equals(KeyEvent.VK_UP)){
+				
+			}
+			if(e.equals(KeyEvent.VK_DOWN)){
+				
+			}
+			if(e.equals(KeyEvent.VK_RIGHT)){
+				
+			}
+			if(e.equals(KeyEvent.VK_LEFT)){
+				
+			}
+		}
+
+		public void keyTyped(KeyEvent e) {
+			
+		}	
+		});
+		}
+		
+		
 	void mouseActionlabel(JLabel l){
 		l.addMouseListener(new MouseListener()
 		{
@@ -360,6 +423,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		return str.toString();
 	}
+	
+	
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
