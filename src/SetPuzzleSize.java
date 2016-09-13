@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
+	public PuzzleLoader puzzleLoader;
 	JFrame frame;
 	JPanel panel, panel1;
 	JButton generate, back;
@@ -29,6 +31,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	JSpinner spinner;
 	Font font, font2;
 	String puzzle;
+	ImageIcon image;
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
@@ -40,10 +43,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
+		image = new ImageIcon("back.png");
 		back = new JButton("Back");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
 		back.addActionListener(this);
+		back.setIcon(image);
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
@@ -102,6 +107,13 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		}
 		if(e.getSource() == back){
+			frame.dispose();
+			try {
+				puzzleLoader = new PuzzleLoader();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			System.out.println("Is this visible"+ this.isVisible());
 			
 		}

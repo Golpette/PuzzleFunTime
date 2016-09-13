@@ -19,6 +19,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
 	public SetPuzzleSize setSize;
+	public static PuzzleLoader puzzle;
 	JFrame frame;
 	JPanel panel;
 	JButton cwd, wds, sud;
@@ -97,6 +98,10 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 //			} catch (IOException e1) {
 //				e1.printStackTrace();
 //			}
+			frame.dispose();
+			//this.setVisible(false);
+			//puzzle.
+
 			try {
 				setSize = new SetPuzzleSize("Crossword");
 			} catch (IOException e1) {
@@ -110,6 +115,10 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 //			} catch (IOException e1) {
 //				e1.printStackTrace();
 //			}
+			//this.setVisible(false);
+			frame.dispose();
+
+			
 			try {
 				setSize = new SetPuzzleSize("WordSearch");
 			} catch (IOException e1) {
@@ -128,7 +137,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	
 	public static void main (String [] args){
 		try {
-			new PuzzleLoader();
+			puzzle = new PuzzleLoader();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
