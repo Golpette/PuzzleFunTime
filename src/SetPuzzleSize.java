@@ -1,8 +1,10 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -26,12 +29,15 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	JFrame frame;
 	JPanel panel, panel1;
 	JButton generate, back;
+	JLayeredPane layer;
 	JLabel intro;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	Font font, font2;
 	String puzzle;
 	ImageIcon image;
+	Image newimg;
+	Image img;
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
@@ -39,41 +45,63 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
+		panel1.setOpaque(false);
+		panel1.setBounds(0,0,500,400);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
-		image = new ImageIcon("back.png");
-		back = new JButton("Back");
+		image = new ImageIcon("C:\\git\\Crossword\\src\\back.png");
+		img = image.getImage();
+		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
+		image = new ImageIcon(newimg);
+		back = new JButton("");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
 		back.addActionListener(this);
 		back.setIcon(image);
+		back.setOpaque(false);
+		back.setBounds(0, 0, 100, 100);
+		back.setBackground(new Color(255,255,255,255));
+		back.setBorder(null);
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
 		model = new SpinnerNumberModel(8, 3, 30, 1);
 		spinner = new JSpinner(model);
 		intro = new JLabel("Set " + puzzle + " Size");
+//		intro.setHorizontalAlignment(SwingConstants.CENTER);
+//		intro.setVerticalAlignment(SwingConstants.TOP);
 		intro.setFont(font);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
+		c.weightx = 0.0;
+		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
+		//c.ipady = 50;
 		panel1.add(intro, c);
 		
 		c.gridx = 1;
 		c.gridy = 1;
 		panel1.add(spinner, c);
 		
+		layer = new JLayeredPane();
+		//layer.setBackground(new Color(255, 255, 255, 255));
+		layer.add(panel1, new Integer(1));
+		layer.add(back, new Integer(0));
+		layer.setVisible(true);
+		layer.setOpaque(true);
+		//layer.setPreferredSize(new Dimension(200,300));
+		//layer.setMinimumSize(new Dimension(200,200));
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.ipady = (int)(frame.getHeight()*0.8);
-		panel.add(panel1, c);
+		panel.add(layer, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
@@ -107,13 +135,14 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		}
 		if(e.getSource() == back){
-			frame.dispose();
+			
 			try {
 				puzzleLoader = new PuzzleLoader();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			frame.dispose();
 			System.out.println("Is this visible"+ this.isVisible());
 			
 		}

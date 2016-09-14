@@ -98,7 +98,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 //			} catch (IOException e1) {
 //				e1.printStackTrace();
 //			}
-			frame.dispose();
+			
 			//this.setVisible(false);
 			//puzzle.
 
@@ -108,6 +108,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			frame.dispose();
 		}
 		if(e.getSource() == wds){
 //			try {
@@ -116,7 +117,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 //				e1.printStackTrace();
 //			}
 			//this.setVisible(false);
-			frame.dispose();
+			
 
 			
 			try {
@@ -125,6 +126,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			frame.dispose();
 		}
 		if(e.getSource() == sud){
 			try {
