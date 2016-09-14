@@ -4,6 +4,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -11,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
@@ -91,6 +96,55 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		frame.setVisible(true);		
 	}
 
+	
+	
+	void keyActionTextField(JTextField l) {
+
+		l.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+			}
+
+			public void keyReleased(KeyEvent e) {
+			}
+
+			public void keyTyped(KeyEvent e) {
+
+			}
+		});
+	}
+	
+	
+	
+	
+
+	void mouseActionlabel(JButton b) {
+		b.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			public void mouseExited(MouseEvent e) {
+				
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			public void mouseReleased(MouseEvent e) {
+
+			}
+		});
+	}
+	
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == cwd){
 //			try {

@@ -7,8 +7,13 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
+import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -17,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
@@ -28,14 +34,16 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	public PuzzleLoader puzzleLoader;
 	JFrame frame;
 	JPanel panel, panel1;
-	JButton generate, back;
+	JButton generate;
+	JButton back;
+	ButtonModel blah;
 	JLayeredPane layer;
 	JLabel intro;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	Font font, font2;
 	String puzzle;
-	ImageIcon image;
+	ImageIcon image, image2;
 	Image newimg;
 	Image img;
 	
@@ -55,12 +63,18 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
+		image2 = new ImageIcon("C:\\git\\Crossword\\src\\back1.png");
+		img = image2.getImage();
+		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
+		image2 = new ImageIcon(newimg);
 		back = new JButton("");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
+		mouseActionlabel(back);
 		back.addActionListener(this);
 		back.setIcon(image);
 		back.setOpaque(false);
+		
 		back.setBounds(0, 0, 100, 100);
 		back.setBackground(new Color(255,255,255,255));
 		back.setBorder(null);
@@ -116,6 +130,56 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
 	}
+	
+	
+
+	void keyActionTextField(JTextField l) {
+
+		l.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+			}
+
+			public void keyReleased(KeyEvent e) {
+			}
+
+			public void keyTyped(KeyEvent e) {
+
+			}
+		});
+	}
+	
+	
+	
+	
+
+	void mouseActionlabel(JButton b) {
+		b.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+
+			public void mouseEntered(MouseEvent e) {
+				back.setIcon(image2);
+			}
+
+			public void mouseExited(MouseEvent e) {
+				back.setIcon(image);
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			public void mouseReleased(MouseEvent e) {
+
+			}
+		});
+	}
+	
+	
+	
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == generate){
