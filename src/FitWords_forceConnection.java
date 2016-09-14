@@ -3,7 +3,7 @@ import java.lang.Math;
 
 /**
  * Fitting procedure that forces each word to be connected to at least one existing word,
- * calls Search.findWord_forceConnection()
+ * thus don't need Hoshen-Kopelman check. Calls Search.findWord_forceConnection() method.
  * 
  */
 public class FitWords_forceConnection {

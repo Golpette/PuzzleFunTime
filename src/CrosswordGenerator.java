@@ -43,7 +43,7 @@ public class CrosswordGenerator{
 				r = new Random();
 				direction = r.nextBoolean();
 				if(!direction){
-					new FitWords(grid, x, y, words, entries, "crossword", true);
+					new FitWords(grid, x, y, words, entries, "crossword", true);  // Andy, this isn't an object!?
 					//new FitWords_forceConnection(grid, x, y, words, entries, true);
 				}
 				else{
