@@ -45,7 +45,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
 	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	Font font;
+	Font font, font2, font3;
 	Random rand;
 	boolean buttonPushed, clicked;
 	Color grey;
@@ -58,6 +58,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		this.entries = entries;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
+		font3 = new Font("Times New Roman", Font.BOLD, 36);
+		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
@@ -74,6 +76,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		clicked = false;
 		
 		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 
@@ -305,6 +308,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int i = 0; i < x-1; i++){
 						for (int j = 0; j < y-1; j++){
 							if(!grid[i][j].equals("_")){
+								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
@@ -315,6 +319,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				for (int i = 0; i < x-1; i++){
 					for (int j = 0; j < y-1; j++){
 						if(!grid[i][j].equals("_")){
+							reveal.setText("Show Solution");
 							//letters[j-1][i-1].setForeground(Color.BLACK);
 							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
 						}

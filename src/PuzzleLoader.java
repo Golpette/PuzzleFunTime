@@ -72,6 +72,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(cwd, c);
 		
 		c.weightx = 1.0;
@@ -80,6 +81,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(wds, c);
 		
 		c.weightx = 1.0;
@@ -88,6 +90,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(sud, c);
 		
 		frame.setContentPane(panel);

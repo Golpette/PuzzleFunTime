@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,18 +53,16 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
-		panel1.setBounds(0,0,500,400);
+		panel1.setBounds(0, 0, 500, 320);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
-		//image = new ImageIcon("C:\\git\\Crossword\\src\\back.png");		//laptop
-		image = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back.png");				//PC
+		image = new ImageIcon("src\\back.png");
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		//image2 = new ImageIcon("C:\\git\\Crossword\\src\\back1.png");		//laptop
-		image2 = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back1.png");				//PC
+		image2 = new ImageIcon("src\\back1.png");
 
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
@@ -87,9 +84,8 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		model = new SpinnerNumberModel(8, 3, 30, 1);
 		spinner = new JSpinner(model);
 		intro = new JLabel("Set " + puzzle + " Size");
-//		intro.setHorizontalAlignment(SwingConstants.CENTER);
-//		intro.setVerticalAlignment(SwingConstants.TOP);
 		intro.setFont(font);
+		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
@@ -97,7 +93,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		//c.ipady = 50;
 		panel1.add(intro, c);
 		
 		c.gridx = 1;
@@ -105,13 +100,10 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		panel1.add(spinner, c);
 		
 		layer = new JLayeredPane();
-		//layer.setBackground(new Color(255, 255, 255, 255));
 		layer.add(panel1, new Integer(1));
 		layer.add(back, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
-		//layer.setPreferredSize(new Dimension(200,300));
-		//layer.setMinimumSize(new Dimension(200,200));
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -125,7 +117,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		//c.gridwidth = 1;
 		panel.add(generate, c);
 		
 		frame.setContentPane(panel);
@@ -133,8 +124,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
 	}
-	
-	
 
 	void keyActionTextField(JTextField l) {
 
@@ -151,10 +140,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		});
 	}
-	
-	
-	
-	
 
 	void mouseActionlabel(JButton b) {
 		b.addMouseListener(new MouseListener() {
@@ -181,9 +166,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		});
 	}
 	
-	
-	
-	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == generate){
 			if(puzzle.equals("Crossword")){
@@ -202,16 +184,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		}
 		if(e.getSource() == back){
-			
 			try {
 				puzzleLoader = new PuzzleLoader();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			frame.dispose();
-			System.out.println("Is this visible"+ this.isVisible());
-			
+			frame.dispose();			
 		}
 	}
 }

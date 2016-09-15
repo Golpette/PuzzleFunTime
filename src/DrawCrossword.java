@@ -38,7 +38,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private static int squareSize = 30;
 	private String[][] grid;
 	private JTextField[][] boxes;
-	int rowWidth, y, frameSizeX, frameSizeY;
+	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
@@ -79,7 +79,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		black = new Color(0, 0, 0, 255);
 
 		this.grid = grid;
-		this.rowWidth = x;
+		this.x = x;
 		this.y = y;
 		this.entries = entries;
 
@@ -271,7 +271,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 0;
+		c.ipady = 10;
 		panel.add(reveal, c);
 
 		/**
@@ -290,70 +290,80 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
-				for (int row = 0; row < rowWidth - 2; row++) {
-					for (int column = 0; column < y - 2; column++) {
-						if (e.getSource() == boxes[row][column]) {
+				for (int row = 0; row < x - 2; row++) {
+					for (int col = 0; col < y - 2; col++) {
+						if (e.getSource() == boxes[row][col]) {
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
 								System.out.println("Pressed Up");
 								if (row > 0) {
-									if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+									if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 								System.out.println("Pressed Down");
-								if (row < rowWidth - 3) {
-									if (boxes[row + 1][column].isEnabled()) {
-										boxes[row + 1][column].requestFocus();
+								if (row < x - 3) {
+									if (boxes[row + 1][col].isEnabled()) {
+										boxes[row + 1][col].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 								System.out.println("Pressed Right");
-								if (column < y - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										boxes[row][column + 1].requestFocus();
+								if (col < y - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										boxes[row][col + 1].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 								System.out.println("Pressed Left");
-								if (column > 0) {
-									if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
+								if (col > 0) {
+									if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
 									}
 								}
 							}
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
-								boxes[row][column].setForeground(black);
-								boxes[row][column].setText(Character.toString(e.getKeyChar()));
+								boxes[row][col].setForeground(black);
+								boxes[row][col].setText(Character.toString(e.getKeyChar()));
 								System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
-								if (column < rowWidth - 3 && row < y - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										if (boxes[row][column + 1].getText().equals("")) {
-											boxes[row][column + 1].setText("");
+								if(row > 0){
+									
+								}
+								if (col < x - 3 && row < y - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										if (boxes[row][col + 1].getText().equals("")) {
+											boxes[row][col + 1].setText("");
 										}
-										boxes[row][column + 1].requestFocus();
-									} else if (boxes[row + 1][column].isEnabled()) {
-										if (boxes[row + 1][column].getText().equals("")) {
-											boxes[row + 1][column].setText("");
+										boxes[row][col + 1].requestFocus();
+									} else if (boxes[row + 1][col].isEnabled()) {
+										if (boxes[row + 1][col].getText().equals("")) {
+											boxes[row + 1][col].setText("");
 										}
-										boxes[row + 1][column].requestFocus();
+										boxes[row + 1][col].requestFocus();
 									}
-								} else if (column < rowWidth - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										if (boxes[row][column + 1].getText().equals("")) {
-											boxes[row][column + 1].setText("");
+								} else if (col < x - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										if (boxes[row][col + 1].getText().equals("")) {
+											boxes[row][col + 1].setText("");
 										}
-										boxes[row][column + 1].requestFocus();
+										boxes[row][col + 1].requestFocus();
 									}
 								} else if (row < y - 3) {
-									if (boxes[row + 1][column].isEnabled()) {
-										if (boxes[row + 1][column].getText().equals("")) {
-											boxes[row + 1][column].setText("");
+									if (boxes[row + 1][col].isEnabled()) {
+										if (boxes[row + 1][col].getText().equals("")) {
+											boxes[row + 1][col].setText("");
 										}
-										boxes[row + 1][column].requestFocus();
+										boxes[row + 1][col].requestFocus();
+									}
+								}else{
+									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
+										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
+											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
+											break;
+										}
 									}
 								}
 							}
@@ -362,51 +372,51 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								System.out.println("Pressed Backspace");
 								boolean stuck = true;
 								if (row > 0) {
-									if (boxes[row - 1][column].isEnabled()) {
+									if (boxes[row - 1][col].isEnabled()) {
 										stuck = false;
 									}
 								}
-								if (column > 0) {
-									if (boxes[row][column - 1].isEnabled()) {
+								if (col > 0) {
+									if (boxes[row][col - 1].isEnabled()) {
 										stuck = false;
 									}
 								}
-								boxes[row][column].setText("");
-								if (column > 0 && row > 0 && !stuck) {
-									if (boxes[row][column - 1].isEnabled()
-											&& !boxes[row][column - 1].getText().equals("")) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()
-											&& !boxes[row - 1][column].getText().equals("")) {
-										boxes[row - 1][column].requestFocus();
-									} else if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+								boxes[row][col].setText("");
+								if (col > 0 && row > 0 && !stuck) {
+									if (boxes[row][col - 1].isEnabled()
+											&& !boxes[row][col - 1].getText().equals("")) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()
+											&& !boxes[row - 1][col].getText().equals("")) {
+										boxes[row - 1][col].requestFocus();
+									} else if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
-								} else if (column > 0 && !stuck) {
-									if (boxes[row][column - 1].isEnabled()
-											&& !boxes[row][column - 1].getText().equals("")) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
+								} else if (col > 0 && !stuck) {
+									if (boxes[row][col - 1].isEnabled()
+											&& !boxes[row][col - 1].getText().equals("")) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
 									}
 								} else if (row > 0 && !stuck) {
-									if (boxes[row - 1][column].isEnabled()
-											&& !boxes[row - 1][column].getText().equals("")) {
-										boxes[row - 1][column].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+									if (boxes[row - 1][col].isEnabled()
+											&& !boxes[row - 1][col].getText().equals("")) {
+										boxes[row - 1][col].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
 								} else {
-									if (!(row == 0 && column == 0) && stuck) {
+									if (!(row == 0 && col == 0) && stuck) {
 										System.out.println("Stuck");
-										System.out.println("i = " + row + " j = " + column);
+										System.out.println("i = " + row + " j = " + col);
 
-										for (int stepsBack = 1; stepsBack <= row * (rowWidth - 2) + column; stepsBack++) {
-											if (boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].isEnabled()) {
+										for (int stepsBack = 1; stepsBack <= row * (x - 2) + col; stepsBack++) {
+											if (boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].isEnabled()) {
 												//if (!boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].getText().equals("")) {
-													boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].requestFocus();
+													boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].requestFocus();
 												//}
 												break;
 											}
@@ -449,6 +459,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
+									String str = shuffleString(ent.word).toUpperCase();
 									k.setText("     " + shuffleString(ent.word).toUpperCase());
 								}
 							} else {
@@ -535,7 +546,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if (sol.frame.isVisible()) {
 				reveal.setText("Hide Solution");
-				for (int i = 0; i < rowWidth - 2; i++) {
+				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						if (boxes[i][j].getText().equals("")) {
 							boxes[i][j].setForeground(black);
@@ -548,7 +559,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			} else {
 				reveal.setText("Show Solution");
-				for (int i = 0; i < rowWidth - 2; i++) {
+				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						boxes[i][j].setForeground(new Color(0, 0, 0, 255));
 					}
