@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -43,9 +45,11 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
 	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	Font font;
+	Font font, font2, font3;
 	Random rand;
-	boolean buttonPushed;
+	boolean buttonPushed, clicked;
+	Color grey;
+	int wordLength, dir, startx, starty;
 	
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
@@ -54,9 +58,14 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		this.entries = entries;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
+		font3 = new Font("Times New Roman", Font.BOLD, 36);
+		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
-	
+		grey = new Color(200,200,200,255);
+		wordLength = 0;
+		dir = 0;
+		
 		layer = new JLayeredPane();
 		letters = new JLabel [x-2][y-2];
 		c = new GridBagConstraints();
@@ -64,8 +73,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		rand = new Random();
 		Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		buttonPushed = false;
+		clicked = false;
 		
 		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 
@@ -76,16 +87,21 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				letters[i][j] = new JLabel();
+				mouseActionlabel(letters[i][j]);
 				letters[i][j].setFont(font);
 				letters[i][j].setForeground(Color.BLACK);
+				letters[i][j].setBackground(Color.WHITE);
 				letters[i][j].setBorder(border);
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
 					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
 				}
+				letters[i][j].setOpaque(true);
+				mouseActionlabel(letters[i][j]);
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
+				transparentLayer.add(letters[i][j]);
 				transparentLayer.add(letters[i][j]);
 			}
 		}
@@ -150,6 +166,141 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	
+	void mouseActionlabel(JLabel l) {
+		l.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				if(clicked){
+					for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+						for (int j = 0; j < y-2; j++){
+							if(e.getSource() == letters[i][j]){
+								if(i - startx == 0){
+									if(j - starty < 0){
+										for(int a = 0; a < starty - j; a++){
+											letters[i][starty+a].setBackground(grey);
+										}
+									}else if(j - starty > 0){
+										for(int a = 0; a < j - starty; a++){
+											letters[i][j+a].setBackground(grey);
+										}
+									}
+								}else if (i - startx < 0){
+									if(j - starty == 0){
+										for(int a = 0; a < startx - i; a++){
+											letters[i+a][j].setBackground(grey);
+										}
+									}else if(j - starty < 0){
+										if(starty - j == startx - i){
+											for(int a = 0; a < startx - i; a++){
+												letters[i+a][j+a].setBackground(grey);
+											}
+										}
+									}else{
+										if(j - starty == startx - i){
+											for(int a = 0; a < startx - i; a++){
+												letters[i+a][starty+a].setBackground(grey);
+											}
+										}
+									}
+								}else{
+									if(j - starty == 0){
+										for(int a = 0; a < i - startx; a++){
+											letters[startx+a][j].setBackground(grey);
+										}
+									}else if(j - starty < 0){
+										if(starty - j == i - startx){
+											for(int a = 0; a < startx - i; a++){
+												letters[startx+a][j+a].setBackground(grey);
+											}
+										}
+									}else{
+										if(j - starty == i - startx){
+											for(int a = 0; a < startx - i; a++){
+												letters[startx+a][starty+a].setBackground(grey);
+											}
+										}
+									}
+								}
+								//letters[i][j].setBackground(grey);
+							}
+						}
+					}
+					clicked = false;
+					System.out.println(clicked);
+				}else{
+					for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+						for (int j = 0; j < y-2; j++){
+							letters[i][j].setBackground(Color.WHITE);
+							if(e.getSource() == letters[i][j]){
+								letters[i][j].setBackground(grey);
+								startx = i;
+								starty = j;
+							}
+						}
+					}
+					clicked = true;
+					System.out.println(clicked);
+				}
+				
+				
+			}
+
+			public void mouseEntered(MouseEvent e) {//try to get to highlight letters in one direction
+//				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+//					for (int j = 0; j < y-2; j++){
+//						if(e.getSource() == letters[i][j]){
+//							if(sameDirection(i, j, dir)){
+//								letters[i][j].setBackground(grey);
+//								wordLength++;
+//							}else{
+//								wordLength = 0;
+//							}
+//						}
+//					}
+//				}
+			}
+
+			private boolean sameDirection(int i, int j, int dir) {
+				//dir is int for direction of word:   567
+				//									  801
+				//									  234
+				if(wordLength == 0){
+					dir = 0;
+					return true;
+				}else if(wordLength == 1){
+					for(int a = 0; a < 2; a++){
+						for(int b = 0; b < 2; b++){
+							if(!(a == 1 && b == 1)){
+								//check boundary conditions - or is this included in the extra grid squares?
+								if(letters[a][b].getBackground().equals(grey)){
+									dir = (a*b+a)%8;
+									return true;
+							}
+							//if(i > 0 && j > 0 && )
+								
+								
+							}
+						}
+					}
+				}
+				return false;
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			public void mouseReleased(MouseEvent e) {
+
+			}
+		});
+	}
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
 			buttonPushed = !buttonPushed;
@@ -157,6 +308,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int i = 0; i < x-1; i++){
 						for (int j = 0; j < y-1; j++){
 							if(!grid[i][j].equals("_")){
+								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
@@ -167,6 +319,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				for (int i = 0; i < x-1; i++){
 					for (int j = 0; j < y-1; j++){
 						if(!grid[i][j].equals("_")){
+							reveal.setText("Show Solution");
 							//letters[j-1][i-1].setForeground(Color.BLACK);
 							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
 						}

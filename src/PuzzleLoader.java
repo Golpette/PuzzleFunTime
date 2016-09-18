@@ -34,7 +34,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public PuzzleLoader() throws IOException {
 		font = new Font("Times New Roman", Font.BOLD, 36);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
-		intro = new JLabel("Welcome to puzzle solver!");
+		intro = new JLabel("Welcome to Puzzle Solver!");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		panel = new JPanel(new GridBagLayout());
@@ -72,6 +72,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(cwd, c);
 		
 		c.weightx = 1.0;
@@ -80,6 +81,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(wds, c);
 		
 		c.weightx = 1.0;
@@ -88,6 +90,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 1;
 		c.ipady = 0;
 		c.gridwidth = 1;
+		c.ipady = 10;
 		panel.add(sud, c);
 		
 		frame.setContentPane(panel);
@@ -175,7 +178,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 
 			
 			try {
-				setSize = new SetPuzzleSize("WordSearch");
+				setSize = new SetPuzzleSize("Word Search");
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
