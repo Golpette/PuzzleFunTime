@@ -175,7 +175,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			if(puzzle.equals("WordSearch")){
+			if(puzzle.equals("Word Search")){
 				try {
 					wordsearch = new WordSearchGenerator((Integer)spinner.getValue());
 				}catch (IOException e1) {
