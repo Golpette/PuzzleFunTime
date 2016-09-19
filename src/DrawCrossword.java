@@ -169,10 +169,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */
 		clue = new JPanel(new GridBagLayout());
+		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
-		// clue.setBounds(0, 0, 200, 200);
+		clue.setAlignmentY(0);
+		clue.setBounds(300, 300, 200, 200);
 		hints = new ArrayList<JLabel>();
 
 		JLabel first = new JLabel("Across");

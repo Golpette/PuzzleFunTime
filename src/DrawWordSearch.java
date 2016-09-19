@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,9 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -65,6 +61,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		grey = new Color(200,200,200,255);
 		wordLength = 0;
 		dir = 0;
+		startx = 0;
+		starty = 0;
 		
 		layer = new JLayeredPane();
 		letters = new JLabel [x-2][y-2];
@@ -73,7 +71,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		rand = new Random();
 		Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		buttonPushed = false;
-		clicked = false;
 		
 		reveal = new JButton("Show Solution");
 		reveal.setFont(font2);
@@ -171,14 +168,35 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				if(clicked){
-					for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
-						for (int j = 0; j < y-2; j++){
-							if(e.getSource() == letters[i][j]){
+				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+					for (int j = 0; j < y-2; j++){
+						//if(e.getClickCount()<=1){
+
+//						int temp = e.getClickCount();
+//						while (e.getClickCount() == temp ){
+						//System.out.println("clicked " + clicked);
+						if(e.getSource() == letters[i][j]){
+							if(!clicked){
+								//e.setSource(letters[0][0]);
+								System.out.println("not clicked");
+								for (int k = 0; k < x-2; k++){		//ie down, across or diagonally down
+									for (int l = 0; l < y-2; l++){
+										letters[k][l].setBackground(Color.WHITE);
+									}
+								}
+								letters[i][j].setBackground(grey);
+								startx = i;
+								starty = j;
+								clicked = true;
+								System.out.println("x = " + startx + " y = " + starty);
+								//break;
+							}else{
+								System.out.println("inside clicked");
 								if(i - startx == 0){
 									if(j - starty < 0){
 										for(int a = 0; a < starty - j; a++){
 											letters[i][starty+a].setBackground(grey);
+											System.out.println("along forward");
 										}
 									}else if(j - starty > 0){
 										for(int a = 0; a < j - starty; a++){
@@ -219,31 +237,20 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 											for(int a = 0; a < startx - i; a++){
 												letters[startx+a][starty+a].setBackground(grey);
 											}
+								//letters[i][j].setBackground(grey);
 										}
 									}
 								}
-								//letters[i][j].setBackground(grey);
+								clicked = false;
+							//clicked = false;
+								}
+							System.out.println("clicked " + clicked);
 							}
+							
+							//System.out.println(clicked);
 						}
 					}
-					clicked = false;
-					System.out.println(clicked);
-				}else{
-					for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
-						for (int j = 0; j < y-2; j++){
-							letters[i][j].setBackground(Color.WHITE);
-							if(e.getSource() == letters[i][j]){
-								letters[i][j].setBackground(grey);
-								startx = i;
-								starty = j;
-							}
-						}
-					}
-					clicked = true;
-					System.out.println(clicked);
-				}
-				
-				
+				//}
 			}
 
 			public void mouseEntered(MouseEvent e) {//try to get to highlight letters in one direction
