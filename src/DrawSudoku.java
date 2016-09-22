@@ -41,17 +41,27 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JButton reveal;
 	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
+	ArrayList<Integer> col, square, tempColumn, checks;
+	ArrayList<ArrayList<Integer>> rows;
+	ArrayList<ArrayList<Integer>> boxes;
 	Font font, font2;
 	Random rand;
 	boolean buttonPushed;
 	
+	@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
-		font = new Font("Times New Roman", Font.BOLD, 36);
+		font = new Font("Times New Roman", Font.PLAIN, 36);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
 		sol = new DrawSudokuSolution(grid2, x, y, squareSize, "Crossword");
+		col = new ArrayList<Integer>();
+		rows = new ArrayList<ArrayList<Integer>>();
+		boxes = new ArrayList<ArrayList<Integer>>();
+		square = new ArrayList<Integer>();
+		tempColumn = new ArrayList<Integer>();
+		checks = new ArrayList<Integer>();
 		fullGrid = new ArrayList<String>();
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
@@ -84,6 +94,59 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 		}
 
+		//Generates random grid of numbers to build a sudoku puzzle
+
+		
+		for (int i = 0; i < x-2; i++){
+			int bound = 9;
+			checks.clear();
+			ArrayList<Integer> tempRow = new ArrayList<Integer>();
+			for (int j = 0; j < y-2; j++){
+				if(j == 0){
+					for(int k = 0; k < 9; k++){
+						col.add(k);
+						if(i == 0){
+							ArrayList<Integer> temps = new ArrayList<Integer>();
+							ArrayList<Integer> box = new ArrayList<Integer>();
+							boxes.add(box);
+							rows.add(temps);
+						}
+					}
+				}
+				System.out.println("Bound: "+bound);
+				tempRow.clear();
+				System.out.print("\nRemoved: ");
+				for(Integer a : rows.get(j)){
+					if(col.contains(a) && bound > 1){
+						System.out.print(a +", ");
+						tempRow.add(a);
+						col.remove(a);
+						bound--;
+					}
+				}
+				int temp = rand.nextInt(bound);
+				System.out.println("\ntemp: " + temp);
+				int insertion = col.get(temp);
+				System.out.println("insertion: "+ insertion);
+				numbers[i][j].setText(""+(insertion+1));
+				checks.add(col.get(temp));
+				rows.get(j).add(col.get(temp));
+				boxes.get((i/3)*(j/3)+(j/3)).add(col.get(temp));
+				col.remove(col.get(temp));
+				bound--;
+				System.out.println("col: " + col.toString());
+				for(Integer a: tempRow){
+					col.add(a);
+					bound++;
+				}
+				System.out.println("checks: " + checks.toString());
+				System.out.println("rows: " + rows.toString()+"\n");
+			}
+			
+		}
+		
+		
+		
 		layer.add(transparentLayer);
 		
 		c.weightx = 1.0;
