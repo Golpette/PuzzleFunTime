@@ -94,56 +94,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 		}
 
-		//Generates random grid of numbers to build a sudoku puzzle
-
-		
-		for (int i = 0; i < x-2; i++){
-			int bound = 9;
-			checks.clear();
-			ArrayList<Integer> tempRow = new ArrayList<Integer>();
-			for (int j = 0; j < y-2; j++){
-				if(j == 0){
-					for(int k = 0; k < 9; k++){
-						col.add(k);
-						if(i == 0){
-							ArrayList<Integer> temps = new ArrayList<Integer>();
-							ArrayList<Integer> box = new ArrayList<Integer>();
-							boxes.add(box);
-							rows.add(temps);
-						}
-					}
-				}
-				System.out.println("Bound: "+bound);
-				tempRow.clear();
-				System.out.print("\nRemoved: ");
-				for(Integer a : rows.get(j)){
-					if(col.contains(a) && bound > 1){
-						System.out.print(a +", ");
-						tempRow.add(a);
-						col.remove(a);
-						bound--;
-					}
-				}
-				int temp = rand.nextInt(bound);
-				System.out.println("\ntemp: " + temp);
-				int insertion = col.get(temp);
-				System.out.println("insertion: "+ insertion);
-				numbers[i][j].setText(""+(insertion+1));
-				checks.add(col.get(temp));
-				rows.get(j).add(col.get(temp));
-				boxes.get((i/3)*(j/3)+(j/3)).add(col.get(temp));
-				col.remove(col.get(temp));
-				bound--;
-				System.out.println("col: " + col.toString());
-				for(Integer a: tempRow){
-					col.add(a);
-					bound++;
-				}
-				System.out.println("checks: " + checks.toString());
-				System.out.println("rows: " + rows.toString()+"\n");
-			}
-			
-		}
 		
 		
 		
@@ -170,8 +120,79 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		generateSudoku();
 	}
 
+	//Generates random grid of numbers to build a sudoku puzzle#
+		public void generateSudoku(){
+			boxes.clear();
+			rows.clear();
+			col.clear();
+			for (int i = 0; i < x-2; i++){
+				int bound = 9;
+				checks.clear();
+				ArrayList<Integer> tempRow = new ArrayList<Integer>();
+				ArrayList<Integer> tempBox = new ArrayList<Integer>();
+				for (int j = 0; j < y-2; j++){
+					if(j == 0){
+						for(int k = 1; k < 10; k++){
+							col.add(k);
+							if(i == 0){
+								ArrayList<Integer> box = new ArrayList<Integer>();
+								boxes.add(box);
+								ArrayList<Integer> temps = new ArrayList<Integer>();
+								rows.add(temps);
+							}
+						}
+					}
+					tempRow.clear();
+					tempBox.clear();
+					for(Integer a : rows.get(j)){
+						if(col.contains(a) && bound > 0){
+							tempRow.add(a);
+							col.remove(a);
+							bound--;
+						}
+					}
+					for(Integer b : boxes.get((i/3)*3+(j/3))){
+						if(col.contains(b) && bound > 0){
+							tempBox.add(b);
+							col.remove(b);
+							bound--;
+						}
+					}
+					if(col.isEmpty()){
+						if(i != 8 || j != 8){
+							generateSudoku();
+						}else{
+							break;
+						}
+					}
+					int temp = (rand.nextInt(bound));
+					int insertion = col.get(temp);
+					numbers[i][j].setText(""+insertion);
+					checks.add(col.get(temp));
+					rows.get(j).add(col.get(temp));
+					boxes.get(((i/3)*3)+(j/3)).add(col.get(temp));	//need this to get 3x3 box
+					col.remove(col.get(temp));
+					bound--;
+					for(Integer a: tempRow){
+						if(!col.contains(a)){
+							col.add(a);
+						bound++;
+						}
+					}
+					for(Integer b: tempBox){
+						if(!col.contains(b)){
+							col.add(b);
+							bound++;
+						}
+					}
+				}
+			}		
+		}
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
 			sol.frame.setVisible(!sol.frame.isVisible());
