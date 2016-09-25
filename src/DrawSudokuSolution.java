@@ -29,7 +29,7 @@ public class DrawSudokuSolution extends JComponent {
 			setOpaque(true);
 			setBackground(Color.WHITE);
 			if(puzzle.equals("Crossword")){
-				title = "Auto Crossword Solution!";
+				title = "Auto Sudoku Solution!";
 			}else if (puzzle.equals("Word Search")){
 				title = "Auto Word Search Solution!";
 			}

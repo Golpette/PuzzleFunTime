@@ -41,14 +41,14 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JButton reveal;
 	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
-	ArrayList<Integer> col, square, tempColumn, checks;
-	ArrayList<ArrayList<Integer>> rows;
+	ArrayList<Integer> row, square, tempColumn, checks;
+	ArrayList<ArrayList<Integer>> cols;
 	ArrayList<ArrayList<Integer>> boxes;
 	Font font, font2;
 	Random rand;
 	boolean buttonPushed;
 	
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
 		font = new Font("Times New Roman", Font.PLAIN, 36);
 		font2 = new Font("Times New Roman", Font.PLAIN, 24);
@@ -56,8 +56,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		this.y = y;
 		this.grid = grid;
 		sol = new DrawSudokuSolution(grid2, x, y, squareSize, "Crossword");
-		col = new ArrayList<Integer>();
-		rows = new ArrayList<ArrayList<Integer>>();
+		row = new ArrayList<Integer>();
+		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
 		square = new ArrayList<Integer>();
 		tempColumn = new ArrayList<Integer>();
@@ -112,7 +112,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
-		frame = new JFrame("Auto Word Search");
+		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+3)));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
@@ -126,65 +126,71 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	//Generates random grid of numbers to build a sudoku puzzle#
 		public void generateSudoku(){
 			boxes.clear();
-			rows.clear();
-			col.clear();
+			cols.clear();
+			row.clear();
+			checks.clear();
 			for (int i = 0; i < x-2; i++){
 				int bound = 9;
-				checks.clear();
+				
 				ArrayList<Integer> tempRow = new ArrayList<Integer>();
 				ArrayList<Integer> tempBox = new ArrayList<Integer>();
 				for (int j = 0; j < y-2; j++){
 					if(j == 0){
 						for(int k = 1; k < 10; k++){
-							col.add(k);
+							row.add(k);
 							if(i == 0){
 								ArrayList<Integer> box = new ArrayList<Integer>();
 								boxes.add(box);
 								ArrayList<Integer> temps = new ArrayList<Integer>();
-								rows.add(temps);
+								cols.add(temps);
 							}
 						}
 					}
 					tempRow.clear();
 					tempBox.clear();
-					for(Integer a : rows.get(j)){
-						if(col.contains(a) && bound > 0){
+					for(Integer a : cols.get(j)){
+						if(row.contains(a) && bound > 0){
 							tempRow.add(a);
-							col.remove(a);
+							row.remove(a);
 							bound--;
 						}
 					}
 					for(Integer b : boxes.get((i/3)*3+(j/3))){
-						if(col.contains(b) && bound > 0){
+						if(row.contains(b) && bound > 0){
 							tempBox.add(b);
-							col.remove(b);
+							row.remove(b);
 							bound--;
 						}
 					}
-					if(col.isEmpty()){
+					if(row.isEmpty()){
 						if(i != 8 || j != 8){
+							System.out.println("got here first");
 							generateSudoku();
 						}else{
-							break;
+							System.out.println("got here");
+							bound = 100;
+							//break;
 						}
+						System.out.println("Got here");
+						//break;
 					}
 					int temp = (rand.nextInt(bound));
-					int insertion = col.get(temp);
+					int insertion = row.get(temp);
 					numbers[i][j].setText(""+insertion);
-					checks.add(col.get(temp));
-					rows.get(j).add(col.get(temp));
-					boxes.get(((i/3)*3)+(j/3)).add(col.get(temp));	//need this to get 3x3 box
-					col.remove(col.get(temp));
+					checks.add(row.get(temp));
+					cols.get(j).add(row.get(temp));
+					boxes.get(((i/3)*3)+(j/3)).add(row.get(temp));
+					row.remove(row.get(temp));
 					bound--;
 					for(Integer a: tempRow){
-						if(!col.contains(a)){
-							col.add(a);
+						if(!row.contains(a)){
+							row.add(a);
 						bound++;
 						}
 					}
 					for(Integer b: tempBox){
-						if(!col.contains(b)){
-							col.add(b);
+						if(!row.contains(b)){
+							row.add(b);
 							bound++;
 						}
 					}
