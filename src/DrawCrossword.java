@@ -480,6 +480,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
 						i.setText("     HINT");
+						//Try to highlight entry
+//						for (Entry ent : entries) {
+//							if (ent.isAcross()) {
+//								if (ent.getEntryAcross() == hints.indexOf(i)) {
+//						//boxes[i].setBackgroundColor(Color.YELLOW);
+//								}
+//							}
+//						}
 					}
 				}
 				for (JLabel j : cluesAcr) {

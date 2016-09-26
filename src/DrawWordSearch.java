@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -30,9 +32,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	private static int squareSize = 40;	
 	int x, y;
 	JFrame frame;
-	JPanel panel, transparentLayer, main, clues;
+	JPanel panel, transparentLayer, transparentLayer2, main, clues;
 	JLayeredPane layer;
-	JLabel [][] letters;
+	JLabel [][] letters, backgrounds;
 	String[][] grid;
 	GridBagConstraints c;
 	JButton reveal;
@@ -46,6 +48,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	boolean buttonPushed, clicked;
 	Color grey;
 	int wordLength, dir, startx, starty;
+	ImageIcon image, image2;
+	Image newimg, newimg2;
+	Image img, img2;
 	
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
@@ -64,12 +69,23 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		startx = 0;
 		starty = 0;
 		
+		image = new ImageIcon("src\\Circle.png");
+		img = image.getImage();
+		newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
+		image = new ImageIcon(newimg);
+		
+		image2 = new ImageIcon("src\\CircleBlue.png");
+		img2 = image2.getImage();
+		newimg2 = img2.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
+		image2 = new ImageIcon(newimg2);
+		
 		layer = new JLayeredPane();
 		letters = new JLabel [x-2][y-2];
+		backgrounds = new JLabel [x-2][y-2];
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
-		Border border = BorderFactory.createLineBorder(Color.BLACK);	
+		//Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
@@ -87,19 +103,51 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				mouseActionlabel(letters[i][j]);
 				letters[i][j].setFont(font);
 				letters[i][j].setForeground(Color.BLACK);
-				letters[i][j].setBackground(Color.WHITE);
-				letters[i][j].setBorder(border);
+				letters[i][j].setBackground(new Color(255, 255, 255, 255));
+				letters[i][j].setBorder(null);
+				//letters[i][j].setIcon(image);	//need to do this in another transparent layer.
+				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
 					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
 				}
-				letters[i][j].setOpaque(true);
+				letters[i][j].setOpaque(false);
 				mouseActionlabel(letters[i][j]);
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
 				transparentLayer.add(letters[i][j]);
 				transparentLayer.add(letters[i][j]);
+			}
+		}
+		
+		transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
+		transparentLayer2.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer2.setOpaque(false);
+		
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				backgrounds[i][j] = new JLabel();
+				mouseActionlabel(letters[i][j]);
+//				backgrounds[i][j].setFont(font);
+//				backgrounds[i][j].setForeground(Color.BLACK);
+				backgrounds[i][j].setBackground(new Color(255, 255, 255, 255));
+//				backgrounds[i][j].setBorder(null);
+				backgrounds[i][j].setIcon(image);	//need to do this in another transparent layer.
+//				if(grid[j+1][i+1] != "_"){
+//					backgrounds[i][j].setText(grid[j+1][i+1].toUpperCase());
+//				}else{
+//					backgrounds[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
+//				}
+				backgrounds[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+
+				backgrounds[i][j].setOpaque(false);
+//				mouseActionlabel(letters[i][j]);
+//				backgrounds[i][j].setHorizontalAlignment(JTextField.CENTER);
+//				backgrounds[i][j].setVerticalAlignment(JTextField.CENTER);
+				transparentLayer2.add(backgrounds[i][j]);
+				transparentLayer2.add(backgrounds[i][j]);
 			}
 		}
 		
@@ -109,7 +157,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setPreferredSize(new Dimension(500,500));
 //		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 //		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y)));
-		layer.add(transparentLayer);
+		layer.add(transparentLayer, new Integer(1));
+		layer.add(transparentLayer2, new Integer(0));
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(new Color(255, 255, 255, 255));
@@ -317,8 +366,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							if(!grid[i][j].equals("_")){
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
-								letters[j-1][i-1].setOpaque(true);
+								//letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
+								backgrounds[j-1][i-1].setIcon(image2);
 							}
 					}
 				}
@@ -329,6 +379,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							reveal.setText("Show Solution");
 							//letters[j-1][i-1].setForeground(Color.BLACK);
 							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
+							backgrounds[j-1][i-1].setIcon(image);
 						}
 					}
 				}
