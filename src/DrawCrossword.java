@@ -42,7 +42,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
-	JTextArea text;
 	JButton reveal;
 	JLabel[][] clueNumbers;
 	ArrayList<JLabel> cluesDwn, cluesAcr, hints;
@@ -83,9 +82,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		this.y = y;
 		this.entries = entries;
 
-		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
-		font3 = new Font("Times New Roman", Font.PLAIN, 20);
+		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font3 = new Font("Century Gothic", Font.PLAIN, 15);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
 
@@ -105,6 +104,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
+				clueNumbers[i][j].setFont(font3);
 				clueNumbers[i][j].setOpaque(false);
 				if (!gridInit[j + 1][i + 1].equals("_")) {
 					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
@@ -142,7 +142,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					keyActionTextField(boxes[i][j]);
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-				boxes[i][j].setFont(font3);
+				boxes[i][j].setFont(font2);
 
 				crosswordGrid.add(boxes[i][j]);
 				crosswordGrid.setMaximumSize(new Dimension(400, 300));
@@ -182,7 +182,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesAcr.add(first);
 		for (String s : cluesAcross) {
 			JLabel across = new JLabel(s);
+			across.setFont(font3);
 			hintA = new JLabel(" ");
+			hintA.setFont(font3);
 			hintA.setForeground(Color.GREEN);
 			hints.add(hintA);
 			mouseActionlabel(across);
@@ -196,7 +198,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesDwn.add(second);
 		for (String s : cluesDown) {
 			JLabel down = new JLabel(s);
+			down.setFont(font3);
 			hintD = new JLabel(" ");
+			hintD.setFont(font3);
 			hintD.setForeground(Color.GREEN);
 			hints.add(hintD);
 			mouseActionlabel(down);
@@ -464,11 +468,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
 									String str = shuffleString(ent.word).toUpperCase();
-									k.setText("     " + shuffleString(ent.word).toUpperCase());
+									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							} else {
 								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)) {
-									k.setText("     " + shuffleString(ent.word).toUpperCase());
+									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							}
 						}
@@ -479,28 +483,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
-						i.setText("     HINT");
-						//Try to highlight entry
-//						for (Entry ent : entries) {
-//							if (ent.isAcross()) {
-//								if (ent.getEntryAcross() == hints.indexOf(i)) {
-//						//boxes[i].setBackgroundColor(Color.YELLOW);
-//								}
-//							}
-//						}
+						i.setText("      HINT");
 					}
 				}
 				for (JLabel j : cluesAcr) {
 					if (e.getSource() == j) {
 						if (!hints.contains(j)) {
-							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("     HINT");
+							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("      HINT");
 						}
 					}
 				}
 				for (JLabel k : cluesDwn) {
 					if (e.getSource() == k) {
 						if (!hints.contains(k)) {
-							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("     HINT");
+							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("      HINT");
 						}
 					}
 				}

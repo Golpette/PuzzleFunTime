@@ -48,8 +48,8 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Times New Roman", Font.BOLD, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.BOLD, 36);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
@@ -81,8 +81,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
-		model = new SpinnerNumberModel(8, 3, 30, 1);
+		model = new SpinnerNumberModel(12, 3, 30, 1);
 		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font2);
+		
 		intro = new JLabel("Set " + puzzle + " Size");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);

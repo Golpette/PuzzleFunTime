@@ -50,8 +50,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	//@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
-		font = new Font("Times New Roman", Font.PLAIN, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.PLAIN, 30);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		this.x = x;
 		this.y = y;
 		this.grid = grid;

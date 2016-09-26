@@ -23,7 +23,7 @@ public class DrawSolution extends JComponent {
 		this.y = y;
 		this.squareSize = squareSize;
 		this.puzzle = puzzle;
-		font = new Font("Times New Roman", Font.PLAIN, 20);
+		font = new Font("Century Gothic", Font.PLAIN, 24);
 		frameSizeX = (x) * squareSize+(squareSize/2);
 		frameSizeY = (y + 1) * squareSize;
 		setOpaque(true);

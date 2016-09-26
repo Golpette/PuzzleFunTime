@@ -59,9 +59,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		this.entries = entries;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
-		font3 = new Font("Times New Roman", Font.BOLD, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
-		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
+		font3 = new Font("Century Gothic", Font.BOLD, 36);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
 		wordLength = 0;
@@ -156,7 +156,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(500,500));
 //		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
-//		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y)));
+		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.add(transparentLayer, new Integer(1));
 		layer.add(transparentLayer2, new Integer(0));
 		
@@ -168,6 +168,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		for(Entry entry: entries){
 			JLabel temp = new JLabel(entry.getWord());
+			temp.setFont(new Font("Century Gothic", Font.PLAIN, 18));
 			clues.add(temp);
 		}
 		
@@ -179,13 +180,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.gridy = 0;
 		main.add(layer, c);
 
-		c.weightx = 0.0;
-		c.weighty = 0.0;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		c.ipady = 10;
 		main.add(clues, c);
-		
 		
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);

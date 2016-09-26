@@ -32,8 +32,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	Font font, font2;
 	
 	public PuzzleLoader() throws IOException {
-		font = new Font("Times New Roman", Font.BOLD, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.BOLD, 36);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		intro = new JLabel("Welcome to Puzzle Solver!");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
