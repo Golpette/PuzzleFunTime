@@ -79,8 +79,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		reveal.addActionListener(this);
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
+		transparentLayer.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -95,9 +96,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		}
 
 		
-		
+		transparentLayer.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		
 		layer.add(transparentLayer);
+		
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -105,7 +107,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.gridy = 0;
 		panel.add(layer, c);
 
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
@@ -113,9 +115,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		frame = new JFrame("Auto Sudoku");
-		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+3)));
+		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
+		//frame.setMinimumSize(new Dimension(500,400));
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

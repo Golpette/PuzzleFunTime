@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -38,6 +39,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	String[][] grid;
 	GridBagConstraints c;
 	JButton reveal;
+	JScrollPane area;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
 	ArrayList<Entry> entries;
@@ -51,6 +53,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	ImageIcon image, image2;
 	Image newimg, newimg2;
 	Image img, img2;
+	Color clear;
 	
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
@@ -68,6 +71,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		dir = 0;
 		startx = 0;
 		starty = 0;
+		area = new JScrollPane();
+		clear = new Color(255, 255, 255, 255);
 		
 		image = new ImageIcon("src\\Circle.png");
 		img = image.getImage();
@@ -95,6 +100,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		transparentLayer.setOpaque(false);
 
 		for (int i = 0; i < x-2; i++){
@@ -124,6 +130,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer2.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		transparentLayer2.setOpaque(false);
 		
 		for (int i = 0; i < x-2; i++){
@@ -155,8 +162,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(500,500));
-//		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
-		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y)));
+		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
+		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(1));
 		layer.add(transparentLayer2, new Integer(0));
 		
@@ -187,6 +194,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		main.add(clues, c);
 		
+		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area.getVerticalScrollBar().setUnitIncrement(10);
+		area.getHorizontalScrollBar().setUnitIncrement(10);
+		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		area.setBackground(clear);
+		
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		
@@ -194,7 +208,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(main, c);
+		panel.add(area, c);
 
 		c.weightx = 0.0;
 		c.weighty = 0.0;
@@ -203,9 +217,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
+		
+		
 		frame = new JFrame("Auto Word Search");
 		frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
 		frame.setBackground(new Color(255,255,255,255));
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

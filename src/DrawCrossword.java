@@ -49,7 +49,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	Random rand;
 	Border border;
 	Color clear, red, green, blue, black;
@@ -65,6 +65,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setBackground(new Color(255, 255, 255, 255));
 
 		keys = new ArrayList<KeyEvent>();
@@ -85,6 +86,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 15);
+		font4 = new Font("Century Gothic", Font.PLAIN, 11);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
 
@@ -104,7 +106,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
-				clueNumbers[i][j].setFont(font3);
+				clueNumbers[i][j].setFont(font4);
 				clueNumbers[i][j].setOpaque(false);
 				if (!gridInit[j + 1][i + 1].equals("_")) {
 					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
@@ -249,8 +251,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		area.getVerticalScrollBar().setUnitIncrement(8);
-		area.getHorizontalScrollBar().setUnitIncrement(8);
+		area.getVerticalScrollBar().setUnitIncrement(10);
+		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
 
@@ -302,7 +304,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for (int col = 0; col < y - 2; col++) {
 						if (e.getSource() == boxes[row][col]) {
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
-								System.out.println("Pressed Up");
+							//	System.out.println("Pressed Up");
 								if (row > 0) {
 									if (boxes[row - 1][col].isEnabled()) {
 										boxes[row - 1][col].requestFocus();
@@ -310,7 +312,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-								System.out.println("Pressed Down");
+								//System.out.println("Pressed Down");
 								if (row < x - 3) {
 									if (boxes[row + 1][col].isEnabled()) {
 										boxes[row + 1][col].requestFocus();
@@ -318,7 +320,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-								System.out.println("Pressed Right");
+							//	System.out.println("Pressed Right");
 								if (col < y - 3) {
 									if (boxes[row][col + 1].isEnabled()) {
 										boxes[row][col + 1].requestFocus();
@@ -326,7 +328,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-								System.out.println("Pressed Left");
+								//System.out.println("Pressed Left");
 								if (col > 0) {
 									if (boxes[row][col - 1].isEnabled()) {
 										boxes[row][col - 1].requestFocus();
@@ -336,7 +338,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
-								System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
+								//System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
 								if(row > 0){
 									
 								}
@@ -377,7 +379,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							}
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-								System.out.println("Pressed Backspace");
+								//System.out.println("Pressed Backspace");
 								boolean stuck = true;
 								if (row > 0) {
 									if (boxes[row - 1][col].isEnabled()) {
@@ -418,8 +420,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}
 								} else {
 									if (!(row == 0 && col == 0) && stuck) {
-										System.out.println("Stuck");
-										System.out.println("i = " + row + " j = " + col);
+									//	System.out.println("Stuck");
+									//	System.out.println("i = " + row + " j = " + col);
 
 										for (int stepsBack = 1; stepsBack <= row * (x - 2) + col; stepsBack++) {
 											if (boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].isEnabled()) {

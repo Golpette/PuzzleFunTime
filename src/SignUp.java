@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -18,40 +20,31 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class PuzzleLoader extends JComponent implements ActionListener{
+public class SignUp extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
-	public SignUp signUp;
 	public SetPuzzleSize setSize;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
 	JPanel panel;
-	JButton cwd, wds, sud, signup, login;
-	JLabel intro;
+	JButton  signup, login, back;
+	JLabel intro, emailLabel, passwordLabel, passwordRetypeLabel;
 	Font font, font2, font3;
+	JTextField email, password, passwordRetype;
+	ImageIcon image, image2;
+	Image newimg;
+	Image img;
 	
-	public PuzzleLoader() throws IOException {
+	public SignUp() throws IOException {
 		font = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
-		intro = new JLabel("Welcome to Puzzle Solver!");
+		intro = new JLabel("Sign Up to Puzzle Solver");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		panel = new JPanel(new GridBagLayout());
-		cwd = new JButton("Crossword");
-		cwd.setFont(font2);
-		cwd.setHorizontalAlignment(SwingConstants.CENTER);
-		cwd.addActionListener(this);
-		wds = new JButton("Word Search");
-		wds.setFont(font2);
-		wds.setHorizontalAlignment(SwingConstants.CENTER);
-		wds.addActionListener(this);
-		sud = new JButton("Sudoku");
-		sud.setFont(font2);
-		sud.setHorizontalAlignment(SwingConstants.CENTER);
-		sud.addActionListener(this);
 		signup = new JButton("Sign Up");
 		signup.setFont(font3);
 		signup.setHorizontalAlignment(SwingConstants.CENTER);
@@ -61,6 +54,34 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		login.setHorizontalAlignment(SwingConstants.CENTER);
 		login.addActionListener(this);
 		
+		image = new ImageIcon("src\\back.png");
+		img = image.getImage();
+		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
+		image = new ImageIcon(newimg);
+		image2 = new ImageIcon("src\\back1.png");
+
+		img = image2.getImage();
+		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
+		image2 = new ImageIcon(newimg);
+		
+		back = new JButton("");
+		back.setHorizontalAlignment(SwingConstants.CENTER);
+		mouseActionlabel(back);
+		back.addActionListener(this);
+		back.setIcon(image);
+
+		emailLabel = new JLabel("Email: ");
+		emailLabel.setFont(font);
+		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		passwordLabel = new JLabel("Create Password: ");
+		passwordLabel.setFont(font);
+		passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		passwordRetypeLabel = new JLabel("Retype Password: ");
+//		passwordRetypeLabel.setFont(font);
+//		passwordRetypeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		email = new JTextField("Email:");
+		password = new JTextField("Password:");
+		passwordRetype = new JTextField("Retype Password");
 		frame = new JFrame("Auto Puzzle Generator");
 		frame.setPreferredSize(new Dimension(500,400));
 		frame.setSize(500, 400);
@@ -68,58 +89,81 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 0;
-		c.ipady = (int)(frame.getHeight()*0.3);
-		c.gridwidth = 3;
-		panel.add(signup, c);
+		c.gridwidth = 2;
+		panel.add(back, c);
 		
-
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = (int)(frame.getHeight()*0.3);
-		c.gridwidth = 3;
+		c.gridwidth = 2;
 		panel.add(login, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 2;
-		c.ipady = (int)(frame.getHeight()*0.8);
-		c.gridwidth = 3;
+		c.gridwidth = 2;
 		panel.add(intro, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
+		c.weightx = 0.5;
+		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 3;
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.ipady = 10;
-		panel.add(cwd, c);
+		c.gridwidth = 2;
+		c.ipadx = 3;
+		panel.add(emailLabel, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
+		c.weightx = 0.5;
+		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 3;
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.ipady = 10;
-		panel.add(wds, c);
+		c.gridwidth = 2;
+		c.ipadx = 1;
+		panel.add(email, c);
+		
+		c.weightx = 0.2;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		c.ipadx = 3;
+		panel.add(passwordLabel, c);
+		
+		c.weightx = 0.8;
+		c.weighty = 1.0;
+		c.gridx = 1;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		c.ipadx = 1;
+		panel.add(password, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 3;
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.ipady = 10;
-		panel.add(sud, c);
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 5;
+		c.gridwidth = 2;
+		c.ipadx = 3;
+		panel.add(passwordRetypeLabel, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 1;
+		c.gridy = 5;
+		c.gridwidth = 2;
+		c.ipadx = 1;
+		panel.add(passwordRetype, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 6;
+		c.gridwidth = 2;
+		panel.add(signup, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
@@ -177,56 +221,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == cwd){
-//			try {
-//				crossword = new CrosswordGenerator(10);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-			
-			//this.setVisible(false);
-			//puzzle.
-
-			try {
-				setSize = new SetPuzzleSize("Crossword");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			frame.dispose();
-		}
-		if(e.getSource() == wds){
-//			try {
-//				wordsearch = new WordSearchGenerator(15);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-			//this.setVisible(false);
-			
-
-			
-			try {
-				setSize = new SetPuzzleSize("Word Search");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			frame.dispose();
-		}
-		if(e.getSource() == sud){
-			try {
-				sudoku = new SudokuGenerator(9);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		if (e.getSource() == signup){
-			try {
-				signUp = new SignUp();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
+	
+	
 	}
 	
 	public static void main (String [] args){
