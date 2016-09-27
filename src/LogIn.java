@@ -24,7 +24,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class SignUp extends JComponent implements ActionListener{
+public class LogIn extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;
@@ -32,35 +32,33 @@ public class SignUp extends JComponent implements ActionListener{
 	public SetPuzzleSize setSize;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
-	JLayeredPane layer;
 	JPanel panel;
-	JButton  signup, back;
+	JLayeredPane layer;
+	JButton login, back;
 	JLabel intro, emailLabel, passwordLabel, passwordRetypeLabel;
 	Font font, font2, font3;
 	JTextField email, password, passwordRetype;
 	ImageIcon image, image2;
 	Image newimg;
 	Image img;
-	JPasswordField pass1, pass2;
 	public PuzzleLoader puzzleLoader;
 	EmailValidator emailValidator;
+	JPasswordField password2;
 	
-	public SignUp() throws IOException {
+	public LogIn() throws IOException {
 		font = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
-		intro = new JLabel("Sign Up to Puzzle Solver");
+		intro = new JLabel("Log In to Puzzle Solver");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setOpaque(false);
-		intro.setBounds(0, 0, 500, 220);
+		intro.setBounds(0, 0, 500, 300);
 		panel = new JPanel(new GridBagLayout());
-		signup = new JButton("Sign Up");
-		signup.setFont(font3);
-		signup.setHorizontalAlignment(SwingConstants.CENTER);
-		signup.addActionListener(this);
-		
-		emailValidator = new EmailValidator();
+		login = new JButton("Login");
+		login.setFont(font2);
+		login.setHorizontalAlignment(SwingConstants.CENTER);
+		login.addActionListener(this);
 		
 		image = new ImageIcon("src\\back.png");
 		img = image.getImage();
@@ -71,6 +69,8 @@ public class SignUp extends JComponent implements ActionListener{
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg);
+		
+		emailValidator = new EmailValidator();
 		
 		back = new JButton("");
 		back.setFont(font2);
@@ -83,27 +83,27 @@ public class SignUp extends JComponent implements ActionListener{
 		back.setBounds(0, 0, 100, 100);
 		back.setBackground(new Color(255,255,255,255));
 		back.setBorder(null);
-		
+
 		layer = new JLayeredPane();
-		layer.add(back, new Integer(0));
 		layer.add(intro, new Integer(1));
+		layer.add(back, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		
 		emailLabel = new JLabel("Email: ");
 		emailLabel.setFont(font2);
+		
 		passwordLabel = new JLabel("Password: ");
 		passwordLabel.setFont(font2);
-		passwordRetypeLabel = new JLabel("Retype: ");
-		passwordRetypeLabel.setFont(font2);
+//		passwordRetypeLabel.setFont(font);
+//		passwordRetypeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		email = new JTextField("");
 		email.setFont(font2);
+		//email.setDocument(new JTextFieldLimit(20));	//not quite right
 		password = new JTextField("");
-		pass1 = new JPasswordField("");
-		pass1.setFont(font2);
-		pass2 = new JPasswordField("");
-		pass2.setFont(font2);
-		passwordRetype = new JTextField("");
+		password.setFont(font2);
+		password2 = new JPasswordField("");
+		password2.setFont(font2);
 		frame = new JFrame("Auto Puzzle Generator");
 		frame.setPreferredSize(new Dimension(500,400));
 		frame.setSize(500, 400);
@@ -112,7 +112,7 @@ public class SignUp extends JComponent implements ActionListener{
 		c.fill = GridBagConstraints.BOTH;
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 2.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 2;
@@ -145,35 +145,19 @@ public class SignUp extends JComponent implements ActionListener{
 		c.weightx = 5.0;
 		c.weighty = 0.1;
 		c.gridx = 1;
-		c.gridy = 2;
-		c.gridwidth = 1;
-		c.insets = new Insets(0,0,0,0);
-		panel.add(pass1, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.1;
-		c.gridx = 0;
-		c.gridy = 3;
-		c.gridwidth = 1;
-		c.insets = new Insets(0,10,0,0);
-		panel.add(passwordRetypeLabel, c);
-		
-		c.weightx = 5.0;
-		c.weighty = 0.1;
-		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;	
 		c.gridwidth = 1;
 		c.insets = new Insets(0,0,20,0);
-		panel.add(pass2, c);
+		panel.add(password2, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.gridwidth = 2;
 		c.ipady = 10;
 		c.insets = new Insets(0,0,0,0);
-		panel.add(signup, c);
+		panel.add(login, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
@@ -228,16 +212,15 @@ public class SignUp extends JComponent implements ActionListener{
 	
 	
 	public void actionPerformed(ActionEvent e) {
-	
-		if(e.getSource() == signup){
-			   if(!emailValidator.validate(email.getText().trim())) {
-			        System.out.print("Invalid Email ID");
-			        /*
-			           Action that you want to take. For ex. make email id field red
-			           or give message box saying invalid email id.
-			        */
-			   }
-			}
+		if(e.getSource() == login){
+		   if(!emailValidator.validate(email.getText().trim())) {
+		        System.out.print("Invalid Email ID");
+		        /*
+		           Action that you want to take. For ex. make email id field red
+		           or give message box saying invalid email id.
+		        */
+		   }
+		}
 		
 		if(e.getSource() == back){
 			try {

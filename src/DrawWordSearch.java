@@ -174,7 +174,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		clues.setOpaque(true);
 		
 		for(Entry entry: entries){
-			JLabel temp = new JLabel(entry.getWord());
+			JLabel temp = new JLabel(entry.getWord().toUpperCase());
 			temp.setFont(new Font("Century Gothic", Font.PLAIN, 18));
 			clues.add(temp);
 		}

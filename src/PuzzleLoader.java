@@ -24,6 +24,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
 	public SignUp signUp;
+	public LogIn logIn;
 	public SetPuzzleSize setSize;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
@@ -226,6 +227,15 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			frame.dispose();
+		}
+		if (e.getSource() == login){
+			try {
+				logIn = new LogIn();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			frame.dispose();
 		}
 	}
 	
