@@ -32,8 +32,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	JButton cwd, wds, sud, signup, login;
 	JLabel intro;
 	Font font, font2, font3;
+	String user;
 	
-	public PuzzleLoader() throws IOException {
+	public PuzzleLoader(String user) throws IOException {
 		font = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
@@ -61,8 +62,14 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		login.setFont(font3);
 		login.setHorizontalAlignment(SwingConstants.CENTER);
 		login.addActionListener(this);
+		this.user = user;
 		
-		frame = new JFrame("Auto Puzzle Generator");
+		if(user == ""){
+			frame = new JFrame("Auto Puzzle Generator");
+		}else{
+			frame = new JFrame("Welcome to PuzzleLoader "+ user);
+		}
+		
 		frame.setPreferredSize(new Dimension(500,400));
 		frame.setSize(500, 400);
 		
@@ -241,7 +248,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	
 	public static void main (String [] args){
 		try {
-			puzzle = new PuzzleLoader();
+			puzzle = new PuzzleLoader("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

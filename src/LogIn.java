@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -102,7 +103,9 @@ public class LogIn extends JComponent implements ActionListener{
 		//email.setDocument(new JTextFieldLimit(20));	//not quite right
 		password = new JTextField("");
 		password.setFont(font2);
-		password2 = new JPasswordField("");
+		password2 = new JPasswordField(20);
+		//password2.setColumns(8);
+		password2.setText("password");
 		password2.setFont(font2);
 		frame = new JFrame("Auto Puzzle Generator");
 		frame.setPreferredSize(new Dimension(500,400));
@@ -213,18 +216,31 @@ public class LogIn extends JComponent implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == login){
+			char[] correctPass = new char[]{'p','a','s','s','w','o','r','d'};
+			char[] password = password2.getPassword();
+			System.out.println(password);
 		   if(!emailValidator.validate(email.getText().trim())) {
 		        System.out.print("Invalid Email ID");
 		        /*
 		           Action that you want to take. For ex. make email id field red
 		           or give message box saying invalid email id.
 		        */
+		   }else if(!Arrays.equals(password, correctPass)){
+			   System.out.println("Wrong password");
+		   }else{
+			   System.out.println("Correct password");
+			   try {
+					puzzleLoader = new PuzzleLoader(email.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				frame.dispose();
 		   }
 		}
 		
 		if(e.getSource() == back){
 			try {
-				puzzleLoader = new PuzzleLoader();
+				puzzleLoader = new PuzzleLoader("");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -234,7 +250,7 @@ public class LogIn extends JComponent implements ActionListener{
 	
 	public static void main (String [] args){
 		try {
-			puzzle = new PuzzleLoader();
+			puzzle = new PuzzleLoader("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -132,7 +132,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												// letters in boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
 				action.setEnabled(false);
-				boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
+				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1));
 				if (grid[j + 1][i + 1] == "_") {
@@ -486,6 +486,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
 						i.setText("      HINT");
+//						for (Entry ent : entries) {
+//							if (ent.isAcross()) {
+//								if (ent.getEntryAcross() == hints.indexOf(i)) {
+//									i.setText("      " + shuffleString(ent.word).toUpperCase());
+//								}
+//							} 
+//						}
+						//boxes[3][3].setBackground(Color.YELLOW);
 					}
 				}
 				for (JLabel j : cluesAcr) {
@@ -509,6 +517,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
 						i.setText(" ");
+						//boxes[3][3].setBackground(Color.WHITE);
 					}
 				}
 				for (JLabel j : cluesAcr) {
@@ -552,6 +561,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		
+
+		
+		
 		if (e.getSource() == reveal) {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if (sol.frame.isVisible()) {

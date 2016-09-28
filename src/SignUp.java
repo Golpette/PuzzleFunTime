@@ -11,7 +11,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -225,23 +227,54 @@ public class SignUp extends JComponent implements ActionListener{
 		});
 	}
 	
-	
+	void writeToFile(String fileName, String text) throws Exception {
+		   FileOutputStream out = new FileOutputStream(fileName, true);
+		   out.write(text.getBytes());
+		} 
 	
 	public void actionPerformed(ActionEvent e) {
 	
 		if(e.getSource() == signup){
-			   if(!emailValidator.validate(email.getText().trim())) {
-			        System.out.print("Invalid Email ID");
-			        /*
-			           Action that you want to take. For ex. make email id field red
-			           or give message box saying invalid email id.
-			        */
+			char[] correctPass = new char[]{'p','a','s','s'};
+			char[] password = pass1.getPassword();
+			System.out.println(password);
+		   if(!emailValidator.validate(email.getText().trim())) {
+		        System.out.print("Invalid Email ID");
+		        /*
+		           Action that you want to take. For ex. make email id field red
+		           or give message box saying invalid email id.
+		        */
+		   }else if(!Arrays.equals(password, correctPass)){
+			   System.out.println("Wrong password");
+		   }else{
+			   System.out.println("Correct password");   
+			   String user = email.getText();
+				   try {
+					writeToFile("Users.txt", user);
+						puzzleLoader = new PuzzleLoader(email.getText());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					frame.dispose();
 			   }
-			}
+			   
+			   System.out.println("Correct password");
+			   try {
+					puzzleLoader = new PuzzleLoader(email.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				frame.dispose();
+		   }
+		
+	
 		
 		if(e.getSource() == back){
 			try {
-				puzzleLoader = new PuzzleLoader();
+				puzzleLoader = new PuzzleLoader("");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -251,7 +284,7 @@ public class SignUp extends JComponent implements ActionListener{
 	
 	public static void main (String [] args){
 		try {
-			puzzle = new PuzzleLoader();
+			puzzle = new PuzzleLoader("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

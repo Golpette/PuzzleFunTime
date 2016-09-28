@@ -189,7 +189,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		}
 		if(e.getSource() == back){
 			try {
-				puzzleLoader = new PuzzleLoader();
+				puzzleLoader = new PuzzleLoader("");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
