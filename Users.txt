@@ -1,1 +1,12 @@
-ewrtwe@sdfg.sdfewrtwe@sdfg.sdfewrtwe@sdfg.sdfewrtwe@sdfg.sdfsad@asdf.sd
+<user>
+	<username>Andy</username>
+	<email>anyboy@yahoomail.com</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username>Steve</username>
+	<email>bo@lk.com</email>
+	<password>leeds</password>
+</user>
+
