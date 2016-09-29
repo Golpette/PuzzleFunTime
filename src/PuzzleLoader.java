@@ -254,3 +254,4 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		}
 	}
 }
+
