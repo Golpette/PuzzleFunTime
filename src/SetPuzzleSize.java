@@ -59,13 +59,24 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
 		
-		//image = new ImageIcon("src\\back.png");  //Andy
-		image = new ImageIcon("src/back.png");  //Steve
+		// Set image path depending on OS
+		String path1 = "";
+		String path2 = "";
+		//System.out.println(System.getProperty("os.name").toLowerCase());
+		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
+			path1 = "src/back.png";
+			path2 = "src/back1.png";
+		}
+		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
+			path1 = "src\\back.png";
+			path2 = "src\\back1.png";
+		}
+		
+		image = new ImageIcon( path1 );  
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		//image2 = new ImageIcon("src\\back1.png"); //Andy
-		image2 = new ImageIcon("src/back1.png"); //Steve
+		image2 = new ImageIcon( path2 );
 
 
 		img = image2.getImage();

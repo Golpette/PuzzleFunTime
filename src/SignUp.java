@@ -64,11 +64,23 @@ public class SignUp extends JComponent implements ActionListener{
 		
 		emailValidator = new EmailValidator();
 		
-		image = new ImageIcon("src\\back.png");
+		// Set image path depending on OS
+		String path1 = "";
+		String path2 = "";
+		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
+			path1 = "src/back.png";
+			path2 = "src/back1.png";
+		}
+		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
+			path1 = "src\\back.png";
+			path2 = "src\\back1.png";
+		}
+		
+		image = new ImageIcon( path1 );
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		image2 = new ImageIcon("src\\back1.png");
+		image2 = new ImageIcon( path2 );
 
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 

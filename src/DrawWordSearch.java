@@ -82,12 +82,25 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		width = screenSize.getWidth();
 		height = screenSize.getHeight();
 		
-		image = new ImageIcon("src\\Circle.png");
+		// Set image path depending on OS
+		String path1 = "";
+		String path2 = "";
+		//System.out.println(System.getProperty("os.name").toLowerCase());
+		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
+			path1 = "src/Circle.png";
+			path2 = "src/CircleBlue.png";
+		}
+		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
+			path1 = "src\\Circle.png";
+			path2 = "src\\CircleBlue.png";
+		}
+	    
+		image = new ImageIcon( path1 );
 		img = image.getImage();
 		newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
 		
-		image2 = new ImageIcon("src\\CircleBlue.png");
+		image2 = new ImageIcon( path2 );
 		img2 = image2.getImage();
 		newimg2 = img2.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg2);
