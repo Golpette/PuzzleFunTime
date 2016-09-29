@@ -60,12 +60,15 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
 		//image = new ImageIcon("C:\\git\\Crossword\\src\\back.png");		//laptop
-		image = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back.png");				//PC
+		//image = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back.png");				//PC
+		image = new ImageIcon("~/home/steve/git/Crossword/src");				//PC
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
 		//image2 = new ImageIcon("C:\\git\\Crossword\\src\\back1.png");		//laptop
-		image2 = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back1.png");				//PC
+		//image2 = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back1.png");				//PC
+		image = new ImageIcon("~/home/steve/git/Crossword/src");				//PC
+
 
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
