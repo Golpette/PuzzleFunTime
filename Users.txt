@@ -10,3 +10,9 @@
 	<password>leeds</password>
 </user>
 
+<user>
+	<username>Andrew</username>
+	<email>AJRigg@gippymail.co.uk</email>
+	<password>pass</password>
+</user>
+

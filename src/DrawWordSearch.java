@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -54,6 +55,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	Image newimg, newimg2;
 	Image img, img2;
 	Color clear;
+	Dimension screenSize; 
+	double width;
+	double height;
 	
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
@@ -73,6 +77,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		starty = 0;
 		area = new JScrollPane();
 		clear = new Color(255, 255, 255, 255);
+		
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screenSize.getWidth();
+		height = screenSize.getHeight();
 		
 		image = new ImageIcon("src\\Circle.png");
 		img = image.getImage();
@@ -218,15 +226,29 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		
-		
+		System.out.println("Screen size " + width + "x" + height);
 		frame = new JFrame("Auto Word Search");
-		frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height){
+			//frame.setPreferredSize(new Dimension((int)width,(int)height));
+			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
+			System.out.println("GOt here");
+		}
+		else if(squareSize*(x+2)+squareSize/2 > width){
+			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
+		}else if(squareSize*(y+2) > height){
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+		}else{
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+		}
+		//frame.setPreferredSize(new Dimension(700,500));
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setMinimumSize(new Dimension(500,400));
+		//frame.setMaximumSize(new Dimension(1000,800));
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
 	}
 
 	
