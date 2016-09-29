@@ -82,6 +82,7 @@ public class SignUp extends JComponent implements ActionListener{
 		image = new ImageIcon(newimg);
 		image2 = new ImageIcon( path2 );
 
+
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg);

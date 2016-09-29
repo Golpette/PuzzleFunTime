@@ -98,9 +98,11 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		image = new ImageIcon( path1 );
 		img = image.getImage();
 		newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
-		image = new ImageIcon(newimg);
-		
+		image = new ImageIcon(newimg);		
 		image2 = new ImageIcon( path2 );
+
+
+
 		img2 = image2.getImage();
 		newimg2 = img2.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg2);
