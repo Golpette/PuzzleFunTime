@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,25 +48,24 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Times New Roman", Font.BOLD, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.BOLD, 36);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
-		panel1.setBounds(0,0,500,400);
+		panel1.setBounds(0, 0, 500, 320);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
-		//image = new ImageIcon("C:\\git\\Crossword\\src\\back.png");		//laptop
-		//image = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back.png");				//PC
-		image = new ImageIcon("~/home/steve/git/Crossword/src");				//PC
+		
+		//image = new ImageIcon("src\\back.png");  //Andy
+		image = new ImageIcon("src/back.png");  //Steve
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		//image2 = new ImageIcon("C:\\git\\Crossword\\src\\back1.png");		//laptop
-		//image2 = new ImageIcon("C:\\Users\\Andrew\\Documents\\GitHub\\Crossword\\src\\back1.png");				//PC
-		image = new ImageIcon("~/home/steve/git/Crossword/src");				//PC
+		//image2 = new ImageIcon("src\\back1.png"); //Andy
+		image2 = new ImageIcon("src/back1.png"); //Steve
 
 
 		img = image2.getImage();
@@ -87,12 +85,15 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame = new JFrame("Set Puzzle Size");
 		frame.setSize(500, 400);
 		frame.setPreferredSize(new Dimension(500,400));
-		model = new SpinnerNumberModel(8, 3, 30, 1);
+		model = new SpinnerNumberModel(12, 3, 30, 1);
 		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font2);
+		
 		intro = new JLabel("Set " + puzzle + " Size");
-//		intro.setHorizontalAlignment(SwingConstants.CENTER);
-//		intro.setVerticalAlignment(SwingConstants.TOP);
 		intro.setFont(font);
+		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
@@ -100,7 +101,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		//c.ipady = 50;
 		panel1.add(intro, c);
 		
 		c.gridx = 1;
@@ -108,13 +108,10 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		panel1.add(spinner, c);
 		
 		layer = new JLayeredPane();
-		//layer.setBackground(new Color(255, 255, 255, 255));
 		layer.add(panel1, new Integer(1));
 		layer.add(back, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
-		//layer.setPreferredSize(new Dimension(200,300));
-		//layer.setMinimumSize(new Dimension(200,200));
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -128,7 +125,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		//c.gridwidth = 1;
 		panel.add(generate, c);
 		
 		frame.setContentPane(panel);
@@ -136,8 +132,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
 	}
-	
-	
 
 	void keyActionTextField(JTextField l) {
 
@@ -154,10 +148,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		});
 	}
-	
-	
-	
-	
 
 	void mouseActionlabel(JButton b) {
 		b.addMouseListener(new MouseListener() {
@@ -184,9 +174,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		});
 	}
 	
-	
-	
-	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == generate){
 			if(puzzle.equals("Crossword")){
@@ -196,7 +183,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			if(puzzle.equals("WordSearch")){
+			if(puzzle.equals("Word Search")){
 				try {
 					wordsearch = new WordSearchGenerator((Integer)spinner.getValue());
 				}catch (IOException e1) {
@@ -205,16 +192,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 		}
 		if(e.getSource() == back){
-			
 			try {
-				puzzleLoader = new PuzzleLoader();
+				puzzleLoader = new PuzzleLoader("");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			frame.dispose();
-			System.out.println("Is this visible"+ this.isVisible());
-			
+			frame.dispose();			
 		}
 	}
 }

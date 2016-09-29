@@ -1,0 +1,18 @@
+<user>
+	<username>Andy</username>
+	<email>anyboy@yahoomail.com</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username>Steve</username>
+	<email>bo@lk.com</email>
+	<password>leeds</password>
+</user>
+
+<user>
+	<username>Andrew</username>
+	<email>AJRigg@gippymail.co.uk</email>
+	<password>pass</password>
+</user>
+

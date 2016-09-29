@@ -92,7 +92,7 @@ public class CrosswordGenerator{
 			
 		}
 		
-		System.out.println( count_fails );
+		//System.out.println( count_fails );
 		crossword = new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries);
 		
 	}

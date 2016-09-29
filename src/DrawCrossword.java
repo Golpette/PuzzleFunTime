@@ -38,11 +38,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private static int squareSize = 30;
 	private String[][] grid;
 	private JTextField[][] boxes;
-	int rowWidth, y, frameSizeX, frameSizeY;
+	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
-	JTextArea text;
 	JButton reveal;
 	JLabel[][] clueNumbers;
 	ArrayList<JLabel> cluesDwn, cluesAcr, hints;
@@ -50,7 +49,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	Random rand;
 	Border border;
 	Color clear, red, green, blue, black;
@@ -66,6 +65,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setBackground(new Color(255, 255, 255, 255));
 
 		keys = new ArrayList<KeyEvent>();
@@ -79,13 +79,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		black = new Color(0, 0, 0, 255);
 
 		this.grid = grid;
-		this.rowWidth = x;
+		this.x = x;
 		this.y = y;
 		this.entries = entries;
 
-		font = new Font("Times New Roman", Font.PLAIN, squareSize / 5 * 3);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
-		font3 = new Font("Times New Roman", Font.PLAIN, 20);
+		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font3 = new Font("Century Gothic", Font.PLAIN, 15);
+		font4 = new Font("Century Gothic", Font.PLAIN, 11);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
 
@@ -105,6 +106,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
+				clueNumbers[i][j].setFont(font4);
 				clueNumbers[i][j].setOpaque(false);
 				if (!gridInit[j + 1][i + 1].equals("_")) {
 					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
@@ -130,7 +132,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												// letters in boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
 				action.setEnabled(false);
-				boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
+				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1));
 				if (grid[j + 1][i + 1] == "_") {
@@ -142,7 +144,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					keyActionTextField(boxes[i][j]);
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-				boxes[i][j].setFont(font3);
+				boxes[i][j].setFont(font2);
 
 				crosswordGrid.add(boxes[i][j]);
 				crosswordGrid.setMaximumSize(new Dimension(400, 300));
@@ -169,10 +171,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */
 		clue = new JPanel(new GridBagLayout());
+		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
-		// clue.setBounds(0, 0, 200, 200);
+		clue.setAlignmentY(0);
+		clue.setBounds(300, 300, 200, 200);
 		hints = new ArrayList<JLabel>();
 
 		JLabel first = new JLabel("Across");
@@ -180,7 +184,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesAcr.add(first);
 		for (String s : cluesAcross) {
 			JLabel across = new JLabel(s);
+			across.setFont(font3);
 			hintA = new JLabel(" ");
+			hintA.setFont(font3);
 			hintA.setForeground(Color.GREEN);
 			hints.add(hintA);
 			mouseActionlabel(across);
@@ -194,7 +200,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		cluesDwn.add(second);
 		for (String s : cluesDown) {
 			JLabel down = new JLabel(s);
+			down.setFont(font3);
 			hintD = new JLabel(" ");
+			hintD.setFont(font3);
 			hintD.setForeground(Color.GREEN);
 			hints.add(hintD);
 			mouseActionlabel(down);
@@ -204,15 +212,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 
 		for (JLabel j : cluesAcr) {
-			c.weightx = 1;
-			c.weighty = 0;
+			c.weightx = 1.0;
+			c.weighty = 1.0;
 			c.gridx = 0;
 			clue.add(j, c);
 		}
 
 		for (JLabel k : cluesDwn) {
-			c.weightx = 1;
-			c.weighty = 0;
+			c.weightx = 1.0;
+			c.weighty = 1.0;
 			c.gridx = 0;
 			clue.add(k, c);
 		}
@@ -226,11 +234,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		main.setBackground(clear);
 
 		c.weighty = 1.0;
+		c.weightx = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
 
 		c.weighty = 1.0;
+		c.weightx = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		main.add(clue, c);
@@ -241,8 +251,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		area.getVerticalScrollBar().setUnitIncrement(8);
-		area.getHorizontalScrollBar().setUnitIncrement(8);
+		area.getVerticalScrollBar().setUnitIncrement(10);
+		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
 
@@ -271,7 +281,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 0;
+		c.ipady = 10;
 		panel.add(reveal, c);
 
 		/**
@@ -290,123 +300,133 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
-				for (int row = 0; row < rowWidth - 2; row++) {
-					for (int column = 0; column < y - 2; column++) {
-						if (e.getSource() == boxes[row][column]) {
+				for (int row = 0; row < x - 2; row++) {
+					for (int col = 0; col < y - 2; col++) {
+						if (e.getSource() == boxes[row][col]) {
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
-								System.out.println("Pressed Up");
+							//	System.out.println("Pressed Up");
 								if (row > 0) {
-									if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+									if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-								System.out.println("Pressed Down");
-								if (row < rowWidth - 3) {
-									if (boxes[row + 1][column].isEnabled()) {
-										boxes[row + 1][column].requestFocus();
+								//System.out.println("Pressed Down");
+								if (row < x - 3) {
+									if (boxes[row + 1][col].isEnabled()) {
+										boxes[row + 1][col].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-								System.out.println("Pressed Right");
-								if (column < y - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										boxes[row][column + 1].requestFocus();
+							//	System.out.println("Pressed Right");
+								if (col < y - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										boxes[row][col + 1].requestFocus();
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-								System.out.println("Pressed Left");
-								if (column > 0) {
-									if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
+								//System.out.println("Pressed Left");
+								if (col > 0) {
+									if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
 									}
 								}
 							}
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
-								boxes[row][column].setForeground(black);
-								boxes[row][column].setText(Character.toString(e.getKeyChar()));
-								System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
-								if (column < rowWidth - 3 && row < y - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										if (boxes[row][column + 1].getText().equals("")) {
-											boxes[row][column + 1].setText("");
+								boxes[row][col].setForeground(black);
+								boxes[row][col].setText(Character.toString(e.getKeyChar()));
+								//System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
+								if(row > 0){
+									
+								}
+								if (col < x - 3 && row < y - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										if (boxes[row][col + 1].getText().equals("")) {
+											boxes[row][col + 1].setText("");
 										}
-										boxes[row][column + 1].requestFocus();
-									} else if (boxes[row + 1][column].isEnabled()) {
-										if (boxes[row + 1][column].getText().equals("")) {
-											boxes[row + 1][column].setText("");
+										boxes[row][col + 1].requestFocus();
+									} else if (boxes[row + 1][col].isEnabled()) {
+										if (boxes[row + 1][col].getText().equals("")) {
+											boxes[row + 1][col].setText("");
 										}
-										boxes[row + 1][column].requestFocus();
+										boxes[row + 1][col].requestFocus();
 									}
-								} else if (column < rowWidth - 3) {
-									if (boxes[row][column + 1].isEnabled()) {
-										if (boxes[row][column + 1].getText().equals("")) {
-											boxes[row][column + 1].setText("");
+								} else if (col < x - 3) {
+									if (boxes[row][col + 1].isEnabled()) {
+										if (boxes[row][col + 1].getText().equals("")) {
+											boxes[row][col + 1].setText("");
 										}
-										boxes[row][column + 1].requestFocus();
+										boxes[row][col + 1].requestFocus();
 									}
 								} else if (row < y - 3) {
-									if (boxes[row + 1][column].isEnabled()) {
-										if (boxes[row + 1][column].getText().equals("")) {
-											boxes[row + 1][column].setText("");
+									if (boxes[row + 1][col].isEnabled()) {
+										if (boxes[row + 1][col].getText().equals("")) {
+											boxes[row + 1][col].setText("");
 										}
-										boxes[row + 1][column].requestFocus();
+										boxes[row + 1][col].requestFocus();
+									}
+								}else{
+									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
+										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
+											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
+											break;
+										}
 									}
 								}
 							}
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-								System.out.println("Pressed Backspace");
+								//System.out.println("Pressed Backspace");
 								boolean stuck = true;
 								if (row > 0) {
-									if (boxes[row - 1][column].isEnabled()) {
+									if (boxes[row - 1][col].isEnabled()) {
 										stuck = false;
 									}
 								}
-								if (column > 0) {
-									if (boxes[row][column - 1].isEnabled()) {
+								if (col > 0) {
+									if (boxes[row][col - 1].isEnabled()) {
 										stuck = false;
 									}
 								}
-								boxes[row][column].setText("");
-								if (column > 0 && row > 0 && !stuck) {
-									if (boxes[row][column - 1].isEnabled()
-											&& !boxes[row][column - 1].getText().equals("")) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()
-											&& !boxes[row - 1][column].getText().equals("")) {
-										boxes[row - 1][column].requestFocus();
-									} else if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+								boxes[row][col].setText("");
+								if (col > 0 && row > 0 && !stuck) {
+									if (boxes[row][col - 1].isEnabled()
+											&& !boxes[row][col - 1].getText().equals("")) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()
+											&& !boxes[row - 1][col].getText().equals("")) {
+										boxes[row - 1][col].requestFocus();
+									} else if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
-								} else if (column > 0 && !stuck) {
-									if (boxes[row][column - 1].isEnabled()
-											&& !boxes[row][column - 1].getText().equals("")) {
-										boxes[row][column - 1].requestFocus();
-									} else if (boxes[row][column - 1].isEnabled()) {
-										boxes[row][column - 1].requestFocus();
+								} else if (col > 0 && !stuck) {
+									if (boxes[row][col - 1].isEnabled()
+											&& !boxes[row][col - 1].getText().equals("")) {
+										boxes[row][col - 1].requestFocus();
+									} else if (boxes[row][col - 1].isEnabled()) {
+										boxes[row][col - 1].requestFocus();
 									}
 								} else if (row > 0 && !stuck) {
-									if (boxes[row - 1][column].isEnabled()
-											&& !boxes[row - 1][column].getText().equals("")) {
-										boxes[row - 1][column].requestFocus();
-									} else if (boxes[row - 1][column].isEnabled()) {
-										boxes[row - 1][column].requestFocus();
+									if (boxes[row - 1][col].isEnabled()
+											&& !boxes[row - 1][col].getText().equals("")) {
+										boxes[row - 1][col].requestFocus();
+									} else if (boxes[row - 1][col].isEnabled()) {
+										boxes[row - 1][col].requestFocus();
 									}
 								} else {
-									if (!(row == 0 && column == 0) && stuck) {
-										System.out.println("Stuck");
-										System.out.println("i = " + row + " j = " + column);
+									if (!(row == 0 && col == 0) && stuck) {
+									//	System.out.println("Stuck");
+									//	System.out.println("i = " + row + " j = " + col);
 
-										for (int stepsBack = 1; stepsBack <= row * (rowWidth - 2) + column; stepsBack++) {
-											if (boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].isEnabled()) {
+										for (int stepsBack = 1; stepsBack <= row * (x - 2) + col; stepsBack++) {
+											if (boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].isEnabled()) {
 												//if (!boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].getText().equals("")) {
-													boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].requestFocus();
+													boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].requestFocus();
 												//}
 												break;
 											}
@@ -449,11 +469,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
-									k.setText("     " + shuffleString(ent.word).toUpperCase());
+									String str = shuffleString(ent.word).toUpperCase();
+									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							} else {
 								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)) {
-									k.setText("     " + shuffleString(ent.word).toUpperCase());
+									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							}
 						}
@@ -464,20 +485,28 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
-						i.setText("     HINT");
+						i.setText("      HINT");
+//						for (Entry ent : entries) {
+//							if (ent.isAcross()) {
+//								if (ent.getEntryAcross() == hints.indexOf(i)) {
+//									i.setText("      " + shuffleString(ent.word).toUpperCase());
+//								}
+//							} 
+//						}
+						//boxes[3][3].setBackground(Color.YELLOW);
 					}
 				}
 				for (JLabel j : cluesAcr) {
 					if (e.getSource() == j) {
 						if (!hints.contains(j)) {
-							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("     HINT");
+							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("      HINT");
 						}
 					}
 				}
 				for (JLabel k : cluesDwn) {
 					if (e.getSource() == k) {
 						if (!hints.contains(k)) {
-							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("     HINT");
+							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("      HINT");
 						}
 					}
 				}
@@ -488,6 +517,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
 						i.setText(" ");
+						//boxes[3][3].setBackground(Color.WHITE);
 					}
 				}
 				for (JLabel j : cluesAcr) {
@@ -531,11 +561,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		
+
+		
+		
 		if (e.getSource() == reveal) {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if (sol.frame.isVisible()) {
 				reveal.setText("Hide Solution");
-				for (int i = 0; i < rowWidth - 2; i++) {
+				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						if (boxes[i][j].getText().equals("")) {
 							boxes[i][j].setForeground(black);
@@ -548,7 +582,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			} else {
 				reveal.setText("Show Solution");
-				for (int i = 0; i < rowWidth - 2; i++) {
+				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						boxes[i][j].setForeground(new Color(0, 0, 0, 255));
 					}
