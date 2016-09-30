@@ -56,6 +56,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JLabel hintD, hintA;
 	ArrayList<KeyEvent> keys;
 	Action action;
+	
+	
+	
 
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
@@ -295,6 +298,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	
+	
+	
+	
 	void keyActionTextField(JTextField l) {
 
 		l.addKeyListener(new KeyListener() {
@@ -305,34 +312,51 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						if (e.getSource() == boxes[row][col]) {
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
 							//	System.out.println("Pressed Up");
-								if (row > 0) {
-									if (boxes[row - 1][col].isEnabled()) {
-										boxes[row - 1][col].requestFocus();
+								if (row > 0) {		
+									// STEVE: edit this (and next 3 conditions) to jump black squares
+									//        and implement periodic boundary conditions
+									for( int i=1; i<(x-2); i++){
+										if (boxes[ (row-i) ][col].isEnabled()) {
+											boxes[ (row-i) ][col].requestFocus();
+											break;
+										}
 									}
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 								//System.out.println("Pressed Down");
 								if (row < x - 3) {
-									if (boxes[row + 1][col].isEnabled()) {
-										boxes[row + 1][col].requestFocus();
-									}
+									for( int i=1; i<x-2; i++ ){									
+										if (boxes[row + i][col].isEnabled()) {
+											boxes[row + i][col].requestFocus();
+											break;
+										}						
+									}									
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 							//	System.out.println("Pressed Right");
 								if (col < y - 3) {
-									if (boxes[row][col + 1].isEnabled()) {
-										boxes[row][col + 1].requestFocus();
+									for( int i=1; i<y-3; i++){
+										if (boxes[row][col + i].isEnabled()) {
+											boxes[row][col + i].requestFocus();
+											break;
+										}
 									}
+										
+									
 								}
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 								//System.out.println("Pressed Left");
 								if (col > 0) {
-									if (boxes[row][col - 1].isEnabled()) {
-										boxes[row][col - 1].requestFocus();
+									for(int i=1; i<y-3; i++){
+										if (boxes[row][col - i].isEnabled()) {
+											boxes[row][col - i].requestFocus();
+											break;
+										}
 									}
+									
 								}
 							}
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
@@ -459,6 +483,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		});
 	}
+	
+	
+	
+	
+	
+	
 
 	void mouseActionlabel(JLabel l) {
 		l.addMouseListener(new MouseListener() {
@@ -545,6 +575,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		});
 	}
+	
+	
+	
+	
+	
 
 	public String shuffleString(String string) {
 		ArrayList<Character> letters = new ArrayList<Character>();
@@ -559,10 +594,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 		return str.toString();
 	}
+	
+	
+	
+	
+	
 
 	public void actionPerformed(ActionEvent e) {
-		
-
 		
 		
 		if (e.getSource() == reveal) {
