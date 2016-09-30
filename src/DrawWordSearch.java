@@ -58,6 +58,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	Dimension screenSize; 
 	double width;
 	double height;
+	Border border;
 	
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
@@ -101,13 +102,14 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		image = new ImageIcon(newimg);		
 		image2 = new ImageIcon( path2 );
 
-
+		border = BorderFactory.createLineBorder(Color.BLACK);
 
 		img2 = image2.getImage();
 		newimg2 = img2.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg2);
 		
 		layer = new JLayeredPane();
+		//layer.setBorder(border);
 		letters = new JLabel [x-2][y-2];
 		backgrounds = new JLabel [x-2][y-2];
 		c = new GridBagConstraints();
@@ -123,6 +125,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer.setBorder(border);
 		transparentLayer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		transparentLayer.setOpaque(false);
 
@@ -164,7 +167,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 //				backgrounds[i][j].setForeground(Color.BLACK);
 				backgrounds[i][j].setBackground(new Color(255, 255, 255, 255));
 //				backgrounds[i][j].setBorder(null);
-				backgrounds[i][j].setIcon(image);	//need to do this in another transparent layer.
+				//backgrounds[i][j].setIcon(image);	//need to do this in another transparent layer.
 //				if(grid[j+1][i+1] != "_"){
 //					backgrounds[i][j].setText(grid[j+1][i+1].toUpperCase());
 //				}else{
@@ -424,9 +427,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							if(!grid[i][j].equals("_")){
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
-								//letters[j-1][i-1].setOpaque(true);
+								letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
-								backgrounds[j-1][i-1].setIcon(image2);
+								//backgrounds[j-1][i-1].setIcon(image2);
 							}
 					}
 				}
@@ -437,7 +440,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							reveal.setText("Show Solution");
 							//letters[j-1][i-1].setForeground(Color.BLACK);
 							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
-							backgrounds[j-1][i-1].setIcon(image);
+							//backgrounds[j-1][i-1].setIcon(null);
 						}
 					}
 				}
