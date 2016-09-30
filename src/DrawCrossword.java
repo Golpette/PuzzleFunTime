@@ -296,6 +296,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.getRootPane().setDefaultButton(reveal);
 	}
 
 	

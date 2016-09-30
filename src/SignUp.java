@@ -21,6 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -91,6 +92,7 @@ public class SignUp extends JComponent implements ActionListener{
 		back = new JButton("");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
+		keyActionTextField(back);
 		mouseActionlabel(back);
 		back.addActionListener(this);
 		back.setIcon(image);
@@ -116,6 +118,7 @@ public class SignUp extends JComponent implements ActionListener{
 		passwordRetypeLabel.setFont(font2);
 		email = new JTextField("");
 		mouseActionlabel(email);
+		keyActionTextField(email);
 		email.setFont(font2);
 		username = new JTextField("");
 		username.setFont(font2);
@@ -218,8 +221,30 @@ public class SignUp extends JComponent implements ActionListener{
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
+		frame.getRootPane().setDefaultButton(signup);
 	}
 
+	
+	void keyActionTextField(JButton l) {
+
+		l.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+				if(e.getSource()== back){
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+						//actionPerformed(back.this);
+					}
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+			}
+
+			public void keyTyped(KeyEvent e) {
+
+			}
+		});
+	}
 	
 	
 	void keyActionTextField(JTextField l) {
@@ -227,6 +252,10 @@ public class SignUp extends JComponent implements ActionListener{
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				if(e.getSource() == email){
+					email.setFont(font2);
+					email.setForeground(Color.BLACK);
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {
@@ -301,22 +330,33 @@ public class SignUp extends JComponent implements ActionListener{
 	
 	@SuppressWarnings("null")
 	public void actionPerformed(ActionEvent e) {
-	
+	System.out.println("ActionEvent e: " + e.toString());
 		if(e.getSource() == signup){
 			char[] password1 = pass1.getPassword();
 			char[] password2 = pass2.getPassword();
 			String a = new String(password1);
 			//String b = new String(ID);
 			System.out.println(password1);
-		   if(!emailValidator.validate(email.getText().trim())) {
+			if(username.getText().equals("")){
+				JOptionPane.showMessageDialog(frame, "Username Required");
+			}
+			else if(!emailValidator.validate(email.getText().trim())) {
+			   
 		        System.out.print("Invalid Email ID");
-		        email.setForeground(Color.RED);
-		        email.setFont(font4);
+		        if(!email.getText().equals("")){
+			        email.setForeground(Color.RED);
+			        email.setFont(font4);
+		        }else{
+		        	JOptionPane.showMessageDialog(frame, "Email Required");
+		        }
 		   }else if(!Arrays.equals(password1, password2)){
 			   System.out.println("Passwords do not match!");
+			   JOptionPane.showMessageDialog(frame, "Password do not match!");
 			   pass1.setText("");
 			   pass2.setText("");
 			   
+		   }else if(password1.length < 5){
+			   JOptionPane.showMessageDialog(frame, "Password too short!");
 		   }else{
 			   System.out.println("Correct password");   
 			 

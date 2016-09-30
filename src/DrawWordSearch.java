@@ -263,6 +263,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.getRootPane().setDefaultButton(reveal);
 		
 	}
 
@@ -271,10 +272,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
+				
+				
+				
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
 						//if(e.getClickCount()<=1){
-
+						//letters[i][j].setBackground(grey);
 //						int temp = e.getClickCount();
 //						while (e.getClickCount() == temp ){
 						//System.out.println("clicked " + clicked);

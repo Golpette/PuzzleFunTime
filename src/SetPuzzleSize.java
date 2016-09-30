@@ -64,10 +64,12 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		String path2 = "";
 		//System.out.println(System.getProperty("os.name").toLowerCase());
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
+			
 			path1 = "src/back.png";
 			path2 = "src/back1.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
+			System.out.println("You are on " + System.getProperty("os.name").toString());
 			path1 = "src\\back.png";
 			path2 = "src\\back1.png";
 		}
@@ -141,6 +143,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
+		frame.getRootPane().setDefaultButton(generate);
 	}
 
 	void keyActionTextField(JTextField l) {

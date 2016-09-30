@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -37,7 +38,7 @@ public class LogIn extends JComponent implements ActionListener{
 	JLayeredPane layer;
 	JButton login, back;
 	JLabel intro, emailLabel, passwordLabel, passwordRetypeLabel;
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	JTextField email, password;
 	ImageIcon image, image2;
 	Image newimg;
@@ -49,6 +50,7 @@ public class LogIn extends JComponent implements ActionListener{
 	public LogIn() throws IOException {
 		font = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font4 = new Font("Century Gothic", Font.ITALIC, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		intro = new JLabel("Log In to Puzzle Solver");
 		intro.setFont(font);
@@ -114,6 +116,7 @@ public class LogIn extends JComponent implements ActionListener{
 		email = new JTextField("");
 		mouseActionlabel(email);
 		email.setFont(font2);
+		keyActionTextField(email);
 		//email.setDocument(new JTextFieldLimit(20));	//not quite right
 		password = new JTextField("");
 		password.setFont(font2);
@@ -180,15 +183,19 @@ public class LogIn extends JComponent implements ActionListener{
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
+		frame.getRootPane().setDefaultButton(login);
 	}
 
 	
 	
 	void keyActionTextField(JTextField l) {
-
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				if(e.getSource() == email){
+					email.setFont(font2);
+					email.setForeground(Color.BLACK);
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {
@@ -237,6 +244,7 @@ public class LogIn extends JComponent implements ActionListener{
 				//if(e.getSource() == email){
 					System.out.println("Pressed email");
 					email.setForeground(Color.BLACK);
+					email.setFont(font2);
 				//}
 			}
 
@@ -266,10 +274,16 @@ public class LogIn extends JComponent implements ActionListener{
 			System.out.println(password);
 		   if(!emailValidator.validate(email.getText().trim())) {
 		        System.out.print("Invalid Email ID");
-		        email.setForeground(Color.RED);
-		        
+		        if(!email.getText().equals("")){
+			        email.setForeground(Color.RED);
+			        email.setFont(font4);
+		        }else{
+		        	JOptionPane.showMessageDialog(frame, "Email Required");
+		        }
 		   }else if(!Arrays.equals(password, correctPass)){
 			   System.out.println("Wrong password");
+			   JOptionPane.showMessageDialog(frame, "Wrong Password");
+			   
 			   password2.setText("");
 		   }else{
 			   System.out.println("Correct password");

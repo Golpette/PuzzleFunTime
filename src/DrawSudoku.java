@@ -123,6 +123,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.getRootPane().setDefaultButton(reveal);
 		generateSudoku();
 	}
 
