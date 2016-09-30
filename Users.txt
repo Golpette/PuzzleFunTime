@@ -16,3 +16,15 @@
 	<password>pass</password>
 </user>
 
+<user>
+	<username>asd</username>
+	<email>asd@dssk.asdf</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username></username>
+	<email>awdsd@D.sd</email>
+	<password>pass</password>
+</user>
+

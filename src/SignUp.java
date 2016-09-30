@@ -38,7 +38,7 @@ public class SignUp extends JComponent implements ActionListener{
 	JPanel panel;
 	JButton  signup, back;
 	JLabel intro, emailLabel, usernameLabel, passwordLabel, passwordRetypeLabel;
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	JTextField email, username, password, passwordRetype;
 	ImageIcon image, image2;
 	Image newimg;
@@ -50,6 +50,7 @@ public class SignUp extends JComponent implements ActionListener{
 	public SignUp() throws IOException {
 		font = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font4 = new Font("Century Gothic", Font.ITALIC, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		intro = new JLabel("Sign Up to Puzzle Solver");
 		intro.setFont(font);
@@ -114,6 +115,7 @@ public class SignUp extends JComponent implements ActionListener{
 		passwordRetypeLabel = new JLabel("Retype: ");
 		passwordRetypeLabel.setFont(font2);
 		email = new JTextField("");
+		mouseActionlabel(email);
 		email.setFont(font2);
 		username = new JTextField("");
 		username.setFont(font2);
@@ -262,6 +264,36 @@ public class SignUp extends JComponent implements ActionListener{
 		});
 	}
 	
+	void mouseActionlabel(JTextField b) {
+		b.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				//if(e.getSource() == email){
+					System.out.println("Pressed email");
+					email.setForeground(Color.BLACK);
+					email.setFont(font2);
+				//}
+			}
+
+			public void mouseEntered(MouseEvent e) {
+				back.setIcon(image2);
+				
+			}
+
+			public void mouseExited(MouseEvent e) {
+				back.setIcon(image);
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			public void mouseReleased(MouseEvent e) {
+
+			}
+		});
+	}
+	
 	void writeToFile(String fileName, String text) throws Exception {
 		   FileOutputStream out = new FileOutputStream(fileName, true);
 		   out.write(text.getBytes());
@@ -278,10 +310,8 @@ public class SignUp extends JComponent implements ActionListener{
 			System.out.println(password1);
 		   if(!emailValidator.validate(email.getText().trim())) {
 		        System.out.print("Invalid Email ID");
-		        /*
-		           Action that you want to take. For ex. make email id field red
-		           or give message box saying invalid email id.
-		        */
+		        email.setForeground(Color.RED);
+		        email.setFont(font4);
 		   }else if(!Arrays.equals(password1, password2)){
 			   System.out.println("Passwords do not match!");
 			   pass1.setText("");

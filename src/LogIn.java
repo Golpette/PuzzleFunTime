@@ -38,7 +38,7 @@ public class LogIn extends JComponent implements ActionListener{
 	JButton login, back;
 	JLabel intro, emailLabel, passwordLabel, passwordRetypeLabel;
 	Font font, font2, font3;
-	JTextField email, password, passwordRetype;
+	JTextField email, password;
 	ImageIcon image, image2;
 	Image newimg;
 	Image img;
@@ -112,6 +112,7 @@ public class LogIn extends JComponent implements ActionListener{
 //		passwordRetypeLabel.setFont(font);
 //		passwordRetypeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		email = new JTextField("");
+		mouseActionlabel(email);
 		email.setFont(font2);
 		//email.setDocument(new JTextFieldLimit(20));	//not quite right
 		password = new JTextField("");
@@ -204,11 +205,15 @@ public class LogIn extends JComponent implements ActionListener{
 		b.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				
+				if(e.getSource() == email){
+					System.out.println("Pressed email");
+					email.setForeground(Color.BLACK);
+				}
 			}
 
 			public void mouseEntered(MouseEvent e) {
 				back.setIcon(image2);
+				
 			}
 
 			public void mouseExited(MouseEvent e) {
@@ -225,7 +230,34 @@ public class LogIn extends JComponent implements ActionListener{
 		});
 	}
 	
-	
+	void mouseActionlabel(JTextField b) {
+		b.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				//if(e.getSource() == email){
+					System.out.println("Pressed email");
+					email.setForeground(Color.BLACK);
+				//}
+			}
+
+			public void mouseEntered(MouseEvent e) {
+				back.setIcon(image2);
+				
+			}
+
+			public void mouseExited(MouseEvent e) {
+				back.setIcon(image);
+			}
+
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			public void mouseReleased(MouseEvent e) {
+
+			}
+		});
+	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == login){
@@ -234,12 +266,11 @@ public class LogIn extends JComponent implements ActionListener{
 			System.out.println(password);
 		   if(!emailValidator.validate(email.getText().trim())) {
 		        System.out.print("Invalid Email ID");
-		        /*
-		           Action that you want to take. For ex. make email id field red
-		           or give message box saying invalid email id.
-		        */
+		        email.setForeground(Color.RED);
+		        
 		   }else if(!Arrays.equals(password, correctPass)){
 			   System.out.println("Wrong password");
+			   password2.setText("");
 		   }else{
 			   System.out.println("Correct password");
 			   try {
