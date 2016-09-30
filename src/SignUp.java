@@ -224,7 +224,6 @@ public class SignUp extends JComponent implements ActionListener{
 		frame.getRootPane().setDefaultButton(signup);
 	}
 
-	
 	void keyActionTextField(JButton l) {
 
 		l.addKeyListener(new KeyListener() {
@@ -246,7 +245,6 @@ public class SignUp extends JComponent implements ActionListener{
 		});
 	}
 	
-	
 	void keyActionTextField(JTextField l) {
 
 		l.addKeyListener(new KeyListener() {
@@ -262,17 +260,14 @@ public class SignUp extends JComponent implements ActionListener{
 			}
 
 			public void keyTyped(KeyEvent e) {
-
 			}
 		});
 	}
 	
-	
 	void mouseActionlabel(JButton b) {
 		b.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {
-				
+			public void mouseClicked(MouseEvent e) {	
 			}
 
 			public void mouseEntered(MouseEvent e) {
@@ -284,11 +279,9 @@ public class SignUp extends JComponent implements ActionListener{
 			}
 
 			public void mousePressed(MouseEvent e) {
-
 			}
 
 			public void mouseReleased(MouseEvent e) {
-
 			}
 		});
 	}
