@@ -10,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -46,7 +48,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
 	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	Random rand;
 	boolean buttonPushed, clicked;
 	Color grey;
@@ -60,6 +62,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	double height;
 	Border border;
 	
+	@SuppressWarnings("unchecked")
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
 		this.y = y;
@@ -67,9 +70,14 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		this.entries = entries;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
+		
 		font3 = new Font("Century Gothic", Font.BOLD, 36);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+		Map fontAttr = font3.getAttributes();
+		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+		Font font4 = new Font(fontAttr);
+		
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
 		wordLength = 0;

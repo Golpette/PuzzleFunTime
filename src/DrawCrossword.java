@@ -141,6 +141,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			for (int j = 0; j < y - 2; j++) {
 				boxes[i][j] = new JTextField(); // need new layout to resize
 												// letters in boxes
+				//trying to stop 'dinging' sound when moving cursor between boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
 				action.setEnabled(false);
 				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
@@ -156,10 +157,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
-
 				crosswordGrid.add(boxes[i][j]);
-				crosswordGrid.setMaximumSize(new Dimension(400, 300));
-				crosswordGrid.setMinimumSize(new Dimension(100, 100));
 			}
 		}
 
