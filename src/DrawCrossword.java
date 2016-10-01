@@ -311,54 +311,57 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
 						if (e.getSource() == boxes[row][col]) {
-							if (e.getKeyCode() == KeyEvent.VK_UP) {
-							//	System.out.println("Pressed Up");
-								if (row > 0) {		
-									// STEVE: edit this (and next 3 conditions) to jump black squares
-									//        and implement periodic boundary conditions
-									for( int i=1; i<(x-2); i++){
-										if (boxes[ (row-i) ][col].isEnabled()) {
-											boxes[ (row-i) ][col].requestFocus();
-											break;
-										}
+							if (e.getKeyCode() == KeyEvent.VK_UP) {								
+							// STEVE: edit this (and next 3 conditions) to jump black squares
+							//        and implement periodic boundary conditions			   
+								int newstart=row;
+								for( int i=1; i<(x-2)*2; i++){										
+									//Periodic BCs
+									if( newstart-i < 0 ){
+										i=1;  newstart=x-2;
 									}
-								}
+									// Jump black spaces to nearest white one
+									if (boxes[ (newstart-i) ][col].isEnabled()) {
+										boxes[ (newstart-i) ][col].requestFocus();
+										break;
+									}
+								}												
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-								//System.out.println("Pressed Down");
-								if (row < x - 3) {
-									for( int i=1; i<x-2; i++ ){									
-										if (boxes[row + i][col].isEnabled()) {
-											boxes[row + i][col].requestFocus();
-											break;
-										}						
-									}									
-								}
+								int newstart=row;
+								for( int i=1; i<x-2; i++ ){	
+									if( newstart+i > x-3 ){
+										i=1;  newstart=-1;
+									}
+									if (boxes[newstart+i][col].isEnabled()) {
+										boxes[newstart+i][col].requestFocus();
+										break;
+									}						
+								}																							
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-							//	System.out.println("Pressed Right");
-								if (col < y - 3) {
-									for( int i=1; i<y-3; i++){
-										if (boxes[row][col + i].isEnabled()) {
-											boxes[row][col + i].requestFocus();
-											break;
-										}
+								int newstart=col;
+								for( int i=1; i<y-2; i++){
+									if( newstart+i>y-3 ){
+										i=1;  newstart=-1;
+									}									
+									if (boxes[row][newstart + i].isEnabled()) {
+										boxes[row][newstart + i].requestFocus();
+										break;
 									}
-										
-									
-								}
+								}								
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-								//System.out.println("Pressed Left");
-								if (col > 0) {
-									for(int i=1; i<y-3; i++){
-										if (boxes[row][col - i].isEnabled()) {
-											boxes[row][col - i].requestFocus();
-											break;
-										}
+								int newstart=col;
+								for(int i=1; i<y-2; i++){
+									if( newstart-i<0 ){
+										i=1;  newstart=y-2;
 									}
-									
-								}
+									if (boxes[row][newstart - i].isEnabled()) {
+										boxes[row][newstart - i].requestFocus();
+										break;
+									}
+								}															
 							}
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								boxes[row][col].setForeground(black);
