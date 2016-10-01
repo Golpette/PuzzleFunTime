@@ -28,6 +28,14 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
 
+// Steve: need these to remove automatic arrow key scrolling in JScrollPane
+import javax.swing.InputMap;
+import javax.swing.UIManager;
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+
+
+
 /**
  * Class to take String[][] grid and paint the crossword as it should look
  * complete with all the required components: The clues, grid, clue numbers,
@@ -258,6 +266,24 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
+		
+		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
+		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
+		InputMap actionMap = (InputMap) UIManager.getDefaults().get("ScrollPane.ancestorInputMap");
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), new AbstractAction(){
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    }});
+
+		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), new AbstractAction(){
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    }});
+		
+		
+		
+		
+		
 
 		/**
 		 * This is the button which generates a solution for the given crossword
