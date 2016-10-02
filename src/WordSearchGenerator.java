@@ -28,37 +28,49 @@ public class WordSearchGenerator{
 					grid[i][j] = "_";
 				}
 			}	
+			
 			ArrayList<Entry> entries = new ArrayList<Entry>();
-			for( int trys=0; trys < 10000; trys++){
-				Random r = new Random();
-				boolean direction = r.nextBoolean();
-				if(!direction){
-					new FitWords(grid, x, y, words, entries, "wordsearch", true);
+			
+			
+			
+			int num_words_to_fit = 12;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			int count_tries = 0;
+			
+			//for( int trys=0; trys < 20; trys++){
+			while( entries.size() < num_words_to_fit   && count_tries<10000 ){  //stop infinite loop
+
+				count_tries++;	
+				int direc = (int)(Math.random()*3);
+				
+				if( direc==0 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "across" );
 				}
-				else{
-					new FitWords(grid, x, y, words, entries, "wordsearch", false);
+				else if( direc==1 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "down" );
 				}
+				else if( direc==2 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "diagonal" );
+				}
+				
 			}
+			
 			acrossClues.clear();
 			downClues.clear();
-			int problemNumber = 0;
-			for(int i = 1; i < y-1; i++){
+			int c=1;
+			
+			for(int i = 1; i < y-1; i++){   //STEVE: modified from crossword. Don't care about direction or clue numbers
 				for(int j = 1; j < x-1; j++){
-					boolean twoOnSameSite = false;
 					for(int current=0; current <entries.size(); current++){
 						if(entries.get(current).getX() == j && entries.get(current).getY() == i){
-							if(!twoOnSameSite){problemNumber++;}
-							twoOnSameSite=true;
-							if(entries.get(current).isAcross()){
-								acrossClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
-							}
-							else{
-								downClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
-							}						
+							acrossClues.add(Integer.toString(c)+ ". " + entries.get(current).getDefinition());	
+							c++;
 						}
 					}				
 				}
 			}	
+			
+			
+			
 		new DrawWordSearch(grid, x, y, acrossClues, downClues, entries);
 	}
 }

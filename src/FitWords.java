@@ -101,8 +101,6 @@ public class FitWords {
 		} else if(!across && grid[init_x][init_y - 1].equals("_")) {  // steve fix andy change
 			int maxPossLength = (yLength - 1) - init_y;
 
-			// Now need to fit something to the "toWorkWith" String.
-			// Uses **SearchWords.java**
 			for (int i = 0; i < maxPossLength; i++) {
 				if (grid[init_x][init_y + i] == "_") {
 					if (grid[init_x - 1][init_y + i].equals("_") && grid[init_x + 1][init_y + i].equals("_")) {
