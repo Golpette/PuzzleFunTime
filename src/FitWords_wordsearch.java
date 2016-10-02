@@ -11,7 +11,11 @@ public class FitWords_wordsearch {
 	public FitWords_wordsearch(String[][] grid, int xLength, int yLength, ArrayList<Word> wordlist, ArrayList<Entry> entries, String dir) {
 		
 		
-		boolean biggestFirst = false;
+		boolean biggestFirst = true;  
+		//TODO: we don't want lots of little (3-letter words) but we don't always want to fit the biggest possible.
+		//   Make some appropriate word-length weighting here.
+		
+		
 		int init_x = (int) (Math.random() * (xLength - 2) + 1);
 	    int init_y = (int) (Math.random() * (yLength - 2) + 1);
 			
@@ -46,8 +50,25 @@ public class FitWords_wordsearch {
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x - i][init_y];					
 			}
+		} else if( dir.equals("up") ){
+			int maxPossLength = init_y - 1 ;
+			for (int i = 0; i < maxPossLength; i++) {
+				toWorkWith = toWorkWith + grid[init_x ][init_y - i ];					
+			}
 		}
-
+		else if( dir.equals("backwardsdiagonal") ){
+			int maxX = init_x - 1;
+			int maxY = init_y - 1;
+			int maxPossLength = 0;
+			if( maxX < maxY ){ maxPossLength = maxX; }
+			else{ maxPossLength = maxY; }
+			for (int i = 0; i < maxPossLength; i++) {
+				toWorkWith = toWorkWith + grid[init_x - i][init_y - i];					
+			}
+		}
+		else{
+			System.out.println("CROSSWORD DIRECTION NOT DEFINED");  System.exit(1);
+		}
 		
 		
 		
@@ -89,6 +110,11 @@ public class FitWords_wordsearch {
 						grid[init_x + g][init_y + g] = "" + word.charAt(g);						
 					} else if( dir.equals( "backwards" ) ){
 						grid[init_x - g][init_y ] = "" + word.charAt(g);						
+					} else if( dir.equals( "up" ) ){
+						grid[init_x ][init_y - g ] = "" + word.charAt(g);						
+					}
+					else if( dir.equals("backwardsdiagonal")  ){
+						grid[init_x - g][init_y - g] = "" + word.charAt(g);						
 					}
 					
 				}

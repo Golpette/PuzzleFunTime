@@ -34,12 +34,12 @@ public class WordSearchGenerator{
 			
 			
 			// Fit specific number of words
-			int num_words_to_fit = 8;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			int num_words_to_fit = 12;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
 			int count_tries = 0;
 			
 			while( entries.size() < num_words_to_fit   && count_tries<10000 ){  //stop infinite loop
 				count_tries++;	
-				int direc = (int)(Math.random() * 4);
+				int direc = (int)(Math.random() * 6);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
 				
 				if( direc==0 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "across" );
@@ -52,7 +52,13 @@ public class WordSearchGenerator{
 				}
 				else if( direc==3 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwards" );
-				}		
+				}
+				else if( direc==4 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "up" );
+				}
+				else if( direc==5 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsdiagonal" );
+				}
 			}
 			
 			
