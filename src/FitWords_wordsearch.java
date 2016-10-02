@@ -55,8 +55,7 @@ public class FitWords_wordsearch {
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x ][init_y - i ];					
 			}
-		}
-		else if( dir.equals("backwardsdiagonal") ){
+		}else if( dir.equals("backwardsdiagonal") ){
 			int maxX = init_x - 1;
 			int maxY = init_y - 1;
 			int maxPossLength = 0;
@@ -64,6 +63,24 @@ public class FitWords_wordsearch {
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x - i][init_y - i];					
+			}
+		}else if( dir.equals("backwardsBLTRdiagonal") ){
+			int maxX = init_x - 1;
+			int maxY = (yLength - 1) - init_y;
+			int maxPossLength = 0;
+			if( maxX < maxY ){ maxPossLength = maxX; }
+			else{ maxPossLength = maxY; }
+			for (int i = 0; i < maxPossLength; i++) {
+				toWorkWith = toWorkWith + grid[init_x - i][init_y + i];					
+			}
+		}else if( dir.equals("BLTRdiagonal") ){
+			int maxX= (xLength - 1) - init_x;
+			int maxY = init_y - 1;
+			int maxPossLength = 0;
+			if( maxX < maxY ){ maxPossLength = maxX; }
+			else{ maxPossLength = maxY; }
+			for (int i = 0; i < maxPossLength; i++) {
+				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}
 		else{
@@ -112,9 +129,12 @@ public class FitWords_wordsearch {
 						grid[init_x - g][init_y ] = "" + word.charAt(g);						
 					} else if( dir.equals( "up" ) ){
 						grid[init_x ][init_y - g ] = "" + word.charAt(g);						
-					}
-					else if( dir.equals("backwardsdiagonal")  ){
+					}else if( dir.equals("backwardsdiagonal")  ){
 						grid[init_x - g][init_y - g] = "" + word.charAt(g);						
+					}else if( dir.equals("BLTRdiagonal")  ){
+						grid[init_x + g][init_y - g] = "" + word.charAt(g);	
+					}else if( dir.equals("backwardsBLTRdiagonal")  ){
+						grid[init_x - g][init_y + g] = "" + word.charAt(g);	
 					}
 					
 				}

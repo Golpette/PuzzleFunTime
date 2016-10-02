@@ -7,12 +7,14 @@ public class WordSearchGenerator{
 	int gridSize;
 	int x;     
 	int y;
+	int difficulty;
 	String[][] grid;
 	ArrayList<String> acrossClues;
 	ArrayList<String> downClues;
 	ArrayList<Word> words;	
 	
-	public WordSearchGenerator(int wordsearchSize) throws IOException{
+	public WordSearchGenerator(int wordsearchSize, int difficulty) throws IOException{
+		this.difficulty = difficulty;
 		this.wordsearchSize = wordsearchSize;
 		gridSize = wordsearchSize + 2;
 		x = gridSize;     
@@ -39,8 +41,8 @@ public class WordSearchGenerator{
 			
 			while( entries.size() < num_words_to_fit   && count_tries<10000 ){  //stop infinite loop
 				count_tries++;	
-				int direc = (int)(Math.random() * 6);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
-				
+				int direc = (int)(Math.random() * difficulty);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
+														// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
 				if( direc==0 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "across" );
 				}
@@ -51,14 +53,21 @@ public class WordSearchGenerator{
 					new FitWords_wordsearch(grid, x, y, words, entries, "diagonal" );
 				}
 				else if( direc==3 ){
-					new FitWords_wordsearch(grid, x, y, words, entries, "backwards" );
+					new FitWords_wordsearch(grid, x, y, words, entries, "BLTRdiagonal" );
 				}
 				else if( direc==4 ){
-					new FitWords_wordsearch(grid, x, y, words, entries, "up" );
+					new FitWords_wordsearch(grid, x, y, words, entries, "backwards" );
 				}
 				else if( direc==5 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "up" );
+				}
+				else if( direc==6 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsdiagonal" );
 				}
+				else if( direc==7 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
+				}
+				
 			}
 			
 			
