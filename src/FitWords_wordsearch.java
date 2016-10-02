@@ -10,11 +10,10 @@ public class FitWords_wordsearch {
 	//'Random fit approach' to try and fit words ACROSS into grid. Updates ArrayList<Entry> and grid all at once
 	public FitWords_wordsearch(String[][] grid, int xLength, int yLength, ArrayList<Word> wordlist, ArrayList<Entry> entries, String dir) {
 		
+		
 		boolean biggestFirst = false;
 		int init_x = (int) (Math.random() * (xLength - 2) + 1);
 	    int init_y = (int) (Math.random() * (yLength - 2) + 1);
-		
-		
 			
 
 
@@ -33,7 +32,7 @@ public class FitWords_wordsearch {
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x][init_y + i];					
 			}
-		} else if( dir.equals("diagonal") && true ){
+		} else if( dir.equals("diagonal") ){
 			int maxX = (xLength - 1) - init_x;
 			int maxY = (yLength - 1) - init_y;
 			int maxPossLength = 0;
@@ -41,6 +40,11 @@ public class FitWords_wordsearch {
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y + i];					
+			}
+		} else if( dir.equals("backwards") ){
+			int maxPossLength = init_x - 1 ;
+			for (int i = 0; i < maxPossLength; i++) {
+				toWorkWith = toWorkWith + grid[init_x - i][init_y];					
 			}
 		}
 
@@ -75,8 +79,7 @@ public class FitWords_wordsearch {
 			}
 			if (!seenBefore) {
 
-				// Then fit has been found
-				// Need to modify grid
+				// Then fit has been found. Need to modify grid
 				for (int g = 0; g < word.length(); g++) {
 					if ( dir.equals("across") ) {
 						grid[init_x + g][init_y] = "" + word.charAt(g);
@@ -84,6 +87,8 @@ public class FitWords_wordsearch {
 						grid[init_x][init_y + g] = "" + word.charAt(g);
 					} else if( dir.equals( "diagonal" ) ){
 						grid[init_x + g][init_y + g] = "" + word.charAt(g);						
+					} else if( dir.equals( "backwards" ) ){
+						grid[init_x - g][init_y ] = "" + word.charAt(g);						
 					}
 					
 				}
