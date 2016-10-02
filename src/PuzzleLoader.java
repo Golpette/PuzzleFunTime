@@ -78,20 +78,22 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		
 
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
-		c.ipady = (int)(frame.getHeight()*0.3);
-		c.gridwidth = 3;
+		//c.ipady = (int)(frame.getHeight()*0.3);
+		//c.gridwidth = 3;
+		//c.ipady = 2;
 		panel.add(signup, c);
 		
 
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 1;
-		c.ipady = (int)(frame.getHeight()*0.3);
-		c.gridwidth = 3;
+		//c.ipady = (int)(frame.getHeight()*0.3);
+		//c.ipady = 0;
+		//c.gridwidth = 3;
 		panel.add(login, c);
 		
 		c.weightx = 1.0;
@@ -132,6 +134,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setVisible(true);		
 	}
 

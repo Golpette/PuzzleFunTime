@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -41,10 +42,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	JLabel [][] letters, backgrounds;
 	String[][] grid;
 	GridBagConstraints c;
+	String [] loopDirections = {"top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"};
+	String imagePath, operatingSystem;
 	JButton reveal;
 	JScrollPane area;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
+	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
 	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -53,9 +57,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	boolean buttonPushed, clicked;
 	Color grey;
 	int wordLength, dir, startx, starty;
-	ImageIcon image, image2;
-	Image newimg, newimg2;
-	Image img, img2;
 	Color clear;
 	Dimension screenSize; 
 	double width;
@@ -70,13 +71,14 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		this.entries = entries;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
+		completed = new ArrayList<JLabel>();
 		
-		font3 = new Font("Century Gothic", Font.BOLD, 36);
+		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		Map fontAttr = font3.getAttributes();
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-		Font font4 = new Font(fontAttr);
+		font4 = new Font(fontAttr);
 		
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
@@ -92,30 +94,20 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		height = screenSize.getHeight();
 		
 		// Set image path depending on OS
-		String path1 = "";
-		String path2 = "";
-		//System.out.println(System.getProperty("os.name").toLowerCase());
-		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
-			path1 = "src/Circle.png";
-			path2 = "src/CircleBlue.png";
+		operatingSystem = System.getProperty("os.name").toLowerCase();
+		if(operatingSystem.equals("linux")){
+			imagePath = "src/";
 		}
-		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\Circle.png";
-			path2 = "src\\CircleBlue.png";
+		else if(operatingSystem.equals("windows")){
+			imagePath = "src\\";
 		}
 	    
-		image = new ImageIcon( path1 );
-		img = image.getImage();
-		newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
-		image = new ImageIcon(newimg);		
-		image2 = new ImageIcon( path2 );
-
-		border = BorderFactory.createLineBorder(Color.BLACK);
-
-		img2 = image2.getImage();
-		newimg2 = img2.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
-		image2 = new ImageIcon(newimg2);
+//		for(String direction: loopDirections){
+//				setImage(setPath(direction), squareSize, squareSize);
+//		}
+	
 		
+		border = BorderFactory.createLineBorder(Color.BLACK);
 		layer = new JLayeredPane();
 		//layer.setBorder(border);
 		letters = new JLabel [x-2][y-2];
@@ -134,8 +126,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setBorder(border);
-		transparentLayer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//transparentLayer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		transparentLayer.setOpaque(false);
+		//transparentLayer.setVisible(true);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -143,59 +136,47 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				mouseActionlabel(letters[i][j]);
 				letters[i][j].setFont(font);
 				letters[i][j].setForeground(Color.BLACK);
-				letters[i][j].setBackground(new Color(255, 255, 255, 255));
+				//letters[i][j].setBackground(new Color(255, 255, 255, 255));
 				letters[i][j].setBorder(null);
 				//letters[i][j].setIcon(image);	//need to do this in another transparent layer.
 				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
 					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
 				}
-				letters[i][j].setOpaque(false);
-				mouseActionlabel(letters[i][j]);
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
-				transparentLayer.add(letters[i][j]);
 				transparentLayer.add(letters[i][j]);
 			}
 		}
 		
 		transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer2.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//transparentLayer2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//transparentLayer.setBackground(clear);
 		transparentLayer2.setOpaque(false);
+		
 		
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				backgrounds[i][j] = new JLabel();
-				mouseActionlabel(letters[i][j]);
-//				backgrounds[i][j].setFont(font);
-//				backgrounds[i][j].setForeground(Color.BLACK);
+				//mouseActionlabel(letters[i][j]);
 				backgrounds[i][j].setBackground(new Color(255, 255, 255, 255));
-//				backgrounds[i][j].setBorder(null);
-				//backgrounds[i][j].setIcon(image);	//need to do this in another transparent layer.
-//				if(grid[j+1][i+1] != "_"){
-//					backgrounds[i][j].setText(grid[j+1][i+1].toUpperCase());
-//				}else{
-//					backgrounds[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
-//				}
+				//backgrounds[i][j].setIcon(setImage("src\\Bottom.png", squareSize, squareSize));
 				backgrounds[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 
 				backgrounds[i][j].setOpaque(false);
-//				mouseActionlabel(letters[i][j]);
-//				backgrounds[i][j].setHorizontalAlignment(JTextField.CENTER);
-//				backgrounds[i][j].setVerticalAlignment(JTextField.CENTER);
-				transparentLayer2.add(backgrounds[i][j]);
 				transparentLayer2.add(backgrounds[i][j]);
 			}
 		}
 		
+		
 		layer.setBackground(new Color(255, 255, 255, 255));
 		layer.setVisible(true);
-		layer.setOpaque(true);
-		layer.setPreferredSize(new Dimension(500,500));
+		layer.setOpaque(false);
+		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		//layer.setPreferredSize(new Dimension(500,500));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(1));
@@ -210,10 +191,17 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		for(Entry entry: entries){
 			JLabel temp = new JLabel(entry.getWord().toUpperCase());
 			temp.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+			allClues.add(temp);
+		}
+		
+		for(JLabel temp: allClues){
 			clues.add(temp);
 		}
 		
 		main = new JPanel(new GridBagLayout());
+		main.setBackground(new Color(255, 255, 255, 255));
+		main.setVisible(true);
+		main.setOpaque(true);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -233,10 +221,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		area.setBackground(clear);
+		area.setBackground(new Color(255, 255, 255, 255));
+		area.setVisible(true);
+		area.setOpaque(true);
 		
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
+		panel.setBackground(clear);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -252,12 +243,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		panel.add(reveal, c);
 		
 		
-		System.out.println("Screen size " + width + "x" + height);
+		//System.out.println("Screen size " + width + "x" + height);
 		frame = new JFrame("Auto Word Search");
 		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height){
 			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
-			System.out.println("GOt here");
+			//System.out.println("GOt here");
 		}
 		else if(squareSize*(x+2)+squareSize/2 > width){
 			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
@@ -275,101 +266,147 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
-		
+	}
+	
+	/**
+	 * This sets the imageIcon from a given name of image and creates the corresponding image, 
+	 * from it.  The image is then scaled and placed into a temporary image
+	 * and finally this is set back to the imageIcon itself.  
+	 */
+	public Icon setImage(String path, int scaleX, int scaleY){
+		ImageIcon icon = new ImageIcon(path);
+		Image img = icon.getImage();
+		Image newimg = img.getScaledInstance(scaleX, scaleY, java.awt.Image.SCALE_SMOOTH ) ; 
+		icon = new ImageIcon(newimg);
+		return icon;	
 	}
 
+	/**
+	 * Class which takes String name of image (eg top for the top facing loop image) and appends the 
+	 * appropriate path according to operating system to the beginning and then appends ".png" to the end.
+	 */
+	public String setPath(String imageName){
+		return (imagePath + imageName + ".png");	
+	}
 	
 	void mouseActionlabel(JLabel l) {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				
-				
-				
+				letters[0][0].setBackground(Color.YELLOW);
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
-						//if(e.getClickCount()<=1){
-						//letters[i][j].setBackground(grey);
-//						int temp = e.getClickCount();
-//						while (e.getClickCount() == temp ){
-						//System.out.println("clicked " + clicked);
-						if(e.getSource() == letters[i][j]){
-							if(!clicked){
-								//e.setSource(letters[0][0]);
-								System.out.println("not clicked");
-								for (int k = 0; k < x-2; k++){		//ie down, across or diagonally down
-									for (int l = 0; l < y-2; l++){
-										letters[k][l].setBackground(Color.WHITE);
-									}
-								}
-								letters[i][j].setBackground(grey);
-								startx = i;
-								starty = j;
-								clicked = true;
-								System.out.println("x = " + startx + " y = " + starty);
-								//break;
-							}else{
-								System.out.println("inside clicked");
-								if(i - startx == 0){
-									if(j - starty < 0){
-										for(int a = 0; a < starty - j; a++){
-											letters[i][starty+a].setBackground(grey);
-											System.out.println("along forward");
-										}
-									}else if(j - starty > 0){
-										for(int a = 0; a < j - starty; a++){
-											letters[i][j+a].setBackground(grey);
-										}
-									}
-								}else if (i - startx < 0){
-									if(j - starty == 0){
-										for(int a = 0; a < startx - i; a++){
-											letters[i+a][j].setBackground(grey);
-										}
-									}else if(j - starty < 0){
-										if(starty - j == startx - i){
-											for(int a = 0; a < startx - i; a++){
-												letters[i+a][j+a].setBackground(grey);
-											}
-										}
-									}else{
-										if(j - starty == startx - i){
-											for(int a = 0; a < startx - i; a++){
-												letters[i+a][starty+a].setBackground(grey);
-											}
-										}
-									}
+						if (e.getSource().equals(letters[i][j])){
+							letters[i][j].setBackground(Color.YELLOW);
+							System.out.println(letters[i][j].getBackground().toString());
+							System.out.println("letter pressed");
+							for(Entry a : entries){
+								allClues.get(2).setFont(font4);
+								if(a.getX() == 2){
+									
+									//System.out.println("sdfasdfa");
+									for (JLabel temp: allClues){
+									//System.out.println(temp.getText());
+										if(temp.getText().equals(a.getWord())){
+											//System.out.println("Here");
+											temp.setFont(font4);						//This is horribly clunky
+										}												//probably should do this differently
+									}													//(It also doesn't work)
+									
 								}else{
-									if(j - starty == 0){
-										for(int a = 0; a < i - startx; a++){
-											letters[startx+a][j].setBackground(grey);
-										}
-									}else if(j - starty < 0){
-										if(starty - j == i - startx){
-											for(int a = 0; a < startx - i; a++){
-												letters[startx+a][j+a].setBackground(grey);
-											}
-										}
-									}else{
-										if(j - starty == i - startx){
-											for(int a = 0; a < startx - i; a++){
-												letters[startx+a][starty+a].setBackground(grey);
-											}
-								//letters[i][j].setBackground(grey);
-										}
-									}
+									
 								}
-								clicked = false;
-							//clicked = false;
-								}
-							System.out.println("clicked " + clicked);
 							}
-							
-							//System.out.println(clicked);
 						}
 					}
-				//}
+				}
+				
 			}
+				
+//				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+//					for (int j = 0; j < y-2; j++){
+//						//if(e.getClickCount()<=1){
+//						//letters[i][j].setBackground(grey);
+////						int temp = e.getClickCount();
+////						while (e.getClickCount() == temp ){
+//						//System.out.println("clicked " + clicked);
+//						if(e.getSource() == letters[i][j]){
+//							if(!clicked){
+//								//e.setSource(letters[0][0]);
+//								System.out.println("not clicked");
+//								for (int k = 0; k < x-2; k++){		//ie down, across or diagonally down
+//									for (int l = 0; l < y-2; l++){
+//										letters[k][l].setBackground(Color.WHITE);
+//									}
+//								}
+//								letters[i][j].setBackground(grey);
+//								startx = i;
+//								starty = j;
+//								clicked = true;
+//								System.out.println("x = " + startx + " y = " + starty);
+//								//break;
+//							}else{
+//								System.out.println("inside clicked");
+//								if(i - startx == 0){
+//									if(j - starty < 0){
+//										for(int a = 0; a < starty - j; a++){
+//											letters[i][starty+a].setBackground(grey);
+//											System.out.println("along forward");
+//										}
+//									}else if(j - starty > 0){
+//										for(int a = 0; a < j - starty; a++){
+//											letters[i][j+a].setBackground(grey);
+//										}
+//									}
+//								}else if (i - startx < 0){
+//									if(j - starty == 0){
+//										for(int a = 0; a < startx - i; a++){
+//											letters[i+a][j].setBackground(grey);
+//										}
+//									}else if(j - starty < 0){
+//										if(starty - j == startx - i){
+//											for(int a = 0; a < startx - i; a++){
+//												letters[i+a][j+a].setBackground(grey);
+//											}
+//										}
+//									}else{
+//										if(j - starty == startx - i){
+//											for(int a = 0; a < startx - i; a++){
+//												letters[i+a][starty+a].setBackground(grey);
+//											}
+//										}
+//									}
+//								}else{
+//									if(j - starty == 0){
+//										for(int a = 0; a < i - startx; a++){
+//											letters[startx+a][j].setBackground(grey);
+//										}
+//									}else if(j - starty < 0){
+//										if(starty - j == i - startx){
+//											for(int a = 0; a < startx - i; a++){
+//												letters[startx+a][j+a].setBackground(grey);
+//											}
+//										}
+//									}else{
+//										if(j - starty == i - startx){
+//											for(int a = 0; a < startx - i; a++){
+//												letters[startx+a][starty+a].setBackground(grey);
+//											}
+//								//letters[i][j].setBackground(grey);
+//										}
+//									}
+//								}
+//								clicked = false;
+//							//clicked = false;
+//								}
+//							System.out.println("clicked " + clicked);
+//							}
+//							
+//							//System.out.println(clicked);
+//						}
+//					}
+//				//}
+//			}
 
 			public void mouseEntered(MouseEvent e) {//try to get to highlight letters in one direction
 //				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
@@ -428,6 +465,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
+			String direction = "top";
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
 					for (int i = 0; i < x-1; i++){
@@ -437,7 +475,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
-								//backgrounds[j-1][i-1].setIcon(image2);
+								//set the image around the word
+								//letters[j-1][i-1].setIcon(setImage(setPath(direction), squareSize, squareSize));
 							}
 					}
 				}

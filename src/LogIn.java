@@ -151,7 +151,7 @@ public class LogIn extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 1;
 		c.gridwidth = 1;
-		c.insets = new Insets(0,0,0,0);
+		c.insets = new Insets(0,0,0,10);
 		panel.add(email, c);
 		
 		c.weightx = 1.0;
@@ -167,7 +167,7 @@ public class LogIn extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 2;	
 		c.gridwidth = 1;
-		c.insets = new Insets(0,0,20,0);
+		c.insets = new Insets(0,0,20,10);
 		panel.add(password2, c);
 		
 		c.weightx = 1.0;
@@ -182,6 +182,7 @@ public class LogIn extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(login);
 	}

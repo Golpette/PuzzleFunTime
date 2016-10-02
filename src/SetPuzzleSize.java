@@ -54,6 +54,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
 		panel1.setBounds(0, 0, 500, 320);
+		//panel1.setAlignmentX(SwingConstants.CENTER);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
@@ -142,6 +143,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(generate);
 	}

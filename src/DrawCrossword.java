@@ -278,11 +278,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		    public void actionPerformed(ActionEvent e) {
 		    }});
 		
-		
-		
-		
-		
-
 		/**
 		 * This is the button which generates a solution for the given crossword
 		 * bringing up a new GUI instance with the filled in grid on being

@@ -92,6 +92,7 @@ public class DrawSolution extends JComponent {
 		frame = new JFrame(title);
 		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension((squareSize+1) * (x+1), (squareSize+1) * (y+1)));
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setContentPane(area);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
