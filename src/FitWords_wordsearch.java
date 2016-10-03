@@ -82,7 +82,27 @@ public class FitWords_wordsearch {
 			for (int i = 0; i < maxPossLength; i++) {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
+		}else if( dir.equals("snaking") ){		//Attempt at snaking words
+			int maxPossLength = 10;		// -- could vary this
+			Integer[] current = {init_x, init_y};
+			ArrayList<Integer[]> squares = new ArrayList<Integer[]>();
+			squares.add(current);
+			for (int i = 0; i < maxPossLength; i++) {
+				int nextAcross = (int)Math.random()*3 - 1;
+				int nextDown = (int)Math.random()*3 - 1;
+				Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
+				if(!squares.contains(newone)){
+					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+					squares.add(newone);
+				}
+				
+			}
 		}
+		
+		
+		//////********TO IMPLEMENT:  SNAKING WORDS!!!!********/////////
+		
+		
 		else{
 			System.out.println("CROSSWORD DIRECTION NOT DEFINED");  System.exit(1);
 		}
@@ -134,6 +154,8 @@ public class FitWords_wordsearch {
 					}else if( dir.equals("BLTRdiagonal")  ){
 						grid[init_x + g][init_y - g] = "" + word.charAt(g);	
 					}else if( dir.equals("backwardsBLTRdiagonal")  ){
+						grid[init_x - g][init_y + g] = "" + word.charAt(g);	
+					}else if( dir.equals("snaking")  ){
 						grid[init_x - g][init_y + g] = "" + word.charAt(g);	
 					}
 					

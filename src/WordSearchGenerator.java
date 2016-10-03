@@ -67,6 +67,9 @@ public class WordSearchGenerator{
 				else if( direc==7 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
 				}
+				else if(direc == 8 ){
+					new FitWords_wordsearch(grid, x, y, words, entries, "snaking" );
+				}
 				
 			}
 			
