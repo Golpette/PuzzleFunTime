@@ -287,7 +287,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			difficulty = 8;			
 		}
 		if(e.getSource() == expert){
-			difficulty = 10;			
+			difficulty = 9;			
 		}
 	}
 }

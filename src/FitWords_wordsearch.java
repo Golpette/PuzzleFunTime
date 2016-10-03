@@ -19,7 +19,7 @@ public class FitWords_wordsearch {
 		int init_x = (int) (Math.random() * (xLength - 2) + 1);
 	    int init_y = (int) (Math.random() * (yLength - 2) + 1);
 			
-
+	    ArrayList<Integer[]> squares = new ArrayList<Integer[]> ();
 
 		//Make sure space on LHS is empty, otherwise do nothing
 		String toWorkWith = "";
@@ -84,18 +84,52 @@ public class FitWords_wordsearch {
 			}
 		}else if( dir.equals("snaking") ){		//Attempt at snaking words
 			int maxPossLength = 10;		// -- could vary this
+			squares.clear();
 			Integer[] current = {init_x, init_y};
-			ArrayList<Integer[]> squares = new ArrayList<Integer[]>();
 			squares.add(current);
 			for (int i = 0; i < maxPossLength; i++) {
-				int nextAcross = (int)Math.random()*3 - 1;
-				int nextDown = (int)Math.random()*3 - 1;
+				int nextAcross;
+				int nextDown;
+				// BCs//
+				if(squares.get(i)[0] == 0 && squares.get(i)[1] == 0){			//topleft
+					nextAcross = (int)Math.random()*2;
+					nextDown = (int)Math.random()*2;
+					//would this work:  if(nextAcross == 0 && nextDown == 0){i--; continue;} 
+					//ie repeat the loop ----- there is probably a much simpler way of doing it
+					//need to prevent both from being 0 so not putting in same place as first letter *in all methods
+				}else if(squares.get(i)[0] == 0 && squares.get(i)[1] == yLength-1){		//top
+					nextAcross = (int)Math.random()*2;
+					nextDown = (int)Math.random()*2 - 1;
+				}else if(squares.get(i)[0] == xLength - 1 && squares.get(i)[1] == 0){		//bottom
+					nextAcross = (int)Math.random()*2 - 1;
+					nextDown = (int)Math.random()*2;
+				}else if(squares.get(i)[0] == xLength - 1 &&  squares.get(i)[1] == yLength-1){		//left
+					nextAcross = (int)Math.random()*2 - 1;
+					nextDown = (int)Math.random()*2 - 1;
+				}else if(squares.get(i)[0] == 0){
+					nextAcross = (int)Math.random()*2;
+					nextDown = (int)Math.random()*3 - 1;
+				}else if(squares.get(i)[0] == xLength){
+					nextAcross = (int)Math.random()*2 - 1;
+					nextDown = (int)Math.random()*3 - 1;
+				}else if(squares.get(i)[1] == 0){
+					nextAcross = (int)Math.random()*3 - 1;
+					nextDown = (int)Math.random()*2;
+				}else if(squares.get(i)[1] == yLength-1){
+					nextAcross = (int)Math.random()*3 - 1;
+					nextDown = (int)Math.random()*2 - 1;
+				}else{	
+					//normal condition ie in the middle of the grid
+					nextAcross = (int)Math.random()*3 - 1;
+					nextDown = (int)Math.random()*3 - 1;
+				}
+				
 				Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 				if(!squares.contains(newone)){
 					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
 					squares.add(newone);
 				}
-				
+				//
 			}
 		}
 		
@@ -156,7 +190,12 @@ public class FitWords_wordsearch {
 					}else if( dir.equals("backwardsBLTRdiagonal")  ){
 						grid[init_x - g][init_y + g] = "" + word.charAt(g);	
 					}else if( dir.equals("snaking")  ){
-						grid[init_x - g][init_y + g] = "" + word.charAt(g);	
+						//somehow need to put in the actual word grid; 
+						//could use the arraylist of numbers: 'squares' 
+						//grid[init_x - g][init_y + g] = "" + word.charAt(g);	
+						for(Integer [] a: squares){
+							grid[a[0]][a[1]] = "" + word.charAt(g);
+						}
 					}
 					
 				}
