@@ -47,6 +47,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	String operatingSystem;
 	String imagePath = "";
 	JButton reveal;
+	boolean diagonal;
 	JScrollPane area;
 	DrawSolution sol;
 	ArrayList<String> fullGrid;
@@ -465,7 +466,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	}
 	
 	
-	public String [] setImageDirections(String direction, JLabel label){
+	public String [] setImageDirections(String direction, boolean diagonal){
 		String middle = "";
 		String start = "";
 		String end = "";
@@ -485,6 +486,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "BottomRight";
 			corner1 = "BottomLeftCorner";
 			corner2 = "TopRightCorner";
+			diagonal = true;
 		}else if(direction.equals("backwards")){
 			start = "Right";
 			middle = "Horizontal";
@@ -499,18 +501,21 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "TopLeft";
 			corner1 = "TopRightCorner";
 			corner2 = "BottomLeftCorner";
+			diagonal = true;
 		}else if(direction.equals("BLTRdiagonal")){
 			start = "BottomLeft";
 			middle = "DiagonalUpRight";
 			end = "TopRight";
 			corner1 = "BottomRightCorner";
 			corner2 = "TopLeftCorner";
+			diagonal = true;
 		}else if(direction.equals("backwardsBLTRdiagonal")){
 			start = "TopRight";
 			middle = "DiagonalUpRight";
 			end = "BottomLeft";
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
+			diagonal = true;
 		}else{
 			start = "Left";
 			middle = "Horizontal";
@@ -525,6 +530,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
 			//String direction = "Top";
+			diagonal = false;
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
 					for (int i = 1; i < x-1; i++){
@@ -540,13 +546,31 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								System.out.println("imagePath"+imagePath);
 								//set conditions for each image
 								String direction = "across";
-//								for(Entry a: entries){
-//									if(a.getX()==j-1 && a.getY() == i-1){
-//										direction = a.direction;
-//										setImageDirections(direction, letters[j-1][i-1]);
-//									}
-//								}
+								String [] temps;
+								String upperSide = "";
+								String lowerSide = "";
+								for(Entry a: entries){
+									if(a.getX()==j-1 && a.getY() == i-1){
+										direction = a.direction;
+										temps = setImageDirections(direction, diagonal);
+										if(i == a.start_x && j == a.start_y){//condition for first letter
+											direction = temps[0];
+										}else if(i == a.start_x + a.word.length() && j == a.start_y + a.word.length()){//condition for last letter
+											direction = temps[1];
+										}else{//condition for middle letter
+											direction = temps[2];
+											upperSide = temps[3];
+											lowerSide = temps[4];
+										}
+									}
+								}
 								Icon temp = setImage(setPath(direction), squareSize, squareSize);
+								Icon corner1  = setImage(setPath(upperSide), squareSize, squareSize);
+								Icon corner2 = setImage(setPath(lowerSide), squareSize, squareSize);
+								if(diagonal){
+									letters[j-2][i-1].setIcon(corner1);
+									letters[j][i-1].setIcon(corner2);
+								}
 								letters[j-1][i-1].setIcon(temp);
 								letters[j-1][i-1].setHorizontalTextPosition(SwingConstants.CENTER);
 							}

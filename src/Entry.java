@@ -29,12 +29,21 @@ public class Entry {
 	   this.across = across;
 	   this.word = word;
 	   this.definition = definition;
+	   this.direction = direction;
 	   clue_number = 0;
 	   entryAcross = 0;
 	   entryDown = 0;
    }
    
-   public String toString(){
+   public String getDirection() {
+	   return direction;
+   }
+
+   public void setDirection(String direction) {
+	   this.direction = direction;
+   }
+
+public String toString(){
 	   return "("+ this.start_x + ", " + this.start_y + ") " + this.across + ": " + this.word + " Def:" + this.definition;
    }
    
