@@ -88,96 +88,121 @@ public class FitWords_wordsearch {
 			squares.clear();
 			Integer[] current = {init_x, init_y};
 			squares.add(current);
+			
 			for (int i = 0; i < maxPossLength; i++) {
 				int nextAcross = 0;
 				int nextDown = 0;
-			
+				
 				// BCs//
 				//while (!(nextAcross == 0 && nextDown == 0)){
 					if(squares.get(i)[0] == 0 && squares.get(i)[1] == 0){			//topleft
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*2);
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here1");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2);
-							nextDown = (int)(Math.random()*2);
-							
+							nextDown = (int)(Math.random()*2);	
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 						//would this work:  if(nextAcross == 0 && nextDown == 0){i--; continue;} 
 						//ie repeat the loop ----- there is probably a much simpler way of doing it
 						//need to prevent both from being 0 so not putting in same place as first letter *in all methods
 					}else if(squares.get(i)[0] == 0 && squares.get(i)[1] == yLength-1){		//top
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*2) - 1;
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here2");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2);
 							nextDown = (int)(Math.random()*2)-1;
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[0] == xLength - 1 && squares.get(i)[1] == 0){		//bottom
 						nextAcross = (int)(Math.random()*2) - 1;
 						nextDown = (int)(Math.random()*2);
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here3");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2)-1;
 							nextDown = (int)(Math.random()*2);
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[0] == xLength - 1 &&  squares.get(i)[1] == yLength-1){		//left
 						nextAcross = (int)(Math.random()*2) - 1;
 						nextDown = (int)(Math.random()*2) - 1;
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here4");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2)-1;
 							nextDown = (int)(Math.random()*2)-1;
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[0] == 0){
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*3) - 1;
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here4");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2);
 							nextDown = (int)(Math.random()*3) - 1;
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[0] == xLength){
 						System.out.println("!!!");
 						nextAcross = (int)(Math.random()*2) - 1;
 						nextDown = (int)(Math.random()*3) - 1;
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here5");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*2) - 1;
 							nextDown = (int)(Math.random()*3) - 1;
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[1] == 0){
 						nextAcross = (int)(Math.random()*3) - 1;
 						nextDown = (int)(Math.random()*2);
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here6");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*3) - 1;
 							nextDown = (int)(Math.random()*2);
 							System.out.println("!!");
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else if(squares.get(i)[1] == yLength-1){
 						nextAcross = (int)(Math.random()*3) - 1;
 						nextDown = (int)(Math.random()*2) - 1;
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
 						System.out.println("Here7");
-						while(nextAcross == 0 && nextDown == 0){
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*3) - 1;
 							nextDown = (int)(Math.random()*2) - 1;
 						}
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
 					}else{	
 						System.out.println("Here8");
 						//normal condition ie in the middle of the grid
 						nextAcross = (int)(Math.random()*3) - 1;
 						nextDown = (int)(Math.random()*3) - 1;
-						while(nextAcross == 0 && nextDown == 0){
+						Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
+						while(nextAcross == 0 && nextDown == 0 && !squares.contains(newone)){
 							nextAcross = (int)(Math.random()*3) - 1;
 							nextDown = (int)(Math.random()*3) - 1;
 						}
-					}
-					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-						System.out.println(newone[0] +","+ newone[1]);
 						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
 						squares.add(newone);
+					}	
 			}
 			for(Integer [] a: squares){
 				System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
