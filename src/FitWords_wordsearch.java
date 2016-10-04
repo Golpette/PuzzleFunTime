@@ -83,10 +83,12 @@ public class FitWords_wordsearch {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}else if( dir.equals("snaking") ){		//Attempt at snaking words
+			System.out.println("Here");
 			int maxPossLength = 10;		// -- could vary this
 			squares.clear();
 			Integer[] current = {init_x, init_y};
 			squares.add(current);
+			
 			for (int i = 0; i < maxPossLength; i++) {
 				int nextAcross;
 				int nextDown;
@@ -189,6 +191,9 @@ public class FitWords_wordsearch {
 				}
 				//
 			}
+			for(Integer [] a: squares){
+				System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
+				}
 		}
 		
 		

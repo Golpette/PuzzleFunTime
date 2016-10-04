@@ -38,18 +38,21 @@ public class WordSearchGenerator{
 			// Fit specific number of words
 			
 			int num_words_to_fit = 12;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
-			
-			
+
 			int count_tries = 0;
 			
 			while( entries.size() < num_words_to_fit   && count_tries<10000 ){  //stop infinite loop
 				count_tries++;	
+
 				int direc = (int)(Math.random() * difficulty);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
 														// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
 
 				
 				//direc = 8;
-				
+
+				//int direc = (int)(Math.random() * difficulty);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
+				// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
+
 				if( direc==0 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "across" );
 				}
@@ -75,13 +78,11 @@ public class WordSearchGenerator{
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
 				}
 				else if(direc == 8 ){
+					System.out.println("snaking");
 					new FitWords_wordsearch(grid, x, y, words, entries, "snaking" );
-				}
-				
+					
+				}	
 			}
-			
-			
-			
 			acrossClues.clear();
 			downClues.clear();
 			int c=1;
