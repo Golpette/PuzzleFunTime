@@ -5,6 +5,9 @@
 public class Entry {
 	int start_x;
     int start_y;
+    int end_x;
+    int end_y;
+    int wordLength;
     Boolean across;
     String word;
     String direction;
@@ -15,6 +18,7 @@ public class Entry {
    public Entry(int start_x, int start_y, Boolean across, String word, String definition){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
+	   wordLength = word.length();
 	   this.across = across;
 	   this.word = word;
 	   this.definition = definition;
@@ -23,7 +27,15 @@ public class Entry {
 	   entryDown = 0;
    }
    
-   public Entry(int start_x, int start_y, Boolean across, String word, String definition, String direction){
+	public int getWordLength() {
+		  return wordLength;
+	}
+
+	public void setWordLength(int wordLength) {
+	   this.wordLength = wordLength;
+	}
+
+public Entry(int start_x, int start_y, Boolean across, String word, String definition, String direction){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
 	   this.across = across;

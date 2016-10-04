@@ -465,7 +465,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		});
 	}
 	
-	
+	/**
+	 * Get names of images for relevant direction of word
+	 * @param direction
+	 * @param diagonal
+	 * @return
+	 */
 	public String [] setImageDirections(String direction, boolean diagonal){
 		String middle = "";
 		String start = "";
@@ -545,9 +550,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								//System.out.println(setPath(direction));
 								System.out.println("imagePath"+imagePath);
 								//set conditions for each image
-								String direction = "across";
-								String [] temps;
-								String upperSide = "";
+								String direction = "across";	//Set up direction of each letter
+								String [] temps;				
+								String upperSide = "";			//and possible side pieces 
 								String lowerSide = "";
 								for(Entry a: entries){
 									if(a.getX()==j-1 && a.getY() == i-1){
@@ -555,7 +560,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 										temps = setImageDirections(direction, diagonal);
 										if(i == a.start_x && j == a.start_y){//condition for first letter
 											direction = temps[0];
-										}else if(i == a.start_x + a.word.length() && j == a.start_y + a.word.length()){//condition for last letter
+										}else if(false){//condition for last letter
 											direction = temps[1];
 										}else{//condition for middle letter
 											direction = temps[2];
