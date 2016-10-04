@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -64,8 +65,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JLabel hintD, hintA;
 	ArrayList<KeyEvent> keys;
 	Action action;
-	
-	
+	Dimension screenSize;
+	double width;
+	double height;
 	
 
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
@@ -94,6 +96,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		this.y = y;
 		this.entries = entries;
 
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screenSize.getWidth();
+		height = screenSize.getHeight();
+		
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 15);
@@ -310,6 +316,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * Overall JFrame to hold all components This has the main panel
 		 * assigned to it
 		 */
+		
+		frame = new JFrame("Auto Word Search");
+		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
+			//frame.setPreferredSize(new Dimension((int)width,(int)height));
+			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
+			//System.out.println("GOt here");
+		}
+		else if(squareSize*(x+2)+squareSize/2 > width){
+			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
+		}else if(squareSize*(y+2) > height-30){
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+		}else{
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+		}
 
 		frame.setContentPane(panel);
 		frame.pack();

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -27,14 +28,24 @@ public class DrawSolution extends JComponent {
 	JScrollPane area;
 	JPanel main, body;
 	Border border;
+	Dimension screenSize;
+	double width;
+	double height;
 	
 	public DrawSolution(String[][] grid,int x, int y, int squareSize, String puzzle){
 		this.x = x;
 		this.y = y;
 		this.puzzle = puzzle;
+		
+		frame = new JFrame(title);
+		frame.setBackground(Color.WHITE);
+		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
+		frame.setMinimumSize(new Dimension(500,400));
+		frame.setBackground(new Color(255, 255, 255, 255));
+		
 		font = new Font("Century Gothic", Font.PLAIN, 24);
 		frameSizeX = (x) * squareSize+(squareSize/2);
-		frameSizeY = (y + 1) * squareSize;
+		frameSizeY = (y) * squareSize;
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		if(puzzle.equals("Crossword")){
@@ -48,6 +59,10 @@ public class DrawSolution extends JComponent {
 		main.setPreferredSize(new Dimension(squareSize * (x-2), squareSize * (y-2)));
 		
 		border = BorderFactory.createLineBorder(Color.BLACK);
+		
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screenSize.getWidth();
+		height = screenSize.getHeight();
 		
 		for(int q = 1; q < x-1; q++){
 			for(int qq = 1; qq < y-1; qq++){
@@ -89,10 +104,20 @@ public class DrawSolution extends JComponent {
 		area.setBackground(new Color(255,255,255,255));
 		area.setAlignmentX(SwingConstants.BOTTOM);
 				
-		frame = new JFrame(title);
-		frame.setBackground(Color.WHITE);
-		frame.setPreferredSize(new Dimension((squareSize+1) * (x+1), (squareSize+1) * (y+1)));
-		frame.setMinimumSize(new Dimension(500,400));
+		frame = new JFrame("Auto Word Search");
+		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
+			//frame.setPreferredSize(new Dimension((int)width,(int)height));
+			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
+			//System.out.println("GOt here");
+		}
+		else if(squareSize*(x+2)+squareSize/2 > width){
+			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
+		}else if(squareSize*(y+2) > height-30){
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+		}else{
+			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+		}
+
 		frame.setContentPane(area);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

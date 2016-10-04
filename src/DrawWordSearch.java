@@ -247,14 +247,14 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		//System.out.println("Screen size " + width + "x" + height);
 		frame = new JFrame("Auto Word Search");
-		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height){
+		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
 			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
 			//System.out.println("GOt here");
 		}
 		else if(squareSize*(x+2)+squareSize/2 > width){
 			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
-		}else if(squareSize*(y+2) > height){
+		}else if(squareSize*(y+2) > height-30){
 			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
 		}else{
 			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
