@@ -83,51 +83,96 @@ public class FitWords_wordsearch {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}else if( dir.equals("snaking") ){		//Attempt at snaking words
+			System.out.println("Here");
 			int maxPossLength = 10;		// -- could vary this
 			squares.clear();
 			Integer[] current = {init_x, init_y};
 			squares.add(current);
 			for (int i = 0; i < maxPossLength; i++) {
-				int nextAcross;
-				int nextDown;
+				int nextAcross = 0;
+				int nextDown = 0;
+			
 				// BCs//
-				if(squares.get(i)[0] == 0 && squares.get(i)[1] == 0){			//topleft
-					nextAcross = (int)Math.random()*2;
-					nextDown = (int)Math.random()*2;
-					//would this work:  if(nextAcross == 0 && nextDown == 0){i--; continue;} 
-					//ie repeat the loop ----- there is probably a much simpler way of doing it
-					//need to prevent both from being 0 so not putting in same place as first letter *in all methods
-				}else if(squares.get(i)[0] == 0 && squares.get(i)[1] == yLength-1){		//top
-					nextAcross = (int)Math.random()*2;
-					nextDown = (int)Math.random()*2 - 1;
-				}else if(squares.get(i)[0] == xLength - 1 && squares.get(i)[1] == 0){		//bottom
-					nextAcross = (int)Math.random()*2 - 1;
-					nextDown = (int)Math.random()*2;
-				}else if(squares.get(i)[0] == xLength - 1 &&  squares.get(i)[1] == yLength-1){		//left
-					nextAcross = (int)Math.random()*2 - 1;
-					nextDown = (int)Math.random()*2 - 1;
-				}else if(squares.get(i)[0] == 0){
-					nextAcross = (int)Math.random()*2;
-					nextDown = (int)Math.random()*3 - 1;
-				}else if(squares.get(i)[0] == xLength){
-					nextAcross = (int)Math.random()*2 - 1;
-					nextDown = (int)Math.random()*3 - 1;
-				}else if(squares.get(i)[1] == 0){
-					nextAcross = (int)Math.random()*3 - 1;
-					nextDown = (int)Math.random()*2;
-				}else if(squares.get(i)[1] == yLength-1){
-					nextAcross = (int)Math.random()*3 - 1;
-					nextDown = (int)Math.random()*2 - 1;
-				}else{	
-					//normal condition ie in the middle of the grid
-					nextAcross = (int)Math.random()*3 - 1;
-					nextDown = (int)Math.random()*3 - 1;
-				}
-				
-				Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-				if(!squares.contains(newone)){
-					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-					squares.add(newone);
+				//while (!(nextAcross == 0 && nextDown == 0)){
+					if(squares.get(i)[0] == 0 && squares.get(i)[1] == 0){			//topleft
+						nextAcross = (int)Math.random()*2;
+						nextDown = (int)Math.random()*2;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2;
+							nextDown = (int)Math.random()*2;
+						}
+						//would this work:  if(nextAcross == 0 && nextDown == 0){i--; continue;} 
+						//ie repeat the loop ----- there is probably a much simpler way of doing it
+						//need to prevent both from being 0 so not putting in same place as first letter *in all methods
+					}else if(squares.get(i)[0] == 0 && squares.get(i)[1] == yLength-1){		//top
+						nextAcross = (int)Math.random()*2;
+						nextDown = (int)Math.random()*2 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2;
+							nextDown = (int)Math.random()*2-1;
+						}
+					}else if(squares.get(i)[0] == xLength - 1 && squares.get(i)[1] == 0){		//bottom
+						nextAcross = (int)Math.random()*2 - 1;
+						nextDown = (int)Math.random()*2;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2-1;
+							nextDown = (int)Math.random()*2;
+						}
+					}else if(squares.get(i)[0] == xLength - 1 &&  squares.get(i)[1] == yLength-1){		//left
+						nextAcross = (int)Math.random()*2 - 1;
+						nextDown = (int)Math.random()*2 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2-1;
+							nextDown = (int)Math.random()*2-1;
+						}
+					}else if(squares.get(i)[0] == 0){
+						nextAcross = (int)Math.random()*2;
+						nextDown = (int)Math.random()*3 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2;
+							nextDown = (int)Math.random()*3 - 1;
+						}
+					}else if(squares.get(i)[0] == xLength){
+						System.out.println("!!!");
+						nextAcross = (int)Math.random()*2 - 1;
+						nextDown = (int)Math.random()*3 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*2 - 1;
+							nextDown = (int)Math.random()*3 - 1;
+						}
+					}else if(squares.get(i)[1] == 0){
+						nextAcross = (int)Math.random()*3 - 1;
+						nextDown = (int)Math.random()*2;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*3 - 1;
+							nextDown = (int)Math.random()*2;
+							System.out.println("!!");
+						}
+					}else if(squares.get(i)[1] == yLength-1){
+						nextAcross = (int)Math.random()*3 - 1;
+						nextDown = (int)Math.random()*2 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*3 - 1;
+							nextDown = (int)Math.random()*2 - 1;
+						}
+					}else{	
+						//normal condition ie in the middle of the grid
+						nextAcross = (int)Math.random()*3 - 1;
+						nextDown = (int)Math.random()*3 - 1;
+						while(nextAcross == 0 && nextDown == 0){
+							nextAcross = (int)Math.random()*3 - 1;
+							nextDown = (int)Math.random()*3 - 1;
+						}
+					}
+					for(Integer [] a: squares){
+					System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
+					}
+					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
+					if(!squares.contains(newone)){
+						System.out.println("Here tpp");
+						toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
+						squares.add(newone);
+					//}
 				}
 				//
 			}
@@ -195,6 +240,7 @@ public class FitWords_wordsearch {
 						//grid[init_x - g][init_y + g] = "" + word.charAt(g);	
 						for(Integer [] a: squares){
 							grid[a[0]][a[1]] = "" + word.charAt(g);
+							System.out.println(word.charAt(g));
 						}
 					}
 					

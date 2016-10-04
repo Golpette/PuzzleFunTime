@@ -46,7 +46,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	ImageIcon image, image2;
 	Image newimg;
 	Image img;
-	int difficulty;
+	int difficulty = 4;
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
