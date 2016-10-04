@@ -533,19 +533,19 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
-								letters[j-1][i-1].setBackground(Color.RED);
+								letters[j-1][i-1].setBackground(Color.GREEN);
 								//set the image around the word
 								
 								//System.out.println(setPath(direction));
 								System.out.println("imagePath"+imagePath);
 								//set conditions for each image
 								String direction = "across";
-								for(Entry a: entries){
-									if(a.getX()==j-1 && a.getY() == i-1){
-										direction = a.direction;
-										setImageDirections(direction, letters[j-1][i-1]);
-									}
-								}
+//								for(Entry a: entries){
+//									if(a.getX()==j-1 && a.getY() == i-1){
+//										direction = a.direction;
+//										setImageDirections(direction, letters[j-1][i-1]);
+//									}
+//								}
 								Icon temp = setImage(setPath(direction), squareSize, squareSize);
 								letters[j-1][i-1].setIcon(temp);
 								letters[j-1][i-1].setHorizontalTextPosition(SwingConstants.CENTER);
