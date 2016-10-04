@@ -96,20 +96,20 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*2);
 					nextDown = (int)(Math.random()*2);
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*2);
 					}
 					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
 					squares.add(newone);
-					//would this work:  if(nextAcross == 0 && nextDown == 0){i--; continue;} 
+					//would this work:  if(n){i--; continue;} 
 					//ie repeat the loop ----- there is probably a much simpler way of doing it
 					//need to prevent both from being 0 so not putting in same place as first letter *in all methods
 				}else if(squares.get(i)[0] == 1 && squares.get(i)[1] == yLength-2){		//top
 					nextAcross = (int)(Math.random()*2);
 					nextDown = (int)(Math.random()*2) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*2)-1;
 					}
@@ -119,7 +119,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*2) - 1;
 					nextDown = (int)(Math.random()*2);
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2)-1;
 						nextDown = (int)(Math.random()*2);
 					}
@@ -129,7 +129,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*2) - 1;
 					nextDown = (int)(Math.random()*2) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2)-1;
 						nextDown = (int)(Math.random()*2)-1;
 					}
@@ -139,7 +139,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*2);
 					nextDown = (int)(Math.random()*3) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2);
 						nextDown = (int)(Math.random()*3)-1;
 					}
@@ -149,7 +149,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*2) - 1;
 					nextDown = (int)(Math.random()*3) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*2)-1;
 						nextDown = (int)(Math.random()*3)-1;
 					}
@@ -159,7 +159,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*3) - 1;
 					nextDown = (int)(Math.random()*2);
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*3)-1;
 						nextDown = (int)(Math.random()*2);
 					}
@@ -169,7 +169,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*3) - 1;
 					nextDown = (int)(Math.random()*2) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*3)-1;
 						nextDown = (int)(Math.random()*2)-1;
 					}
@@ -180,7 +180,7 @@ public class FitWords_wordsearch {
 					nextAcross = (int)(Math.random()*3) - 1;
 					nextDown = (int)(Math.random()*3) - 1;
 					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-					while(nextAcross == 0 && nextDown == 0 && squaresNotFilled(newone[0], newone[1], squares)){
+					while(squaresNotFilled(newone[0], newone[1], squares)){
 						nextAcross = (int)(Math.random()*3)-1;
 						nextDown = (int)(Math.random()*3)-1;
 					}
@@ -267,7 +267,7 @@ public class FitWords_wordsearch {
 				
 
 				// Update Entries list
-				Entry entry = new Entry(init_x, init_y, true, word, definition); //across boolean not sensible for wordsearches
+				Entry entry = new Entry(init_x, init_y, true, word, definition, dir); //across boolean not sensible for wordsearches
 				entries.add(entry);
 			}
 		}

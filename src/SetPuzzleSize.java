@@ -89,7 +89,6 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			path2 = "src/back1.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			//System.out.println("You are on " + System.getProperty("os.name").toString());
 			path1 = "src\\back.png";
 			path2 = "src\\back1.png";
 		}
@@ -131,17 +130,18 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 3;
-		c.insets = new Insets(0,0,0,0);
+		c.gridy = 0;
+		c.gridwidth = 4;
+	//	c.insets = new Insets(10,10,10,10);
 		panel1.add(intro, c);
 		
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 1;
-		c.ipadx = 0;
+		c.gridwidth = 1;
+		c.insets = new Insets(10,10,10,100);
 		panel1.add(spinner, c);
 		
 		c.weightx = 1.0;
@@ -149,6 +149,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 2;
 		c.gridwidth = 4;
+		c.insets = new Insets(0,0,0,0);
 		panel1.add(chooseDifficulty, c);
 		
 		c.weightx = 0.1;

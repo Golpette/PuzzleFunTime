@@ -48,7 +48,7 @@ public class WordSearchGenerator{
 														// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
 
 				
-				direc = 8;
+				//direc = 8;
 				
 				if( direc==0 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "across" );

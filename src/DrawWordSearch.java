@@ -27,6 +27,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
@@ -43,7 +44,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	String[][] grid;
 	GridBagConstraints c;
 	String [] loopDirections = {"top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"};
-	String imagePath, operatingSystem;
+	String operatingSystem;
+	String imagePath = "";
 	JButton reveal;
 	JScrollPane area;
 	DrawSolution sol;
@@ -98,7 +100,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		if(operatingSystem.equals("linux")){
 			imagePath = "src/";
 		}
-		else if(operatingSystem.equals("windows")){
+		else if(operatingSystem.contains("windows")){
 			imagePath = "src\\";
 		}
 	    
@@ -463,9 +465,66 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	}
 	
 	
+	public String [] setImageDirections(String direction, JLabel label){
+		String middle = "";
+		String start = "";
+		String end = "";
+		String corner1 = "";
+		String corner2 = "";
+		if(direction.equals("across")){
+			start = "Left";
+			middle = "Horizontal";
+			end = "Right";
+		}else if(direction.equals("down")){
+			start = "Top";
+			middle = "Vertical";
+			end = "Bottom";
+		}else if(direction.equals("diagonal")){
+			start = "TopLeft";
+			middle = "DiagonalDownRight";
+			end = "BottomRight";
+			corner1 = "BottomLeftCorner";
+			corner2 = "TopRightCorner";
+		}else if(direction.equals("backwards")){
+			start = "Right";
+			middle = "Horizontal";
+			end = "Left";
+		}else if(direction.equals("up")){
+			start = "Bottom";
+			middle = "Vertical";
+			end = "Top";
+		}else if(direction.equals("backwardsdiagonal")){
+			start = "BottomRight";
+			middle = "DiagonalDownRight";
+			end = "TopLeft";
+			corner1 = "TopRightCorner";
+			corner2 = "BottomLeftCorner";
+		}else if(direction.equals("BLTRdiagonal")){
+			start = "BottomLeft";
+			middle = "DiagonalUpRight";
+			end = "TopRight";
+			corner1 = "BottomRightCorner";
+			corner2 = "TopLeftCorner";
+		}else if(direction.equals("backwardsBLTRdiagonal")){
+			start = "TopRight";
+			middle = "DiagonalUpRight";
+			end = "BottomLeft";
+			corner1 = "TopLeftCorner";
+			corner2 = "BottomRightCorner";
+		}else{
+			start = "Left";
+			middle = "Horizontal";
+			end = "Right";
+			corner1 = "";
+			corner2 = "";
+		}
+		String [] images = {start, middle, end, corner1, corner2};
+		return images; 
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==reveal){
-			String direction = "top";
+			//String direction = "Top";
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
 					for (int i = 0; i < x-1; i++){
@@ -474,9 +533,22 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
-								letters[j-1][i-1].setBackground(Color.GREEN);
+								letters[j-1][i-1].setBackground(Color.RED);
 								//set the image around the word
-								//letters[j-1][i-1].setIcon(setImage(setPath(direction), squareSize, squareSize));
+								
+								//System.out.println(setPath(direction));
+								System.out.println("imagePath"+imagePath);
+								//set conditions for each image
+								String direction = "across";
+								for(Entry a: entries){
+									if(a.getX()==j-1 && a.getY() == i-1){
+										direction = a.direction;
+										setImageDirections(direction, letters[j-1][i-1]);
+									}
+								}
+								Icon temp = setImage(setPath(direction), squareSize, squareSize);
+								letters[j-1][i-1].setIcon(temp);
+								letters[j-1][i-1].setHorizontalTextPosition(SwingConstants.CENTER);
 							}
 					}
 				}
