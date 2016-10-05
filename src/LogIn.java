@@ -56,7 +56,7 @@ public class LogIn extends JComponent implements ActionListener{
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setOpaque(false);
-		intro.setBounds(0, 0, 500, 300);
+		intro.setBounds(0, 0, 550, 300);
 		panel = new JPanel(new GridBagLayout());
 		login = new JButton("Login");
 		login.setFont(font2);
@@ -125,8 +125,8 @@ public class LogIn extends JComponent implements ActionListener{
 		password2.setText("password");
 		password2.setFont(font2);
 		frame = new JFrame("Auto Puzzle Generator");
-		frame.setPreferredSize(new Dimension(500,400));
-		frame.setSize(500, 400);
+		frame.setPreferredSize(new Dimension(550,400));
+		frame.setSize(550, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -182,7 +182,7 @@ public class LogIn extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(login);
 	}

@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -29,7 +30,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public LogIn logIn;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
-	JPanel panel;
+	JPanel panel, grid;
 	JButton cwd, wds, sud, signup, login;
 	JLabel intro;
 	Font font, font2, font3;
@@ -43,11 +44,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		panel = new JPanel(new GridBagLayout());
+		grid = new JPanel(new GridLayout(1, 3));
 		cwd = new JButton("Crossword");
 		cwd.setFont(font2);
 		cwd.setHorizontalAlignment(SwingConstants.CENTER);
 		cwd.addActionListener(this);
-		wds = new JButton("Word Search");
+		wds = new JButton("WordSearch");
 		wds.setFont(font2);
 		wds.setHorizontalAlignment(SwingConstants.CENTER);
 		wds.addActionListener(this);
@@ -71,67 +73,80 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			frame = new JFrame("Welcome to PuzzleLoader "+ user);
 		}
 		
-		frame.setPreferredSize(new Dimension(500,400));
-		frame.setSize(500, 400);
+		frame.setPreferredSize(new Dimension(550,400));
+		frame.setSize(550, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
+		
+		grid.add(cwd);
+		grid.add(wds);
+		grid.add(sud);
 
 		c.weightx = 1.0;
 		c.weighty = 0.0;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(signup, c);
 		
 
 		c.weightx = 1.0;
 		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
+		c.gridx = 1;
+		c.gridy = 0;
 		panel.add(login, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
-		c.gridy = 2;
-		c.ipady = (int)(frame.getHeight()*0.8);
+		c.gridy = 1;
+		//c.ipady = (int)(frame.getHeight()*0.8);
 		c.gridwidth = 3;
 		panel.add(intro, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 2;
 		c.ipady = 0;
-		c.gridwidth = 1;
+		c.gridwidth = 3;
 		c.ipady = 10;
-		panel.add(cwd, c);
+		panel.add(grid, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 3;
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.ipady = 10;
-		panel.add(wds, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 3;
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.ipady = 10;
-		panel.add(sud, c);
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 0;
+//		c.gridy = 3;
+//		c.ipady = 0;
+//		c.gridwidth = 1;
+//		c.ipady = 10;
+//		panel.add(cwd, c);
+//		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 1;
+//		c.gridy = 3;
+//		c.ipady = 0;
+//		c.gridwidth = 1;
+//		c.ipady = 10;
+//		panel.add(wds, c);
+//		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 2;
+//		c.gridy = 3;
+//		c.ipady = 0;
+//		c.gridwidth = 1;
+//		c.ipady = 10;
+//		panel.add(sud, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
-		frame.getRootPane().setDefaultButton(cwd);
 	}
 
 	void mouseActionlabel(JButton b) {

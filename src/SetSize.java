@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -47,6 +48,7 @@ public class SetSize extends JComponent implements ActionListener{
 	Image newimg;
 	Image img;
 	int difficulty = 4;
+	ComponentListener comp;
 	
 	public SetSize(String puzzle, int difficulty) throws IOException {
 		this.puzzle = puzzle;
@@ -56,8 +58,8 @@ public class SetSize extends JComponent implements ActionListener{
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
 		frame = new JFrame("Set Puzzle Size");
-		frame.setSize(500, 400);
-		panel1.setBounds(0, 0, frame.getWidth(), 320);
+		frame.setSize(550, 400);
+		panel1.setBounds(0, 0, frame.getWidth(), frame.getHeight()-50);
 		//panel1.setAlignmentX(SwingConstants.CENTER);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
@@ -98,7 +100,7 @@ public class SetSize extends JComponent implements ActionListener{
 		back.setBackground(new Color(255,255,255,255));
 		back.setBorder(null);
 		
-		frame.setPreferredSize(new Dimension(500,400));
+		frame.setPreferredSize(new Dimension(550,400));
 		model = new SpinnerNumberModel(5, 3, 30, 1);
 		spinner = new JSpinner(model);
 		spinner.setForeground(Color.WHITE);
@@ -117,7 +119,6 @@ public class SetSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 4;
-	//	c.insets = new Insets(10,10,10,10);
 		panel1.add(intro, c);
 		
 		c.fill = GridBagConstraints.NONE;
@@ -127,18 +128,23 @@ public class SetSize extends JComponent implements ActionListener{
 		c.gridwidth = 1;
 		c.insets = new Insets(10,10,10,10);
 		panel1.add(spinner, c);
-		
+	
 		layer = new JLayeredPane();
 		layer.add(panel1, new Integer(1));
+		layer.setAlignmentX(frame.getWidth());
 		layer.add(back, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
+		
+		//frame.getRootPane().add(layer, BorderLayout.CENTER);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
+//		c.anchor = GridBagConstraints.WEST;
+//	    c.fill = GridBagConstraints.BOTH;
 		c.ipady = (int)(frame.getHeight()*0.8);
 		c.insets = new Insets(0,0,0,0);
 		panel.add(layer, c);
@@ -148,17 +154,17 @@ public class SetSize extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.insets = new Insets(0,0,0,0);
+		//c.insets = new Insets(0,0,0,0);
 		panel.add(generate, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(generate);
-	}
-
+	}	
+	
 	void keyActionTextField(JTextField l) {
 
 		l.addKeyListener(new KeyListener() {

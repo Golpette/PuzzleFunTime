@@ -57,7 +57,7 @@ public class SignUp extends JComponent implements ActionListener{
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setOpaque(false);
-		intro.setBounds(0, 0, 500, 170);
+		intro.setBounds(0, 0, 550, 170);
 		panel = new JPanel(new GridBagLayout());
 		signup = new JButton("Sign Up");
 		signup.setFont(font3);
@@ -131,8 +131,8 @@ public class SignUp extends JComponent implements ActionListener{
 		pass2.setText("pass");
 		passwordRetype = new JTextField("");
 		frame = new JFrame("Auto Puzzle Generator");
-		frame.setPreferredSize(new Dimension(500,400));
-		frame.setSize(500, 400);
+		frame.setPreferredSize(new Dimension(600,400));
+		frame.setSize(550, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -220,7 +220,7 @@ public class SignUp extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(signup);
 	}

@@ -85,7 +85,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255,255,255,255));
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
@@ -183,7 +183,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setVisible(true);
 		layer.setOpaque(false);
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		//layer.setPreferredSize(new Dimension(500,500));
+		//layer.setPreferredSize(new Dimension(600,500));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(1));
@@ -264,7 +264,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		}else{
 			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
 		}
-		//frame.setPreferredSize(new Dimension(700,500));
+		//frame.setPreferredSize(new Dimension(550,400));
 		
 		//frame.setMaximumSize(new Dimension(1000,800));
 		frame.setContentPane(panel);

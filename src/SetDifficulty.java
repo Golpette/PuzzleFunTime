@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 	public CrosswordGenerator crossword;
 	public PuzzleLoader puzzleLoader;
 	JFrame frame;
-	JPanel panel, panel1;
+	JPanel panel, panel1, grid;
 	JButton generate, easy, medium, hard, expert;
 	JButton back;
 	ButtonModel blah;
@@ -54,8 +55,9 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
+		grid = new JPanel(new GridLayout(1,4));
 		frame = new JFrame("Set Puzzle Difficulty");
-		frame.setSize(500, 400);
+		frame.setSize(550, 400);
 		panel1.setBounds(0, 0, frame.getWidth(), 320);
 		//panel1.setAlignmentX(SwingConstants.CENTER);
 		generate = new JButton("OK");
@@ -66,7 +68,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		easy.setFont(font2);
 		//easy.setHorizontalAlignment(SwingConstants.CENTER);
 		easy.addActionListener(this);
-		medium = new JButton("Medium");
+		medium = new JButton("Normal");
 		medium.setFont(font2);
 		//medium.setHorizontalAlignment(SwingConstants.CENTER);
 		medium.addActionListener(this);
@@ -92,6 +94,12 @@ public class SetDifficulty extends JComponent implements ActionListener{
 			path2 = "src\\back1.png";
 		}
 		
+		grid.add(easy);
+		grid.add(medium);
+		grid.add(hard);
+		grid.add(expert);
+		
+		
 		image = new ImageIcon( path1 );  
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
@@ -113,7 +121,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		back.setBackground(new Color(255,255,255,255));
 		back.setBorder(null);
 		
-		frame.setPreferredSize(new Dimension(500,400));
+		frame.setPreferredSize(new Dimension(550,400));
 		model = new SpinnerNumberModel(12, 3, 30, 1);
 		chooseDifficulty = new JLabel(puzzle + " Difficulty");
 		chooseDifficulty.setFont(font);
@@ -122,7 +130,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
-		c.weighty = 0.0;
+		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 2;
 		c.gridwidth = 4;
@@ -137,10 +145,10 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
-		c.weighty = 0.0;
+		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.ipady = (int)(frame.getHeight()*0.8);
+		//c.ipady = (int)(frame.getHeight()*0.8);
 		panel.add(layer, c);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -149,37 +157,46 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(easy, c);
+		c.gridwidth = 4;
+		panel.add(grid, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 1;
-		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(medium, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(hard, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 3;
-		c.gridy = 1;
-		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(expert, c);
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 0;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		c.gridwidth = 1;
+//		panel.add(easy, c);
+//		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 1;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		c.gridwidth = 1;
+//		panel.add(medium, c);
+//		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 2;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		c.gridwidth = 1;
+//		panel.add(hard, c);
+//		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 3;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		c.gridwidth = 1;
+//		panel.add(expert, c);
 		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(generate);
 	}

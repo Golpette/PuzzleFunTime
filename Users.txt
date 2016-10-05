@@ -70,3 +70,9 @@
 	<password>aaaaa</password>
 </user>
 
+<user>
+	<username>rtyhurgd</username>
+	<email>dgyuzxcvz@sad.th</email>
+	<password>passwor</password>
+</user>
+
