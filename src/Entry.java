@@ -45,9 +45,50 @@ public Entry(int start_x, int start_y, Boolean across, String word, String defin
 	   clue_number = 0;
 	   entryAcross = 0;
 	   entryDown = 0;
+	   if(direction.equals("across")){
+		   end_x = start_x + wordLength;
+		   end_y = start_y;
+	   }else if(direction.equals("backwards")){
+		   end_x = start_x - wordLength;
+		   end_y = start_y;
+	   }else if(direction.equals("down")){
+		   end_x = start_x;
+		   end_y = start_y + wordLength;
+	   }else if(direction.equals("up")){
+		   end_x = start_x;
+		   end_y = start_y - wordLength;
+	   }else if(direction.equals("backwardsdiagonal")){
+		   end_x = start_x - wordLength;
+		   end_y = start_y - wordLength;
+	   }else if(direction.equals("diagonal")){
+		   end_x = start_x + wordLength;
+		   end_y = start_y + wordLength;
+	   }else if(direction.equals("BLTRdiagonal")){
+		   end_x = start_x + wordLength;
+		   end_y = start_y - wordLength;
+	   }else if(direction.equals("backwardsBLTRdiagonal")){
+		   end_x = start_x - wordLength;
+		   end_y = start_y + wordLength;
+	   }
    }
    
-   public String getDirection() {
+   public int getEnd_x() {
+	return end_x;
+}
+
+public void setEnd_x(int end_x) {
+	this.end_x = end_x;
+}
+
+public int getEnd_y() {
+	return end_y;
+}
+
+public void setEnd_y(int end_y) {
+	this.end_y = end_y;
+}
+
+public String getDirection() {
 	   return direction;
    }
 

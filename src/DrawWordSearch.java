@@ -83,6 +83,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		font4 = new Font(fontAttr);
 		
+		frame = new JFrame("Auto Word Search");
+		frame.setBackground(new Color(255,255,255,255));
+		frame.setMinimumSize(new Dimension(500,400));
+		
 		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
 		wordLength = 0;
@@ -247,7 +251,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		
 		
 		//System.out.println("Screen size " + width + "x" + height);
-		frame = new JFrame("Auto Word Search");
+		
 		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
 			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
@@ -261,8 +265,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
 		}
 		//frame.setPreferredSize(new Dimension(700,500));
-		frame.setBackground(new Color(255,255,255,255));
-		frame.setMinimumSize(new Dimension(500,400));
+		
 		//frame.setMaximumSize(new Dimension(1000,800));
 		frame.setContentPane(panel);
 		frame.pack();
@@ -491,6 +494,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "BottomRight";
 			corner1 = "BottomLeftCorner";
 			corner2 = "TopRightCorner";
+			System.out.println("Changed Diagonal");
 			diagonal = true;
 		}else if(direction.equals("backwards")){
 			start = "Right";
@@ -506,6 +510,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "TopLeft";
 			corner1 = "TopRightCorner";
 			corner2 = "BottomLeftCorner";
+			System.out.println("Changed Diagonal");
 			diagonal = true;
 		}else if(direction.equals("BLTRdiagonal")){
 			start = "BottomLeft";
@@ -513,6 +518,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "TopRight";
 			corner1 = "BottomRightCorner";
 			corner2 = "TopLeftCorner";
+			System.out.println("Changed Diagonal");
 			diagonal = true;
 		}else if(direction.equals("backwardsBLTRdiagonal")){
 			start = "TopRight";
@@ -520,6 +526,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "BottomLeft";
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
+			System.out.println("Changed Diagonal");
 			diagonal = true;
 		}else{
 			start = "Left";
@@ -538,8 +545,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
-					for (int i = 1; i < x-1; i++){
-						for (int j = 1; j < y-1; j++){
+					for (int i = 0; i < x-1; i++){
+						for (int j = 0; j < y-1; j++){
 							if(!grid[i][j].equals("_")){
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
@@ -557,11 +564,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								for(Entry a: entries){
 									if(a.getX()==j-1 && a.getY() == i-1){
 										direction = a.direction;
+										System.out.println("word: "+a.word);
+										System.out.println("direction: " +direction);
 										temps = setImageDirections(direction, diagonal);
-										if(i == a.start_x && j == a.start_y){//condition for first letter
+										if(i-1 == a.start_x && j-1 == a.start_y){//condition for first letter
 											direction = temps[0];
-										}else if(false){//condition for last letter
+											System.out.println("Start of Word: " + a.word);
+										}else if(i-1 == a.end_x && j-1 == a.end_y){//condition for last letter
 											direction = temps[1];
+											System.out.println("End of Word: " + a.word);
 										}else{//condition for middle letter
 											direction = temps[2];
 											upperSide = temps[3];
@@ -573,8 +584,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								Icon corner1  = setImage(setPath(upperSide), squareSize, squareSize);
 								Icon corner2 = setImage(setPath(lowerSide), squareSize, squareSize);
 								if(diagonal){
-									letters[j-2][i-1].setIcon(corner1);
-									letters[j][i-1].setIcon(corner2);
+									if(j >= 2 && i >=1){
+										letters[j-2][i-1].setIcon(corner1);
+									}
+									if(i >= 1){
+										letters[j][i-1].setIcon(corner2);
+									}
+									
 								}
 								letters[j-1][i-1].setIcon(temp);
 								letters[j-1][i-1].setHorizontalTextPosition(SwingConstants.CENTER);
