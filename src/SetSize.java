@@ -1,10 +1,15 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -12,6 +17,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 
 import javax.swing.ButtonModel;
@@ -33,18 +41,19 @@ public class SetSize extends JComponent implements ActionListener{
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
 	public PuzzleLoader puzzleLoader;
+	FontPanel fontPanel;
 	JFrame frame;
 	JPanel panel, panel1;
 	JButton generate;
 	JButton back;
 	ButtonModel blah;
 	JLayeredPane layer;
-	JLabel intro;
+	JLabel intro, pic;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	Font font, font2;
 	public String puzzle;
-	ImageIcon image, image2;
+	ImageIcon image, image2, pic1, pic2;
 	Image newimg;
 	Image img;
 	int difficulty = 4;
@@ -52,7 +61,8 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public SetSize(String puzzle, int difficulty) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Century Gothic", Font.BOLD, 36);
+		fontPanel = new FontPanel();
+		font = new Font("Century Gothic", Font.BOLD, 48);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
@@ -68,16 +78,28 @@ public class SetSize extends JComponent implements ActionListener{
 		// Set image path depending on OS
 		String path1 = "";
 		String path2 = "";
+		String path3 = "";
+		String path4 = "";
 		//System.out.println(System.getProperty("os.name").toLowerCase());
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
 			
 			path1 = "src/back.png";
 			path2 = "src/back1.png";
+			path3 = "src/crossword.png";
+			path4 = "src/wordsearch.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
 			path1 = "src\\back.png";
 			path2 = "src\\back1.png";
+			path3 = "src\\crossword.png";
+			path4 = "src\\wordsearch.png";
 		}
+	
+		pic = new JLabel("");
+		pic.setOpaque(false);
+		pic.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		pic.setBackground(new Color(255,255,255,255));
+		pic.setBorder(null);
 		
 		image = new ImageIcon( path1 );  
 		img = image.getImage();
@@ -88,6 +110,24 @@ public class SetSize extends JComponent implements ActionListener{
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg);
+		
+		pic1 = new ImageIcon(path3);
+		img = pic1.getImage();
+		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
+		pic1 = new ImageIcon(newimg);
+		
+		
+		pic2 = new ImageIcon(path4);
+		img = pic2.getImage();
+		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
+		pic2 = new ImageIcon(newimg);
+		
+		if(puzzle.equals("Crossword")){
+			pic.setIcon(pic1);
+		}else if(puzzle.equals("Word Search")){
+			pic.setIcon(pic2);
+		}
+		
 		back = new JButton("");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
@@ -110,6 +150,7 @@ public class SetSize extends JComponent implements ActionListener{
 		intro = new JLabel(puzzle + " Size");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
+		intro.setForeground(Color.RED);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -133,6 +174,8 @@ public class SetSize extends JComponent implements ActionListener{
 		layer.add(panel1, new Integer(1));
 		layer.setAlignmentX(frame.getWidth());
 		layer.add(back, new Integer(0));
+		layer.add(pic, new Integer(1));
+		//layer.add(fontPanel, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		
