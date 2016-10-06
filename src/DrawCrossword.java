@@ -1,4 +1,5 @@
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -29,11 +30,17 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
 
+//Steve
+import java.awt.event.FocusListener;
+import java.awt.event.FocusEvent;
+
 // Steve: need these to remove automatic arrow key scrolling in JScrollPane
 import javax.swing.InputMap;
 import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+
+
 
 
 
@@ -72,6 +79,22 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
+		
+		
+        FocusListener highlighter = new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                e.getComponent().setBackground(new Color(0, 100, 0, 255));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                //e.getComponent().setBackground(UIManager.getColor("TextField.background"));
+            }
+        };
+		
+		
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
@@ -132,6 +155,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
@@ -142,18 +177,29 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		crosswordGrid.setOpaque(false);
 		boxes = new JTextField[x - 2][y - 2];
 		border = BorderFactory.createLineBorder(Color.BLACK);
+		
+		
+		
+
+        
+        
 
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				boxes[i][j] = new JTextField(); // need new layout to resize
 												// letters in boxes
+				
+				boxes[i][j].addFocusListener(highlighter);
+
+
+				
 				//trying to stop 'dinging' sound when moving cursor between boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
 				action.setEnabled(false);
 				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1));
-				if (grid[j + 1][i + 1] == "_") {
+				if (grid[j+1][i+1] == "_") {
 					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
 					boxes[i][j].setEnabled(false);
 				} else {
@@ -161,11 +207,60 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					boxes[i][j].setOpaque(false);
 					keyActionTextField(boxes[i][j]);
 				}
+				
+					
+				
+				
+				
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
 				crosswordGrid.add(boxes[i][j]);
 			}
 		}
+		
+		
+//		for (int i = 0; i < x - 2; i++) {
+//			for (int j = 0; j < y - 2; j++) {	
+//				
+//				boxes[i][j].addFocusListener(new FocusListener() {
+//
+//					@Override
+//					public void focusGained(FocusEvent e) {
+//						e.getComponent().setBackground(new Color(0, 100, 0, 255));
+//						System.out.println("gained");
+//					}
+//
+//					@Override
+//					public void focusLost(FocusEvent e) {
+//						System.out.println("lost");
+//					}
+//				});
+//			}
+//		}
+//		
+//		
+		
+		
+
+
+
+//		
+//		for (int i = 0; i < x - 2; i++) {
+//			for (int j = 0; j < y - 2; j++) {	
+//				boxes[i][j].addFocusListener(highlighter);
+//			}
+//		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -349,7 +444,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			public void keyPressed(KeyEvent e) {
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
+						
 						if (e.getSource() == boxes[row][col]) {
+						
 							if (e.getKeyCode() == KeyEvent.VK_UP) {								
 							// STEVE: edit this (and next 3 conditions) to jump black squares
 							//        and implement periodic boundary conditions			   
@@ -500,6 +597,23 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										}
 									}
 								}
+								
+								
+								
+//								for (int r = 0; r < x - 2; r++) {
+//									for (int c = 0; c < y - 2; c++) {
+//										if( boxes[r][c].isEnabled() ){
+//											boxes[r][c].setBackground(new Color(100, 100, 100, 255));
+//										}			
+//									}	
+//								}
+								if( boxes[row][col].isFocusOwner() ){
+									boxes[row][col].setBackground(new Color(200, 0, 0, 255));
+								}	
+								
+								
+								
+								
 							}
 						}
 					}

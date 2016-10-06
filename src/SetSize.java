@@ -141,7 +141,7 @@ public class SetSize extends JComponent implements ActionListener{
 		back.setBorder(null);
 		
 		frame.setPreferredSize(new Dimension(550,400));
-		model = new SpinnerNumberModel(5, 3, 30, 1);
+		model = new SpinnerNumberModel(12, 3, 30, 1);
 		spinner = new JSpinner(model);
 		spinner.setForeground(Color.WHITE);
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
@@ -251,7 +251,7 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == generate){
-			System.out.println(puzzle);
+			//System.out.println(puzzle);
 			if(puzzle.equals("Crossword")){
 				try {
 					crossword = new CrosswordGenerator((Integer)spinner.getValue());
