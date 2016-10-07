@@ -1,5 +1,4 @@
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -30,15 +29,21 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
 
+
 //Steve
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
+
 
 // Steve: need these to remove automatic arrow key scrolling in JScrollPane
 import javax.swing.InputMap;
 import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+
+// Steve: for mouse clicks in JTextFields (?)
+import java.awt.event.MouseAdapter;
+
 
 
 
@@ -150,6 +155,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
 				
+	            mouseActionlabel(boxes[i][j]);
 				
 				//trying to stop 'dinging' sound when moving cursor between boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
@@ -407,7 +413,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	void keyActionTextField(JTextField l) {
-
+		
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
@@ -608,14 +614,64 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	
-	
-	
 
-	void mouseActionlabel(JLabel l) {
+	
+	
+	
+	
+	
+	// MOUSE ACTIONS on JTextArea (grid spaces) here ---------------------
+	void mouseActionlabel(JTextField l) {
+			
 		l.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {	
+				
+				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+					for (int j = 0; j < y-2; j++){
+						if (e.getSource().equals(boxes[i][j])){
+							makeAllWhite();
+							highlightWord(i,j);
+						}
+					}
+				}			
+			}
+			
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			public void mousePressed(MouseEvent arg0) {
+
+			}
+
+			public void mouseReleased(MouseEvent arg0) {
+
+			}
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// MOUSE ACTIONS on JLabel (hints) here ---------------------
+	void mouseActionlabel(JLabel l) {
+		
+		
+		l.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {				
+				
 				for (JLabel k : hints) {
 					if (e.getSource() == k) {
 						for (Entry ent : entries) {
@@ -631,9 +687,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							}
 						}
 					}
-				}
+				}			
+				
+				
 			}
 
+			
+			
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
@@ -687,6 +747,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
+			
+			
+			
+			
+			
+
+				
+			
+			
+			
+			
+			
+			
+			
 
 			public void mousePressed(MouseEvent arg0) {
 
@@ -730,14 +804,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public void makeAllWhite(){
-		//Reset all white ################################
+		//Reset all white 
 		for (int rrrr = 0; rrrr < x - 2; rrrr++) {
 			for (int cccc = 0; cccc < y - 2; cccc++) {
 				if( boxes[rrrr][cccc].isEnabled() ){
 					boxes[rrrr][cccc].setBackground(new Color(255,255,255,255) );
 				}	
 			}
-		}	// ###########################################	
+		}	
 	}
 	
 	
@@ -762,6 +836,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 
 	public void actionPerformed(ActionEvent e) {
+		
+//		for (int i = 0; i < x - 2; i++) {
+//			for (int j = 0; j < y - 2; j++) {
+//				if( e.getSource() == boxes[i][j] ){
+//					System.out.println("NAAAA");
+//				}
+//			}
+//		}
+
 		
 		
 		if (e.getSource() == reveal) {
