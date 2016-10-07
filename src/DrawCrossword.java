@@ -90,6 +90,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
             @Override
             public void focusGained(FocusEvent e) {
                 e.getComponent().setBackground(new Color(0, 100, 0, 105));
+                
             }
 
             @Override
@@ -163,14 +164,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		boxes = new JTextField[x - 2][y - 2];
 		border = BorderFactory.createLineBorder(Color.BLACK);
 	
+		for (int i = 0; i < x - 2; i++) {
+			for (int j = 0; j < y - 2; j++) {
+				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
+				boxes[i][j].addFocusListener(highlighter);				
+			}
+		}
         
 
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				
-				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
+				//boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
 				
-				boxes[i][j].addFocusListener(highlighter);
+				//boxes[i][j].addFocusListener(highlighter);
 
 
 				
@@ -256,7 +263,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
 		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		clueNums.setOpaque(true);  //#### originally false
+		clueNums.setOpaque(false);  //#### originally false
 		clueNumbers = new JLabel[x - 2][y - 2];
 
 		for (int i = 0; i < x - 2; i++) {
@@ -266,12 +273,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
 				clueNumbers[i][j].setFont(font4);
-				clueNumbers[i][j].setOpaque(true);//was false
+				clueNumbers[i][j].setOpaque(false);//was false
 				if (!gridInit[j + 1][i + 1].equals("_")) {
 					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
 				}
 				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
-				clueNums.setOpaque(true);
+				clueNums.setOpaque(false);
 
 				
 				clueNums.add(clueNumbers[i][j]);
@@ -303,11 +310,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
 		
-		//switch order???
-		layer.add(crosswordGrid, new Integer(1));
-		layer.add(clueNums, new Integer(0));
-		
-		
+		layer.add(clueNums, new Integer(1));
+		layer.add(crosswordGrid, new Integer(0));
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
