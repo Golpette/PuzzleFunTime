@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -33,11 +34,11 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	public PuzzleLoader puzzleLoader;
 	JFrame frame;
 	JPanel panel, panel1;
-	JButton generate;
+	JButton generate, easy, medium, hard, expert;
 	JButton back;
 	ButtonModel blah;
 	JLayeredPane layer;
-	JLabel intro;
+	JLabel intro, chooseDifficulty;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	Font font, font2;
@@ -45,24 +46,58 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 	ImageIcon image, image2;
 	Image newimg;
 	Image img;
+	int difficulty = 4;
 	
 	public SetPuzzleSize(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Times New Roman", Font.BOLD, 36);
-		font2 = new Font("Times New Roman", Font.PLAIN, 24);
+		font = new Font("Century Gothic", Font.BOLD, 36);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
-		panel1.setBounds(0, 0, 500, 320);
+		frame = new JFrame("Set Puzzle Size and Difficulty");
+		frame.setSize(500, 400);
+		panel1.setBounds(0, 0, frame.getWidth(), 320);
+		//panel1.setAlignmentX(SwingConstants.CENTER);
 		generate = new JButton("Generate");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
-		image = new ImageIcon("src\\back.png");
+		easy = new JButton("Easy");
+		easy.setFont(font2);
+		easy.setHorizontalAlignment(SwingConstants.CENTER);
+		easy.addActionListener(this);
+		medium = new JButton("Medium");
+		medium.setFont(font2);
+		medium.setHorizontalAlignment(SwingConstants.CENTER);
+		medium.addActionListener(this);
+		hard = new JButton("Hard");
+		hard.setFont(font2);
+		hard.setHorizontalAlignment(SwingConstants.CENTER);
+		hard.addActionListener(this);
+		expert = new JButton("Expert");
+		expert.setFont(font2);
+		expert.setHorizontalAlignment(SwingConstants.CENTER);
+		expert.addActionListener(this);
+		// Set image path depending on OS
+		String path1 = "";
+		String path2 = "";
+		//System.out.println(System.getProperty("os.name").toLowerCase());
+		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
+			
+			path1 = "src/back.png";
+			path2 = "src/back1.png";
+		}
+		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
+			path1 = "src\\back.png";
+			path2 = "src\\back1.png";
+		}
+		
+		image = new ImageIcon( path1 );  
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		image2 = new ImageIcon("src\\back1.png");
+		image2 = new ImageIcon( path2 );
 
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
@@ -78,26 +113,76 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		back.setBounds(0, 0, 100, 100);
 		back.setBackground(new Color(255,255,255,255));
 		back.setBorder(null);
-		frame = new JFrame("Set Puzzle Size");
-		frame.setSize(500, 400);
+		
 		frame.setPreferredSize(new Dimension(500,400));
-		model = new SpinnerNumberModel(8, 3, 30, 1);
+		model = new SpinnerNumberModel(12, 3, 30, 1);
 		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font2);
+		
 		intro = new JLabel("Set " + puzzle + " Size");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
+		chooseDifficulty = new JLabel("Choose " + puzzle + " Difficulty");
+		chooseDifficulty.setFont(font);
+		chooseDifficulty.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 0;
+		c.gridwidth = 4;
+	//	c.insets = new Insets(10,10,10,10);
 		panel1.add(intro, c);
 		
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 1;
+		c.gridwidth = 1;
+		c.insets = new Insets(10,10,10,100);
 		panel1.add(spinner, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 4;
+		c.insets = new Insets(0,0,0,0);
+		panel1.add(chooseDifficulty, c);
+		
+		c.weightx = 0.1;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		//c.ipadx = frame.getWidth()/5;
+		panel1.add(easy, c);
+		
+		c.weightx = 0.1;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		//c.ipadx = frame.getWidth()/5;
+		panel1.add(medium, c);
+		
+		c.weightx = 0.1;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		//c.ipadx = frame.getWidth()/5;
+		panel1.add(hard, c);
+		
+		c.weightx = 0.1;
+		c.weighty = 0.0;
+		c.gridx = 3;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		//c.ipadx = frame.getWidth()/5;
+		panel1.add(expert, c);
 		
 		layer = new JLayeredPane();
 		layer.add(panel1, new Integer(1));
@@ -122,7 +207,9 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(new Dimension(500,400));
 		frame.setVisible(true);		
+		frame.getRootPane().setDefaultButton(generate);
 	}
 
 	void keyActionTextField(JTextField l) {
@@ -177,7 +264,7 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 			}
 			if(puzzle.equals("Word Search")){
 				try {
-					wordsearch = new WordSearchGenerator((Integer)spinner.getValue());
+					wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
 				}catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -185,11 +272,24 @@ public class SetPuzzleSize extends JComponent implements ActionListener{
 		}
 		if(e.getSource() == back){
 			try {
-				puzzleLoader = new PuzzleLoader();
+				puzzleLoader = new PuzzleLoader("");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			frame.dispose();			
+		}
+		if(e.getSource() == easy){
+			difficulty = 2;				
+		}
+		if(e.getSource() == medium){
+			difficulty = 4;
+		}
+		if(e.getSource() == hard){
+			difficulty = 8;			
+		}
+		if(e.getSource() == expert){
+			//difficulty = 9;				//set to 9 to include snakes
+			difficulty = 8;
 		}
 	}
 }

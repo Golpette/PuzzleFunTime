@@ -7,11 +7,23 @@ public class Entry {
     int start_y;
     Boolean across;
     String word;
+    String direction;
     String definition;
     int clue_number;
     int entryAcross, entryDown;
    
    public Entry(int start_x, int start_y, Boolean across, String word, String definition){
+	   this.start_x = start_x;
+	   this.start_y = start_y;
+	   this.across = across;
+	   this.word = word;
+	   this.definition = definition;
+	   clue_number = 0;
+	   entryAcross = 0;
+	   entryDown = 0;
+   }
+   
+   public Entry(int start_x, int start_y, Boolean across, String word, String definition, String direction){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
 	   this.across = across;

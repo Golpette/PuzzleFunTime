@@ -4,77 +4,59 @@ import java.lang.Math;
 /**
  * Class holds two methods: for fitting *across* and *down* in the crossword
  * 
- * Note to Steve:  I added a boolean and checked if doing down or across to 
- * implement fitting words into the crossword without repeating code.
- * 
- * Note to Andy: I corrected a small bug you introduced with the boolean thing above, and also
- * have played with the fitting procedure, trying to make prettier crosswords by forcing the corner
+ * Have played with the fitting procedure, trying to make prettier crosswords by forcing the corner
  * cells to be occupied. I let these be random lengths, then after a certain number of words are
  * fitted, I start forcing the biggest possible words. This helps ensure connectivity and looks nicer.
  * 
  * 
  */
-public class FitWords {
+public class FitWords_crossword {
 
 	//'Random fit approach' to try and fit words ACROSS into grid. Updates ArrayList<Entry> and grid all at once
-	public FitWords(String[][] grid, int xLength, int yLength, ArrayList<Word> wordlist, ArrayList<Entry> entries, String type, boolean across) {
+	public FitWords_crossword(String[][] grid, int xLength, int yLength, ArrayList<Word> wordlist, ArrayList<Entry> entries, boolean across) {
 		// Steve added "type" since fitting is different for crosswords and wordsearches
 		
 		boolean biggestFirst;
 		int init_x;
 	    int init_y;
 		
-		// If wordsearch, we do not want to force corner cells nor force largest words
-	    if (type.equals( "wordsearch" ) ){
-			init_x = (int) (Math.random() * (xLength - 2) + 1);
-			init_y = (int) (Math.random() * (yLength - 2) + 1);
-	        biggestFirst = false;
-	    }
-	    else if( type.equals("crossword") ){
-	    	
-	        // Steve:  choose to fit biggest first or random sizes (in any case, we need to fit biggest word
-	        //         when starting from bottom right or we'll miss the final square -------------------------
-	        biggestFirst = false;   // This is fed into Search.findWord()
 
-	        if( entries.size() >= 6 ){  //make this depend on size of crossword
-	            biggestFirst = true;
-	        }
-	        
-	        // Make sure corner cells are always occupied//	        
-//	        if(  grid[xLength-2][yLength-2].equals("_")  ){
-//	           int rndm_length = (int) (Math.random() * (xLength - 2 - 4) );     // CAREFUL WITH SMALL CROSSWORDS
-//	           init_x = xLength - 2 - rndm_length ;   init_y = yLength-2;  
-//	            // force exact size on word; a random choice can leave corner blank
-//	            biggestFirst = true ;
-//	        }
-//	        else if( grid[xLength-2][1].equals("_")  ){      // BUG HERE. SOMETIMES MISSES THE BOTTOM RIGHT SQUARE. WHY!?!
-	        if( grid[xLength-2][1].equals("_")  ){
-	            init_x = xLength-2;   init_y = 1;
-	            biggestFirst = false;
-	        }
-	        else if( grid[1][yLength-2].equals("_")  ){
-	            init_x = 1;  init_y=yLength-2;
-	            biggestFirst = false;
-	        }
-	        else if( grid[1][1].equals("_") ){
-	        //if(false){
-	            init_x = 1;  init_y=1;
-	            biggestFirst = false;
-	        }else{
-			    init_x = (int) (Math.random() * (xLength - 2) + 1);
-			    init_y = (int) (Math.random() * (yLength - 2) + 1);
-	        } //-------------------------------------------------------------------------------------------
-	 		
-	    }
-	    else{
-	    	init_x=0; init_y=0; biggestFirst=false;
-	        System.out.println("Neither 'crossword' or 'wordsearch' was specified in fitWord");    	
-	    }
-		
-		
-		
+	    // Steve:  choose to fit biggest first or random sizes (in any case, we need to fit biggest word
+	    //         when starting from bottom right or we'll miss the final square -------------------------
+	    biggestFirst = false;   // This is fed into Search.findWord()
 
-			
+	    if( entries.size() >= 6 ){  //make this depend on size of crossword
+	    	biggestFirst = true;
+	    }
+
+	    // Make sure corner cells are always occupied//	        
+	    //	        if(  grid[xLength-2][yLength-2].equals("_")  ){
+	    //	           int rndm_length = (int) (Math.random() * (xLength - 2 - 4) );     // CAREFUL WITH SMALL CROSSWORDS
+	    //	           init_x = xLength - 2 - rndm_length ;   init_y = yLength-2;  
+	    //	            // force exact size on word; a random choice can leave corner blank
+	    //	            biggestFirst = true ;
+	    //	        }
+	    //	        else if( grid[xLength-2][1].equals("_")  ){      // BUG HERE. SOMETIMES MISSES THE BOTTOM RIGHT SQUARE. WHY!?!
+	    if( grid[xLength-2][1].equals("_")  ){
+	    	init_x = xLength-2;   init_y = 1;
+	    	biggestFirst = false;
+	    }
+	    else if( grid[1][yLength-2].equals("_")  ){
+	    	init_x = 1;  init_y=yLength-2;
+	    	biggestFirst = false;
+	    }
+	    else if( grid[1][1].equals("_") ){
+	    	//if(false){
+	    	init_x = 1;  init_y=1;
+	    	biggestFirst = false;
+	    }else{
+	    	init_x = (int) (Math.random() * (xLength - 2) + 1);
+	    	init_y = (int) (Math.random() * (yLength - 2) + 1);
+	    } //-------------------------------------------------------------------------------------------
+
+
+
+
 
 
 		//Make sure space on LHS is empty, otherwise do nothing
@@ -101,8 +83,6 @@ public class FitWords {
 		} else if(!across && grid[init_x][init_y - 1].equals("_")) {  // steve fix andy change
 			int maxPossLength = (yLength - 1) - init_y;
 
-			// Now need to fit something to the "toWorkWith" String.
-			// Uses **SearchWords.java**
 			for (int i = 0; i < maxPossLength; i++) {
 				if (grid[init_x][init_y + i] == "_") {
 					if (grid[init_x - 1][init_y + i].equals("_") && grid[init_x + 1][init_y + i].equals("_")) {

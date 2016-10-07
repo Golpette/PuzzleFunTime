@@ -1,0 +1,72 @@
+<user>
+	<username>Andy</username>
+	<email>anyboy@yahoomail.com</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username>Steve</username>
+	<email>bo@lk.com</email>
+	<password>leeds</password>
+</user>
+
+<user>
+	<username>Andrew</username>
+	<email>AJRigg@gippymail.co.uk</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username>asd</username>
+	<email>asd@dssk.asdf</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username></username>
+	<email>awdsd@D.sd</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username>asdfas</username>
+	<email>asdfdf@dsd.ds</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username></username>
+	<email>dsfgsdfg@Sdfg.df</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username></username>
+	<email>asddsfafa@dk.sa</email>
+	<password>pass</password>
+</user>
+
+<user>
+	<username></username>
+	<email>asd@dkdl.ds</email>
+	<password>sdf</password>
+</user>
+
+<user>
+	<username>asd</username>
+	<email>das@ds.sd</email>
+	<password></password>
+</user>
+
+<user>
+	<username>AS</username>
+	<email>ASDF@Dsd.ds</email>
+	<password>password</password>
+</user>
+
+<user>
+	<username>ewfgw</username>
+	<email>werer@Weewr.werq</email>
+	<password>aaaaa</password>
+</user>
+
