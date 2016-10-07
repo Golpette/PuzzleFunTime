@@ -24,15 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
-
-
-//Steve
-import java.awt.event.FocusListener;
-import java.awt.event.FocusEvent;
 
 
 // Steve: need these to remove automatic arrow key scrolling in JScrollPane
@@ -40,12 +34,6 @@ import javax.swing.InputMap;
 import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
-
-// Steve: for mouse clicks in JTextFields (?)
-import java.awt.event.MouseAdapter;
-
-
-
 
 
 
@@ -58,8 +46,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;
 	private String[][] grid;
-	//private JTextField[][] boxes;
-	JTextField[][] boxes;
+	private JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
@@ -126,14 +113,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 
 		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 
 		/**
@@ -170,16 +150,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					boxes[i][j].setBackground(new Color(255, 255, 255, 105));
 										
 					keyActionTextField(boxes[i][j]);
-				}
-								
-				
+				}			
 				
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
-				crosswordGrid.add(boxes[i][j]);
-				
-					
-				
+				crosswordGrid.add(boxes[i][j]);			
 				
 			}
 		}
@@ -218,21 +193,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -423,9 +384,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						if (e.getSource() == boxes[row][col]) {
 						
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
+								// get rid of all previous highlighting
 								makeAllWhite();
-							    // STEVE: edit this (and next 3 conditions) to jump black squares
-							    //        and implement periodic boundary conditions			   
+							    // STEVE: jump black squares and implement periodic boundary conditions			   
 								int newstart=row;
 								for( int i=1; i<(x-2)*2; i++){										
 									//Periodic BCs
@@ -435,6 +396,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									// Jump black spaces to nearest white one
 									if (boxes[ (newstart-i) ][col].isEnabled()) {
 										boxes[ (newstart-i) ][col].requestFocus();
+										// highlight any words that *start* from this square
 										highlightWord( newstart-i, col);
 										break;
 									}
@@ -656,13 +618,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	// MOUSE ACTIONS on JLabel (hints) here ---------------------
 	void mouseActionlabel(JLabel l) {
@@ -692,8 +648,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 			}
 
-			
-			
+					
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
@@ -750,18 +705,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			
 			
 			
-			
-			
-
-				
-			
-			
-			
-			
-			
-			
-			
-
 			public void mousePressed(MouseEvent arg0) {
 
 			}
@@ -836,15 +779,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 
 	public void actionPerformed(ActionEvent e) {
-		
-//		for (int i = 0; i < x - 2; i++) {
-//			for (int j = 0; j < y - 2; j++) {
-//				if( e.getSource() == boxes[i][j] ){
-//					System.out.println("NAAAA");
-//				}
-//			}
-//		}
-
 		
 		
 		if (e.getSource() == reveal) {
