@@ -89,12 +89,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
         FocusListener highlighter = new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                e.getComponent().setBackground(new Color(0, 100, 0, 100));
+                e.getComponent().setBackground(new Color(0, 100, 0, 105));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                e.getComponent().setBackground(new Color(255, 255, 255, 100));
+                e.getComponent().setBackground(new Color(255, 255, 255, 255));
                 crosswordGrid.setOpaque(false);
             }
         };
