@@ -53,7 +53,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;
 	private String[][] grid;
-	private JTextField[][] boxes;
+	//private JTextField[][] boxes;
+	JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
@@ -81,19 +82,27 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
 		
 		
+		
+		
+		//Focus listeners to be added to each JTextField in boxes. Focused square green,
+		// back to white when focus is lost.
         FocusListener highlighter = new FocusListener() {
-
             @Override
             public void focusGained(FocusEvent e) {
-                e.getComponent().setBackground(new Color(0, 100, 0, 255));
+                e.getComponent().setBackground(new Color(0, 100, 0, 100));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                //e.getComponent().setBackground(UIManager.getColor("TextField.background"));
+                e.getComponent().setBackground(new Color(255, 255, 255, 100));
+                crosswordGrid.setOpaque(false);
             }
         };
 		
+        
+        
+        
+        
 		
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
@@ -130,33 +139,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
 
-		/**
-		 * This is where the transparentLayer to hold all the clue numbers is
-		 * created. It sets all the cells with question numbers with the correct
-		 * number in the top left corner of a GridLayout cell.
-		 */
-		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
-		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		clueNums.setOpaque(false);
-		clueNumbers = new JLabel[x - 2][y - 2];
 
-		for (int i = 0; i < x - 2; i++) {
-			for (int j = 0; j < y - 2; j++) {
-				clueNumbers[i][j] = new JLabel();
-				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
-				clueNumbers[i][j].setForeground(Color.BLACK);
-				clueNumbers[i][j].setVisible(true);
-				clueNumbers[i][j].setFont(font4);
-				clueNumbers[i][j].setOpaque(false);
-				if (!gridInit[j + 1][i + 1].equals("_")) {
-					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
-				}
-				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
-				clueNums.add(clueNumbers[i][j]);
-			}
-		}
-		
-		
 		
 		
 		
@@ -174,20 +157,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		crosswordGrid.setOpaque(false);
+		
+		crosswordGrid.setOpaque(false);  // want it opaque!? false originally
+ 		
 		boxes = new JTextField[x - 2][y - 2];
 		border = BorderFactory.createLineBorder(Color.BLACK);
-		
-		
-		
-
-        
+	
         
 
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
-				boxes[i][j] = new JTextField(); // need new layout to resize
-												// letters in boxes
+				
+				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
 				
 				boxes[i][j].addFocusListener(highlighter);
 
@@ -203,53 +184,105 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
 					boxes[i][j].setEnabled(false);
 				} else {
-					boxes[i][j].setBackground(new Color(255, 255, 255, 100));
-					boxes[i][j].setOpaque(false);
+					boxes[i][j].setBackground(new Color(255, 255, 255, 105));
+					
+					//boxes[i][j].setOpaque(false);// seem to need this to see clue numbers, but need to disable it to get color in focus
+					
 					keyActionTextField(boxes[i][j]);
 				}
-				
-					
-				
+								
 				
 				
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
 				crosswordGrid.add(boxes[i][j]);
+				
+				
+				
+				
+				
+				
 			}
 		}
 		
 		
+		
+		
+		
+		
+		
+		
+		
+//		// SECOND ATTEMPT---------------
 //		for (int i = 0; i < x - 2; i++) {
 //			for (int j = 0; j < y - 2; j++) {	
+//				
 //				
 //				boxes[i][j].addFocusListener(new FocusListener() {
 //
 //					@Override
 //					public void focusGained(FocusEvent e) {
-//						e.getComponent().setBackground(new Color(0, 100, 0, 255));
-//						System.out.println("gained");
+//						e.getComponent().setBackground(new Color(0, 100, 0, 100));
+//						//System.out.println("gained");
+//						//System.out.println( e.getComponent() );
 //					}
 //
 //					@Override
 //					public void focusLost(FocusEvent e) {
-//						System.out.println("lost");
+//						//System.out.println("lost");
+//						e.getComponent().setBackground(new Color(255, 255, 255, 255));
 //					}
 //				});
+//				
+//				
+//				//crosswordGrid.add(boxes[i][j]);
 //			}
 //		}
-//		
-//		
-		
+//		//------------------------
 		
 
+		
+		
+		
+		
+		
+		
+		
+		
+		/**
+		 * This is where the transparentLayer to hold all the clue numbers is
+		 * created. It sets all the cells with question numbers with the correct
+		 * number in the top left corner of a GridLayout cell.
+		 */
+		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
+		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		clueNums.setOpaque(true);  //#### originally false
+		clueNumbers = new JLabel[x - 2][y - 2];
 
+		for (int i = 0; i < x - 2; i++) {
+			for (int j = 0; j < y - 2; j++) {
+				clueNumbers[i][j] = new JLabel();
+				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
+				clueNumbers[i][j].setForeground(Color.BLACK);
+				clueNumbers[i][j].setVisible(true);
+				clueNumbers[i][j].setFont(font4);
+				clueNumbers[i][j].setOpaque(true);//was false
+				if (!gridInit[j + 1][i + 1].equals("_")) {
+					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
+				}
+				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
+				clueNums.setOpaque(true);
 
-//		
-//		for (int i = 0; i < x - 2; i++) {
-//			for (int j = 0; j < y - 2; j++) {	
-//				boxes[i][j].addFocusListener(highlighter);
-//			}
-//		}
+				
+				clueNums.add(clueNumbers[i][j]);
+			}
+		}
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -269,8 +302,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
-		layer.add(clueNums, new Integer(0));
+		
+		//switch order???
 		layer.add(crosswordGrid, new Integer(1));
+		layer.add(clueNums, new Integer(0));
+		
+		
+		
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
@@ -599,19 +637,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 								
 								
-								
-//								for (int r = 0; r < x - 2; r++) {
-//									for (int c = 0; c < y - 2; c++) {
-//										if( boxes[r][c].isEnabled() ){
-//											boxes[r][c].setBackground(new Color(100, 100, 100, 255));
-//										}			
-//									}	
-//								}
-								if( boxes[row][col].isFocusOwner() ){
-									boxes[row][col].setBackground(new Color(200, 0, 0, 255));
-								}	
-								
-								
+									
 								
 								
 							}
@@ -656,7 +682,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
-									String str = shuffleString(ent.word).toUpperCase();
+									//String str = shuffleString(ent.word).toUpperCase();
 									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							} else {
