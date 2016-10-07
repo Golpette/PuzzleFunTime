@@ -178,12 +178,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 		
-		
 		layer.setBackground(new Color(255, 255, 255, 255));
 		layer.setVisible(true);
 		layer.setOpaque(false);
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		//layer.setPreferredSize(new Dimension(600,500));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(1));
@@ -223,8 +221,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		main.add(clues, c);
 		
-		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -249,13 +246,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
-		
-		//System.out.println("Screen size " + width + "x" + height);
-		
 		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
-			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
-			//System.out.println("GOt here");
 		}
 		else if(squareSize*(x+2)+squareSize/2 > width){
 			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
@@ -264,9 +256,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		}else{
 			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
 		}
-		//frame.setPreferredSize(new Dimension(550,400));
-		
-		//frame.setMaximumSize(new Dimension(1000,800));
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

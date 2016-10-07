@@ -38,19 +38,19 @@ public class SetDifficulty extends JComponent implements ActionListener{
 	JButton back;
 	ButtonModel blah;
 	JLayeredPane layer;
-	JLabel chooseDifficulty;
+	JLabel chooseDifficulty, pic;
 	SetSize size;
 	SpinnerNumberModel model;
 	Font font, font2;
 	String puzzle;
-	ImageIcon image, image2;
+	ImageIcon image, image2, pic1, pic2;
 	Image newimg;
 	Image img;
 	int difficulty = 4;
 	
 	public SetDifficulty(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Century Gothic", Font.BOLD, 36);
+		font = new Font("Century Gothic", Font.BOLD, 48);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
@@ -59,46 +59,51 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		frame = new JFrame("Set Puzzle Difficulty");
 		frame.setSize(550, 400);
 		panel1.setBounds(0, 0, frame.getWidth(), 320);
-		//panel1.setAlignmentX(SwingConstants.CENTER);
 		generate = new JButton("OK");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
 		generate.addActionListener(this);
 		easy = new JButton("Easy");
 		easy.setFont(font2);
-		//easy.setHorizontalAlignment(SwingConstants.CENTER);
 		easy.addActionListener(this);
 		medium = new JButton("Normal");
 		medium.setFont(font2);
-		//medium.setHorizontalAlignment(SwingConstants.CENTER);
 		medium.addActionListener(this);
 		hard = new JButton("Hard");
 		hard.setFont(font2);
-		//hard.setHorizontalAlignment(SwingConstants.CENTER);
 		hard.addActionListener(this);
 		expert = new JButton("Expert");
 		expert.setFont(font2);
-		//expert.setHorizontalAlignment(SwingConstants.CENTER);
 		expert.addActionListener(this);
+		
 		// Set image path depending on OS
 		String path1 = "";
 		String path2 = "";
-		//System.out.println(System.getProperty("os.name").toLowerCase());
+		String path3 = "";
+		String path4 = "";
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
-			
 			path1 = "src/back.png";
 			path2 = "src/back1.png";
+			path3 = "src/crossword.png";
+			path4 = "src/wordsearch.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
 			path1 = "src\\back.png";
 			path2 = "src\\back1.png";
+			path3 = "src\\crossword.png";
+			path4 = "src\\wordsearch.png";
 		}
+		
+		pic = new JLabel("");
+		pic.setOpaque(false);
+		pic.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		pic.setBackground(new Color(255,255,255,255));
+		pic.setBorder(null);
 		
 		grid.add(easy);
 		grid.add(medium);
 		grid.add(hard);
 		grid.add(expert);
-		
 		
 		image = new ImageIcon( path1 );  
 		img = image.getImage();
@@ -109,6 +114,23 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image2 = new ImageIcon(newimg);
+		
+		pic1 = new ImageIcon(path3);
+		img = pic1.getImage();
+		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
+		pic1 = new ImageIcon(newimg);
+		
+		pic2 = new ImageIcon(path4);
+		img = pic2.getImage();
+		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
+		pic2 = new ImageIcon(newimg);
+		
+		if(puzzle.equals("Crossword")){
+			pic.setIcon(pic1);
+		}else if(puzzle.equals("Word Search")){
+			pic.setIcon(pic2);
+		}
+		
 		back = new JButton("");
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,7 +147,9 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		model = new SpinnerNumberModel(12, 3, 30, 1);
 		chooseDifficulty = new JLabel(puzzle + " Difficulty");
 		chooseDifficulty.setFont(font);
+		chooseDifficulty.setForeground(Color.RED);
 		chooseDifficulty.setHorizontalAlignment(SwingConstants.CENTER);
+	//	chooseDifficulty.setIcon(image);
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -138,8 +162,9 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		panel1.add(chooseDifficulty, c);
 		
 		layer = new JLayeredPane();
-		layer.add(panel1, new Integer(1));
+		layer.add(panel1, new Integer(0));
 		layer.add(back, new Integer(0));
+		layer.add(pic, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		
@@ -160,45 +185,13 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		c.gridwidth = 4;
 		panel.add(grid, c);
 		
-//		c.fill = GridBagConstraints.BOTH;
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 0;
-//		c.gridy = 1;
-//		c.ipady = 10;
-//		c.gridwidth = 1;
-//		panel.add(easy, c);
-//		
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 1;
-//		c.gridy = 1;
-//		c.ipady = 10;
-//		c.gridwidth = 1;
-//		panel.add(medium, c);
-//		
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 2;
-//		c.gridy = 1;
-//		c.ipady = 10;
-//		c.gridwidth = 1;
-//		panel.add(hard, c);
-//		
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 3;
-//		c.gridy = 1;
-//		c.ipady = 10;
-//		c.gridwidth = 1;
-//		panel.add(expert, c);
-		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(generate);
+		frame.setResizable(false);
 	}
 
 	void keyActionTextField(JTextField l) {

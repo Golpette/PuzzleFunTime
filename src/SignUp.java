@@ -223,6 +223,7 @@ public class SignUp extends JComponent implements ActionListener{
 		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(signup);
+		frame.setResizable(false);
 	}
 
 	void keyActionTextField(JButton l) {
@@ -345,7 +346,7 @@ public class SignUp extends JComponent implements ActionListener{
 		        }
 		   }else if(!Arrays.equals(password1, password2)){
 			   System.out.println("Passwords do not match!");
-			   JOptionPane.showMessageDialog(frame, "Password do not match!");
+			   JOptionPane.showMessageDialog(frame, "Passwords do not match!");
 			   pass1.setText("");
 			   pass2.setText("");
 			   

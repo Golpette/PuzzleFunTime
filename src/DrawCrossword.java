@@ -77,8 +77,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
-		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setPreferredSize(new Dimension(550, 400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setBackground(new Color(255, 255, 255, 255));
 
 		keys = new ArrayList<KeyEvent>();
@@ -317,7 +317,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * assigned to it
 		 */
 		
-		frame = new JFrame("Auto Word Search");
 		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
 			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));

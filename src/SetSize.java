@@ -39,6 +39,7 @@ public class SetSize extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;
+	public SetDifficulty puz2;
 	public SudokuGenerator sudoku;
 	public PuzzleLoader puzzleLoader;
 	FontPanel fontPanel;
@@ -105,7 +106,7 @@ public class SetSize extends JComponent implements ActionListener{
 		img = image.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
 		image = new ImageIcon(newimg);
-		image2 = new ImageIcon( path2 );
+		image2 = new ImageIcon(path2);
 
 		img = image2.getImage();
 		newimg = img.getScaledInstance(50, 30, java.awt.Image.SCALE_SMOOTH ) ; 
@@ -115,7 +116,6 @@ public class SetSize extends JComponent implements ActionListener{
 		img = pic1.getImage();
 		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
 		pic1 = new ImageIcon(newimg);
-		
 		
 		pic2 = new ImageIcon(path4);
 		img = pic2.getImage();
@@ -171,11 +171,10 @@ public class SetSize extends JComponent implements ActionListener{
 		panel1.add(spinner, c);
 	
 		layer = new JLayeredPane();
-		layer.add(panel1, new Integer(1));
 		layer.setAlignmentX(frame.getWidth());
+		layer.add(panel1, new Integer(0));
 		layer.add(back, new Integer(0));
-		layer.add(pic, new Integer(1));
-		//layer.add(fontPanel, new Integer(0));
+		layer.add(pic, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		
@@ -206,6 +205,7 @@ public class SetSize extends JComponent implements ActionListener{
 		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(generate);
+		frame.setResizable(false);
 	}	
 	
 	void keyActionTextField(JTextField l) {
@@ -268,12 +268,23 @@ public class SetSize extends JComponent implements ActionListener{
 			}
 		}
 		if(e.getSource() == back){
-			try {
-				puzzleLoader = new PuzzleLoader("");
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(puzzle.equals("Crossword")){
+				try {
+					puzzleLoader = new PuzzleLoader("");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				frame.dispose();	
 			}
-			frame.dispose();			
+			if(puzzle.equals("Word Search")){
+				try {
+					puz2 = new SetDifficulty("Word Search");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				frame.dispose();
+			}
 		}
 	}
 }

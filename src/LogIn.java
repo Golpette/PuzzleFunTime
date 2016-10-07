@@ -185,6 +185,7 @@ public class LogIn extends JComponent implements ActionListener{
 		frame.setMinimumSize(new Dimension(550,400));
 		frame.setVisible(true);		
 		frame.getRootPane().setDefaultButton(login);
+		frame.setResizable(false);
 	}
 
 	
