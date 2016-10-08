@@ -40,7 +40,7 @@ public class DrawSolution extends JComponent {
 		frame = new JFrame(title);
 		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
-		frame.setMinimumSize(new Dimension(500,400));
+		frame.setMinimumSize(new Dimension(550,400));
 		frame.setBackground(new Color(255, 255, 255, 255));
 		
 		font = new Font("Century Gothic", Font.PLAIN, 24);

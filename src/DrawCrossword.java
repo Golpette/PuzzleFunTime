@@ -24,10 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
+
 
 // Steve: need these to remove automatic arrow key scrolling in JScrollPane
 import javax.swing.InputMap;
@@ -69,9 +69,19 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	double width;
 	double height;
 	
+	
+	//tracking clicks
+	int lastClick_x = 0;
+	int lastClick_y = 0;
+	int countClicks = 0;
+	
 
+	
+	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
+                
+		
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
@@ -107,6 +117,58 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
 
+
+		
+
+		
+
+		/**
+		 * This is where all the crossword boxes are filled black or provide a
+		 * useable JTextfield. This is layered on top of the transparentLayer
+		 */
+		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
+		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		
+		crosswordGrid.setOpaque(false);  
+ 		
+		boxes = new JTextField[x - 2][y - 2];
+		border = BorderFactory.createLineBorder(Color.BLACK);
+	
+        
+
+		for (int i = 0; i < x - 2; i++) {
+			for (int j = 0; j < y - 2; j++) {
+				
+				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
+				
+	            mouseActionlabel(boxes[i][j]);
+				
+				//trying to stop 'dinging' sound when moving cursor between boxes
+				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
+				action.setEnabled(false);
+				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
+				boxes[i][j].setBorder(border);
+				boxes[i][j].setDocument(new JTextFieldLimit(1));
+				if (grid[j+1][i+1] == "_") {
+					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
+					boxes[i][j].setEnabled(false);
+				} else {
+					boxes[i][j].setBackground(new Color(255, 255, 255, 105));
+										
+					keyActionTextField(boxes[i][j]);
+				}			
+				
+				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
+				boxes[i][j].setFont(font2);
+				crosswordGrid.add(boxes[i][j]);			
+				
+			}
+		}
+		
+		
+		
+		
+		
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
@@ -114,7 +176,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
 		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		clueNums.setOpaque(false);
+		clueNums.setOpaque(false);  //#### originally false
 		clueNumbers = new JLabel[x - 2][y - 2];
 
 		for (int i = 0; i < x - 2; i++) {
@@ -124,48 +186,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNumbers[i][j].setForeground(Color.BLACK);
 				clueNumbers[i][j].setVisible(true);
 				clueNumbers[i][j].setFont(font4);
-				clueNumbers[i][j].setOpaque(false);
+				clueNumbers[i][j].setOpaque(false);//was false
 				if (!gridInit[j + 1][i + 1].equals("_")) {
 					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
 				}
 				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
+				clueNums.setOpaque(false);
+
+				
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
+		
+		
 
-		/**
-		 * This is where all the crossword boxes are filled black or provide a
-		 * useable JTextfield. This is layered on top of the transparentLayer
-		 */
-		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
-		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		crosswordGrid.setOpaque(false);
-		boxes = new JTextField[x - 2][y - 2];
-		border = BorderFactory.createLineBorder(Color.BLACK);
-
-		for (int i = 0; i < x - 2; i++) {
-			for (int j = 0; j < y - 2; j++) {
-				boxes[i][j] = new JTextField(); // need new layout to resize
-												// letters in boxes
-				//trying to stop 'dinging' sound when moving cursor between boxes
-				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
-				action.setEnabled(false);
-				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
-				boxes[i][j].setBorder(border);
-				boxes[i][j].setDocument(new JTextFieldLimit(1));
-				if (grid[j + 1][i + 1] == "_") {
-					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
-					boxes[i][j].setEnabled(false);
-				} else {
-					boxes[i][j].setBackground(new Color(255, 255, 255, 100));
-					boxes[i][j].setOpaque(false);
-					keyActionTextField(boxes[i][j]);
-				}
-				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-				boxes[i][j].setFont(font2);
-				crosswordGrid.add(boxes[i][j]);
-			}
-		}
 
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -174,8 +208,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
-		layer.add(clueNums, new Integer(0));
-		layer.add(crosswordGrid, new Integer(1));
+		
+		// STEVE: SWITCHED THESE
+		layer.add(clueNums, new Integer(1));
+		layer.add(crosswordGrid, new Integer(0));
+		
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
@@ -343,16 +380,19 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	void keyActionTextField(JTextField l) {
-
+		
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
+						
 						if (e.getSource() == boxes[row][col]) {
-							if (e.getKeyCode() == KeyEvent.VK_UP) {								
-							// STEVE: edit this (and next 3 conditions) to jump black squares
-							//        and implement periodic boundary conditions			   
+						
+							if (e.getKeyCode() == KeyEvent.VK_UP) {			
+								// get rid of all previous highlighting
+								makeAllWhite();
+							    // STEVE: jump black squares and implement periodic boundary conditions			   
 								int newstart=row;
 								for( int i=1; i<(x-2)*2; i++){										
 									//Periodic BCs
@@ -362,11 +402,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									// Jump black spaces to nearest white one
 									if (boxes[ (newstart-i) ][col].isEnabled()) {
 										boxes[ (newstart-i) ][col].requestFocus();
+										// highlight any words that *start* from this square
+										highlightWord( newstart-i, col);
 										break;
 									}
 								}												
 							}
-							if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
+								makeAllWhite();
 								int newstart=row;
 								for( int i=1; i<x-2; i++ ){	
 									if( newstart+i > x-3 ){
@@ -374,11 +417,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}
 									if (boxes[newstart+i][col].isEnabled()) {
 										boxes[newstart+i][col].requestFocus();
+										highlightWord(newstart+i,col);
 										break;
 									}						
 								}																							
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+								makeAllWhite();
 								int newstart=col;
 								for( int i=1; i<y-2; i++){
 									if( newstart+i>y-3 ){
@@ -386,11 +431,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}									
 									if (boxes[row][newstart + i].isEnabled()) {
 										boxes[row][newstart + i].requestFocus();
+										highlightWord(row, newstart+i);
 										break;
 									}
 								}								
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+								makeAllWhite();
 								int newstart=col;
 								for(int i=1; i<y-2; i++){
 									if( newstart-i<0 ){
@@ -398,6 +445,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}
 									if (boxes[row][newstart - i].isEnabled()) {
 										boxes[row][newstart - i].requestFocus();
+										highlightWord(row,newstart-i);
 										break;
 									}
 								}															
@@ -500,6 +548,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										}
 									}
 								}
+								
+								
+									
+								
+								
 							}
 						}
 					}
@@ -529,20 +582,64 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	
-	
-	
 
-	void mouseActionlabel(JLabel l) {
+	
+	
+	
+	
+	
+	// MOUSE ACTIONS on JTextArea (grid spaces) here ---------------------
+	void mouseActionlabel(JTextField l) {
+			
 		l.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {	
+				
+				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+					for (int j = 0; j < y-2; j++){
+						if (e.getSource().equals(boxes[i][j])){
+							makeAllWhite();
+							highlightWord_fromClick(i,j);
+						}
+					}
+				}			
+			}
+			
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			public void mousePressed(MouseEvent arg0) {
+
+			}
+
+			public void mouseReleased(MouseEvent arg0) {
+
+			}
+		});
+	}
+	
+	
+	
+	
+
+	
+	// MOUSE ACTIONS on JLabel (hints) here ---------------------
+	void mouseActionlabel(JLabel l) {
+		
+		
+		l.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {				
+				
 				for (JLabel k : hints) {
 					if (e.getSource() == k) {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
-									String str = shuffleString(ent.word).toUpperCase();
+									//String str = shuffleString(ent.word).toUpperCase();
 									k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
 							} else {
@@ -552,9 +649,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							}
 						}
 					}
-				}
+				}			
+				
+				
 			}
 
+					
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
@@ -608,7 +708,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
-
+			
+			
+			
 			public void mousePressed(MouseEvent arg0) {
 
 			}
@@ -621,6 +723,123 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
+	
+	// Highlight squares if on start of word
+	public void highlightWord( int xstart, int ystart ){
+		
+		if( !clueNumbers[xstart][ystart].getText().equals("") ){
+			
+			for( Entry ent : entries ){
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
+					
+					if( ent.isAcross()  ) {
+						int length = ent.getWord().length();
+						for( int dbl=0; dbl<length; dbl++ ){
+							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
+						}													
+					} 
+					else {
+						int length = ent.getWord().length();
+						for( int dbl=0; dbl<length; dbl++ ){
+							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
+						}														
+					}					
+				}
+			}
+		}		
+	}
+	
+	
+	
+	
+	
+	
+	
+	// Highlight across/down depending on number of clicks
+	public void highlightWord_fromClick( int xstart, int ystart ){
+		
+
+		if( !clueNumbers[xstart][ystart].getText().equals("") ){
+		
+			boolean acrossExists = false;
+			boolean downExists = false;			
+			int acrossLength=0;   
+			int downLength = 0;
+			
+			for( Entry ent : entries){
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
+					if( ent.isAcross()  ) {
+						acrossExists = true;
+						acrossLength = ent.getWord().length();
+					} 
+					else {
+						downExists = true;
+						downLength = ent.getWord().length();
+					}
+				}
+			}
+			
+			
+			countClicks++;		
+			boolean highlightAcross = true;
+			if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2!=0 && acrossExists){
+				highlightAcross = true;				
+			}
+			else if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2==0 && downExists ){
+				highlightAcross = false;
+			}
+			else if( !acrossExists && downExists ){
+				highlightAcross =  false;	
+				countClicks = 0;
+			}
+			else{
+				lastClick_x = xstart;    lastClick_y = ystart;
+				countClicks = 1;
+			}
+			
+			
+			for( Entry ent : entries ){
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
+					
+					if( highlightAcross  ) {
+						for( int dbl=0; dbl<acrossLength; dbl++ ){
+							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
+						}													
+					} 
+					else {
+						for( int dbl=0; dbl<downLength; dbl++ ){
+							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
+						}														
+					}
+				}
+			}
+		}	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void makeAllWhite(){
+		//Reset all white 
+		for (int rrrr = 0; rrrr < x - 2; rrrr++) {
+			for (int cccc = 0; cccc < y - 2; cccc++) {
+				if( boxes[rrrr][cccc].isEnabled() ){
+					boxes[rrrr][cccc].setBackground(new Color(255,255,255,255) );
+				}	
+			}
+		}	
+	}
 	
 	
 

@@ -114,7 +114,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
-		//frame.setMinimumSize(new Dimension(500,400));
+		//frame.setMinimumSize(new Dimension(550,400));
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
