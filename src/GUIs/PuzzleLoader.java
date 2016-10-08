@@ -105,11 +105,11 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			//Could try to allow the user to have a customisable background or backgrounds
 			//they choose folder an the background is dynamically created from that location
 			//could also create custom look and feels which can be selected by user
-			path1 = "src/1.jpg";			//lol
+			path1 = "src/resources/1.jpg";			//lol
 		}
 			
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\1.jpg";
+			path1 = "src\\resources\\1.jpg";
 		}
 	
 		System.out.println(frame.getWidth());

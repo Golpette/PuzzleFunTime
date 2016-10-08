@@ -89,16 +89,16 @@ public class SetSize extends JComponent implements ActionListener{
 		//System.out.println(System.getProperty("os.name").toLowerCase());
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
 			
-			path1 = "src/back.png";
-			path2 = "src/back1.png";
-			path3 = "src/crossword.png";
-			path4 = "src/wordsearch.png";
+			path1 = "src/resources/back.png";
+			path2 = "src/resources/back1.png";
+			path3 = "src/resources/crossword.png";
+			path4 = "src/resources/wordsearch.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\back.png";
-			path2 = "src\\back1.png";
-			path3 = "src\\crossword.png";
-			path4 = "src\\wordsearch.png";
+			path1 = "src\\resources\\back.png";
+			path2 = "src\\resources\\back1.png";
+			path3 = "src\\resources\\crossword.png";
+			path4 = "src\\resources\\wordsearch.png";
 		}
 	
 		pic = new JLabel("");
