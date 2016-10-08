@@ -69,6 +69,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	double width;
 	double height;
 	
+	
+	//tracking clicks
+	int lastClick_x = 0;
+	int lastClick_y = 0;
+	int countClicks = 0;
+	
 
 	
 	
@@ -593,7 +599,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j])){
 							makeAllWhite();
-							highlightWord(i,j);
+							highlightWord_fromClick(i,j);
 						}
 					}
 				}			
@@ -727,22 +733,105 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				String nomnom = Integer.toString( ent.getClueNumber()  );
 				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
 					
-					if (ent.isAcross()) {
+					if( ent.isAcross()  ) {
 						int length = ent.getWord().length();
 						for( int dbl=0; dbl<length; dbl++ ){
-							boxes[xstart][ystart+dbl].setBackground(new Color(100,100,100,100) );
+							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
 						}													
 					} 
 					else {
 						int length = ent.getWord().length();
 						for( int dbl=0; dbl<length; dbl++ ){
-							boxes[xstart+dbl][ystart].setBackground(new Color(100,100,100,100) );
+							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
 						}														
-					}		
+					}					
 				}
 			}
 		}		
 	}
+	
+	
+	
+	
+	
+	
+	
+	// Highlight across/down depending on number of clicks
+	public void highlightWord_fromClick( int xstart, int ystart ){
+		
+
+		if( !clueNumbers[xstart][ystart].getText().equals("") ){
+			boolean acrossExists = false;
+			boolean downExists = false;
+			
+			int acrossLength=0;   int downLength = 0;
+			
+			for( Entry ent : entries){
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
+					if( ent.isAcross()  ) {
+						acrossExists = true;
+						acrossLength = ent.getWord().length();
+					} 
+					else {
+						downExists = true;
+						downLength = ent.getWord().length();
+					}
+				}
+			}
+			
+			
+			countClicks++;		
+			boolean highlightAcross = true;
+			if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2!=0 && acrossExists){
+				highlightAcross = true;				
+			}
+			else if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2==0 && downExists ){
+				highlightAcross = false;
+			}
+			else if( !acrossExists && downExists ){
+				highlightAcross =  false;	
+				countClicks = 0;
+			}
+			else{
+				lastClick_x = xstart;    lastClick_y = ystart;
+				countClicks = 1;
+			}
+			
+			
+			for( Entry ent : entries ){
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
+					
+					if( highlightAcross  ) {
+						for( int dbl=0; dbl<acrossLength; dbl++ ){
+							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
+						}													
+					} 
+					else {
+						for( int dbl=0; dbl<downLength; dbl++ ){
+							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
+						}														
+					}
+
+				}
+			}
+					
+			
+		}	
+			
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
