@@ -8,14 +8,14 @@ public class Entry {
     int end_x;
     int end_y;
     int wordLength;
-    Boolean across;
+    boolean across;
     String word;
     String direction;
     String definition;
     int clue_number;
     int entryAcross, entryDown;
    
-   public Entry(int start_x, int start_y, Boolean across, String word, String definition){
+   public Entry(int start_x, int start_y, boolean across, String word, String definition){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
 	   wordLength = word.length();
@@ -35,7 +35,7 @@ public class Entry {
 	   this.wordLength = wordLength;
 	}
 
-public Entry(int start_x, int start_y, Boolean across, String word, String definition, String direction){
+public Entry(int start_x, int start_y, boolean across, String word, String definition, String direction){
 	   this.start_x = start_x;
 	   this.start_y = start_y;
 	   this.across = across;
@@ -108,7 +108,7 @@ public String toString(){
 	return this.start_y;   
    }
    
-   public Boolean isAcross(){
+   public boolean isAcross(){
 	   return across;
    }
    

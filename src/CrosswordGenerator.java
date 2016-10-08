@@ -88,7 +88,7 @@ public class CrosswordGenerator{
 				}
 			}	
 			connected = HoshenKopelman.isConnected(grid, x, y);
-			if(!connected){ count_fails++; }
+			//if(!connected){ count_fails++; }
 			
 		}
 		
