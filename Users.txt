@@ -76,3 +76,9 @@
 	<password>passwor</password>
 </user>
 
+<user>
+	<username>sdfa</username>
+	<email>dghjk@dfg.fsdfg</email>
+	<password>asdfas</password>
+</user>
+
