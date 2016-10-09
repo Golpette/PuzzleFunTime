@@ -68,14 +68,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	double width;
 	double height;
 	
-	
 	//tracking clicks
 	int lastClick_x = 0;
 	int lastClick_y = 0;
 	int countClicks = 0;
-	
-
-	
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
@@ -196,9 +192,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
-		
-		
-
 
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -233,8 +226,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		JLabel first = new JLabel("Across");
 		first.setFont(font2);
 		cluesAcr.add(first);
+		int len = 0;
 		for (String s : cluesAcross) {
-			JLabel across = new JLabel(s);
+			for(Entry e: entries){
+				if(e.definition.equals(s)){
+					len = e.wordLength;
+				}
+			}
+			
+			String clue = s + " (" + len + ")";
+			JLabel across = new JLabel(clue);
+			//add word length here.
+			
 			across.setFont(font3);
 			hintA = new JLabel(" ");
 			hintA.setFont(font3);
@@ -246,11 +249,20 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			cluesAcr.add(hintA);
 		}
 
+
+
+		
 		JLabel second = new JLabel("Down\n");
 		second.setFont(font2);
 		cluesDwn.add(second);
 		for (String s : cluesDown) {
-			JLabel down = new JLabel(s);
+			for(Entry e: entries){
+				if(e.definition.equals(s)){
+					len = e.wordLength;
+				}
+			}
+			String clue = s + " (" + len + ")";
+			JLabel down = new JLabel(clue);
 			down.setFont(font3);
 			hintD = new JLabel(" ");
 			hintD.setFont(font3);

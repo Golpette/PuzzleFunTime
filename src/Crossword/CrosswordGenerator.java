@@ -75,12 +75,14 @@ public class CrosswordGenerator{
 							gridInit[j][i] = Integer.toString(problemNumber);
 							entries.get(current).setClueNumber(problemNumber);	//add clue number to entry
 							if(entries.get(current).isAcross()){
-								acrossClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
+								entries.get(current).definition = Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition();
+								acrossClues.add(entries.get(current).definition);
 								entries.get(current).setEntryAcross(entryAcross);
 								entryAcross++;
 							}
 							else{
-								downClues.add(Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition());
+								entries.get(current).definition = Integer.toString(problemNumber) + ". " + entries.get(current).getDefinition();
+								downClues.add(entries.get(current).definition);
 								entries.get(current).setEntryDown(entryDown);
 								entryDown++;
 							}						

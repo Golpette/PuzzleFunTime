@@ -302,8 +302,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							for(Entry a : entries){
 								allClues.get(2).setFont(font4);
 								if(a.getX() == 2){
-									
-									//System.out.println("sdfasdfa");
 									for (JLabel temp: allClues){
 									//System.out.println(temp.getText());
 										if(temp.getText().equals(a.getWord())){
