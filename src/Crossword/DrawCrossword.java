@@ -607,6 +607,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							makeAllWhite();
 							highlightWord_fromClick(i,j);
 						}
+						for (JLabel lb : hints) {
+							lb.setText(" ");
+						}
 					}
 				}			
 			}
