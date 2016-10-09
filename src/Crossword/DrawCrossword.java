@@ -111,10 +111,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		font4 = new Font("Century Gothic", Font.PLAIN, 11);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
 		rand = new Random();
-
-
-		
-
 		
 
 		/**
@@ -649,12 +645,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
 								if (ent.getEntryAcross() == hints.indexOf(k)) {
+									k.setText("      " + ent.getShuffledWord().toUpperCase());
 									//String str = shuffleString(ent.word).toUpperCase();
-									k.setText("      " + shuffleString(ent.word).toUpperCase());
+									//k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
-							} else {
+							} else if(!ent.isAcross()){
 								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)) {
-									k.setText("      " + shuffleString(ent.word).toUpperCase());
+									k.setText("      " + ent.getShuffledWord().toUpperCase());
 								}
 							}
 						}
@@ -664,11 +661,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 			}
 
-					
+					/////////////////CHECK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
-						i.setText("      HINT");
+						if(i.getText().equals(" ")){
+							i.setText("      HINT");
+						}
+					
 //						for (Entry ent : entries) {
 //							if (ent.isAcross()) {
 //								if (ent.getEntryAcross() == hints.indexOf(i)) {
@@ -679,44 +679,47 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						//boxes[3][3].setBackground(Color.YELLOW);
 					}
 				}
-				for (JLabel j : cluesAcr) {
-					if (e.getSource() == j) {
-						if (!hints.contains(j)) {
-							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("      HINT");
-						}
-					}
-				}
-				for (JLabel k : cluesDwn) {
-					if (e.getSource() == k) {
-						if (!hints.contains(k)) {
-							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("      HINT");
-						}
-					}
-				}
+//				for (JLabel j : cluesAcr) {
+//					if (e.getSource() == j) {
+//						if (!hints.contains(j)) {
+//							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("      HINT");
+//						}
+//					}
+//				}
+//				for (JLabel k : cluesDwn) {
+//					if (e.getSource() == k) {
+//						if (!hints.contains(k)) {
+//							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("      HINT");
+//						}
+//					}
+//				}
 			}
 
 			public void mouseExited(MouseEvent e) {
 
 				for (JLabel i : hints) {
 					if (e.getSource() == i) {
-						i.setText(" ");
+						if(i.getText().equals("      HINT")){
+							i.setText(" ");
+						}
+						
 						//boxes[3][3].setBackground(Color.WHITE);
 					}
 				}
-				for (JLabel j : cluesAcr) {
-					if (e.getSource() == j) {
-						if (!hints.contains(j)) {
-							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText(" ");
-						}
-					}
-				}
-				for (JLabel k : cluesDwn) {
-					if (e.getSource() == k) {
-						if (!hints.contains(k)) {
-							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText(" ");
-						}
-					}
-				}
+//				for (JLabel j : cluesAcr) {
+//					if (e.getSource() == j) {
+//						if (!hints.contains(j)) {
+//							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText(" ");
+//						}
+//					}
+//				}
+//				for (JLabel k : cluesDwn) {
+//					if (e.getSource() == k) {
+//						if (!hints.contains(k)) {
+//							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText(" ");
+//						}
+//					}
+//				}
 			}
 			
 			
@@ -857,6 +860,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
+
 
 	public String shuffleString(String string) {
 		ArrayList<Character> letters = new ArrayList<Character>();
