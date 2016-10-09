@@ -322,6 +322,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 									}
 									tempStrikethrough.clear();	
 								}
+								//********************
+								//a few problems here, if one word starts where another ends then you can get problems
+								//*********************
 								else if(a.start_x == j+1 && a.start_y == i+1){
 									tempWord = a.getWord();
 									//Then we have the correct clue
