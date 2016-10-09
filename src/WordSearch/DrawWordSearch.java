@@ -292,26 +292,27 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				letters[0][0].setBackground(Color.YELLOW);
+				
+				//letters[0][0].setBackground(Color.YELLOW);
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
-							letters[i][j].setBackground(Color.YELLOW);
-							System.out.println(letters[i][j].getBackground().toString());
-							System.out.println("letter pressed");
+							//letters[i][j].setBackground(Color.YELLOW);
+//							System.out.println(letters[i][j].getBackground().toString());
+//							System.out.println("letter pressed");
 							for(Entry a : entries){
-								allClues.get(2).setFont(font4);
-								if(a.getX() == 2){
+								//allClues.get(2).setFont(font4);
+								
+								if(a.start_x == j+1 && a.start_y == i+1){
+									//Then we have the correct clue
+									//need if a.getWord == clue word
 									for (JLabel temp: allClues){
 									//System.out.println(temp.getText());
-										if(temp.getText().equals(a.getWord())){
+										if(temp.getText().equals(a.getWord().toUpperCase())){
 											//System.out.println("Here");
 											temp.setFont(font4);						//This is horribly clunky
 										}												//probably should do this differently
 									}													//(It also doesn't work)
-									
-								}else{
-									
 								}
 							}
 						}

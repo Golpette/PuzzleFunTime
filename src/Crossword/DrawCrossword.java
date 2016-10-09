@@ -765,11 +765,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
-	
-	
-	
-	
-	
 	// Highlight across/down depending on number of clicks
 	public void highlightWord_fromClick( int xstart, int ystart ){
 		
@@ -830,23 +825,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 				}
 			}
-					
-			
 		}	
-			
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	public void makeAllWhite(){
@@ -859,28 +839,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}	
 	}
-	
-	
 
-
-	public String shuffleString(String string) {
-		ArrayList<Character> letters = new ArrayList<Character>();
-		letters.clear();
-		StringBuilder str = new StringBuilder(string.length());
-		for (Character c : string.toCharArray()) {
-			letters.add(c);
-		}
-		while (letters.size() >= 1) {
-			char temp = letters.remove(rand.nextInt(letters.size()));
-			str.append(temp);
-		}
-		return str.toString();
-	}
-	
-	
-	
-	
-	
 
 	public void actionPerformed(ActionEvent e) {
 		
