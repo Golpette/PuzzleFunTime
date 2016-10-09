@@ -139,6 +139,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
 		mouseActionlabel(back);
+		keyActionTextField(back);
 		back.addActionListener(this);
 		back.setIcon(image);
 		back.setOpaque(false);
@@ -198,11 +199,21 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		frame.setResizable(false);
 	}
 
-	void keyActionTextField(JTextField l) {
+	void keyActionTextField(JButton l) {
 
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				if(e.getSource().equals(KeyEvent.VK_BACK_SPACE)){
+					//actionPerformed();
+					
+					try {
+						puzzleLoader = new PuzzleLoader("");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					frame.dispose();	
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {

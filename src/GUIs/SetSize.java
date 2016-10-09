@@ -67,6 +67,7 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public SetSize(String puzzle, int difficulty) throws IOException {
 		this.puzzle = puzzle;
+		this.difficulty = difficulty;
 		fontPanel = new FontPanel();
 		font = new Font("Century Gothic", Font.BOLD, 48);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
