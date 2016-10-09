@@ -237,7 +237,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			across.setFont(font3);
 			hintA = new JLabel(" ");
 			hintA.setFont(font3);
-			hintA.setForeground(Color.GREEN);
+			hintA.setForeground(Color.BLUE);
 			hints.add(hintA);
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
@@ -262,7 +262,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			down.setFont(font3);
 			hintD = new JLabel(" ");
 			hintD.setFont(font3);
-			hintD.setForeground(Color.GREEN);
+			hintD.setForeground(Color.BLUE);
 			hints.add(hintD);
 			mouseActionlabel(down);
 			mouseActionlabel(hintD);
@@ -367,11 +367,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			//System.out.println("GOt here");
 		}
 		else if(squareSize*(x+2)+squareSize/2 > width){
-			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
+			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+4)));
 		}else if(squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2, (int)height-30));
 		}else{
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2,squareSize*(y+4)));
 		}
 
 		frame.setContentPane(panel);
@@ -641,6 +641,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			public void mouseClicked(MouseEvent e) {				
 				
 				for (JLabel k : hints) {
+					k.setText(" ");				//can remove this line if we want to keep showing all hints
 					if (e.getSource() == k) {
 						for (Entry ent : entries) {
 							if (ent.isAcross()) {
@@ -649,7 +650,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									//String str = shuffleString(ent.word).toUpperCase();
 									//k.setText("      " + shuffleString(ent.word).toUpperCase());
 								}
-							} else if(!ent.isAcross()){
+							} else{
 								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)) {
 									k.setText("      " + ent.getShuffledWord().toUpperCase());
 								}

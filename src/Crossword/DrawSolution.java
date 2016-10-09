@@ -3,7 +3,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 
@@ -32,6 +35,7 @@ public class DrawSolution extends JComponent {
 	Dimension screenSize;
 	double width;
 	double height;
+	GridBagConstraints c;
 	
 	public DrawSolution(String[][] grid,int x, int y, int squareSize, String puzzle){
 		this.x = x;
@@ -90,11 +94,15 @@ public class DrawSolution extends JComponent {
 			}					
 		}
 		
-		body = new JPanel();
+		body = new JPanel(new GridBagLayout());
 		body.setBackground(Color.WHITE);
-		//body.setBounds(100, 20, squareSize * x, squareSize * y);;
+		//body.setBounds(0, 20, squareSize * x, squareSize * y);
+		
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.NONE;
+		//c.insets = new Insets(0,0,0,100);
 		body.setPreferredSize(new Dimension(squareSize * x, squareSize * y));
-		body.add(main);
+		body.add(main, c);
 		
 		
 		area = new JScrollPane(body, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
