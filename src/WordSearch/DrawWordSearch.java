@@ -250,15 +250,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
-		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
+		if(squareSize*(x+6) > width && squareSize*(y+2) > height-30){
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
 		}
-		else if(squareSize*(x+2)+squareSize/2 > width){
+		else if(squareSize*(x+6) > width){
 			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
 		}else if(squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+			frame.setPreferredSize(new Dimension(squareSize*(x+6), (int)height-30));
 		}else{
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+			frame.setPreferredSize(new Dimension(squareSize*(x+6), squareSize*(y+2)));
 		}
 		frame.setContentPane(panel);
 		frame.pack();
