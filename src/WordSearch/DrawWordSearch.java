@@ -58,7 +58,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
-	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	String randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
 	Font font, font2, font3, font4;
 	Random rand;
 	boolean buttonPushed, clicked;
@@ -154,7 +154,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
-					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
+					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
 				}
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
