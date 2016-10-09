@@ -58,7 +58,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 
 		frame.setMinimumSize(new Dimension(550,400));
 		
-		font = new Font("Century Gothic", Font.BOLD, 36);
+		font = new Font("Century Gothic", Font.BOLD, 40);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		

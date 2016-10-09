@@ -59,35 +59,36 @@ public class Entry {
 		this.start_y = start_y;
 		this.across = across;
 		this.word = word;
+		wordLength = word.length();
 		this.definition = definition;
 		this.direction = direction;
 		clue_number = 0;
 		entryAcross = 0;
 		entryDown = 0;
 		if (direction.equals("across")) {
-			end_x = start_x + wordLength;
+			end_x = start_x + wordLength-1;
 			end_y = start_y;
 		} else if (direction.equals("backwards")) {
-			end_x = start_x - wordLength;
+			end_x = start_x - wordLength+1;
 			end_y = start_y;
 		} else if (direction.equals("down")) {
 			end_x = start_x;
-			end_y = start_y + wordLength;
+			end_y = start_y + wordLength-1;
 		} else if (direction.equals("up")) {
 			end_x = start_x;
-			end_y = start_y - wordLength;
+			end_y = start_y - wordLength+1;
 		} else if (direction.equals("backwardsdiagonal")) {
-			end_x = start_x - wordLength;
-			end_y = start_y - wordLength;
+			end_x = start_x - wordLength+1;
+			end_y = start_y - wordLength+1;
 		} else if (direction.equals("diagonal")) {
-			end_x = start_x + wordLength;
-			end_y = start_y + wordLength;
+			end_x = start_x + wordLength-1;
+			end_y = start_y + wordLength-1;
 		} else if (direction.equals("BLTRdiagonal")) {
-			end_x = start_x + wordLength;
-			end_y = start_y - wordLength;
+			end_x = start_x + wordLength-1;
+			end_y = start_y - wordLength+1;
 		} else if (direction.equals("backwardsBLTRdiagonal")) {
-			end_x = start_x - wordLength;
-			end_y = start_y + wordLength;
+			end_x = start_x - wordLength+1;
+			end_y = start_y + wordLength-1;
 		}
 	}
 

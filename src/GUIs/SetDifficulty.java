@@ -54,7 +54,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 	
 	public SetDifficulty(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Century Gothic", Font.PLAIN, 48);
+		font = new Font("Century Gothic", Font.BOLD, 40);
 		font3 = new Font("Century Gothic", Font.BOLD, 48);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
@@ -156,12 +156,12 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		model = new SpinnerNumberModel(12, 3, 30, 1);
 		chooseDifficulty = new JLabel(puzzle + " Difficulty");
 		chooseDifficulty.setFont(font);
-		chooseDifficulty.setForeground(Color.RED);
+		chooseDifficulty.setForeground(Color.BLACK);
 		chooseDifficulty.setHorizontalAlignment(SwingConstants.CENTER);
-		chooseDifficulty2 = new JLabel(puzzle + " Difficulty");
-		chooseDifficulty2.setFont(font3);
-		chooseDifficulty2.setForeground(Color.BLACK);
-		chooseDifficulty2.setHorizontalAlignment(SwingConstants.CENTER);
+//		chooseDifficulty2 = new JLabel(puzzle + " Difficulty");
+//		chooseDifficulty2.setFont(font3);
+//		chooseDifficulty2.setForeground(Color.BLACK);
+//		chooseDifficulty2.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -173,14 +173,14 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		c.insets = new Insets(0,0,0,0);
 		panel1.add(chooseDifficulty, c);
 		
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 4;
-		c.insets = new Insets(0,0,0,0);
-		panel2.add(chooseDifficulty2, c);
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1.0;
+//		c.weighty = 1.0;
+//		c.gridx = 0;
+//		c.gridy = 2;
+//		c.gridwidth = 4;
+//		c.insets = new Insets(0,0,0,0);
+//		panel2.add(chooseDifficulty2, c);
 		
 		layer = new JLayeredPane();
 		layer.add(panel1, new Integer(0));

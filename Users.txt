@@ -82,3 +82,15 @@
 	<password>asdfas</password>
 </user>
 
+<user>
+	<username>sd</username>
+	<email>sdf@d.fdq</email>
+	<password>qwerpoiu</password>
+</user>
+
+<user>
+	<username>Johnny</username>
+	<email>jon@bob.vom</email>
+	<password>asdf</password>
+</user>
+

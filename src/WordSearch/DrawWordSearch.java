@@ -54,7 +54,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	boolean diagonal;
 	JScrollPane area;
 	DrawSolution sol;
-	ArrayList<String> fullGrid;
+	ArrayList<String> fullGrid, tempStrikethrough;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
@@ -69,6 +69,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	double width;
 	double height;
 	Border border;
+	String tempWord = "";
 	
 	@SuppressWarnings("unchecked")
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
@@ -79,6 +80,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
 		completed = new ArrayList<JLabel>();
+		tempStrikethrough = new ArrayList<String>();
 		
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
@@ -292,8 +294,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				
-				String tempWord = "";
 				//letters[0][0].setBackground(Color.YELLOW);
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
@@ -308,20 +308,29 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								if(a.end_x == j+1 && a.end_y == i+1){
 									//correct so far
 									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
-									//if(tempWord == a.getWord()){
+									System.out.println("now: " + tempWord);
+									if(tempStrikethrough.contains(a.getWord())){
+										
 										for (JLabel temp: allClues){
 									//System.out.println(temp.getText());
 											if(temp.getText().equals(a.getWord().toUpperCase())){
 												//System.out.println("Here");
-												temp.setFont(font4);						//This is horribly clunky
+												temp.setFont(font4);
+																//This is horribly clunky
 											}												//probably should do this differently
 										}	
-									//}
-									
+									}
+									tempStrikethrough.clear();	
 								}
 								else if(a.start_x == j+1 && a.start_y == i+1){
 									tempWord = a.getWord();
 									//Then we have the correct clue
+									tempStrikethrough.clear();
+									tempStrikethrough.add(tempWord);
+									System.out.println("Start clicked: "+ tempWord);
+								}else{
+									tempWord = "";
+									//tempStrikethrough.clear();
 								}
 								//(It also doesn't work)
 							}
