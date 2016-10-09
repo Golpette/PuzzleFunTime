@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import UserCredentials.EmailValidator;
 import WordSearch.WordSearchGenerator;
 
@@ -325,11 +325,11 @@ public class SignUp extends JComponent implements ActionListener{
 	}
 	
 	void writeToFile(String fileName, String text) throws Exception {
-		   FileOutputStream out = new FileOutputStream(fileName, true);
+		   @SuppressWarnings("resource")
+		FileOutputStream out = new FileOutputStream(fileName, true);
 		   out.write(text.getBytes());
 		} 
 	
-	@SuppressWarnings("null")
 	public void actionPerformed(ActionEvent e) {
 	System.out.println("ActionEvent e: " + e.toString());
 		if(e.getSource() == signup){

@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;

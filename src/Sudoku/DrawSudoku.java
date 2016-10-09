@@ -1,4 +1,4 @@
-package Sudolu;
+package Sudoku;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,19 +24,19 @@ import javax.swing.border.Border;
 /**
  * Class to draw a word search
  */
-public class DrawSudokuSolution extends JComponent implements ActionListener {
+public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;	
 	int x, y;
 	JFrame frame;
-	JPanel panel, transparentLayer;
+	JPanel panel, transparentLayer, largeGrid;
 	JLayeredPane layer;
-	JLabel [][] numbers;
+	JLabel [][] numbers, threeByThreeGrid;
 	int[][] grid;
 	String[][] grid2;
 	GridBagConstraints c;
 	JButton reveal;
-	DrawSudoku sol;
+	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
 	ArrayList<Integer> row, square, tempColumn, checks;
 	ArrayList<ArrayList<Integer>> cols;
@@ -46,13 +46,12 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 	boolean buttonPushed;
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudokuSolution(int[][] grid, int x, int y) throws IOException{
+	public DrawSudoku() throws IOException{
+		x = 11;
+		y = 11;
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
-		this.x = x;
-		this.y = y;
-		this.grid = grid;
-	//	sol = new DrawSudoku(grid2, x, y, squareSize, "Crossword");
+		//sol = new DrawSudokuSolution(grid, x, y);
 		row = new ArrayList<Integer>();
 		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
@@ -64,10 +63,12 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 		panel.setOpaque(false);
 		layer = new JLayeredPane();
 		numbers = new JLabel [x-2][y-2];
+		threeByThreeGrid = new JLabel [3][3];
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
-		Border border = BorderFactory.createLineBorder(Color.BLACK);	
+		Border border = BorderFactory.createLineBorder(Color.GREEN);	
+		Border border2 = BorderFactory.createLineBorder(Color.BLACK);
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
@@ -79,6 +80,12 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 		transparentLayer.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setOpaque(false);
 		transparentLayer.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		
+		largeGrid = new JPanel(new GridLayout(3, 3));
+		largeGrid.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
+		largeGrid.setOpaque(false);
+		largeGrid.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		largeGrid.setBorder(border2);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -92,10 +99,18 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 			}
 		}
 		
+		for(int i = 0; i < 3; i++){
+			for(int j = 0; j < 3; j++){
+				threeByThreeGrid[i][j] = new JLabel();
+				threeByThreeGrid[i][j].setBorder(border2);
+				largeGrid.add(threeByThreeGrid[i][j]);
+			}
+		}
+		
 		transparentLayer.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		
-		layer.add(transparentLayer);
-		
+		layer.add(transparentLayer, new Integer(0));
+		layer.add(largeGrid, new Integer(1));
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -110,7 +125,7 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
-		frame = new JFrame("Auto Sudoku Solution");
+		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(new Color(255,255,255,255));
@@ -165,7 +180,7 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 					if(row.isEmpty()){
 						if(i != 8 || j != 8){
 							System.out.println("got here first");
-							generateSudoku();
+							//generateSudoku();
 						}else{
 							System.out.println("got here");
 							bound = 100;
@@ -204,18 +219,24 @@ public class DrawSudokuSolution extends JComponent implements ActionListener {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
 				reveal.setText("Hide Solution");
-				for (int i = 0; i < x-2; i++){
-					for (int j = 0; j < y-2; j++){
-						if(numbers[i][j].getText().equals("")){
-							numbers[i][j].setForeground(new Color(0,0,0,255));
-						}
-						else if(numbers[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
-							numbers[i][j].setForeground(new Color(0,255,0,255));
-						}else{
-							numbers[i][j].setForeground(new Color(255,0,0,255));
-						}
-					}
+				try {
+					sol = new DrawSudokuSolution(grid, 11, 11);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+//				for (int i = 0; i < x-2; i++){
+//					for (int j = 0; j < y-2; j++){
+//						if(numbers[i][j].getText().equals("")){
+//							numbers[i][j].setForeground(new Color(0,0,0,255));
+//						}
+//						else if(numbers[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
+//							numbers[i][j].setForeground(new Color(0,255,0,255));
+//						}else{
+//							numbers[i][j].setForeground(new Color(255,0,0,255));
+//						}
+					//}
+			//	}
 			}
 			else{
 				reveal.setText("Show Solution");

@@ -37,7 +37,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import WordSearch.WordSearchGenerator;
 
 public class SetSize extends JComponent implements ActionListener{

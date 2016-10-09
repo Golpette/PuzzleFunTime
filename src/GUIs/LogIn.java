@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import UserCredentials.EmailValidator;
 import WordSearch.WordSearchGenerator;
 
