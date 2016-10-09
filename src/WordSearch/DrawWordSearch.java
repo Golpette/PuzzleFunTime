@@ -293,6 +293,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 
 			public void mouseClicked(MouseEvent e) {
 				
+				String tempWord = "";
 				//letters[0][0].setBackground(Color.YELLOW);
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
@@ -302,18 +303,27 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 //							System.out.println("letter pressed");
 							for(Entry a : entries){
 								//allClues.get(2).setFont(font4);
+								//Trying to implement start click and end click - also want background colour change here
 								
-								if(a.start_x == j+1 && a.start_y == i+1){
-									//Then we have the correct clue
-									//need if a.getWord == clue word
-									for (JLabel temp: allClues){
+								if(a.end_x == j+1 && a.end_y == i+1){
+									//correct so far
+									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
+									//if(tempWord == a.getWord()){
+										for (JLabel temp: allClues){
 									//System.out.println(temp.getText());
-										if(temp.getText().equals(a.getWord().toUpperCase())){
-											//System.out.println("Here");
-											temp.setFont(font4);						//This is horribly clunky
-										}												//probably should do this differently
-									}													//(It also doesn't work)
+											if(temp.getText().equals(a.getWord().toUpperCase())){
+												//System.out.println("Here");
+												temp.setFont(font4);						//This is horribly clunky
+											}												//probably should do this differently
+										}	
+									//}
+									
 								}
+								else if(a.start_x == j+1 && a.start_y == i+1){
+									tempWord = a.getWord();
+									//Then we have the correct clue
+								}
+								//(It also doesn't work)
 							}
 						}
 					}
