@@ -77,7 +77,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	int currentDirection = 0;  // {0,1,2,3} = {right, down, left, up}
 	boolean firstAutoMove = true;
 	
-	
+	boolean firsteverclick = true; //stupid hack to fix a bug I couldn't find
 	
 	
 	
@@ -123,7 +123,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
-		 * useable JTextfield. This is layered on top of the transparentLayer
+		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
@@ -159,7 +159,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
-				crosswordGrid.add(boxes[i][j]);			
+				crosswordGrid.add(boxes[i][j]);	
+
 				
 			}
 		}
@@ -387,12 +388,24 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
+		
+		
+		
+		//Highlight first word to begin
+		highlightWord_fromClick(0,0);
+		//firstAutoMove=false;
+		
 	}
 
 	
 	
 	
-	
+
+
+
+
+
+
 	void keyActionTextField(JTextField l) {
 		
 		l.addKeyListener(new KeyListener() {
@@ -405,11 +418,44 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
 					firstAutoMove = true; //reset for auto-cursor movements
 				}
+				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
+					firstAutoMove = true;
+					makeAllWhite();
+					highlightWord_fromClick(0,0);
+					firsteverclick=false;
+				}
+
+					
 						
 				
 				
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
+						
+						
+//						///////////determine initial direction, favouring across  //MOVED THIS UP FROM BELOW
+//						if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+//							currentDirection = 0;
+//							firstAutoMove=false;
+//						}
+//						else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
+//							currentDirection = 1;
+//							firstAutoMove=false;
+//						}
+//						//
+//						// highlighted squares take priority; i.e. can choose to go down if we want
+//						if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
+//							currentDirection = 0;
+//							firstAutoMove=false;
+//						}
+//						else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
+//							currentDirection = 1;
+//							firstAutoMove=false;									
+//						}//////////////////////
+						
+						
+						
+						
 						
 						if (e.getSource() == boxes[row][col]) {
 						
@@ -483,17 +529,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							///  FIX THIS FOR AUTO CURSOR MOVEMENTS =========================================
 							///
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
+								
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
 								
+													
 								
 								
-								
-								//boxes[row][col].getBackground().getRGB();
-								
-								
-								
-								//determine initial direction, favouring across
+								///////////determine initial direction, favouring across
 								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
 									currentDirection = 0;
 									firstAutoMove=false;
@@ -508,10 +551,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									currentDirection = 0;
 									firstAutoMove=false;
 								}
-								else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1 ){
+								else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
 									currentDirection = 1;
 									firstAutoMove=false;									
-								}
+								}//////////////////////
 								
 								
 								
@@ -526,6 +569,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 											if( row<y-3 && boxes[row+1][col].isEnabled() ){ // this HAS to be true
 												boxes[row+1][col].requestFocus();
 												currentDirection = 1;  //i.e. going down
+												//also make new highlight
+												makeAllWhite();
+												highlightWord( row, col);												
 											}
 										}
 									}
@@ -542,6 +588,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 											if( col<x-3 && boxes[row][col+1].isEnabled() ){ // this HAS to be true
 												boxes[row][col+1].requestFocus();
 												currentDirection = 0;  //i.e. going across
+												//also make new highlight
+												makeAllWhite();
+												highlightWord( row, col);	
 											}
 										}
 									}									
@@ -603,6 +652,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 								//System.out.println("Pressed Backspace");
+								
+								
 								boolean stuck = true;
 								if (row > 0) {
 									if (boxes[row - 1][col].isEnabled()) {
@@ -873,7 +924,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	// Highlight across/down depending on number of clicks
 	public void highlightWord_fromClick( int xstart, int ystart ){
 		
-
+		if(firsteverclick){countClicks--;}
+		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			boolean acrossExists = false;
 			boolean downExists = false;
@@ -932,6 +984,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}	
 	}
+	
+	
+	
 	
 	
 	public void makeAllWhite(){
