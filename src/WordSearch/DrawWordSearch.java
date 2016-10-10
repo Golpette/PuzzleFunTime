@@ -109,10 +109,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		// Set image path depending on OS
 		operatingSystem = System.getProperty("os.name").toLowerCase();
 		if(operatingSystem.equals("linux")){
-			imagePath = "src/";
+			imagePath = "src/resources/";
 		}
 		else if(operatingSystem.contains("windows")){
-			imagePath = "src\\";
+			imagePath = "src\\resources\\";
 		}
 	    
 //		for(String direction: loopDirections){
@@ -139,17 +139,21 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setBorder(border);
+		
+		transparentLayer.setBackground(clear);
 		//transparentLayer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
-		transparentLayer.setOpaque(false);
+		transparentLayer.setOpaque(true);
 		//transparentLayer.setVisible(true);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				letters[i][j] = new JLabel();
-				mouseActionlabel(letters[i][j]);
+				letters[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
+				letters[i][j].setOpaque(true);
+				
 				letters[i][j].setFont(font);
 				letters[i][j].setForeground(Color.BLACK);
-				//letters[i][j].setBackground(new Color(255, 255, 255, 255));
+				letters[i][j].setBackground(clear);
 				letters[i][j].setBorder(null);
 				//letters[i][j].setIcon(image);	//need to do this in another transparent layer.
 				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
@@ -159,15 +163,19 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
 				}
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
+				
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
+				mouseActionlabel(letters[i][j]);
+				
 				transparentLayer.add(letters[i][j]);
+				
 			}
 		}
 		
 		transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer2.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		//transparentLayer2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
-		//transparentLayer.setBackground(clear);
+		transparentLayer.setBackground(clear);
 		transparentLayer2.setOpaque(false);
 		
 		
@@ -175,7 +183,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			for (int j = 0; j < y-2; j++){
 				backgrounds[i][j] = new JLabel();
 				//mouseActionlabel(letters[i][j]);
-				backgrounds[i][j].setBackground(new Color(255, 255, 255, 255));
+				backgrounds[i][j].setBackground(clear);
 				//backgrounds[i][j].setIcon(setImage("src\\Bottom.png", squareSize, squareSize));
 				backgrounds[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 
@@ -184,17 +192,17 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 		
-		layer.setBackground(new Color(255, 255, 255, 255));
+		layer.setBackground(clear);
 		layer.setVisible(true);
-		layer.setOpaque(false);
+		layer.setOpaque(true);
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
-		layer.add(transparentLayer, new Integer(1));
+		layer.add(transparentLayer, new Integer(0));
 		layer.add(transparentLayer2, new Integer(0));
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
-		clues.setBackground(new Color(255, 255, 255, 255));
+		clues.setBackground(clear);
 		
 		clues.setVisible(true);
 		clues.setOpaque(true);
@@ -210,9 +218,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		}
 		
 		main = new JPanel(new GridBagLayout());
-		main.setBackground(new Color(255, 255, 255, 255));
+		main.setBackground(clear);
 		main.setVisible(true);
-		main.setOpaque(true);
+		main.setOpaque(false);
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -231,12 +239,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		area.setBackground(new Color(255, 255, 255, 255));
+		area.setBackground(clear);
 		area.setVisible(true);
 		area.setOpaque(true);
 		
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
+		panel.setBackground(clear);
 		panel.setBackground(clear);
 		
 		c.weightx = 1.0;
@@ -264,6 +273,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		}
 		frame.setContentPane(panel);
 		frame.pack();
+		frame.setBackground(clear);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
@@ -292,12 +302,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	
 	void mouseActionlabel(JLabel l) {
 		l.addMouseListener(new MouseListener() {
-
+		
+			
 			public void mouseClicked(MouseEvent e) {
+				
+				
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
-							letters[i][j].setBackground(Color.RED);
+							//letters[i][j].setBackground(Color.GREEN);
 							//for (String b: tempStrikethrough){
 							for(Entry a : entries){
 								if(a.end_x == j+1 && a.end_y == i+1){
@@ -307,6 +320,24 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 										for (JLabel temp: allClues){
 											if(temp.getText().equals(a.getWord().toUpperCase())){
 												temp.setFont(font4);
+												String[] images = setImageDirections(a.direction);
+												Icon ic0 = setImage(setPath(images[0]), squareSize, squareSize);
+												Icon ic1 = setImage(setPath(images[1]), squareSize, squareSize);
+												Icon ic2 = setImage(setPath(images[2]), squareSize, squareSize);
+												Icon ic3 = setImage(setPath(images[3]), squareSize, squareSize);
+												Icon ic4 = setImage(setPath(images[4]), squareSize, squareSize);
+												letters[i][j].setIcon(ic2);
+												letters[a.start_y-1][a.start_x-1].setIcon(ic0);
+												int [] t = setIncrements(a.direction);
+												for(int c = 0; c < a.getWordLength()-1; c++){
+													if(!(c == 0)){
+														letters[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic1);
+													}													
+													if(a.isDiagonal){
+														letters[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
+														letters[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
+													}
+												}
 												tempStrikethrough.clear();
 											}									
 										}	
@@ -412,6 +443,43 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 //				//}
 //			}
 
+			private int[] setIncrements(String direction) {
+				int [] inc = new int[2];
+				if(direction.equals("across")){
+					inc[0] = 1;
+					inc[1] = 0;
+				}
+				else if(direction.equals("backwards")){
+					inc[0] = -1;
+					inc[1] = 0;				
+				}
+				else if(direction.equals("down")){
+					inc[0] = 0;
+					inc[1] = 1;
+				}
+				else if(direction.equals("up")){
+					inc[0] = 0;
+					inc[1] = -1;
+				}
+				else if(direction.equals("diagonal")){
+					inc[0] = 1;
+					inc[1] = 1;
+				}
+				else if(direction.equals("backwardsdiagonal")){
+					inc[0] = -1;
+					inc[1] = -1;
+				}
+				else if(direction.equals("BLTRdiagonal")){
+					inc[0] = 1;
+					inc[1] = -1;
+				}
+				else if(direction.equals("backwardsBLTRdiagonal")){
+					inc[0] = -1;
+					inc[1] = 1;
+				}
+				return inc;
+			}
+
 			public void mouseEntered(MouseEvent e) {//try to get to highlight letters in one direction
 //				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 //					for (int j = 0; j < y-2; j++){
@@ -472,7 +540,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	 * @param diagonal
 	 * @return
 	 */
-	public String [] setImageDirections(String direction, boolean diagonal){
+	public String [] setImageDirections(String direction){
 		String middle = "";
 		String start = "";
 		String end = "";
@@ -493,7 +561,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			corner1 = "BottomLeftCorner";
 			corner2 = "TopRightCorner";
 			System.out.println("Changed Diagonal");
-			diagonal = true;
 		}else if(direction.equals("backwards")){
 			start = "Right";
 			middle = "Horizontal";
@@ -509,7 +576,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			corner1 = "TopRightCorner";
 			corner2 = "BottomLeftCorner";
 			System.out.println("Changed Diagonal");
-			diagonal = true;
 		}else if(direction.equals("BLTRdiagonal")){
 			start = "BottomLeft";
 			middle = "DiagonalUpRight";
@@ -517,7 +583,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			corner1 = "BottomRightCorner";
 			corner2 = "TopLeftCorner";
 			System.out.println("Changed Diagonal");
-			diagonal = true;
 		}else if(direction.equals("backwardsBLTRdiagonal")){
 			start = "TopRight";
 			middle = "DiagonalUpRight";
@@ -525,7 +590,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
 			System.out.println("Changed Diagonal");
-			diagonal = true;
 		}else{
 			start = "Left";
 			middle = "Horizontal";
@@ -549,7 +613,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
-								letters[j-1][i-1].setBackground(Color.GREEN);
+								//letters[j-1][i-1].setBackground(Color.GREEN);
 								//set the image around the word
 								
 								//System.out.println(setPath(direction));
@@ -559,25 +623,25 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								String [] temps;				
 								String upperSide = "";			//and possible side pieces 
 								String lowerSide = "";
-								for(Entry a: entries){
-									if(a.getX()==j-1 && a.getY() == i-1){
-										direction = a.direction;
-										System.out.println("word: "+a.word);
-										System.out.println("direction: " +direction);
-										temps = setImageDirections(direction, diagonal);
-										if(i-1 == a.start_x && j-1 == a.start_y){//condition for first letter
-											direction = temps[0];
-											System.out.println("Start of Word: " + a.word);
-										}else if(i-1 == a.end_x && j-1 == a.end_y){//condition for last letter
-											direction = temps[1];
-											System.out.println("End of Word: " + a.word);
-										}else{//condition for middle letter
-											direction = temps[2];
-											upperSide = temps[3];
-											lowerSide = temps[4];
-										}
-									}
-								}
+//								for(Entry a: entries){
+//									if(a.getX()==j-1 && a.getY() == i-1){
+//										direction = a.direction;
+//										System.out.println("word: "+a.word);
+//										System.out.println("direction: " +direction);
+//										temps = setImageDirections(direction, diagonal);
+//										if(i-1 == a.start_x && j-1 == a.start_y){//condition for first letter
+//											direction = temps[0];
+//											System.out.println("Start of Word: " + a.word);
+//										}else if(i-1 == a.end_x && j-1 == a.end_y){//condition for last letter
+//											direction = temps[1];
+//											System.out.println("End of Word: " + a.word);
+//										}else{//condition for middle letter
+//											direction = temps[2];
+//											upperSide = temps[3];
+//											lowerSide = temps[4];
+//										}
+//									}
+//								}
 								Icon temp = setImage(setPath(direction), squareSize, squareSize);
 								Icon corner1  = setImage(setPath(upperSide), squareSize, squareSize);
 								Icon corner2 = setImage(setPath(lowerSide), squareSize, squareSize);

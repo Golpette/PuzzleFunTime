@@ -15,6 +15,7 @@ public class Entry {
 	int wordLength;
 	Random rand;
 	Boolean across;
+	public Boolean isDiagonal;
 	public String word;
 	public String shuffledWord;
 	public String direction;
@@ -68,27 +69,35 @@ public class Entry {
 		if (direction.equals("across")) {
 			end_x = start_x + wordLength-1;
 			end_y = start_y;
+			isDiagonal = false;
 		} else if (direction.equals("backwards")) {
 			end_x = start_x - wordLength+1;
 			end_y = start_y;
+			isDiagonal = false;
 		} else if (direction.equals("down")) {
 			end_x = start_x;
 			end_y = start_y + wordLength-1;
+			isDiagonal = false;
 		} else if (direction.equals("up")) {
 			end_x = start_x;
 			end_y = start_y - wordLength+1;
+			isDiagonal = false;
 		} else if (direction.equals("backwardsdiagonal")) {
 			end_x = start_x - wordLength+1;
 			end_y = start_y - wordLength+1;
+			isDiagonal = true;
 		} else if (direction.equals("diagonal")) {
 			end_x = start_x + wordLength-1;
 			end_y = start_y + wordLength-1;
+			isDiagonal = true;
 		} else if (direction.equals("BLTRdiagonal")) {
 			end_x = start_x + wordLength-1;
 			end_y = start_y - wordLength+1;
+			isDiagonal = true;
 		} else if (direction.equals("backwardsBLTRdiagonal")) {
 			end_x = start_x - wordLength+1;
 			end_y = start_y + wordLength-1;
+			isDiagonal = true;
 		}
 	}
 
