@@ -766,10 +766,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
+		
 			boolean acrossExists = false;
-			boolean downExists = false;
-			
-			int acrossLength=0;   int downLength = 0;
+			boolean downExists = false;			
+			int acrossLength=0;   
+			int downLength = 0;
 			
 			for( Entry ent : entries){
 				String nomnom = Integer.toString( ent.getClueNumber()  );
@@ -818,7 +819,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
 						}														
 					}
-
 				}
 			}
 		}	
