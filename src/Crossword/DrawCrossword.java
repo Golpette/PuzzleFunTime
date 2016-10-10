@@ -73,6 +73,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	int lastClick_y = 0;
 	int countClicks = 0;
 	
+	//tracking last text entry
+	int currentDirection = 0;  // {0,1,2,3} = {right, down, left, up}
+	boolean firstAutoMove = true;
+	
+	
+	
+	
+	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
@@ -390,11 +398,23 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				
+
+				if( e.getKeyCode()==KeyEvent.VK_UP  || e.getKeyCode()==KeyEvent.VK_DOWN ||
+						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
+						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
+					firstAutoMove = true; //reset for auto-cursor movements
+				}
+						
+				
+				
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
 						
 						if (e.getSource() == boxes[row][col]) {
 						
+
+							
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
 								// get rid of all previous highlighting
 								makeAllWhite();
@@ -456,48 +476,113 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}
 								}															
 							}
+							
+							
+							
+							
+							///  FIX THIS FOR AUTO CURSOR MOVEMENTS =========================================
+							///
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
-								//System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
-								if(row > 0){
+								
+								
+								//determine initial direction, favouring across
+								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+									currentDirection = 0;
+									firstAutoMove=false;
+								}
+								else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
+									currentDirection = 1;
+									firstAutoMove=false;
+								}
+								
+								
+								if(currentDirection == 0 ){ //across
+									if( col<x-3 && boxes[row][col+1].isEnabled()  ){
+										boxes[row][col+1].requestFocus();		
+									}
+									else{
+										//check this square is start of a down word
+										boolean isStart = startOfWord(row, col);
+										if( isStart ){
+											if( row<y-3 && boxes[row+1][col].isEnabled() ){ // this HAS to be true
+												boxes[row+1][col].requestFocus();
+												currentDirection = 1;  //i.e. going down
+											}
+										}
+									}
+								}
+								else if(currentDirection ==1 ){ //going down		
+									if( row<y-3 && boxes[row+1][col].isEnabled()  ){
+										boxes[row+1][col].requestFocus();
 									
+									}
+									else{
+										//check this square is start of a down word
+										boolean isStart = startOfWord(row, col);
+										if( isStart ){
+											if( col<x-3 && boxes[row][col+1].isEnabled() ){ // this HAS to be true
+												boxes[row][col+1].requestFocus();
+												currentDirection = 0;  //i.e. going across
+											}
+										}
+									}									
 								}
-								if (col < x - 3 && row < y - 3) {
-									if (boxes[row][col + 1].isEnabled()) {
-										if (boxes[row][col + 1].getText().equals("")) {
-											boxes[row][col + 1].setText("");
-										}
-										boxes[row][col + 1].requestFocus();
-									} else if (boxes[row + 1][col].isEnabled()) {
-										if (boxes[row + 1][col].getText().equals("")) {
-											boxes[row + 1][col].setText("");
-										}
-										boxes[row + 1][col].requestFocus();
-									}
-								} else if (col < x - 3) {
-									if (boxes[row][col + 1].isEnabled()) {
-										if (boxes[row][col + 1].getText().equals("")) {
-											boxes[row][col + 1].setText("");
-										}
-										boxes[row][col + 1].requestFocus();
-									}
-								} else if (row < y - 3) {
-									if (boxes[row + 1][col].isEnabled()) {
-										if (boxes[row + 1][col].getText().equals("")) {
-											boxes[row + 1][col].setText("");
-										}
-										boxes[row + 1][col].requestFocus();
-									}
-								}else{
-									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
-										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
-											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
-											break;
-										}
-									}
-								}
+								
+								
+								
+//								if (col < x - 3 && row < y - 3) {
+//									if (boxes[row][col + 1].isEnabled()) {
+//										if (boxes[row][col + 1].getText().equals("")) {
+//											boxes[row][col + 1].setText("");
+//										}
+//										boxes[row][col + 1].requestFocus();
+//										
+//									} 
+//									else if (boxes[row + 1][col].isEnabled()) {
+//										if (boxes[row + 1][col].getText().equals("")) {
+//											boxes[row + 1][col].setText("");
+//										}
+//										boxes[row + 1][col].requestFocus();
+//									}
+//								} 
+//								else if (col < x - 3) {
+//									if (boxes[row][col + 1].isEnabled()) {
+//										if (boxes[row][col + 1].getText().equals("")) {
+//											boxes[row][col + 1].setText("");
+//										}
+//										boxes[row][col + 1].requestFocus();
+//									}
+//								} 
+//								else if (row < y - 3) {
+//									if (boxes[row + 1][col].isEnabled()) {
+//										if (boxes[row + 1][col].getText().equals("")) {
+//											boxes[row + 1][col].setText("");
+//										}
+//										boxes[row + 1][col].requestFocus();
+//									}
+//								}
+//								else{
+//									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
+//										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
+//											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
+//											break;
+//										}
+//									}
+//								}
+								
+								
+								
 							}
+							//==========================================================================================
+							
+							
+							
+							
+							
+							
+							
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 								//System.out.println("Pressed Backspace");
@@ -598,10 +683,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	void mouseActionlabel(JTextField l) {
 			
 		l.addMouseListener(new MouseListener() {
-
+			
 			public void mouseClicked(MouseEvent e) {	
+			
+				firstAutoMove = true; //reset for auto-cursor movements
+
 				
-				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j])){
 							makeAllWhite();
@@ -840,6 +928,23 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}	
 	}
 
+	
+	
+	
+	public boolean startOfWord(int x, int y){
+		//Determine if a square is the first letter of a word
+		boolean isStart = false;
+		for( Entry ent : entries){
+			String nomnom = Integer.toString( ent.getClueNumber()  );
+			if( clueNumbers[x][y].getText().equals( nomnom ) ){
+				isStart = true;
+			}
+		}
+		return isStart;
+	}
+	
+	
+	
 
 	public void actionPerformed(ActionEvent e) {
 		
