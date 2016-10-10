@@ -487,6 +487,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
 								
 								
+								
+								
+								//boxes[row][col].getBackground().getRGB();
+								
+								
+								
 								//determine initial direction, favouring across
 								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
 									currentDirection = 0;
@@ -496,6 +502,17 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									currentDirection = 1;
 									firstAutoMove=false;
 								}
+								//
+								// highlighted squares take priority; i.e. can choose to go down if we want
+								if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
+									currentDirection = 0;
+									firstAutoMove=false;
+								}
+								else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1 ){
+									currentDirection = 1;
+									firstAutoMove=false;									
+								}
+								
 								
 								
 								if(currentDirection == 0 ){ //across
