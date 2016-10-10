@@ -587,13 +587,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
-	
-
-	
-	
-	
-	
-	
 	// MOUSE ACTIONS on JTextArea (grid spaces) here ---------------------
 	void mouseActionlabel(JTextField l) {
 			

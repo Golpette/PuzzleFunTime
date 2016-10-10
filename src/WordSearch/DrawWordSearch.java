@@ -294,53 +294,37 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				//letters[0][0].setBackground(Color.YELLOW);
-				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
-							//letters[i][j].setBackground(Color.YELLOW);
-//							System.out.println(letters[i][j].getBackground().toString());
-//							System.out.println("letter pressed");
+							letters[i][j].setBackground(Color.RED);
+							//for (String b: tempStrikethrough){
 							for(Entry a : entries){
-								//allClues.get(2).setFont(font4);
-								//Trying to implement start click and end click - also want background colour change here
-								
 								if(a.end_x == j+1 && a.end_y == i+1){
-									//correct so far
 									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
 									System.out.println("now: " + tempWord);
 									if(tempStrikethrough.contains(a.getWord())){
-										
 										for (JLabel temp: allClues){
-									//System.out.println(temp.getText());
 											if(temp.getText().equals(a.getWord().toUpperCase())){
-												//System.out.println("Here");
 												temp.setFont(font4);
-																//This is horribly clunky
-											}												//probably should do this differently
+												tempStrikethrough.clear();
+											}									
 										}	
 									}
-									tempStrikethrough.clear();	
 								}
-								//********************
-								//a few problems here, if one word starts where another ends then you can get problems
-								//*********************
-								else if(a.start_x == j+1 && a.start_y == i+1){
-									tempWord = a.getWord();
-									//Then we have the correct clue
-									tempStrikethrough.clear();
+							}
+							tempStrikethrough.clear();
+							for(Entry b : entries){
+								if(b.start_x == j+1 && b.start_y == i+1){
+									tempWord = b.getWord();
+									//tempStrikethrough.clear();
 									tempStrikethrough.add(tempWord);
 									System.out.println("Start clicked: "+ tempWord);
-								}else{
-									tempWord = "";
-									//tempStrikethrough.clear();
 								}
-								//(It also doesn't work)
 							}
 						}
 					}
 				}
-				
 			}
 				
 //				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
