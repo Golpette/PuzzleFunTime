@@ -532,6 +532,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							///
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								
+								countClicks=0;
+								
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
 								
