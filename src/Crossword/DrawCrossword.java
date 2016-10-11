@@ -435,26 +435,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for (int col = 0; col < y - 2; col++) {
 						
 						
-//						///////////determine initial direction, favouring across  //MOVED THIS UP FROM BELOW
-//						if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
-//							currentDirection = 0;
-//							firstAutoMove=false;
-//						}
-//						else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
-//							currentDirection = 1;
-//							firstAutoMove=false;
-//						}
-//						//
-//						// highlighted squares take priority; i.e. can choose to go down if we want
-//						if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
-//							currentDirection = 0;
-//							firstAutoMove=false;
-//						}
-//						else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
-//							currentDirection = 1;
-//							firstAutoMove=false;									
-//						}//////////////////////
-						
+
 						
 						
 						
@@ -528,8 +509,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							
 							
 							
-							///  FIX THIS FOR AUTO CURSOR MOVEMENTS =========================================
-							///
+							
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								
 								countClicks=0;
@@ -537,10 +517,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
 								
-													
 								
-								
-								///////////determine initial direction, favouring across
+								//determine initial direction, favouring across
 								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
 									currentDirection = 0;
 									firstAutoMove=false;
@@ -549,7 +527,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									currentDirection = 1;
 									firstAutoMove=false;
 								}
-								//
+					
 								// highlighted squares take priority; i.e. can choose to go down if we want
 								if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
 									currentDirection = 0;
@@ -599,53 +577,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										}
 									}									
 								}
-								
-								
-								
-//								if (col < x - 3 && row < y - 3) {
-//									if (boxes[row][col + 1].isEnabled()) {
-//										if (boxes[row][col + 1].getText().equals("")) {
-//											boxes[row][col + 1].setText("");
-//										}
-//										boxes[row][col + 1].requestFocus();
-//										
-//									} 
-//									else if (boxes[row + 1][col].isEnabled()) {
-//										if (boxes[row + 1][col].getText().equals("")) {
-//											boxes[row + 1][col].setText("");
-//										}
-//										boxes[row + 1][col].requestFocus();
-//									}
-//								} 
-//								else if (col < x - 3) {
-//									if (boxes[row][col + 1].isEnabled()) {
-//										if (boxes[row][col + 1].getText().equals("")) {
-//											boxes[row][col + 1].setText("");
-//										}
-//										boxes[row][col + 1].requestFocus();
-//									}
-//								} 
-//								else if (row < y - 3) {
-//									if (boxes[row + 1][col].isEnabled()) {
-//										if (boxes[row + 1][col].getText().equals("")) {
-//											boxes[row + 1][col].setText("");
-//										}
-//										boxes[row + 1][col].requestFocus();
-//									}
-//								}
-//								else{
-//									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
-//										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
-//											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
-//											break;
-//										}
-//									}
-//								}
-								
-								
-								
+																
 							}
-							//==========================================================================================
 							
 							
 							
@@ -899,7 +832,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	// Highlight squares if on start of word
-	public void highlightWord( int xstart, int ystart ){
+	public void highlightWord__OLD( int xstart, int ystart ){
 		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			
@@ -923,6 +856,138 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}		
 	}
+	
+	
+
+	
+	
+	
+	// Highlight squares of word from any position
+	public void highlightWord( int xstart, int ystart ){
+		
+		
+		if( !clueNumbers[xstart][ystart].getText().equals("") ){
+			// i.e., if start of word
+			
+			boolean acrossExists=false; int across_l=0; 
+			boolean downExists=false;   int down_l=0;
+			
+			for( Entry ent : entries ){
+			// go through entries and check if we have across/down/both	
+				String nomnom = Integer.toString( ent.getClueNumber()  );
+				
+				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){			
+					if( ent.isAcross()  ) {
+						across_l = ent.getWord().length();
+						acrossExists = true;
+					}
+					else{
+						down_l = ent.getWord().length();
+						downExists=true;
+					}			
+				}
+			}
+			// prioritise across over down
+			if( acrossExists ){
+				for( int dbl=0; dbl<across_l; dbl++ ){
+					boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
+				}						
+			}
+			else if( downExists ){
+				for( int dbl=0; dbl<down_l; dbl++ ){
+					boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
+				}	
+			}
+			
+		}
+
+		//
+		//
+		// edit: allow word to be highlighted from any position, not just first letter
+		else{
+			int xx1=0; int yy1=0;
+			if( ystart>0 && boxes[xstart][ystart-1].isEnabled() ){
+				//find start point and highlight from there
+				for( int mm=0; mm<y-2; mm++ ){
+					if( !clueNumbers[xstart][ystart-mm].getText().equals("")  ){
+						xx1=xstart;  yy1=ystart-mm;
+						////// replace below with recursive method
+						for( Entry ent : entries ){
+							String nomnom = Integer.toString( ent.getClueNumber()  );
+							if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
+								
+								if( ent.isAcross()  ) {
+									int length = ent.getWord().length();
+									for( int dbl=0; dbl<length; dbl++ ){
+										boxes[xx1][yy1+dbl].setBackground(new Color(20,100,20,100) );
+									}	
+									mm=y; //break
+								} 
+//								else {
+//									int length = ent.getWord().length();
+//									for( int dbl=0; dbl<length; dbl++ ){
+//										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
+//									}														
+//								}					
+							}
+						}////////replace this with recursive method
+						
+					}
+				}
+				
+			}
+			else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ){
+				
+				
+				
+	
+				
+				//find start point and highlight from there
+				for( int mm=0; mm<x-2; mm++ ){
+					if( !clueNumbers[xstart-mm][ystart].getText().equals("")  ){
+						xx1=xstart-mm;  yy1=ystart;
+						////// replace below with recursive method
+						for( Entry ent : entries ){
+							String nomnom = Integer.toString( ent.getClueNumber()  );
+							if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
+								
+								if( !ent.isAcross()  ) {
+									int length = ent.getWord().length();
+									for( int dbl=0; dbl<length; dbl++ ){
+										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
+									}	
+									mm=x; //break; 
+								} 
+//								else {
+//									int length = ent.getWord().length();
+//									for( int dbl=0; dbl<length; dbl++ ){
+//										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
+//									}														
+//								}					
+							}
+						}////////replace this with recursive method
+						
+					}
+				}		
+				
+			
+			}
+			else{
+				// in coord (0,0) so do nothing
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// Highlight across/down depending on number of clicks
