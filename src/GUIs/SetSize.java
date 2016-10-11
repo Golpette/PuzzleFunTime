@@ -37,7 +37,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import WordSearch.WordSearchGenerator;
 
 public class SetSize extends JComponent implements ActionListener{
@@ -67,8 +67,9 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public SetSize(String puzzle, int difficulty) throws IOException {
 		this.puzzle = puzzle;
+		this.difficulty = difficulty;
 		fontPanel = new FontPanel();
-		font = new Font("Century Gothic", Font.BOLD, 48);
+		font = new Font("Century Gothic", Font.BOLD, 40);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
@@ -155,7 +156,7 @@ public class SetSize extends JComponent implements ActionListener{
 		intro = new JLabel(puzzle + " Size");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
-		intro.setForeground(Color.RED);
+		intro.setForeground(Color.BLACK);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;

@@ -54,11 +54,11 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	boolean diagonal;
 	JScrollPane area;
 	DrawSolution sol;
-	ArrayList<String> fullGrid;
+	ArrayList<String> fullGrid, tempStrikethrough;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
-	String randomFill = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	String randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
 	Font font, font2, font3, font4;
 	Random rand;
 	boolean buttonPushed, clicked;
@@ -69,6 +69,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	double width;
 	double height;
 	Border border;
+	String tempWord = "";
 	
 	@SuppressWarnings("unchecked")
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
@@ -79,6 +80,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
 		completed = new ArrayList<JLabel>();
+		tempStrikethrough = new ArrayList<String>();
 		
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
@@ -154,7 +156,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
-					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(26))));
+					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
 				}
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
@@ -250,15 +252,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 		
-		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
+		if(squareSize*(x+6) > width && squareSize*(y+2) > height-30){
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
 		}
-		else if(squareSize*(x+2)+squareSize/2 > width){
+		else if(squareSize*(x+6) > width){
 			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+2)));
 		}else if(squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2, (int)height-30));
+			frame.setPreferredSize(new Dimension(squareSize*(x+6), (int)height-30));
 		}else{
-			frame.setPreferredSize(new Dimension(squareSize*(x+2)+squareSize/2,squareSize*(y+2)));
+			frame.setPreferredSize(new Dimension(squareSize*(x+6), squareSize*(y+2)));
 		}
 		frame.setContentPane(panel);
 		frame.pack();
@@ -292,29 +294,48 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		l.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				letters[0][0].setBackground(Color.YELLOW);
+				//letters[0][0].setBackground(Color.YELLOW);
 				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
-							letters[i][j].setBackground(Color.YELLOW);
-							System.out.println(letters[i][j].getBackground().toString());
-							System.out.println("letter pressed");
+							//letters[i][j].setBackground(Color.YELLOW);
+//							System.out.println(letters[i][j].getBackground().toString());
+//							System.out.println("letter pressed");
 							for(Entry a : entries){
-								allClues.get(2).setFont(font4);
-								if(a.getX() == 2){
-									
-									//System.out.println("sdfasdfa");
-									for (JLabel temp: allClues){
+								//allClues.get(2).setFont(font4);
+								//Trying to implement start click and end click - also want background colour change here
+								
+								if(a.end_x == j+1 && a.end_y == i+1){
+									//correct so far
+									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
+									System.out.println("now: " + tempWord);
+									if(tempStrikethrough.contains(a.getWord())){
+										
+										for (JLabel temp: allClues){
 									//System.out.println(temp.getText());
-										if(temp.getText().equals(a.getWord())){
-											//System.out.println("Here");
-											temp.setFont(font4);						//This is horribly clunky
-										}												//probably should do this differently
-									}													//(It also doesn't work)
-									
-								}else{
-									
+											if(temp.getText().equals(a.getWord().toUpperCase())){
+												//System.out.println("Here");
+												temp.setFont(font4);
+																//This is horribly clunky
+											}												//probably should do this differently
+										}	
+									}
+									tempStrikethrough.clear();	
 								}
+								//********************
+								//a few problems here, if one word starts where another ends then you can get problems
+								//*********************
+								else if(a.start_x == j+1 && a.start_y == i+1){
+									tempWord = a.getWord();
+									//Then we have the correct clue
+									tempStrikethrough.clear();
+									tempStrikethrough.add(tempWord);
+									System.out.println("Start clicked: "+ tempWord);
+								}else{
+									tempWord = "";
+									//tempStrikethrough.clear();
+								}
+								//(It also doesn't work)
 							}
 						}
 					}

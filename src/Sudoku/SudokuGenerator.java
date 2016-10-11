@@ -1,4 +1,4 @@
-package Sudolu;
+package Sudoku;
 import java.io.*;
 import java.util.*;
 

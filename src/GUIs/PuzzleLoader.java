@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 
 		frame.setMinimumSize(new Dimension(550,400));
 		
-		font = new Font("Century Gothic", Font.BOLD, 36);
+		font = new Font("Century Gothic", Font.BOLD, 40);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		
@@ -105,11 +105,11 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			//Could try to allow the user to have a customisable background or backgrounds
 			//they choose folder an the background is dynamically created from that location
 			//could also create custom look and feels which can be selected by user
-			path1 = "src/resources/1.jpg";			//lol
+			//path1 = "src/resources/1.jpg";			//lol
 		}
 			
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\resources\\1.jpg";
+			//path1 = "src\\resources\\1.jpg";
 		}
 	
 		System.out.println(frame.getWidth());

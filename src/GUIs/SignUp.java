@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import UserCredentials.EmailValidator;
 import WordSearch.WordSearchGenerator;
 
@@ -131,10 +131,10 @@ public class SignUp extends JComponent implements ActionListener{
 		password = new JTextField("");
 		pass1 = new JPasswordField(20);
 		pass1.setFont(font2);
-		pass1.setText("pass");
+		pass1.setText("");
 		pass2 = new JPasswordField(20);
 		pass2.setFont(font2);
-		pass2.setText("pass");
+		pass2.setText("");
 		passwordRetype = new JTextField("");
 		frame = new JFrame("Auto Puzzle Generator");
 		frame.setPreferredSize(new Dimension(600,400));
@@ -325,11 +325,11 @@ public class SignUp extends JComponent implements ActionListener{
 	}
 	
 	void writeToFile(String fileName, String text) throws Exception {
-		   FileOutputStream out = new FileOutputStream(fileName, true);
+		   @SuppressWarnings("resource")
+		FileOutputStream out = new FileOutputStream(fileName, true);
 		   out.write(text.getBytes());
 		} 
 	
-	@SuppressWarnings("null")
 	public void actionPerformed(ActionEvent e) {
 	System.out.println("ActionEvent e: " + e.toString());
 		if(e.getSource() == signup){
@@ -350,14 +350,17 @@ public class SignUp extends JComponent implements ActionListener{
 		        }else{
 		        	JOptionPane.showMessageDialog(frame, "Email Required");
 		        }
+		   }else if(password1.length == 0){
+			   JOptionPane.showMessageDialog(frame, "Password required");
+		   } else if(password1.length < 4){
+			   JOptionPane.showMessageDialog(frame, "Password too short");
+		   }else if(password2.length == 0){
+			   JOptionPane.showMessageDialog(frame, "Retype password");
 		   }else if(!Arrays.equals(password1, password2)){
 			   System.out.println("Passwords do not match!");
 			   JOptionPane.showMessageDialog(frame, "Passwords do not match!");
-			   pass1.setText("");
-			   pass2.setText("");
-			   
-		   }else if(password1.length < 5){
-			   JOptionPane.showMessageDialog(frame, "Password too short!");
+			   //pass1.setText("");
+			   pass2.setText("");   
 		   }else{
 			   System.out.println("Correct password");   
 			 
