@@ -392,7 +392,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		
 		//Highlight first word to begin
-		highlightWord_fromClick(0,0);
+		//highlightWord_fromClick(0,0);     ////// IS THIS THE ONLY BUG???
 		//firstAutoMove=false;
 		
 	}
@@ -417,6 +417,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
 						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
 					firstAutoMove = true; //reset for auto-cursor movements
+					countClicks=0;
+					firsteverclick=false;
 				}
 				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
 					firstAutoMove = true;
@@ -924,7 +926,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	// Highlight across/down depending on number of clicks
 	public void highlightWord_fromClick( int xstart, int ystart ){
 		
-		if(firsteverclick){countClicks--;}
+		
+		
+		/////if(firsteverclick){countClicks--;}// REMOVE THIS -  RETURN BETTER FUNCTION?
+		
+		
+		
 		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			boolean acrossExists = false;
