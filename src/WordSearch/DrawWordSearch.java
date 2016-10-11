@@ -182,8 +182,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(0));
-		layer.add(transparentLayer2, new Integer(0));
-		layer.add(transparentLayer3, new Integer(0));
+//		layer.add(transparentLayer2, new Integer(0));
+//		layer.add(transparentLayer3, new Integer(0));
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(clear);
 		
