@@ -334,8 +334,22 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 														letters[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic1);
 													}													
 													if(a.isDiagonal){
-														letters[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
-														letters[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
+														if(a.direction.equals("BLTRdiagonal")){
+															letters[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
+															letters[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
+														}else if(a.direction.equals("backwardsBLTRdiagonal")){
+															letters[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic4);
+															letters[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setIcon(ic3);
+														}else if(a.direction.equals("diagonal")){
+															letters[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setIcon(ic3);
+															letters[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
+														}else{
+															System.out.println("a.start_x: " + a.start_x);
+															System.out.println("a.start_y: " + a.start_y);
+															System.out.println("t[0,1] = {" + t[0]+","+t[1]+"}");
+															letters[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic3);
+															letters[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
+														}
 													}
 												}
 												tempStrikethrough.clear();
@@ -613,7 +627,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								reveal.setText("Hide Solution");
 								//letters[j-1][i-1].setForeground(new Color(255,0,0,255));
 								letters[j-1][i-1].setOpaque(true);
-								//letters[j-1][i-1].setBackground(Color.GREEN);
+								letters[j-1][i-1].setBackground(Color.GREEN);
 								//set the image around the word
 								
 								//System.out.println(setPath(direction));
