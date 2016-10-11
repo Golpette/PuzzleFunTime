@@ -999,7 +999,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		
 		
-		
+		// if clicking on start of a word
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 		
 			boolean acrossExists = false;
@@ -1056,7 +1056,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
-		}	
+		}
+		//
+		// or if clicking on random part of word
+		else{
+			highlightWord(xstart,ystart);
+			countClicks=0;
+		}
+		
 	}
 	
 	
