@@ -73,6 +73,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	int lastClick_y = 0;
 	int countClicks = 0;
 	
+	//tracking last text entry
+	int currentDirection = 0;  // {0,1,2,3} = {right, down, left, up}
+	boolean firstAutoMove = true;
+	
+	boolean firsteverclick = true; //stupid hack to fix a bug I couldn't find
+	
+	
+	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
@@ -115,7 +123,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
-		 * useable JTextfield. This is layered on top of the transparentLayer
+		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
@@ -151,7 +159,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
 				boxes[i][j].setFont(font2);
-				crosswordGrid.add(boxes[i][j]);			
+				crosswordGrid.add(boxes[i][j]);	
+
 				
 			}
 		}
@@ -379,22 +388,81 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
+		
+		
+		
+		//Highlight first word to begin
+		//highlightWord_fromClick(0,0);     ////// IS THIS THE ONLY BUG???
+		//firstAutoMove=false;
+		
 	}
 
 	
 	
 	
-	
+
+
+
+
+
+
 	void keyActionTextField(JTextField l) {
 		
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				
+
+				if( e.getKeyCode()==KeyEvent.VK_UP  || e.getKeyCode()==KeyEvent.VK_DOWN ||
+						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
+						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
+					firstAutoMove = true; //reset for auto-cursor movements
+					countClicks=0;
+					firsteverclick=false;
+				}
+				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
+					firstAutoMove = true;
+					makeAllWhite();
+					highlightWord_fromClick(0,0);
+					firsteverclick=false;
+				}
+
+					
+						
+				
+				
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {
 						
+						
+//						///////////determine initial direction, favouring across  //MOVED THIS UP FROM BELOW
+//						if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+//							currentDirection = 0;
+//							firstAutoMove=false;
+//						}
+//						else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
+//							currentDirection = 1;
+//							firstAutoMove=false;
+//						}
+//						//
+//						// highlighted squares take priority; i.e. can choose to go down if we want
+//						if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
+//							currentDirection = 0;
+//							firstAutoMove=false;
+//						}
+//						else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
+//							currentDirection = 1;
+//							firstAutoMove=false;									
+//						}//////////////////////
+						
+						
+						
+						
+						
 						if (e.getSource() == boxes[row][col]) {
 						
+
+							
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
 								// get rid of all previous highlighting
 								makeAllWhite();
@@ -456,51 +524,140 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}
 								}															
 							}
+							
+							
+							
+							
+							///  FIX THIS FOR AUTO CURSOR MOVEMENTS =========================================
+							///
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
+								
+								countClicks=0;
+								
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
-								//System.out.println("Keycode: " + Character.toString(e.getKeyChar()));
-								if(row > 0){
+								
+													
+								
+								
+								///////////determine initial direction, favouring across
+								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+									currentDirection = 0;
+									firstAutoMove=false;
+								}
+								else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
+									currentDirection = 1;
+									firstAutoMove=false;
+								}
+								//
+								// highlighted squares take priority; i.e. can choose to go down if we want
+								if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
+									currentDirection = 0;
+									firstAutoMove=false;
+								}
+								else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
+									currentDirection = 1;
+									firstAutoMove=false;									
+								}//////////////////////
+								
+								
+								
+								if(currentDirection == 0 ){ //across
+									if( col<x-3 && boxes[row][col+1].isEnabled()  ){
+										boxes[row][col+1].requestFocus();		
+									}
+									else{
+										//check this square is start of a down word
+										boolean isStart = startOfWord(row, col);
+										if( isStart ){
+											if( row<y-3 && boxes[row+1][col].isEnabled() ){ // this HAS to be true
+												boxes[row+1][col].requestFocus();
+												currentDirection = 1;  //i.e. going down
+												//also make new highlight
+												makeAllWhite();
+												highlightWord( row, col);												
+											}
+										}
+									}
+								}
+								else if(currentDirection ==1 ){ //going down		
+									if( row<y-3 && boxes[row+1][col].isEnabled()  ){
+										boxes[row+1][col].requestFocus();
 									
+									}
+									else{
+										//check this square is start of a down word
+										boolean isStart = startOfWord(row, col);
+										if( isStart ){
+											if( col<x-3 && boxes[row][col+1].isEnabled() ){ // this HAS to be true
+												boxes[row][col+1].requestFocus();
+												currentDirection = 0;  //i.e. going across
+												//also make new highlight
+												makeAllWhite();
+												highlightWord( row, col);	
+											}
+										}
+									}									
 								}
-								if (col < x - 3 && row < y - 3) {
-									if (boxes[row][col + 1].isEnabled()) {
-										if (boxes[row][col + 1].getText().equals("")) {
-											boxes[row][col + 1].setText("");
-										}
-										boxes[row][col + 1].requestFocus();
-									} else if (boxes[row + 1][col].isEnabled()) {
-										if (boxes[row + 1][col].getText().equals("")) {
-											boxes[row + 1][col].setText("");
-										}
-										boxes[row + 1][col].requestFocus();
-									}
-								} else if (col < x - 3) {
-									if (boxes[row][col + 1].isEnabled()) {
-										if (boxes[row][col + 1].getText().equals("")) {
-											boxes[row][col + 1].setText("");
-										}
-										boxes[row][col + 1].requestFocus();
-									}
-								} else if (row < y - 3) {
-									if (boxes[row + 1][col].isEnabled()) {
-										if (boxes[row + 1][col].getText().equals("")) {
-											boxes[row + 1][col].setText("");
-										}
-										boxes[row + 1][col].requestFocus();
-									}
-								}else{
-									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
-										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
-											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
-											break;
-										}
-									}
-								}
+								
+								
+								
+//								if (col < x - 3 && row < y - 3) {
+//									if (boxes[row][col + 1].isEnabled()) {
+//										if (boxes[row][col + 1].getText().equals("")) {
+//											boxes[row][col + 1].setText("");
+//										}
+//										boxes[row][col + 1].requestFocus();
+//										
+//									} 
+//									else if (boxes[row + 1][col].isEnabled()) {
+//										if (boxes[row + 1][col].getText().equals("")) {
+//											boxes[row + 1][col].setText("");
+//										}
+//										boxes[row + 1][col].requestFocus();
+//									}
+//								} 
+//								else if (col < x - 3) {
+//									if (boxes[row][col + 1].isEnabled()) {
+//										if (boxes[row][col + 1].getText().equals("")) {
+//											boxes[row][col + 1].setText("");
+//										}
+//										boxes[row][col + 1].requestFocus();
+//									}
+//								} 
+//								else if (row < y - 3) {
+//									if (boxes[row + 1][col].isEnabled()) {
+//										if (boxes[row + 1][col].getText().equals("")) {
+//											boxes[row + 1][col].setText("");
+//										}
+//										boxes[row + 1][col].requestFocus();
+//									}
+//								}
+//								else{
+//									for (int steps = 1; steps <= row * (x - 2) + col; steps++) {
+//										if (boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].isEnabled()) {
+//											boxes[((row*(x-2) + col)+steps) / (x-2)][((row*(x-2) + col)+steps) % (x-2)].requestFocus();
+//											break;
+//										}
+//									}
+//								}
+								
+								
+								
 							}
+							//==========================================================================================
+							
+							
+							
+							
+							
+							
+							
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 								//System.out.println("Pressed Backspace");
+								
+								
 								boolean stuck = true;
 								if (row > 0) {
 									if (boxes[row - 1][col].isEnabled()) {
@@ -591,10 +748,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	void mouseActionlabel(JTextField l) {
 			
 		l.addMouseListener(new MouseListener() {
-
+			
 			public void mouseClicked(MouseEvent e) {	
+			
+				firstAutoMove = true; //reset for auto-cursor movements
+
 				
-				for (int i = 0; i < x-2; i++){		//ie down, across or diagonally down
+				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j])){
 							makeAllWhite();
@@ -764,7 +924,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	// Highlight across/down depending on number of clicks
 	public void highlightWord_fromClick( int xstart, int ystart ){
 		
-
+		
+		
+		/////if(firsteverclick){countClicks--;}// REMOVE THIS -  RETURN BETTER FUNCTION?
+		
+		
+		
+		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 		
 			boolean acrossExists = false;
@@ -825,6 +991,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
+	
+	
+	
 	public void makeAllWhite(){
 		//Reset all white 
 		for (int rrrr = 0; rrrr < x - 2; rrrr++) {
@@ -836,6 +1005,23 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}	
 	}
 
+	
+	
+	
+	public boolean startOfWord(int x, int y){
+		//Determine if a square is the first letter of a word
+		boolean isStart = false;
+		for( Entry ent : entries){
+			String nomnom = Integer.toString( ent.getClueNumber()  );
+			if( clueNumbers[x][y].getText().equals( nomnom ) ){
+				isStart = true;
+			}
+		}
+		return isStart;
+	}
+	
+	
+	
 
 	public void actionPerformed(ActionEvent e) {
 		
