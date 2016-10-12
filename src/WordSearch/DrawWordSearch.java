@@ -171,9 +171,22 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 		
-		setUpLayers(letters2, transparentLayer2);
-		setUpLayers(letters3, transparentLayer3);
-		setUpLayers(letters4, transparentLayer4);
+		transparentLayer2 = new JPanel(new GridLayout(1, 1));
+		//transparentLayer2.setBounds(squareSize,squareSize,squareSize,squareSize);
+		transparentLayer2.setBorder(border);
+		transparentLayer2.setBackground(clear);
+		transparentLayer2.setOpaque(true);
+		
+		JLabel lab = new JLabel("HEllo");
+		lab.setBackground(Color.GREEN);
+		lab.setOpaque(true);
+		transparentLayer2.add(lab);
+		
+		
+		
+//		setUpLayers(letters2, transparentLayer2);
+//		setUpLayers(letters3, transparentLayer3);
+//		setUpLayers(letters4, transparentLayer4);
 	
 		layer.setBackground(clear);
 		layer.setVisible(true);
@@ -181,8 +194,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
-		layer.add(transparentLayer, new Integer(0));
-//		layer.add(transparentLayer2, new Integer(0));
+		layer.add(transparentLayer, new Integer(1));
+		layer.add(transparentLayer2, new Integer(0));
 //		layer.add(transparentLayer3, new Integer(0));
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(clear);
