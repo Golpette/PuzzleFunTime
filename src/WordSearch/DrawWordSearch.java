@@ -163,107 +163,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				transparentLayer.add(letters[i][j]);
 			}
 		}		
-		
-
-		transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer2.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer2.setBorder(border);
-		transparentLayer2.setBackground(clear);
-		transparentLayer2.setOpaque(false);
-
-		for (int i = 0; i < x-2; i++){
-			for (int j = 0; j < y-2; j++){
-				letters2[i][j] = new JLabel();
-				letters2[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				letters2[i][j].setOpaque(false);
-				letters2[i][j].setFont(font);
-				letters2[i][j].setForeground(Color.BLACK);
-				letters2[i][j].setBackground(clear);
-				letters2[i][j].setBorder(null);
-				letters2[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//				if(grid[j+1][i+1] != "_"){
-//					//letters2[i][j].setText(grid[j+1][i+1].toUpperCase());
-//				}else{
-//					letters2[i][j].setText("X");
-//					//letters2[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
-//				}
-				letters2[i][j].setHorizontalAlignment(JTextField.CENTER);
-				letters2[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(letters2[i][j]);
-				transparentLayer2.add(letters2[i][j]);
-			}
-		}		
-		
-		transparentLayer3 = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer3.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer3.setBorder(border);
-		transparentLayer3.setBackground(clear);
-		transparentLayer3.setOpaque(false);
-
-		for (int i = 0; i < x-2; i++){
-			for (int j = 0; j < y-2; j++){
-				letters3[i][j] = new JLabel();
-				letters3[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				letters3[i][j].setOpaque(false);
-				letters3[i][j].setFont(font);
-				letters3[i][j].setForeground(Color.BLACK);
-				letters3[i][j].setBackground(clear);
-				letters3[i][j].setBorder(null);
-				letters3[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//				if(grid[j+1][i+1] != "_"){
-//					//letters2[i][j].setText(grid[j+1][i+1].toUpperCase());
-//				}else{
-//					letters3[i][j].setText("Y");
-//					//letters2[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
-//				}
-				letters3[i][j].setHorizontalAlignment(JTextField.CENTER);
-				letters3[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(letters3[i][j]);
-				transparentLayer3.add(letters3[i][j]);
-			}
-		}		
-		
-		transparentLayer4 = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer4.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer4.setBorder(border);
-		transparentLayer4.setBackground(clear);
-		transparentLayer4.setOpaque(false);
-
-		for (int i = 0; i < x-2; i++){
-			for (int j = 0; j < y-2; j++){
-				letters4[i][j] = new JLabel();
-				letters4[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				letters4[i][j].setOpaque(false);
-				letters4[i][j].setFont(font);
-				letters4[i][j].setForeground(Color.BLACK);
-				letters4[i][j].setBackground(clear);
-				letters4[i][j].setBorder(null);
-				letters4[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//				if(grid[j+1][i+1] != "_"){
-//					//letters2[i][j].setText(grid[j+1][i+1].toUpperCase());
-//				}else{
-//					letters4[i][j].setText("Z");
-//					//letters2[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
-//				}
-				letters4[i][j].setHorizontalAlignment(JTextField.CENTER);
-				letters4[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(letters4[i][j]);
-				transparentLayer4.add(letters4[i][j]);
-			}
-		}		
+	
+		transparentLayer2 = setUpLayers(letters2, transparentLayer2);
+		transparentLayer3 = setUpLayers(letters3, transparentLayer3);
+		transparentLayer4 = setUpLayers(letters4, transparentLayer4);
 		
 		allLayers.add(letters);
 		allLayers.add(letters2);
 		allLayers.add(letters3);
 		allLayers.add(letters4);
-		
-		
-	//	transparentLayer2 = new JPanel(new GridLayout(x-2, y-2));
-//		transparentLayer3 = new JPanel(new GridLayout(x-2, y-2));
-//		transparentLayer4 = new JPanel(new GridLayout(x-2, y-2));
-		//setUpLayers(letters2, transparentLayer2);
-//		setUpLayers(letters3, transparentLayer3);
-//		setUpLayers(letters4, transparentLayer4);
 	
 		layer.setBackground(clear);
 		layer.setVisible(true);
@@ -371,23 +279,22 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	 * @param labels
 	 * @param layer
 	 */
-	public void setUpLayers(JLabel[][] labels, JPanel layer){
+	public JPanel setUpLayers(JLabel[][] labels, JPanel layer){
 		
 		layer = new JPanel(new GridLayout(x-2, y-2));
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		layer.setBorder(border);
 		layer.setBackground(clear);
-		layer.setOpaque(true);
+		layer.setOpaque(false);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				labels[i][j] = new JLabel();
 				labels[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				labels[i][j].setOpaque(true);
+				labels[i][j].setOpaque(false);
 				labels[i][j].setFont(font);
 				labels[i][j].setForeground(Color.BLACK);
-				labels[i][j].setBackground(Color.GREEN);
-				labels[i][j].setText("X");
+				labels[i][j].setBackground(clear);
 				labels[i][j].setBorder(null);
 				labels[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 				labels[i][j].setHorizontalAlignment(JTextField.CENTER);
@@ -396,8 +303,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				layer.add(labels[i][j]);				
 			}
 		}
+		return layer;
 	}
-	
 	
 	/**
 	 * Class which takes String name of image (eg top for the top facing loop image) and appends the 
@@ -409,7 +316,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	
 	void mouseActionlabel(JLabel l) {
 		l.addMouseListener(new MouseListener() {
-		
 			
 			public void mouseClicked(MouseEvent e) {
 				for (int i = 0; i < x-2; i++){
@@ -433,7 +339,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 													if(lab[i][j].getText().equals("")){
 														lab[i][j].setIcon(ic2);
 														lab[i][j].setText(" ");
-														System.out.println("Direction: "+ a.direction+ " layer: " + allLayers.indexOf(lab));
+														System.out.println("Direction: "+ a.direction+ " \nlayer: " + allLayers.indexOf(lab));
 														break;
 													}
 												}
@@ -445,10 +351,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 														break;
 													}
 												}
-											
 												int [] t = setIncrements(a.direction);
 												for(int c = 0; c < a.getWordLength()-1; c++){
-													//Try to dynamically set images on different layers
 													if(!(c == 0)){
 														for(JLabel[][] lab: allLayers){
 															if(lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
@@ -534,37 +438,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 														}
 													}
 												}
-												
-												
-												
-//												
-//												
-//												int [] t = setIncrements(a.direction);
-//												for(int c = 0; c < a.getWordLength()-1; c++){
-//													//Try to dynamically set images on different layers
-//													if(!(c == 0)){
-//														//if(letters[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].getText().equals(""))
-//															letters[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic1);
-//													}											
-//													if(a.isDiagonal){
-//														if(a.direction.equals("BLTRdiagonal")){
-//															letters2[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
-//															letters2[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
-//														}else if(a.direction.equals("backwardsBLTRdiagonal")){
-//															letters4[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic4);
-//															letters4[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setIcon(ic3);
-//														}else if(a.direction.equals("diagonal")){
-//															letters3[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setIcon(ic3);
-//															letters3[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
-//														}else{
-//															System.out.println("a.start_x: " + a.start_x);
-//															System.out.println("a.start_y: " + a.start_y);
-//															System.out.println("t[0,1] = {" + t[0]+","+t[1]+"}");
-//															letters4[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic3);
-//															letters4[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
-//														}
-//													}
-//												}
 												tempStrikethrough.clear();
 											}									
 										}	
@@ -575,7 +448,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							for(Entry b : entries){
 								if(b.start_x == j+1 && b.start_y == i+1){
 									tempWord = b.getWord();
-									//tempStrikethrough.clear();
 									tempStrikethrough.add(tempWord);
 									System.out.println("Start clicked: "+ tempWord);
 								}
