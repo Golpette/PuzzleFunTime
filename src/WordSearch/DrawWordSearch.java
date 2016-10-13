@@ -272,9 +272,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(0));
-		layer.add(transparentLayer2, new Integer(0));
-		layer.add(transparentLayer3, new Integer(0));
 		layer.add(transparentLayer4, new Integer(0));
+		layer.add(transparentLayer3, new Integer(0));
+		layer.add(transparentLayer2, new Integer(0));
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(clear);
 		
@@ -433,12 +433,16 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 													if(lab[i][j].getText().equals("")){
 														lab[i][j].setIcon(ic2);
 														lab[i][j].setText(" ");
+														System.out.println("Direction: "+ a.direction+ " layer: " + allLayers.indexOf(lab));
+														break;
 													}
 												}
 												for(JLabel[][] lab: allLayers){
 													if(lab[a.start_y-1][a.start_x-1].getText().equals("")){
 														lab[a.start_y-1][a.start_x-1].setIcon(ic0);
 														lab[a.start_y-1][a.start_x-1].setText(" ");
+														System.out.println("layer: " + allLayers.indexOf(lab));
+														break;
 													}
 												}
 											
@@ -450,6 +454,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 															if(lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic1);
 																lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
+																System.out.println("layer: " + allLayers.indexOf(lab));
+																break;
 															}
 														}
 													}											
@@ -459,12 +465,16 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
 																	lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 															for(JLabel[][] lab: allLayers){
 																if(lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 														}else if(a.direction.equals("backwardsBLTRdiagonal")){
@@ -472,12 +482,16 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 															for(JLabel[][] lab: allLayers){
 																if(lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].getText().equals("")){
 																	lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setIcon(ic3);
 																	lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 														}else if(a.direction.equals("diagonal")){
@@ -485,12 +499,16 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setIcon(ic3);
 																	lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 															for(JLabel[][] lab: allLayers){
 																if(lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
 																	lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 														}else{
@@ -498,17 +516,21 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic3);
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
 															for(JLabel[][] lab: allLayers){
 																if(lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setText(" ");
+																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	break;
 																}
 															}
-															System.out.println("a.start_x: " + a.start_x);
-															System.out.println("a.start_y: " + a.start_y);
-															System.out.println("t[0,1] = {" + t[0]+","+t[1]+"}");
+//															System.out.println("a.start_x: " + a.start_x);
+//															System.out.println("a.start_y: " + a.start_y);
+//															System.out.println("t[0,1] = {" + t[0]+","+t[1]+"}");
 														}
 													}
 												}
