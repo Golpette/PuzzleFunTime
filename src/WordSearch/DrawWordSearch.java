@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -42,9 +43,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	private static int squareSize = 40;	
 	int x, y;
 	JFrame frame;
-	JPanel panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, main, clues;
+	JPanel panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6,
+	transparentLayer7, transparentLayer8, main, clues;
 	JLayeredPane layer;
-	JLabel [][] letters, letters2, letters3, letters4;
+	JLabel [][] letters, letters2, letters3, letters4, letters5, letters6, letters7, letters8;
 	ArrayList<JLabel[][]> allLayers;
 	String[][] grid;
 	GridBagConstraints c;
@@ -71,6 +73,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	double height;
 	Border border;
 	String tempWord = "";
+	public int counter = 0;
+	boolean congratulations = false;
 	
 	@SuppressWarnings("unchecked")
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
@@ -125,6 +129,11 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		letters2 = new JLabel [x-2][y-2];
 		letters3 = new JLabel [x-2][y-2];
 		letters4 = new JLabel [x-2][y-2];
+		letters5 = new JLabel [x-2][y-2];
+		letters6 = new JLabel [x-2][y-2];
+		letters7 = new JLabel [x-2][y-2];
+		letters8 = new JLabel [x-2][y-2];
+		
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
@@ -166,12 +175,20 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		transparentLayer2 = setUpLayers(letters2, transparentLayer2);
 		transparentLayer3 = setUpLayers(letters3, transparentLayer3);
 		transparentLayer4 = setUpLayers(letters4, transparentLayer4);
+		transparentLayer5 = setUpLayers(letters5, transparentLayer5);
+		transparentLayer6 = setUpLayers(letters6, transparentLayer6);
+		transparentLayer7 = setUpLayers(letters7, transparentLayer7);
+		transparentLayer8 = setUpLayers(letters8, transparentLayer8);
 		
 		allLayers.add(letters);
 		allLayers.add(letters2);
 		allLayers.add(letters3);
 		allLayers.add(letters4);
-	
+		allLayers.add(letters5);
+		allLayers.add(letters6);
+		allLayers.add(letters7);
+		allLayers.add(letters8);
+		
 		layer.setBackground(clear);
 		layer.setVisible(true);
 		layer.setOpaque(true);
@@ -321,12 +338,17 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
 							for(Entry a : entries){
-								if(a.end_x == j+1 && a.end_y == i+1){
+								if(counter == entries.size() && !congratulations){
+									JOptionPane.showMessageDialog(frame, "Congratulations!");
+									congratulations = true;
+								}
+								else if(a.end_x == j+1 && a.end_y == i+1){
 									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
 									System.out.println("now: " + tempWord);
 									if(tempStrikethrough.contains(a.getWord())){
 										for (JLabel temp: allClues){
 											if(temp.getText().equals(a.getWord().toUpperCase())){
+												counter++;
 												temp.setFont(font4);
 												String[] images = setImageDirections(a.direction);
 												Icon ic0 = setImage(setPath(images[0]), squareSize, squareSize);
