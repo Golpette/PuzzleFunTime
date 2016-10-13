@@ -157,7 +157,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
 				}
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
-				
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
 				mouseActionlabel(letters[i][j]);
 				transparentLayer.add(letters[i][j]);
@@ -582,10 +581,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
+					System.out.println("Button pushed!");
 					for (int i = 0; i < x-1; i++){
 						for (int j = 0; j < y-1; j++){
 							if(!grid[i][j].equals("_")){
 								reveal.setText("Hide Solution");
+								letters[j-1][i-1].setOpaque(true);
 								letters[j-1][i-1].setBackground(Color.GREEN);
 							}
 					}
@@ -595,6 +596,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int j = 0; j < y-1; j++){
 						if(!grid[i][j].equals("_")){
 							reveal.setText("Show Solution");
+							letters[j-1][i-1].setOpaque(false);
 							letters[j-1][i-1].setBackground(new Color(255,255,255,255));
 						}
 					}
