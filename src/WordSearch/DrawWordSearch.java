@@ -57,7 +57,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	boolean diagonal;
 	JScrollPane area;
 	DrawSolution sol;
-	ArrayList<String> fullGrid, tempStrikethrough, solutions;
+	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
@@ -88,6 +88,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		allLayers = new ArrayList<JLabel[][]>();
 		tempStrikethrough = new ArrayList<String>();
 		solutions = new ArrayList<String>();
+		struckThrough = new ArrayList<String>();
 		
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
@@ -348,11 +349,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 									System.out.println("now: " + tempWord);
 									if(tempStrikethrough.contains(a.getWord())){
 										for (JLabel temp: allClues){
-											if(temp.getText().equals(a.getWord().toUpperCase())){
+											if(temp.getText().equals(a.getWord().toUpperCase()) && !(struckThrough.contains(temp.getText()))){
 												if(!solutions.contains(temp.getText())){
 													solutions.add(temp.getText());
 													counter++;
 													temp.setFont(font4);
+													struckThrough.add(temp.getText());
 												}
 												String[] images = setImageDirections(a.direction);
 												Icon ic0 = setImage(setPath(images[0]), squareSize, squareSize);
