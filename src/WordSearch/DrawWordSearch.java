@@ -198,9 +198,13 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(0));
-		layer.add(transparentLayer4, new Integer(0));
-		layer.add(transparentLayer3, new Integer(0));
 		layer.add(transparentLayer2, new Integer(0));
+		layer.add(transparentLayer3, new Integer(0));
+		layer.add(transparentLayer4, new Integer(0));
+		layer.add(transparentLayer5, new Integer(0));
+		layer.add(transparentLayer6, new Integer(0));
+		layer.add(transparentLayer7, new Integer(0));
+		layer.add(transparentLayer8, new Integer(0));
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBackground(clear);
 		
@@ -340,11 +344,8 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
 							for(Entry a : entries){
-								if(counter == entries.size() && !congratulations){
-									JOptionPane.showMessageDialog(frame, "Congratulations!");
-									congratulations = true;
-								}
-								else if(a.end_x == j+1 && a.end_y == i+1){
+								
+								if(a.end_x == j+1 && a.end_y == i+1){
 									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
 									System.out.println("now: " + tempWord);
 									if(tempStrikethrough.contains(a.getWord())){
@@ -469,6 +470,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 											}									
 										}	
 									}
+								}
+								if(counter == entries.size() && !congratulations){
+									JOptionPane.showMessageDialog(frame, "Congratulations!");
+									congratulations = true;
 								}
 							}
 							tempStrikethrough.clear();
