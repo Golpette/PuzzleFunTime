@@ -23,8 +23,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
@@ -37,15 +35,15 @@ public class SetDifficulty extends JComponent implements ActionListener{
 	public CrosswordGenerator crossword;
 	public PuzzleLoader puzzleLoader;
 	JFrame frame;
-	JPanel panel, panel1, grid;
+	JPanel panel, panel1, panel2, grid;
 	JButton generate, easy, medium, hard, expert;
 	JButton back;
 	ButtonModel blah;
 	JLayeredPane layer;
-	JLabel chooseDifficulty, pic;
+	JLabel chooseDifficulty, chooseDifficulty2, pic;
 	SetSize size;
 	SpinnerNumberModel model;
-	Font font, font2;
+	Font font, font2, font3;
 	String puzzle;
 	ImageIcon image, image2, pic1, pic2;
 	Image newimg;
@@ -54,15 +52,19 @@ public class SetDifficulty extends JComponent implements ActionListener{
 	
 	public SetDifficulty(String puzzle) throws IOException {
 		this.puzzle = puzzle;
-		font = new Font("Century Gothic", Font.BOLD, 48);
+		font = new Font("Century Gothic", Font.BOLD, 40);
+		font3 = new Font("Century Gothic", Font.BOLD, 48);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
 		panel1.setOpaque(false);
+		panel2 = new JPanel(new GridBagLayout());
+		panel2.setOpaque(false);
 		grid = new JPanel(new GridLayout(1,4));
 		frame = new JFrame("Set Puzzle Difficulty");
 		frame.setSize(550, 400);
 		panel1.setBounds(0, 0, frame.getWidth(), 320);
+		panel2.setBounds(0, 0, frame.getWidth(), 320);
 		generate = new JButton("OK");
 		generate.setFont(font2);
 		generate.setHorizontalAlignment(SwingConstants.CENTER);
@@ -86,16 +88,16 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		String path3 = "";
 		String path4 = "";
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
-			path1 = "src/back.png";
-			path2 = "src/back1.png";
-			path3 = "src/crossword.png";
-			path4 = "src/wordsearch.png";
+			path1 = "src/resources/back.png";
+			path2 = "src/resources/back1.png";
+			path3 = "src/resources/crossword.png";
+			path4 = "src/resources/wordsearch.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\back.png";
-			path2 = "src\\back1.png";
-			path3 = "src\\crossword.png";
-			path4 = "src\\wordsearch.png";
+			path1 = "src\\resources\\back.png";
+			path2 = "src\\resources\\back1.png";
+			path3 = "src\\resources\\crossword.png";
+			path4 = "src\\resources\\wordsearch.png";
 		}
 		
 		pic = new JLabel("");
@@ -139,6 +141,7 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		back.setFont(font2);
 		back.setHorizontalAlignment(SwingConstants.CENTER);
 		mouseActionlabel(back);
+		keyActionTextField(back);
 		back.addActionListener(this);
 		back.setIcon(image);
 		back.setOpaque(false);
@@ -151,9 +154,12 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		model = new SpinnerNumberModel(12, 3, 30, 1);
 		chooseDifficulty = new JLabel(puzzle + " Difficulty");
 		chooseDifficulty.setFont(font);
-		chooseDifficulty.setForeground(Color.RED);
+		chooseDifficulty.setForeground(Color.BLACK);
 		chooseDifficulty.setHorizontalAlignment(SwingConstants.CENTER);
-	//	chooseDifficulty.setIcon(image);
+//		chooseDifficulty2 = new JLabel(puzzle + " Difficulty");
+//		chooseDifficulty2.setFont(font3);
+//		chooseDifficulty2.setForeground(Color.BLACK);
+//		chooseDifficulty2.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -165,8 +171,18 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		c.insets = new Insets(0,0,0,0);
 		panel1.add(chooseDifficulty, c);
 		
+//		c.fill = GridBagConstraints.BOTH;
+//		c.weightx = 1.0;
+//		c.weighty = 1.0;
+//		c.gridx = 0;
+//		c.gridy = 2;
+//		c.gridwidth = 4;
+//		c.insets = new Insets(0,0,0,0);
+//		panel2.add(chooseDifficulty2, c);
+		
 		layer = new JLayeredPane();
 		layer.add(panel1, new Integer(0));
+		//layer.add(panel2, new Integer(0));		//adding this makes it text look a bit like shadowed text but it doesn't work really as required
 		layer.add(back, new Integer(0));
 		layer.add(pic, new Integer(0));
 		layer.setVisible(true);
@@ -198,11 +214,21 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		frame.setResizable(false);
 	}
 
-	void keyActionTextField(JTextField l) {
+	void keyActionTextField(JButton l) {
 
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				if(e.getSource().equals(KeyEvent.VK_BACK_SPACE)){
+					//actionPerformed();
+					
+					try {
+						puzzleLoader = new PuzzleLoader("");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					frame.dispose();	
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {

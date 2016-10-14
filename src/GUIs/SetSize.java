@@ -2,15 +2,10 @@ package GUIs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -18,9 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 
 import javax.swing.ButtonModel;
@@ -37,7 +29,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import Crossword.CrosswordGenerator;
-import Sudolu.SudokuGenerator;
+import Sudoku.SudokuGenerator;
 import WordSearch.WordSearchGenerator;
 
 public class SetSize extends JComponent implements ActionListener{
@@ -67,8 +59,9 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public SetSize(String puzzle, int difficulty) throws IOException {
 		this.puzzle = puzzle;
+		this.difficulty = difficulty;
 		fontPanel = new FontPanel();
-		font = new Font("Century Gothic", Font.BOLD, 48);
+		font = new Font("Century Gothic", Font.BOLD, 40);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		panel = new JPanel(new GridBagLayout());
 		panel1 = new JPanel(new GridBagLayout());
@@ -89,16 +82,16 @@ public class SetSize extends JComponent implements ActionListener{
 		//System.out.println(System.getProperty("os.name").toLowerCase());
 		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
 			
-			path1 = "src/back.png";
-			path2 = "src/back1.png";
-			path3 = "src/crossword.png";
-			path4 = "src/wordsearch.png";
+			path1 = "src/resources/back.png";
+			path2 = "src/resources/back1.png";
+			path3 = "src/resources/crossword.png";
+			path4 = "src/resources/wordsearch.png";
 		}
 		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			path1 = "src\\back.png";
-			path2 = "src\\back1.png";
-			path3 = "src\\crossword.png";
-			path4 = "src\\wordsearch.png";
+			path1 = "src\\resources\\back.png";
+			path2 = "src\\resources\\back1.png";
+			path3 = "src\\resources\\crossword.png";
+			path4 = "src\\resources\\wordsearch.png";
 		}
 	
 		pic = new JLabel("");
@@ -146,7 +139,7 @@ public class SetSize extends JComponent implements ActionListener{
 		back.setBorder(null);
 		
 		frame.setPreferredSize(new Dimension(550,400));
-		model = new SpinnerNumberModel(12, 3, 40, 1);
+		model = new SpinnerNumberModel(6, 3, 40, 1);
 		spinner = new JSpinner(model);
 		spinner.setForeground(Color.WHITE);
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
@@ -155,7 +148,7 @@ public class SetSize extends JComponent implements ActionListener{
 		intro = new JLabel(puzzle + " Size");
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
-		intro.setForeground(Color.RED);
+		intro.setForeground(Color.BLACK);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -256,7 +249,7 @@ public class SetSize extends JComponent implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == generate){
-			System.out.println(puzzle);
+			//System.out.println(puzzle);
 			if(puzzle.equals("Crossword")){
 				try {
 					crossword = new CrosswordGenerator((Integer)spinner.getValue());
