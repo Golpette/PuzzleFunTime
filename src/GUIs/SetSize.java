@@ -139,7 +139,7 @@ public class SetSize extends JComponent implements ActionListener{
 		back.setBorder(null);
 		
 		frame.setPreferredSize(new Dimension(550,400));
-		model = new SpinnerNumberModel(6, 3, 40, 1);
+		model = new SpinnerNumberModel(10, 3, 40, 1);
 		spinner = new JSpinner(model);
 		spinner.setForeground(Color.WHITE);
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));

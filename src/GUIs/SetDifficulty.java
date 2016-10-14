@@ -302,8 +302,8 @@ public class SetDifficulty extends JComponent implements ActionListener{
 		frame.dispose();
 		}
 		if(e.getSource() == expert){
-			//difficulty = 9;				//set to 9 to include snakes
-			difficulty = 8;
+			difficulty = 9;				//set to 9 to include snakes
+			//difficulty = 8;
 			try {
 				size = new SetSize(puzzle, difficulty);
 			}catch (IOException e1) {
