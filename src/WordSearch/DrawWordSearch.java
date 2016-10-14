@@ -460,9 +460,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																	break;
 																}
 															}
-//															System.out.println("a.start_x: " + a.start_x);
-//															System.out.println("a.start_y: " + a.start_y);
-//															System.out.println("t[0,1] = {" + t[0]+","+t[1]+"}");
 														}
 													}
 												}

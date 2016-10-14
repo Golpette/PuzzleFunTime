@@ -94,3 +94,9 @@
 	<password>asdf</password>
 </user>
 
+<user>
+	<username>Andrew James</username>
+	<email>AndrewJRigg@gmail.com</email>
+	<password>boobs</password>
+</user>
+
