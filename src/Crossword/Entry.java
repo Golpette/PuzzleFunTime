@@ -196,10 +196,10 @@ public class Entry {
 		char [] letters = word.toCharArray();
 		for (int a = 0; a < letters.length/2; a++){
 			char temp = letters[a];
-			letters[a] = letters[letters.length-1];
-			letters[letters.length-1] = temp;
+			letters[a] = letters[letters.length-1-a];
+			letters[letters.length-1-a] = temp;
 		}
-		String newPal = letters.toString();
+		String newPal = String.valueOf(letters);
 		if(newPal.equals(word)){
 				return true;
 		}else{

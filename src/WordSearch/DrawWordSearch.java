@@ -72,7 +72,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	String randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
 	Font font, font2, font3, font4, font5;
 	Random rand;
-	boolean buttonPushed, clicked;
+	boolean buttonPushed, clicked, start;
 	Color grey;
 	int wordLength, dir, startx, starty;
 	Color clear;
@@ -85,6 +85,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	public int counter = 0;
 	boolean congratulations = false;
 	boolean reset = true;
+	int x_pos, y_pos;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
@@ -113,6 +114,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		Map fontAttr = font3.getAttributes();
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		font4 = new Font(fontAttr);
+		start = true;
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255,255,255,255));
@@ -416,10 +418,16 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(letters[i][j])){
 							for(Entry a : entries){
-								
-								if(a.end_x == j+1 && a.end_y == i+1){
-									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
-									System.out.println("now: " + tempWord);
+								x_pos = a.end_x;
+								y_pos = a.end_y;
+								if(a.palindromic && !start){
+									System.out.println("Palindromic start_x: " + a.start_x + " start_y: " + a.start_y +" end_x: " + a.end_x + " end_y: " + a.end_y);
+									x_pos = a.start_x;
+									y_pos = a.start_y;
+								}
+								if(x_pos == j+1 && y_pos == i+1){
+//									System.out.println("a.endx: " + a.end_x + " a.endy: " + a.end_y);
+//									System.out.println("now: " + tempWord);
 									if(tempStrikethrough.contains(a.getWord())){
 										for (JLabel temp: allClues){
 											if(temp.getText().equals(a.getWord().toUpperCase()) && !(struckThrough.contains(temp.getText()))){
@@ -436,9 +444,9 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 												Icon ic3 = setImage(setPath(images[3]), squareSize, squareSize);
 												Icon ic4 = setImage(setPath(images[4]), squareSize, squareSize);
 												for(JLabel[][] lab: allLayers){
-													if(lab[i][j].getText().equals("")){
-														lab[i][j].setIcon(ic2);
-														lab[i][j].setText(" ");
+													if(lab[a.end_y-1][a.end_x-1].getText().equals("")){
+														lab[a.end_y-1][a.end_x-1].setIcon(ic2);
+														lab[a.end_y-1][a.end_x-1].setText(" ");
 														System.out.println("Direction: "+ a.direction+ " \nlayer: " + allLayers.indexOf(lab));
 														break;
 													}
@@ -575,7 +583,20 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 							}
 							tempStrikethrough.clear();
 							for(Entry b : entries){
-								if(b.start_x == j+1 && b.start_y == i+1){
+								if(b.palindromic){
+									if(b.start_x == j+1 && b.start_y == i+1){
+										tempWord = b.getWord();
+										tempStrikethrough.add(tempWord);
+										start = true;
+										System.out.println("Palindromic start clicked: "+ tempWord);
+									}else if(b.end_x == j+1 && b.end_y == i+1){
+										tempWord = b.getWord();
+										tempStrikethrough.add(tempWord);
+										System.out.println("Palindromic end clicked: "+ tempWord);
+										start = false;
+									}
+								}
+								 if(b.start_x == j+1 && b.start_y == i+1){
 									tempWord = b.getWord();
 									tempStrikethrough.add(tempWord);
 									System.out.println("Start clicked: "+ tempWord);
