@@ -54,7 +54,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	JLabel [][] letters, letters2, letters3, letters4, letters5, letters6, letters7, letters8;
 	ArrayList<JLabel[][]> allLayers;
 	String[][] grid;
-	String [] ordering = {"ALPHABETICAL", "BIGGEST", "SMALLEST", "RANDOM"};
+	String [] ordering = {"RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST"};
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
 	GridBagConstraints c;
