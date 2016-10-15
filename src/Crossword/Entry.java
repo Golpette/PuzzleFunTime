@@ -22,6 +22,7 @@ public class Entry {
 	String definition;
 	int clue_number;
 	int entryAcross, entryDown;
+	public boolean palindromic;
 
 	public Entry(int start_x, int start_y, boolean across, String word, String definition) {
 		this.start_x = start_x;
@@ -30,6 +31,7 @@ public class Entry {
 		this.across = across;
 		this.word = word;
 		this.definition = definition;
+		palindromic = getPalindromic();
 		clue_number = 0;
 		entryAcross = 0;
 		entryDown = 0;
@@ -66,6 +68,7 @@ public class Entry {
 		clue_number = 0;
 		entryAcross = 0;
 		entryDown = 0;
+		palindromic = getPalindromic();
 		if (direction.equals("across")) {
 			end_x = start_x + wordLength-1;
 			end_y = start_y;
@@ -187,5 +190,20 @@ public class Entry {
 
 	public void setEntryDown(int entry) {
 		this.entryDown = entry;
+	}
+	
+	public boolean getPalindromic(){
+		char [] letters = word.toCharArray();
+		for (int a = 0; a < letters.length/2; a++){
+			char temp = letters[a];
+			letters[a] = letters[letters.length-1];
+			letters[letters.length-1] = temp;
+		}
+		String newPal = letters.toString();
+		if(newPal.equals(word)){
+				return true;
+		}else{
+			return false;
+		}
 	}
 }

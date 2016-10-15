@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -30,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 import Crossword.DrawSolution;
@@ -469,7 +471,35 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 									}
 								}
 								if(counter == entries.size() && !congratulations){
-									JOptionPane.showMessageDialog(frame, "Congratulations!");
+									
+									SwingWorker<Void, String> worker = new SwingWorker<Void, String>(){
+
+									      /*
+									       * 
+									       *   Trying to implement threads
+									       *   Allow GUI to run without pausing while congratulations comes up later
+									       *   @Override(non-Javadoc)
+									       * @see javax.swing.SwingWorker#doInBackground()
+									       */
+									        protected Void doInBackground() throws Exception {
+									            this.publish("Everything");
+									            Thread.sleep(3000);
+									            return null;
+									        }
+
+									        @Override
+									        protected void process(List<String> res){
+									            	 try {
+														Thread.sleep(500);
+													} catch (InterruptedException e) {
+														e.printStackTrace();
+													}
+									            	JOptionPane.showMessageDialog(frame, "Congratulations!");
+									        }
+
+									    };
+
+									    worker.execute();
 									congratulations = true;
 								}
 							}
@@ -486,6 +516,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 				}
 			}
 
+			
 			private int[] setIncrements(String direction) {
 				int [] inc = new int[2];
 				if(direction.equals("across")){

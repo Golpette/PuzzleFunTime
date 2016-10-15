@@ -53,7 +53,7 @@ public class WordSearchGenerator{
 														// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
 
 				
-				direc = 8;
+				//direc = 8;
 
 				//int direc = (int)(Math.random() * difficulty);    // TODO: USE THIS NUMBER TO CONTROL "DIFFICULTY (i.e. backwards/diagonal etc)
 				// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
@@ -83,7 +83,7 @@ public class WordSearchGenerator{
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
 				}
 				else if(direc >= 8 ){
-					System.out.println("snaking");
+					//System.out.println("snaking");
 					new FitWords_wordsearch(grid, x, y, words, entries, "snaking" );
 					
 				}	
