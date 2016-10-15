@@ -82,7 +82,7 @@ public class WordSearchGenerator{
 				else if( direc==7 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
 				}
-				else if(direc == 8 ){
+				else if(direc >= 8 ){
 					System.out.println("snaking");
 					new FitWords_wordsearch(grid, x, y, words, entries, "snaking" );
 					
