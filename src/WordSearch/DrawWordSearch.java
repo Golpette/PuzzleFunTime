@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -22,6 +24,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,26 +48,29 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	private static int squareSize = 40;	
 	int x, y;
 	JFrame frame;
-	JPanel panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6,
+	JPanel extra, panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6,
 	transparentLayer7, transparentLayer8, main, clues;
-	JLayeredPane layer;
+	JLayeredPane layer, layer2;
 	JLabel [][] letters, letters2, letters3, letters4, letters5, letters6, letters7, letters8;
 	ArrayList<JLabel[][]> allLayers;
 	String[][] grid;
+	String [] ordering = {"ALPHABETICAL", "BIGGEST", "SMALLEST", "RANDOM"};
+	@SuppressWarnings({ "rawtypes" })
+	JComboBox orderClues;
 	GridBagConstraints c;
 	String [] loopDirections = {"top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"};
 	String operatingSystem;
 	String imagePath = "";
 	JButton reveal;
-	boolean diagonal;
+	boolean diagonal, notIn;
 	JScrollPane area;
 	DrawSolution sol;
-	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions;
+	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
 	String randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
-	Font font, font2, font3, font4;
+	Font font, font2, font3, font4, font5;
 	Random rand;
 	boolean buttonPushed, clicked;
 	Color grey;
@@ -75,10 +81,12 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	double height;
 	Border border;
 	String tempWord = "";
+	String sortMethod = "random";
 	public int counter = 0;
 	boolean congratulations = false;
+	boolean reset = true;
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		this.x = x;
 		this.y = y;
@@ -91,8 +99,15 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		tempStrikethrough = new ArrayList<String>();
 		solutions = new ArrayList<String>();
 		struckThrough = new ArrayList<String>();
-		
+		clueText = new ArrayList<String>();
+		sorted = new ArrayList<String>();
+		orderClues = new JComboBox(ordering);
+		orderClues.addActionListener(this);
+		orderClues.setFont(font5);
+		extra = new JPanel(new GridBagLayout());
+		notIn = true;
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
+		font3 = new Font("Century Gothic", Font.PLAIN, 16);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		Map fontAttr = font3.getAttributes();
@@ -129,6 +144,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	
 		border = BorderFactory.createLineBorder(Color.BLACK);
 		layer = new JLayeredPane();
+		layer2 = new JLayeredPane();
 		letters = new JLabel [x-2][y-2];
 		letters2 = new JLabel [x-2][y-2];
 		letters3 = new JLabel [x-2][y-2];
@@ -207,21 +223,43 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.add(transparentLayer6, new Integer(0));
 		layer.add(transparentLayer7, new Integer(0));
 		layer.add(transparentLayer8, new Integer(0));
-		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
-		clues.setBackground(clear);
 		
+		
+		
+		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
+		clues.setBounds(0,0,squareSize*(x-2),squareSize*(y-2));
+		clues.setBackground(clear);
 		clues.setVisible(true);
 		clues.setOpaque(true);
 		
-		for(Entry entry: entries){
-			JLabel temp = new JLabel(entry.getWord().toUpperCase());
-			temp.setFont(new Font("Century Gothic", Font.PLAIN, 18));
-			allClues.add(temp);
-		}
+		setUpClues();
 		
-		for(JLabel temp: allClues){
-			clues.add(temp);
-		}
+		extra.setBackground(clear);
+		extra.setVisible(true);
+		extra.setOpaque(true);
+		
+		orderClues.setBounds(0,0,100,40);
+		orderClues.setBorder(border);
+		orderClues.setBackground(clear);
+		orderClues.setOpaque(false);
+		orderClues.setVisible(false);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		extra.add(orderClues, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.insets = new Insets(0, 50, 0, 0);
+		extra.add(clues, c);
+		
+//		layer2.setBackground(clear);
+//		layer2.add(clues, new Integer(0));
+//		layer2.add(orderClues, new Integer(1));
 		
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
@@ -232,6 +270,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.insets = new Insets(0, 0, 0, 0);
 		main.add(layer, c);
 
 		c.weightx = 1.0;
@@ -239,7 +278,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		c.gridx = 1;
 		c.gridy = 0;
 		c.ipady = 10;
-		main.add(clues, c);
+		main.add(extra, c);
 		
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		area.getVerticalScrollBar().setUnitIncrement(10);
@@ -285,6 +324,37 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.getRootPane().setDefaultButton(reveal);
 	}
 	
+	private void setUpClues() {
+		clues.removeAll();
+		clueText.clear();
+		sorted.clear();
+		allClues.clear();
+		
+		
+		for(Entry entry: entries){
+		clueText.add(entry.getWord().toUpperCase());
+		}
+		
+		sorted = sortedStrings(clueText, sortMethod);
+		
+		for(String a: sorted){
+			JLabel temp = new JLabel(a);
+			mouseActionlabel(temp);
+			if(struckThrough.contains(a)){
+				temp.setFont(font4);
+			}else{
+				temp.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+			}
+			
+			allClues.add(temp);
+		}
+		
+		
+		for(JLabel temp: allClues){
+			clues.add(temp);
+		}
+	}
+
 	/**
 	 * This sets the imageIcon from a given name of image and creates the corresponding image, 
 	 * from it.  The image is then scaled and placed into a temporary image
@@ -515,7 +585,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 					}
 				}
 			}
-
 			
 			private int[] setIncrements(String direction) {
 				int [] inc = new int[2];
@@ -555,9 +624,33 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 
 			public void mouseEntered(MouseEvent e) {
+			for(JLabel lab: allClues){
+					if(e.getSource() == lab && notIn && reset){
+						//display ordering dropdown
+						clues.setBackground(new Color(240,240,240,255));
+						orderClues.setVisible(true);
+						notIn = false;
+					}
+				}
+			for(int i = 0; i < x-2; i++){
+				for (int j = 0; j < y-2; j++){
+					if(e.getSource() == letters[i][j]){
+						orderClues.setVisible(false);
+						reset = true;
+					}
+				}
+			}
 			}
 
 			public void mouseExited(MouseEvent e) {
+				for(JLabel lab: allClues){
+					if(e.getSource() == lab){
+						//display ordering dropdown
+						clues.setBackground(clear);
+						notIn = true;
+						//orderClues.setVisible(false);
+					}
+				}
 			}
 
 			public void mousePressed(MouseEvent e) {
@@ -570,6 +663,85 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		});
 	}
 	
+	/**
+	 * Method to Alphabetise arraylist of strings
+	 * @param strings
+	 * @return
+	 */
+	public ArrayList<String> sortedStrings(ArrayList<String> strings, String method){
+		if(method.equals("alphabetical")){
+		List<String> list = strings;
+		Collections.sort(list);
+		strings = (ArrayList<String>) list;
+		}
+		else if(method.equals("smallest")){
+			strings = sortBySize(strings, true);
+		}
+		else if(method.equals("random")){
+			List<String> list = strings;
+			Collections.shuffle(list);
+			strings = (ArrayList<String>) list;
+		}
+		else if(method.equals("biggest")){
+			strings = sortBySize(strings, false);
+			List<String> list = strings;
+			Collections.reverse(list);
+			strings = (ArrayList<String>) list;
+		}
+		return strings;
+	}
+	
+	/**
+	 * Sort arraylist of strings by size and alphabetically or reverse of both.
+	 * Involves sorting list, then running through and putting any smaller words in front of larger ones.
+	 * Knowing they are ordered means only need to check one is smaller or equal than the other.
+	 * The boolean is to determine if it's ordering each size group in alphabetical or reverse alphabetical order.
+	 * (The latter list can then be reverse sorted to give the alphabetical by size largest first ordering).
+	 * @param strings
+	 * @param filter
+	 * @return
+	 */
+	private ArrayList<String> sortBySize(ArrayList<String> strings, boolean filter) {
+			List<String> list = strings;
+			Collections.sort(list);
+			strings = (ArrayList<String>) list;
+			ArrayList<String> temp = new ArrayList<String>();
+			for(String a: strings){
+				if(temp.isEmpty()){
+					temp.add(a);
+				}
+				else if(temp.get(temp.size()-1).length() <= a.length() && filter){
+					temp.add(temp.size(), a);
+				}else if(temp.get(temp.size()-1).length() < a.length()){
+					temp.add(temp.size(), a);
+				}else{
+					for(int b = temp.size()-1; b >= 0; b--){
+						if(b == 0){
+								if(temp.get(b).length() <= a.length() && filter){
+									temp.add(1, a);
+									break;
+								}else if(temp.get(b).length() < a.length()){
+									temp.add(1, a);
+									break;
+								}
+								else{
+									temp.add(0,a);
+									break;
+								}
+							}
+							else if(temp.get(b).length() <= a.length() && filter){
+								temp.add(b+1, a);
+								break;
+							}else if(temp.get(b).length() < a.length()){
+								temp.add(b+1, a);
+								break;
+							}
+					}
+				}
+			}
+		return temp;
+	}
+
 	/**
 	 * Get names of images for relevant direction of word
 	 * @param direction
@@ -642,7 +814,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 				if(buttonPushed){
-					System.out.println("Button pushed!");
 					for (int i = 0; i < x-1; i++){
 						for (int j = 0; j < y-1; j++){
 							if(!grid[i][j].equals("_")){
@@ -662,6 +833,29 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 						}
 					}
 				}
+			}
+		}
+		if(e.getSource() == orderClues){
+			JComboBox cb = (JComboBox)e.getSource();
+			String msg = (String)cb.getSelectedItem();
+			notIn = false;
+			reset = false;
+			if(msg.equals("ALPHABETICAL")){
+				orderClues.setVisible(false);
+				sortMethod = "alphabetical";
+				setUpClues();
+			}else if(msg.equals("BIGGEST")){
+				orderClues.setVisible(false);
+				sortMethod = "biggest";
+				setUpClues();
+			}else if(msg.equals("SMALLEST")){
+				orderClues.setVisible(false);
+				sortMethod = "smallest";
+				setUpClues();
+			}else if(msg.equals("RANDOM")){
+				orderClues.setVisible(false);
+				sortMethod = "random";
+				setUpClues();
 			}
 		}
 	}

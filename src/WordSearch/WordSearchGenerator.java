@@ -42,7 +42,7 @@ public class WordSearchGenerator{
 			
 			// Fit specific number of words
 			
-			int num_words_to_fit = 3;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			int num_words_to_fit = 20;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
 
 			int count_tries = 0;
 			
