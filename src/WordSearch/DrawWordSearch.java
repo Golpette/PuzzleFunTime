@@ -120,7 +120,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		frame.setBackground(new Color(255,255,255,255));
 		frame.setMinimumSize(new Dimension(550,400));
 		
-		sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
+	//	sol = new DrawSolution(grid, x, y, squareSize, "Word Search");
 		grey = new Color(200,200,200,255);
 		wordLength = 0;
 		dir = 0;
