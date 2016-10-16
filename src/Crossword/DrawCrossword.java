@@ -419,7 +419,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
 					firstAutoMove = true;
 					makeAllWhite();
-					highlightWord_fromClick(0,0);
+					highlightWord_fromClick(lastClick_x,lastClick_y);
 					firsteverclick=false;
 				}
 
@@ -523,6 +523,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									currentDirection = 1;
 									firstAutoMove=false;
 								}
+
+								
 					
 								// highlighted squares take priority; i.e. can choose to go down if we want
 								if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
@@ -549,7 +551,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 1;  //i.e. going down
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row, col);												
+												highlightWord( row+1, col);												
 											}
 										}
 									}
@@ -568,7 +570,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 0;  //i.e. going across
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row, col);	
+												highlightWord( row, col+1);	
 											}
 										}
 									}									
@@ -687,6 +689,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j])){
 							makeAllWhite();
+							/////
+							lastClick_x=i; lastClick_y=j;
+						//////////////////////	
+						
 							highlightWord_fromClick(i,j);
 						}
 						for (JLabel lb : hints) {
@@ -898,7 +904,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		// edit: allow word to be highlighted from any position, not just first letter
 		else{
 			int xx1=0; int yy1=0;
-			if( ystart>0 && boxes[xstart][ystart-1].isEnabled() ){
+			if( ystart>0 && boxes[xstart][ystart-1].isEnabled() && ystart<y-3 &&  boxes[xstart][ystart+1].isEnabled() ){// EDITED 1546
 				//find start point and highlight from there
 				for( int mm=0; mm<y-2; mm++ ){
 					if( !clueNumbers[xstart][ystart-mm].getText().equals("")  ){
@@ -915,12 +921,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}	
 									mm=y; //break
 								} 
-//								else {
-//									int length = ent.getWord().length();
-//									for( int dbl=0; dbl<length; dbl++ ){
-//										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
-//									}														
-//								}					
+			
 							}
 						}////////replace this with recursive method
 						
@@ -928,12 +929,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 				
 			}
-			else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ){
-				
-				
-				
+			else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ){    // WORKS. DOWN
+			//else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ||   
+		///	/	( xstart>0 && boxes[xstart-1][ystart].isEnabled() &&   !boxes[xstart][ystart+1].isEnabled()   )	){   
 	
-				
+			
+			
 				//find start point and highlight from there
 				for( int mm=0; mm<x-2; mm++ ){
 					if( !clueNumbers[xstart-mm][ystart].getText().equals("")  ){
@@ -950,12 +951,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 									}	
 									mm=x; //break; 
 								} 
-//								else {
-//									int length = ent.getWord().length();
-//									for( int dbl=0; dbl<length; dbl++ ){
-//										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
-//									}														
-//								}					
+								
 							}
 						}////////replace this with recursive method
 						
@@ -964,6 +960,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 			
 			}
+
 			else{
 				// in coord (0,0) so do nothing
 			}
@@ -983,12 +980,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	// Highlight across/down depending on number of clicks
-	public void highlightWord_fromClick( int xstart, int ystart ){
-		
-		
-		
-		/////if(firsteverclick){countClicks--;}// REMOVE THIS -  RETURN BETTER FUNCTION?
-		
+	public void highlightWord_fromClick( int xstart, int ystart ){		
 		
 		
 		// if clicking on start of a word
