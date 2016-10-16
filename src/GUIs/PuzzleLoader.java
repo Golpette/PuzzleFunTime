@@ -71,7 +71,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setBorder(null);
 		
 		panel = new JPanel(new GridBagLayout());
-		grid = new JPanel(new GridLayout(1, 3));
+		grid = new JPanel(new GridLayout(3, 1));
 		cwd = new JButton("Crossword");
 		cwd.setFont(font2);
 		cwd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -138,36 +138,35 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(wds);
 		grid.add(sud);
 
-		c.weightx = 1.0;
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 0;
+//		c.gridy = 0;
+//		panel.add(signup, c);
+//
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 1;
+//		c.gridy = 0;
+//		panel.add(login, c);
+		
+		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(signup, c);
-
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 0;
-		panel.add(login, c);
+		c.ipady = 0;
+		c.ipady = 10;
+		panel.add(grid, c);
 		
 		c.fill = GridBagConstraints.BOTH;
 		c.ipady = (int)(frame.getHeight()*0.8);		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 3;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 2;
 		panel.add(layer, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 0;
-		c.gridy = 2;
-		c.ipady = 0;
-		c.gridwidth = 3;
-		c.ipady = 10;
-		panel.add(grid, c);
-		
+
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
