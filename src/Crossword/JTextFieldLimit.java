@@ -3,12 +3,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-class JTextFieldLimit extends PlainDocument {
+public class JTextFieldLimit extends PlainDocument {
 
 	private static final long serialVersionUID = 1L;
 	private int limit;
 	String goodChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	JTextFieldLimit(int limit) {
+	public JTextFieldLimit(int limit) {
 		super();
 		this.limit = limit;
 	}

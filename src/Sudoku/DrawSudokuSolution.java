@@ -39,6 +39,7 @@ public class DrawSudokuSolution extends JComponent{
 	DrawSudoku sol;
 	ArrayList<String> fullGrid;
 	ArrayList<Integer> row, square, tempColumn, checks;
+	ArrayList<Integer> correct;
 	ArrayList<ArrayList<Integer>> cols;
 	ArrayList<ArrayList<Integer>> boxes;
 	Font font, font2;
@@ -59,6 +60,7 @@ public class DrawSudokuSolution extends JComponent{
 		tempColumn = new ArrayList<Integer>();
 		checks = new ArrayList<Integer>();
 		fullGrid = new ArrayList<String>();
+		correct = new ArrayList<Integer>();
 		panel = new JPanel(new GridBagLayout());
 		largeGrid = new JPanel(new GridLayout(3,3));
 		panel.setOpaque(false);
@@ -122,7 +124,7 @@ public class DrawSudokuSolution extends JComponent{
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		frame.setVisible(false);
 	}
 
 		public void generateSudoku(){
@@ -130,6 +132,7 @@ public class DrawSudokuSolution extends JComponent{
 			cols.clear();
 			row.clear();
 			checks.clear();
+			correct.clear();
 			if(!complete){
 			for (int i = 0; i < x-2; i++){
 				int bound = 9;
@@ -170,15 +173,15 @@ public class DrawSudokuSolution extends JComponent{
 					}
 					if(row.isEmpty()){
 						if(i != 8 || j != 8){
-							System.out.println("got here first");
+							//System.out.println("got here first");
 							
 							generateSudoku();
 						}else{
-							System.out.println("got here");
+							//System.out.println("got here");
 							complete = true;
 							break;
 						}
-						System.out.println("Got here");
+						//System.out.println("Got here");
 					}
 					if(bound == 0){
 						complete = true;
@@ -188,7 +191,8 @@ public class DrawSudokuSolution extends JComponent{
 						if(!cols.isEmpty()){
 							int temp = (rand.nextInt(bound));
 							int insertion = row.get(temp);
-							numbers[i][j].setText(""+insertion);
+							//numbers[i][j].setText(""+insertion);
+							correct.add(insertion);
 							checks.add(row.get(temp));
 							cols.get(j).add(row.get(temp));
 							boxes.get(((i/3)*3)+(j/3)).add(row.get(temp));
@@ -210,6 +214,14 @@ public class DrawSudokuSolution extends JComponent{
 					}
 				}
 			}		
+			}
+			if(!correct.isEmpty()){
+				//System.out.println("Numbers: " + correct.toString());
+				for(int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						numbers[i][j].setText(""+ correct.get(j*(x-2) + i));
+					}
+				}
 			}
 		}
 	

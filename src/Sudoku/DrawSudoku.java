@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import Crossword.JTextFieldLimit;
+
 /**
  * Class to draw a word search
  */
@@ -33,6 +35,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JPanel panel, transparentLayer, largeGrid;
 	JLayeredPane layer;
 	JLabel [][] numbers, threeByThreeGrid;
+	JTextField [][] nums;
 	int[][] grid;
 	String[][] grid2;
 	GridBagConstraints c;
@@ -52,7 +55,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		y = 11;
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
-		//sol = new DrawSudokuSolution(grid, x, y);
+		sol = new DrawSudokuSolution(grid, x, y);
+		sol.generateSudoku();
+		sol.setVisible(false);
 		row = new ArrayList<Integer>();
 		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
@@ -64,6 +69,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		panel.setOpaque(false);
 		layer = new JLayeredPane();
 		numbers = new JLabel [x-2][y-2];
+		nums = new JTextField [x-2][y-2];
 		threeByThreeGrid = new JLabel [3][3];
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -89,13 +95,22 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
-				numbers[i][j] = new JLabel();
-				numbers[i][j].setFont(font);
-				numbers[i][j].setForeground(Color.BLACK);
-				numbers[i][j].setBorder(border);
-				numbers[i][j].setHorizontalAlignment(JTextField.CENTER);
-				numbers[i][j].setVerticalAlignment(JTextField.CENTER);
-				transparentLayer.add(numbers[i][j]);
+//				numbers[i][j] = new JLabel();
+//				numbers[i][j].setFont(font);
+//				numbers[i][j].setForeground(Color.BLACK);
+//				numbers[i][j].setBorder(border);
+//				numbers[i][j].setHorizontalAlignment(JTextField.CENTER);
+//				numbers[i][j].setVerticalAlignment(JTextField.CENTER);
+//				transparentLayer.add(numbers[i][j]);
+				
+				
+				nums[i][j] = new JTextField();
+				nums[i][j].setFont(font);
+				nums[i][j].setForeground(Color.BLACK);
+				nums[i][j].setBorder(border);
+				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
+				nums[i][j].setDocument(new JTextFieldLimit(1));
+				transparentLayer.add(nums[i][j]);
 			}
 		}
 		
@@ -220,12 +235,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
 				reveal.setText("Hide Solution");
-				try {
-					sol = new DrawSudokuSolution(grid, 11, 11);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
+				//sol.setVisible(true);
+				//sol.frame.setVisible(true);
 //				for (int i = 0; i < x-2; i++){
 //					for (int j = 0; j < y-2; j++){
 //						if(numbers[i][j].getText().equals("")){
@@ -239,6 +251,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					//}
 			//	}
 			}
+				
 			else{
 				reveal.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
