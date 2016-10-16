@@ -112,8 +112,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			//path1 = "src\\resources\\1.jpg";
 		}
 	
-		System.out.println(frame.getWidth());
-		System.out.println(path1);
+//		System.out.println(frame.getWidth());
+//		System.out.println(path1);
 		image = new ImageIcon( path1 );  
 		img = image.getImage();
 		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 

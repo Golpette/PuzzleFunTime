@@ -317,8 +317,8 @@ public class FitWords_wordsearch {
 
 				// Update Entries list
 				Entry entry = new Entry(init_x, init_y, true, word, definition, dir); //across boolean not sensible for wordsearches
-				System.out.println(entry.getWord());
-				System.out.println(entry.palindromic);
+//				System.out.println(entry.getWord());
+//				System.out.println(entry.palindromic);
 				entries.add(entry);
 			}
 		}

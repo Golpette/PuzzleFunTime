@@ -400,13 +400,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 	}
 
-	
-	
-	
-
-
-
-
 
 
 	void keyActionTextField(JTextField l) {

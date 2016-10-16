@@ -421,7 +421,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 								x_pos = a.end_x;
 								y_pos = a.end_y;
 								if(a.palindromic && !start){
-									System.out.println("Palindromic start_x: " + a.start_x + " start_y: " + a.start_y +" end_x: " + a.end_x + " end_y: " + a.end_y);
+									//System.out.println("Palindromic start_x: " + a.start_x + " start_y: " + a.start_y +" end_x: " + a.end_x + " end_y: " + a.end_y);
 									x_pos = a.start_x;
 									y_pos = a.start_y;
 								}
@@ -447,7 +447,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 													if(lab[a.end_y-1][a.end_x-1].getText().equals("")){
 														lab[a.end_y-1][a.end_x-1].setIcon(ic2);
 														lab[a.end_y-1][a.end_x-1].setText(" ");
-														System.out.println("Direction: "+ a.direction+ " \nlayer: " + allLayers.indexOf(lab));
+														//System.out.println("Direction: "+ a.direction+ " \nlayer: " + allLayers.indexOf(lab));
 														break;
 													}
 												}
@@ -455,7 +455,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 													if(lab[a.start_y-1][a.start_x-1].getText().equals("")){
 														lab[a.start_y-1][a.start_x-1].setIcon(ic0);
 														lab[a.start_y-1][a.start_x-1].setText(" ");
-														System.out.println("layer: " + allLayers.indexOf(lab));
+														//System.out.println("layer: " + allLayers.indexOf(lab));
 														break;
 													}
 												}
@@ -466,7 +466,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 															if(lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic1);
 																lab[a.start_y-1+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
-																System.out.println("layer: " + allLayers.indexOf(lab));
+																//System.out.println("layer: " + allLayers.indexOf(lab));
 																break;
 															}
 														}
@@ -477,7 +477,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic3);
 																	lab[a.start_y-2+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -485,7 +485,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-1+c*t[1]][a.start_x+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -494,7 +494,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -502,7 +502,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].getText().equals("")){
 																	lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setIcon(ic3);
 																	lab[a.start_y+c*t[1]][a.start_x-2+(c-1)*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -511,7 +511,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setIcon(ic3);
 																	lab[a.start_y-1+c*t[1]][a.start_x-1+(c+1)*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -519,7 +519,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
 																	lab[a.start_y+c*t[1]][a.start_x-1+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -528,7 +528,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].getText().equals("")){
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setIcon(ic3);
 																	lab[a.start_y-1+c*t[1]][a.start_x-2+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -536,7 +536,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 																if(lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].getText().equals("")){
 																	lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setIcon(ic4);
 																	lab[a.start_y-2 + c*t[1]][a.start_x-1+c*t[0]].setText(" ");
-																	System.out.println("layer: " + allLayers.indexOf(lab));
+																	//System.out.println("layer: " + allLayers.indexOf(lab));
 																	break;
 																}
 															}
@@ -588,18 +588,18 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 										tempWord = b.getWord();
 										tempStrikethrough.add(tempWord);
 										start = true;
-										System.out.println("Palindromic start clicked: "+ tempWord);
+										//System.out.println("Palindromic start clicked: "+ tempWord);
 									}else if(b.end_x == j+1 && b.end_y == i+1){
 										tempWord = b.getWord();
 										tempStrikethrough.add(tempWord);
-										System.out.println("Palindromic end clicked: "+ tempWord);
+										//System.out.println("Palindromic end clicked: "+ tempWord);
 										start = false;
 									}
 								}
 								 if(b.start_x == j+1 && b.start_y == i+1){
 									tempWord = b.getWord();
 									tempStrikethrough.add(tempWord);
-									System.out.println("Start clicked: "+ tempWord);
+									//System.out.println("Start clicked: "+ tempWord);
 								}
 							}
 						}
@@ -789,7 +789,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "BottomRight";
 			corner1 = "BottomLeftCorner";
 			corner2 = "TopRightCorner";
-			System.out.println("Changed Diagonal");
+			//System.out.println("Changed Diagonal");
 		}else if(direction.equals("backwards")){
 			start = "Right";
 			middle = "Horizontal";
@@ -804,21 +804,21 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			end = "TopLeft";
 			corner1 = "TopRightCorner";
 			corner2 = "BottomLeftCorner";
-			System.out.println("Changed Diagonal");
+			//System.out.println("Changed Diagonal");
 		}else if(direction.equals("BLTRdiagonal")){
 			start = "BottomLeft";
 			middle = "DiagonalUpRight";
 			end = "TopRight";
 			corner1 = "BottomRightCorner";
 			corner2 = "TopLeftCorner";
-			System.out.println("Changed Diagonal");
+			//System.out.println("Changed Diagonal");
 		}else if(direction.equals("backwardsBLTRdiagonal")){
 			start = "TopRight";
 			middle = "DiagonalUpRight";
 			end = "BottomLeft";
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
-			System.out.println("Changed Diagonal");
+			//System.out.println("Changed Diagonal");
 		}else{
 			start = "Left";
 			middle = "Horizontal";
