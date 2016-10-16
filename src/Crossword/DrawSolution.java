@@ -1,22 +1,24 @@
 package Crossword;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -36,12 +38,14 @@ public class DrawSolution extends JComponent {
 	double width;
 	double height;
 	GridBagConstraints c;
+	public DrawCrossword puz;
+	JButton b;
 	
-	public DrawSolution(String[][] grid,int x, int y, int squareSize, String puzzle){
+	public DrawSolution(String[][] grid,int x, int y, int squareSize, String puzzle,  final DrawCrossword puz){
 		this.x = x;
 		this.y = y;
 		this.puzzle = puzzle;
-		
+		this.puz = puz;
 		frame = new JFrame(title);
 		frame.setBackground(Color.WHITE);
 		frame.setPreferredSize(new Dimension(frameSizeX, frameSizeY));
@@ -68,6 +72,15 @@ public class DrawSolution extends JComponent {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		width = screenSize.getWidth();
 		height = screenSize.getHeight();
+		
+
+		   final AbstractAction buttonPressed = new AbstractAction() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	//   frame.dispose();
+	            }
+	        };
+		
 		
 		for(int q = 1; q < x-1; q++){
 			for(int qq = 1; qq < y-1; qq++){
@@ -130,5 +143,13 @@ public class DrawSolution extends JComponent {
 		frame.setContentPane(area);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		//This is to change the text on the puzzle GUI when the solution is closed
+		//(needed to pass DrawCrossword into DrawSolution)
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	puz.hideSolution();
+		    }
+		});
 	}
 }

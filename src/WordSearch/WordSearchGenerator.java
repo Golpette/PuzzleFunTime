@@ -42,7 +42,8 @@ public class WordSearchGenerator{
 			
 			// Fit specific number of words
 			
-			int num_words_to_fit = 12;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			int num_words_to_fit = (int) (Math.pow(wordsearchSize, 2)/10)+5;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			//System.out.println("Number of Words in Puzzle: " + num_words_to_fit);
 
 			int count_tries = 0;
 			
@@ -82,8 +83,8 @@ public class WordSearchGenerator{
 				else if( direc==7 ){
 					new FitWords_wordsearch(grid, x, y, words, entries, "backwardsBLTRdiagonal" );
 				}
-				else if(direc == 8 ){
-					System.out.println("snaking");
+				else if(direc >= 8 ){
+					//System.out.println("snaking");
 					new FitWords_wordsearch(grid, x, y, words, entries, "snaking" );
 					
 				}	

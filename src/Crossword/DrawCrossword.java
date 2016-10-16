@@ -120,7 +120,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 15);
 		font4 = new Font("Century Gothic", Font.PLAIN, 11);
-		sol = new DrawSolution(grid, x, y, squareSize, "Crossword");
+		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
 
@@ -399,13 +399,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		//firstAutoMove=false;
 		
 	}
-
-	
-	
-	
-
-
-
 
 
 
@@ -1096,33 +1089,39 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
-	
+	public void revealSolution(){
+		reveal.setText("Hide Solution");
+		for (int i = 0; i < x - 2; i++) {
+			for (int j = 0; j < y - 2; j++) {
+				if (boxes[i][j].getText().equals("")) {
+					boxes[i][j].setForeground(black);
+				} else if (boxes[i][j].getText().toLowerCase().equals(grid[j + 1][i + 1])) {
+					boxes[i][j].setForeground(green);
+				} else {
+					boxes[i][j].setForeground(red);
+				}
+			}
+		}
+	}
 
+	public void hideSolution(){
+		reveal.setText("Show Solution");
+		for (int i = 0; i < x - 2; i++) {
+			for (int j = 0; j < y - 2; j++) {
+				boxes[i][j].setForeground(new Color(0, 0, 0, 255));
+			}
+		}
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		
 		
 		if (e.getSource() == reveal) {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if (sol.frame.isVisible()) {
-				reveal.setText("Hide Solution");
-				for (int i = 0; i < x - 2; i++) {
-					for (int j = 0; j < y - 2; j++) {
-						if (boxes[i][j].getText().equals("")) {
-							boxes[i][j].setForeground(black);
-						} else if (boxes[i][j].getText().toLowerCase().equals(grid[j + 1][i + 1])) {
-							boxes[i][j].setForeground(green);
-						} else {
-							boxes[i][j].setForeground(red);
-						}
-					}
-				}
+				revealSolution();
 			} else {
-				reveal.setText("Show Solution");
-				for (int i = 0; i < x - 2; i++) {
-					for (int j = 0; j < y - 2; j++) {
-						boxes[i][j].setForeground(new Color(0, 0, 0, 255));
-					}
-				}
+				hideSolution();
 			}
 		}
 	}

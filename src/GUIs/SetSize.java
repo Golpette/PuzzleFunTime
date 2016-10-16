@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
+import javax.swing.AbstractAction;
 import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -94,6 +95,23 @@ public class SetSize extends JComponent implements ActionListener{
 			path4 = "src\\resources\\wordsearch.png";
 		}
 	
+//		   AbstractAction buttonPressed = new AbstractAction() {
+//	            @Override
+//	            public void actionPerformed(ActionEvent e) {
+//	            	//   frame.dispose();
+//	            }
+//	        };
+//	        
+//	    generate.addActionListener(buttonPressed);
+//	    
+//	    
+//	    generate.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_BACK_SPACE,0), "A_pressed");
+//	    generate.getActionMap().put("A_pressed", buttonPressed);
+//	    
+//	    
+//	    generate.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_0,0), "b_pressed");
+//	    generate.getActionMap().put("b_pressed", buttonPressed);
+	    
 		pic = new JLabel("");
 		pic.setOpaque(false);
 		pic.setBounds(0, 0, frame.getWidth(), frame.getHeight());
@@ -139,7 +157,7 @@ public class SetSize extends JComponent implements ActionListener{
 		back.setBorder(null);
 		
 		frame.setPreferredSize(new Dimension(550,400));
-		model = new SpinnerNumberModel(6, 3, 40, 1);
+		model = new SpinnerNumberModel(10, 3, 40, 1);
 		spinner = new JSpinner(model);
 		spinner.setForeground(Color.WHITE);
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
@@ -159,6 +177,13 @@ public class SetSize extends JComponent implements ActionListener{
 		c.gridy = 0;
 		c.gridwidth = 4;
 		panel1.add(intro, c);
+		
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 1;
+//		c.gridy = 0;
+//		c.gridwidth = 1;
+//		panel1.add(field, c);
 		
 		c.fill = GridBagConstraints.NONE;
 		c.ipadx = 20;
@@ -211,6 +236,30 @@ public class SetSize extends JComponent implements ActionListener{
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+					back.doClick();
+				}
+				
+				
+//				if(e.getSource().equals(KeyEvent.VK_BACK_SPACE)){
+//					if(puzzle.equals("Crossword")){
+//						try {
+//							puzzleLoader = new PuzzleLoader("");
+//						} catch (IOException e1) {
+//							e1.printStackTrace();
+//						}
+//						frame.dispose();	
+//					}
+//					if(puzzle.equals("Word Search")){
+//						try {
+//							puz2 = new SetDifficulty("Word Search");
+//						} catch (IOException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//						frame.dispose();
+//					}
+//				}
 			}
 
 			public void keyReleased(KeyEvent e) {
