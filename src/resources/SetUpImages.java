@@ -57,7 +57,7 @@ public class SetUpImages {
 	 * appropriate path according to operating system to the beginning and then appends ".png" to the end.
 	 */
 	public String setPath(String imageName){
-		return (imagePath + imageName + "2.png");	
+		return (imagePath + imageName + ".png");	
 	}
 
 	/**

@@ -599,7 +599,6 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			public void mouseExited(MouseEvent e) {
 				for(JLabel lab: allClues){
 					if(e.getSource() == lab){
-						//display ordering dropdown
 						clues.setBackground(clear);
 						notIn = true;
 					}

@@ -245,7 +245,7 @@ public class FitWords_wordsearch {
 		
 		
 		else{
-			System.out.println("CROSSWORD DIRECTION NOT DEFINED");  System.exit(1);
+			System.out.println("WORDSEARCH DIRECTION NOT DEFINED");  System.exit(1);
 		}
 		
 		

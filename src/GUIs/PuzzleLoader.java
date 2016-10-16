@@ -5,49 +5,58 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
+import Crossword.CrosswordGenerator;
 import Sudoku.SudokuGenerator;
+import WordSearch.WordSearchGenerator;
+import resources.SetUpImages;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	//public CrosswordGenerator crossword;
-	//public WordSearchGenerator wordsearch;
+	public CrosswordGenerator crossword;
+	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
+	public SudokuGenerator sudo;
+	public SetUpImages imageSetUp;
 	public SetSize puz1;
 	public SetDifficulty puz2;
 	public SignUp signUp;
 	public LogIn logIn;
 	JLayeredPane layer;
-	public static PuzzleLoader puzzle;
+	@SuppressWarnings("rawtypes")
+	JComboBox cwdDifficulty, wdsDifficulty, sudDifficulty;
+	String [] difficulty = {"EASY", "NORMAL", "HARD", "EXPERT"};
+	JSpinner spinner1, spinner2;
+	SpinnerNumberModel model1;
+	SpinnerNumberModel model2;
 	JFrame frame;
 	JPanel panel, grid;
 	JButton cwd, wds, sud, signup, login;
 	JLabel intro, pic;
 	Font font, font2, font3;
+	int cwdDiff, wdsDiff, sudDiff;
 	String user;
-	ImageIcon image;
-	Image newimg;
-	Image img;
+	Icon [] icons;
+	String [] images = {"crossword", "wordsearch", "sudoku"};
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PuzzleLoader(String user) throws IOException {
 		this.user = user;
 		if(user == ""){
@@ -62,7 +71,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		
-		intro = new JLabel("Welcome to Puzzle Solver!");
+		intro = new JLabel();
 		intro.setFont(font);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setOpaque(false);
@@ -70,28 +79,52 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setBackground(new Color(255,255,255,255));
 		intro.setBorder(null);
 		
+		cwdDifficulty = new JComboBox(difficulty);
+		cwdDifficulty.addActionListener(this);
+		cwdDifficulty.setFont(font3);
+		
+		wdsDifficulty = new JComboBox(difficulty);
+		wdsDifficulty.addActionListener(this);
+		wdsDifficulty.setFont(font3);
+		
+		sudDifficulty = new JComboBox(difficulty);
+		sudDifficulty.addActionListener(this);
+		sudDifficulty.setFont(font3);
+				
+		model1 = new SpinnerNumberModel(12, 4, 30, 1);
+		spinner1 = new JSpinner(model1);
+		spinner1.setForeground(Color.WHITE);
+		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
+		spinner1.setFont(font2);
+		
+		model2 = new SpinnerNumberModel(10, 3, 50, 1);
+		spinner2 = new JSpinner(model2);
+		spinner2.setForeground(Color.WHITE);
+		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
+		spinner2.setFont(font2);
+		
 		panel = new JPanel(new GridBagLayout());
 		grid = new JPanel(new GridLayout(3, 1));
-		cwd = new JButton("Crossword");
+		cwd = new JButton();
 		cwd.setFont(font2);
 		cwd.setHorizontalAlignment(SwingConstants.CENTER);
 		cwd.addActionListener(this);
-		wds = new JButton("WordSearch");
+		wds = new JButton();
 		wds.setFont(font2);
 		wds.setHorizontalAlignment(SwingConstants.CENTER);
 		wds.addActionListener(this);
-		sud = new JButton("Sudoku");
+		sud = new JButton();
 		sud.setFont(font2);
 		sud.setHorizontalAlignment(SwingConstants.CENTER);
 		sud.addActionListener(this);
-		signup = new JButton("Sign Up");
-		signup.setFont(font3);
-		signup.setHorizontalAlignment(SwingConstants.CENTER);
-		signup.addActionListener(this);
-		login = new JButton("Login");
-		login.setFont(font3);
-		login.setHorizontalAlignment(SwingConstants.CENTER);
-		login.addActionListener(this);
+//		signup = new JButton("Sign Up");
+//		signup.setFont(font3);
+//		signup.setHorizontalAlignment(SwingConstants.CENTER);
+//		signup.addActionListener(this);
+//		login = new JButton("Login");
+//		login.setFont(font3);
+//		login.setHorizontalAlignment(SwingConstants.CENTER);
+//		login.addActionListener(this);
 		
 		pic = new JLabel("");
 		pic.setOpaque(false);
@@ -99,32 +132,15 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		pic.setBackground(new Color(255,255,255,255));
 		pic.setBorder(null);
 		
-		String path1 = "";
-		
-		if( System.getProperty("os.name").toLowerCase().equals("linux")   ){
-			//Could try to allow the user to have a customisable background or backgrounds
-			//they choose folder an the background is dynamically created from that location
-			//could also create custom look and feels which can be selected by user
-			//path1 = "src/resources/1.jpg";			//lol
-		}
-			
-		else if(  System.getProperty("os.name").toLowerCase().contains("windows") ){
-			//path1 = "src\\resources\\1.jpg";
-		}
-	
-//		System.out.println(frame.getWidth());
-//		System.out.println(path1);
-		image = new ImageIcon( path1 );  
-		img = image.getImage();
-		newimg = img.getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH ) ; 
-		image = new ImageIcon(newimg);
-		
-		pic.setIcon(image);
-		//intro.setIcon(image);
+		icons = new Icon[3];
+		imageSetUp = new SetUpImages(images, 100, 100, icons);
+		cwd.setIcon(icons[0]);
+		wds.setIcon(icons[1]);
+		sud.setIcon(icons[2]);
 		layer = new JLayeredPane();
 		layer.setAlignmentX(frame.getWidth());
-		layer.add(intro, new Integer(0));
-		layer.add(pic, new Integer(0));
+		//layer.add(intro, new Integer(0));
+		//layer.add(pic, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		
@@ -137,18 +153,6 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(cwd);
 		grid.add(wds);
 		grid.add(sud);
-
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		panel.add(signup, c);
-//
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 1;
-//		c.gridy = 0;
-//		panel.add(login, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
@@ -156,22 +160,53 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 0;
 		c.ipady = 0;
 		c.ipady = 10;
+		c.gridheight = 3;
 		panel.add(grid, c);
 		
-		c.fill = GridBagConstraints.BOTH;
-		c.ipady = (int)(frame.getHeight()*0.8);		
+		c.fill = GridBagConstraints.BOTH;	
+		c.weightx = 0.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		panel.add(spinner1, c);
+		
+		c.weightx = 0.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridheight = 1;
+		panel.add(spinner2, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 2;
+		c.gridy = 0;
+		panel.add(cwdDifficulty, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 2;
+		c.gridy = 1;
+		panel.add(wdsDifficulty, c);
+		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 1;
-		c.gridy = 0;
+		c.gridy = 2;
 		c.gridwidth = 2;
-		panel.add(layer, c);
-
+		panel.add(sudDifficulty, c);
+		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
 		frame.setResizable(false);
+	}
+
+	private int getDifficulty(int index) {
+		return (int) Math.pow(2, index+1);
 	}
 
 	void mouseActionlabel(JButton b) {
@@ -199,33 +234,85 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		});
 	}
 	
-	
-	
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == cwdDifficulty){
+			@SuppressWarnings("rawtypes")
+			JComboBox cwdDifficulty = (JComboBox)e.getSource();
+			String msg = (String)cwdDifficulty.getSelectedItem();
+			if(msg.equals("EASY")){
+				cwdDiff = 2;
+			}
+			if(msg.equals("NORMAL")){
+				cwdDiff = 4;
+			}
+			if(msg.equals("HARD")){
+				cwdDiff = 8;
+			}
+			if(msg.equals("EXPERT")){
+				cwdDiff = 16;
+			}
+		}
+		if(e.getSource() == wdsDifficulty){
+			@SuppressWarnings("rawtypes")
+			JComboBox wdsDifficulty = (JComboBox)e.getSource();
+			String msg = (String)wdsDifficulty.getSelectedItem();
+			if(msg.equals("EASY")){
+				wdsDiff = 2;
+			}
+			if(msg.equals("NORMAL")){
+				wdsDiff = 4;
+			}
+			if(msg.equals("HARD")){
+				wdsDiff = 8;
+			}
+			if(msg.equals("EXPERT")){
+				wdsDiff = 16;
+			}
+		}
+		if(e.getSource() == sudDifficulty){
+			@SuppressWarnings("rawtypes")
+			JComboBox sudDifficulty = (JComboBox)e.getSource();
+			String msg = (String)sudDifficulty.getSelectedItem();
+			if(msg.equals("EASY")){
+				sudDiff = 2;
+			}
+			if(msg.equals("NORMAL")){
+				sudDiff = 4;
+			}
+			if(msg.equals("HARD")){
+				sudDiff = 8;
+			}
+			if(msg.equals("EXPERT")){
+				sudDiff = 16;
+			}
+		}
+		
 		if(e.getSource() == cwd){
 			try {
-				puz1 = new SetSize("Crossword", 0);	//May add set difficulty to crosswords later
+				cwdDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
+				crossword = new CrosswordGenerator((Integer)spinner1.getValue());
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			frame.dispose();
+			//frame.dispose();
 		}
 		if(e.getSource() == wds){
 			try {
-				puz2 = new SetDifficulty("Word Search");
+				//System.out.println("wdsDiff: " + wdsDiff);
+				wordsearch = new WordSearchGenerator((Integer)spinner2.getValue(), wdsDiff);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			frame.dispose();
+			//frame.dispose();
 		}
 		if(e.getSource() == sud){
 			try {
-				sudoku = new SudokuGenerator(9);
+				sudDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
+				sudo = new SudokuGenerator(9);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			//frame.dispose();
 		}
 		if (e.getSource() == signup){
 			try {
@@ -247,7 +334,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	
 	public static void main (String [] args){
 		try {
-			puzzle = new PuzzleLoader("");
+			new PuzzleLoader("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
