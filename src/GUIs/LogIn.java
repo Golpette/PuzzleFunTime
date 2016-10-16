@@ -37,7 +37,6 @@ public class LogIn extends JComponent implements ActionListener{
 	public CrosswordGenerator crossword;
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
-	public SetDifficulty setSize;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
 	JPanel panel;

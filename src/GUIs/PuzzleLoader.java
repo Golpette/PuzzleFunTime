@@ -35,8 +35,6 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public SudokuGenerator sudoku;
 	public SudokuGenerator sudo;
 	public SetUpImages imageSetUp;
-	public SetSize puz1;
-	public SetDifficulty puz2;
 	public SignUp signUp;
 	public LogIn logIn;
 	JLayeredPane layer;
