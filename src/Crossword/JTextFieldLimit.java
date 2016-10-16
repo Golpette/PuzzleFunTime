@@ -8,14 +8,18 @@ public class JTextFieldLimit extends PlainDocument {
 	private static final long serialVersionUID = 1L;
 	private int limit;
 	String goodChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public JTextFieldLimit(int limit) {
-		super();
-		this.limit = limit;
-	}
+	String goodNums = "123456789";
+	Boolean requireLetters;
+	
+//	public JTextFieldLimit(int limit) {
+//		super();
+//		this.limit = limit;
+//	}
 
-	JTextFieldLimit(int limit, boolean upper) {
+	public JTextFieldLimit(int limit, boolean requireLetters) {
 		super();
 		this.limit = limit;
+		this.requireLetters = requireLetters;
 	}
 
 	public void insertString2(int offset, String str, AttributeSet attr) throws BadLocationException {
@@ -31,9 +35,17 @@ public class JTextFieldLimit extends PlainDocument {
 		if (str == null)
 			return;
 
-		if ((getLength() + str.length()) <= limit) {
-			if(goodChars.contains(str)){
-				super.insertString(offset, str.toUpperCase(), attr);
+		if(requireLetters){
+			if ((getLength() + str.length()) <= limit) {
+				if(goodChars.contains(str)){
+					super.insertString(offset, str.toUpperCase(), attr);
+				}
+			}
+		}else if(!requireLetters){
+			if ((getLength() + str.length()) <= limit) {
+				if(goodNums.contains(str)){
+					super.insertString(offset, str, attr);
+				}
 			}
 		}
 	}

@@ -150,7 +150,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				action.setEnabled(false);
 				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				boxes[i][j].setBorder(border);
-				boxes[i][j].setDocument(new JTextFieldLimit(1));
+				boxes[i][j].setDocument(new JTextFieldLimit(1, true));
 				if (grid[j+1][i+1] == "_") {
 					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
 					boxes[i][j].setEnabled(false);

@@ -109,7 +109,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				nums[i][j].setForeground(Color.BLACK);
 				nums[i][j].setBorder(border);
 				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
-				nums[i][j].setDocument(new JTextFieldLimit(1));
+				nums[i][j].setDocument(new JTextFieldLimit(1, false));
 				transparentLayer.add(nums[i][j]);
 			}
 		}
@@ -256,7 +256,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				reveal.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
-						numbers[i][j].setForeground(new Color(0,0,0,255));
+						nums[i][j].setForeground(new Color(0,0,0,255));
 					}
 				}
 			}
