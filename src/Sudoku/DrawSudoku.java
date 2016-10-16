@@ -1,4 +1,5 @@
 package Sudoku;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -67,7 +68,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
-		Border border = BorderFactory.createLineBorder(Color.GREEN);	
+		Border border = BorderFactory.createLineBorder(Color.BLACK);	
 		Border border2 = BorderFactory.createLineBorder(Color.BLACK);
 		buttonPushed = false;
 		
@@ -85,7 +86,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		largeGrid.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
 		largeGrid.setOpaque(false);
 		largeGrid.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		largeGrid.setBorder(border2);
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
@@ -103,6 +103,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			for(int j = 0; j < 3; j++){
 				threeByThreeGrid[i][j] = new JLabel();
 				threeByThreeGrid[i][j].setBorder(border2);
+				threeByThreeGrid[i][j].setBorder(BorderFactory.createStrokeBorder(new BasicStroke(2.0f)));
 				largeGrid.add(threeByThreeGrid[i][j]);
 			}
 		}
