@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -102,6 +103,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner2.setFont(font2);
 		
 		panel = new JPanel(new GridBagLayout());
+		panel.setBackground(new Color(220,220,250,255));
 		grid = new JPanel(new GridLayout(3, 1));
 		cwd = new JButton();
 		cwd.setFont(font2);
@@ -153,11 +155,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(sud);
 		
 		c.weightx = 0.0;
-		c.weighty = 0.0;
+		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.ipady = 0;
-		c.ipady = 10;
 		c.gridheight = 3;
 		panel.add(grid, c);
 		
@@ -168,6 +168,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridy = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
+		c.ipady = 5;
+		c.insets = new Insets(40,30,40,15);
 		panel.add(spinner1, c);
 		
 		c.weightx = 0.0;
@@ -175,25 +177,29 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 1;
 		c.gridheight = 1;
+		c.insets = new Insets(45,30,40,15);
 		panel.add(spinner2, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
+		c.insets = new Insets(40,15,40,30);
 		panel.add(cwdDifficulty, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 1;
+		c.insets = new Insets(45,15,40,30);
 		panel.add(wdsDifficulty, c);
 		
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0.0;
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 2;
+		c.insets = new Insets(42,30,40,30);
 		panel.add(sudDifficulty, c);
 		
 		frame.setContentPane(panel);
