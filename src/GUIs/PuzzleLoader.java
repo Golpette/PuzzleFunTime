@@ -42,9 +42,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	@SuppressWarnings("rawtypes")
 	JComboBox cwdDifficulty, wdsDifficulty, sudDifficulty;
 	String [] difficulty = {"EASY", "NORMAL", "HARD", "EXPERT"};
-	JSpinner spinner1, spinner2;
-	SpinnerNumberModel model1;
-	SpinnerNumberModel model2;
+	JSpinner spinner1, spinner2, spinner3;
+	SpinnerNumberModel model1, model2, model3;
 	JFrame frame;
 	JPanel panel, grid;
 	JButton cwd, wds, sud, signup, login;
@@ -101,6 +100,13 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
 		spinner2.setFont(font2);
+		
+		model3 = new SpinnerNumberModel(3, 1, 5, 1);
+		spinner3 = new JSpinner(model3);
+		spinner3.setForeground(Color.WHITE);
+		spinner3.setEditor(new JSpinner.DefaultEditor(spinner3));
+		spinner3.setFont(font2);
+		spinner3.setEnabled(false);
 		
 		panel = new JPanel(new GridBagLayout());
 		panel.setBackground(new Color(220,220,250,255));
@@ -180,6 +186,14 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.insets = new Insets(45,30,40,15);
 		panel.add(spinner2, c);
 		
+		c.weightx = 0.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridheight = 1;
+		c.insets = new Insets(42,30,40,15);
+		panel.add(spinner3, c);
+		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
@@ -196,10 +210,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 2;
-		c.gridwidth = 2;
-		c.insets = new Insets(42,30,40,30);
+		c.insets = new Insets(42,15,40,30);
 		panel.add(sudDifficulty, c);
 		
 		frame.setContentPane(panel);
@@ -210,7 +223,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	}
 
 	private int getDifficulty(int index) {
-		return (int) Math.pow(2, index+1);
+		return (int) Math.pow(index, 2);
 	}
 
 	void mouseActionlabel(JButton b) {
@@ -312,7 +325,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		if(e.getSource() == sud){
 			try {
 				sudDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
-				sudo = new SudokuGenerator(9);
+				sudo = new SudokuGenerator(getDifficulty((Integer)spinner3.getValue()));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

@@ -50,9 +50,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	boolean buttonPushed;
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudoku() throws IOException{
-		x = 11;
-		y = 11;
+	public DrawSudoku(int x, int y) throws IOException{
+		this.x = x;
+		this.y = y;
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		sol = new DrawSudokuSolution(grid, x, y);

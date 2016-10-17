@@ -38,7 +38,7 @@ public class SudokuGenerator{
 		generateSudoku();
 		removeNumbers(fullGrid);
 		System.out.println(fullGrid.toString());
-		new DrawSudoku();
+		new DrawSudoku(x, y);
 	}
 	
 	public void removeNumbers(ArrayList<ArrayList<Integer>> fullGrid) {
