@@ -35,10 +35,6 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 
-// DELETE LINE. JUST ALTERED FOR PULL REQUEST PUSH CHECK
-
-
-
 /**
  * Class to take String[][] grid and paint the crossword as it should look
  * complete with all the required components: The clues, grid, clue numbers,
@@ -551,7 +547,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 1;  //i.e. going down
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row+1, col);												
+												highlightWord( row, col);												
 											}
 										}
 									}
@@ -570,7 +566,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 0;  //i.e. going across
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row, col+1);	
+												highlightWord( row, col);	
 											}
 										}
 									}									
