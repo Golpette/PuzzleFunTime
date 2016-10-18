@@ -49,7 +49,11 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	JButton cwd, wds, sud, signup, login;
 	JLabel intro, pic;
 	Font font, font2, font3;
-	int cwdDiff, wdsDiff, sudDiff;
+	/// STEVE: these weren't initialised when automatic scroller difficulty was used
+	///     2 implies defualt is "EASY" -- need to change this if we change defualt scroller value
+	int cwdDiff=2; 
+	int wdsDiff=2; 
+	int sudDiff=2;
 	String user;
 	Icon [] icons;
 	String [] images = {"crossword", "wordsearch", "sudoku"};
