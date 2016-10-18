@@ -12,12 +12,15 @@ import java.lang.Math;
  * 
  */
 public class FitWords_wordsearch {
+	
+	int MIN_WORD_LENGTH = 4;  // min length of allowed words
+	
 
 	//'Random fit approach' to try and fit words ACROSS into grid. Updates ArrayList<Entry> and grid all at once
 	public FitWords_wordsearch(String[][] grid, int xLength, int yLength, ArrayList<Word> wordlist, ArrayList<Entry> entries, String dir) {
 		
 		
-		boolean biggestFirst = true;  
+		boolean biggestFirst = false;  
 		//TODO: we don't want lots of little (3-letter words) but we don't always want to fit the biggest possible.
 		//   Make some appropriate word-length weighting here.
 		
@@ -260,14 +263,14 @@ public class FitWords_wordsearch {
 
 		// Get max possible word length
 		int maxWordLength = toWorkWith.length();
-		if (maxWordLength > 2 && toWorkWith.contains("_")) {
+		if (maxWordLength >= MIN_WORD_LENGTH && toWorkWith.contains("_")) {
 			
 			word_and_def = Search.findWord(wordlist, toWorkWith, biggestFirst);   //new parameter here
 			
 			word = word_and_def[0];
 			definition = word_and_def[1];
 		}
-		if (!word.equals("")) {
+		if (!word.equals("") && word.length()>=MIN_WORD_LENGTH) {
 
 			// Only add entry if it's not been seen before.
 			boolean seenBefore = false;
