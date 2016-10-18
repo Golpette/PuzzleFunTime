@@ -36,12 +36,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public WordSearchGenerator wordsearch;
 	public SudokuGenerator sudoku;
 	public SudokuGenerator sudo;
-	public SetUpImages imageSetUp, imageSetUp2;
+	public SetUpImages imageSetUp, imageSetUp2, imageSetUp3, imageSetUp4;
 	public SignUp signUp;
 	public LogIn logIn;
 	JLayeredPane layer2;
 	@SuppressWarnings("rawtypes")
-	JComboBox cwdDifficulty, wdsDifficulty, sudDifficulty, language;
+	JComboBox cwdDifficulty, wdsDifficulty, sudDifficulty, language, language2;
 	String [] difficulty = {"EASY", "NORMAL", "HARD", "EXPERT"};
 	JSpinner spinner1, spinner2, spinner3;
 	SpinnerNumberModel model1, model2, model3;
@@ -49,7 +49,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	JLayeredPane layer;
 	JPanel panel, grid, country, country2;
 	JButton cwd, wds, sud, signup, login;
-	JLabel intro, pic, flag;
+	JLabel intro, pic, flag, flag2, arrow;
 	Font font, font2, font3, font4;
 	/// STEVE: these weren't initialised when automatic scroller difficulty was used
 	///     2 implies defualt is "EASY" -- need to change this if we change defualt scroller value
@@ -60,8 +60,10 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	Icon [] icons;
 	String [] images = {"crossword", "wordsearch", "sudoku"};
 	String [] countries = {"english",  "french",  "german", "italian","spanish"};
-	String [] countries2;
-	Icon [] flags;
+	String [] arrows = {"arrow"};
+	String [] countries2, countries3;
+	Icon [] flags, flags2, arr1;
+	Icon arr;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PuzzleLoader(String user) throws IOException {
@@ -86,9 +88,24 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		flag.setVisible(true);
 		mouseActionlabel(flag);
 		
+		flag2 = new JLabel();
+		flag2.setBorder(BorderFactory.createEmptyBorder());
+		//flag2.setHorizontalAlignment(SwingConstants.CENTER);
+		flag2.setEnabled(true);
+		flag2.setVisible(true);
+		mouseActionlabel(flag2);
+		
+		arrow = new JLabel();
+	//	arrow.setBorder(BorderFactory.createEmptyBorder());
+		//flag2.setHorizontalAlignment(SwingConstants.CENTER);
+		arrow.setEnabled(true);
+		arrow.setVisible(true);
+		
 		countries2 = new String [5];
+		countries3 = new String [5];
 		for (int i = 0; i < countries.length; i++){
 			countries2[i] = countries[i].toUpperCase();
+			countries3[i] = countries[i].toUpperCase();
 		}
 		
 		intro = new JLabel();
@@ -100,12 +117,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setBorder(null);
 		
 		country = new JPanel(new GridBagLayout());
-		country.setBounds(465,0,80, 30);
+		country.setBounds(365,0,155, 30);
 		country.setVisible(true);
 		country.setOpaque(false);
 		
 		country2 = new JPanel(new GridBagLayout());
-		country2.setBounds(395,0,100, 30);
+		country2.setBounds(242,0,120, 30);
 		country2.setVisible(true);
 		country2.setOpaque(false);
 		
@@ -126,8 +143,13 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		language = new JComboBox(countries2);
 		language.addActionListener(this);
 		language.setFont(font4);
-		language.setVisible(false);
-				
+	//	language.setVisible(false);
+			
+		language2 = new JComboBox(countries3);
+		language2.addActionListener(this);
+		language2.setFont(font4);
+	//	language2.setVisible(false);
+		
 		model1 = new SpinnerNumberModel(12, 4, 30, 1);
 		spinner1 = new JSpinner(model1);
 		spinner1.setForeground(Color.WHITE);
@@ -166,14 +188,6 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		sud.setFont(font2);
 		sud.setHorizontalAlignment(SwingConstants.CENTER);
 		sud.addActionListener(this);
-//		signup = new JButton("Sign Up");
-//		signup.setFont(font3);
-//		signup.setHorizontalAlignment(SwingConstants.CENTER);
-//		signup.addActionListener(this);
-//		login = new JButton("Login");
-//		login.setFont(font3);
-//		login.setHorizontalAlignment(SwingConstants.CENTER);
-//		login.addActionListener(this);
 		
 		pic = new JLabel("");
 		pic.setOpaque(false);
@@ -185,13 +199,19 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		imageSetUp = new SetUpImages(images, 100, 100, icons);
 		
 		flags = new Icon [5];
+		flags2 = new Icon [5];
+		arr1 = new Icon[1];
 		imageSetUp2 = new SetUpImages(countries, 20, 30, flags);
+		imageSetUp3 = new SetUpImages(countries, 20, 30, flags2);
+		imageSetUp4 = new SetUpImages(arrows, 20, 30, arr1);
 		
 		cwd.setIcon(icons[0]);
 		wds.setIcon(icons[1]);
 		sud.setIcon(icons[2]);
 	
 		flag.setIcon(flags[0]);
+		flag2.setIcon(flags2[0]);
+		arrow.setIcon(arr1[0]);
 		
 		frame.setPreferredSize(new Dimension(550,400));
 		frame.setSize(550, 400);
@@ -199,14 +219,37 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 0;	
+		c.gridwidth = 1;
+		c.insets = new Insets(0,0,0,0);
+		country.add(arrow, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		c.insets = new Insets(0,0,0,0);
+		country.add(flag2, c);
+		
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
-		c.gridheight = 1;		
-		country.add(flag, c);
+		c.gridwidth = 1;
+		country.add(language2, c);
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridheight = 1;		
+		country2.add(flag, c);
+		
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
@@ -222,6 +265,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridheight = 3;
+		c.insets = new Insets(0,0,0,0);
 		panel.add(grid, c);
 		
 		c.fill = GridBagConstraints.BOTH;	
@@ -292,8 +336,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		return (int) Math.pow(index, 2);
 	}
 
-	void mouseActionlabel(JLabel flag2) {
-		flag2.addMouseListener(new MouseListener() {
+	void mouseActionlabel(JLabel flagX) {
+		flagX.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
 				
@@ -301,8 +345,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 
 			public void mouseEntered(MouseEvent e) {
 				if (e.getSource() == flag){
-					language.setVisible(true);
+					//language.setVisible(true);
 				}
+				if (e.getSource() == flag2){
+					//language2.setVisible(true);
+				}
+				
 			}
 
 			public void mouseExited(MouseEvent e) {
@@ -377,21 +425,42 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			JComboBox language = (JComboBox)e.getSource();
 			String msg = (String)language.getSelectedItem();
 			if(msg.equals("ENGLISH")){
-				System.out.println("This");
 				flag.setIcon(flags[0]);
-				language.setVisible(false);
+				//language.setVisible(false);
 			}else if(msg.equals("SPANISH")){
 				flag.setIcon(flags[4]);	
-				language.setVisible(false);
+				//language.setVisible(false);
 			}else if(msg.equals("ITALIAN")){
 				flag.setIcon(flags[3]);
-				language.setVisible(false);
+				//language.setVisible(false);
 			}else if(msg.equals("FRENCH")){
 				flag.setIcon(flags[1]);
-				language.setVisible(false);
+				//language.setVisible(false);
 			}else if(msg.equals("GERMAN")){
 				flag.setIcon(flags[2]);
-				language.setVisible(false);
+				//language.setVisible(false);
+			}
+		}
+		
+		if(e.getSource() == language2){
+			@SuppressWarnings("rawtypes")
+			JComboBox language2 = (JComboBox)e.getSource();
+			String msg = (String)language2.getSelectedItem();
+			if(msg.equals("ENGLISH")){
+				flag2.setIcon(flags2[0]);
+				//language2.setVisible(false);
+			}else if(msg.equals("SPANISH")){
+				flag2.setIcon(flags2[4]);	
+				//language2.setVisible(false);
+			}else if(msg.equals("ITALIAN")){
+				flag2.setIcon(flags2[3]);
+				//language2.setVisible(false);
+			}else if(msg.equals("FRENCH")){
+				flag2.setIcon(flags2[1]);
+				//language2.setVisible(false);
+			}else if(msg.equals("GERMAN")){
+				flag2.setIcon(flags2[2]);
+				//language2.setVisible(false);
 			}
 		}
 		
