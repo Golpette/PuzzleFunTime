@@ -27,8 +27,10 @@ public class FitWords_wordsearch {
 		
 		int init_x = (int) (Math.random() * (xLength - 2) + 1);
 	    int init_y = (int) (Math.random() * (yLength - 2) + 1);
+	    
+    	ArrayList<Coord> visited = new ArrayList<Coord>(); //needed to track snakes
+
 			
-	    ArrayList<Integer[]> squares = new ArrayList<Integer[]> ();
 
 		//Make sure space on LHS is empty, otherwise do nothing
 		String toWorkWith = "";
@@ -92,156 +94,67 @@ public class FitWords_wordsearch {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}
-		//}else if( dir.equals("snaking") ){		//Attempt at snaking words
-//			System.out.println("Here");
-//			int maxPossLength = 5;		// -- could vary this
-//			squares.clear();
-//			Integer[] current = {init_x, init_y};
-//			squares.add(current);
-//			
-//			for (int i = 0; i < maxPossLength; i++) {
-//				int nextAcross;
-//				int nextDown;
-//				int dirX = 0;
-//				int dirY = 0;
-//				// BCs//
-//				
-////				if(squares.get(i)[0] == 1 && squares.get(i)[1] == 1){			//topleft
-////					nextAcross = (int)(Math.random()*2);
-////					nextDown = (int)(Math.random()*2);
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2);
-////						nextDown = (int)(Math.random()*2);
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////					//would this work:  if(n){i--; continue;} 
-////					//ie repeat the loop ----- there is probably a much simpler way of doing it
-////					//need to prevent both from being 0 so not putting in same place as first letter *in all methods
-////				}else if(squares.get(i)[0] == 1 && squares.get(i)[1] == yLength-2){		//top
-////					nextAcross = (int)(Math.random()*2);
-////					nextDown = (int)(Math.random()*2) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2);
-////						nextDown = (int)(Math.random()*2)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[0] == xLength - 2 && squares.get(i)[1] == 1){		//bottom
-////					nextAcross = (int)(Math.random()*2) - 1;
-////					nextDown = (int)(Math.random()*2);
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2)-1;
-////						nextDown = (int)(Math.random()*2);
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[0] == xLength - 2 &&  squares.get(i)[1] == yLength-2){		//left
-////					nextAcross = (int)(Math.random()*2) - 1;
-////					nextDown = (int)(Math.random()*2) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2)-1;
-////						nextDown = (int)(Math.random()*2)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[0] == 1){
-////					nextAcross = (int)(Math.random()*2);
-////					nextDown = (int)(Math.random()*3) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2);
-////						nextDown = (int)(Math.random()*3)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[0] == xLength-2){
-////					nextAcross = (int)(Math.random()*2) - 1;
-////					nextDown = (int)(Math.random()*3) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*2)-1;
-////						nextDown = (int)(Math.random()*3)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[1] == 1){
-////					nextAcross = (int)(Math.random()*3) - 1;
-////					nextDown = (int)(Math.random()*2);
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*3)-1;
-////						nextDown = (int)(Math.random()*2);
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else if(squares.get(i)[1] == yLength-2){
-////					nextAcross = (int)(Math.random()*3) - 1;
-////					nextDown = (int)(Math.random()*2) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*3)-1;
-////						nextDown = (int)(Math.random()*2)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}else{	
-////					//normal condition ie in the middle of the grid
-////					nextAcross = (int)(Math.random()*3) - 1;
-////					nextDown = (int)(Math.random()*3) - 1;
-////					Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-////					while(squaresNotFilled(newone[0], newone[1], squares)){
-////						nextAcross = (int)(Math.random()*3)-1;
-////						nextDown = (int)(Math.random()*3)-1;
-////					}
-////					toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-////					squares.add(newone);
-////				}
-//				//
-//				
-//				if(squares.get(i)[0] == 1 && squares.get(i)[1] == 1){
-//					
-//				}
-//				else if(squares.get(i)[0] == 1 && squares.get(i)[1] == yLength-2){
-//					
-//				}
-//				else if(squares.get(i)[0] == xLength - 2 && squares.get(i)[1] == 1){	
-//					
-//				}				
-//				else if(squares.get(i)[0] == xLength - 2 &&  squares.get(i)[1] == yLength-2){	
-//					
-//				}				
-//				else if(squares.get(i)[0] == 1){
-//					
-//				}
-//				else if(squares.get(i)[0] == xLength-2){
-//					
-//				}
-//				else if(squares.get(i)[1] == 1){
-//					
-//				}
-//				else if(squares.get(i)[1] == yLength-2){
-//					
-//				}
-//				
-//				nextAcross = (int)(Math.random()*dirX) - 1;
-//				nextDown = (int)(Math.random()*dirY) - 1;
-//				Integer[] newone = {squares.get(i)[0]+nextAcross,squares.get(i)[1]+nextDown};
-//				while(squaresNotFilled(newone[0], newone[1], squares)){
-//					nextAcross = (int)(Math.random()*3)-1;
-//					nextDown = (int)(Math.random()*3)-1;
-//				}
-//				toWorkWith = toWorkWith + grid[newone[0]][newone[1]];	
-//				squares.add(newone);
-//			}
-//			for(Integer [] a: squares){
-//				System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
-//				}
-//		}
+		//}/////////////////////////////////////////////////
+	    else if( dir.equals("snaking") ){		//Attempt at snaking words
+
+	    	int curx=init_x;  int cury=init_y;
+	    	Coord current_coord = new Coord(curx, cury);
+	    	
+	    	visited.clear();
+	    	visited.add( current_coord );
+	    	toWorkWith = toWorkWith + grid[curx][cury];
+	    	
+	    	boolean growing = true;
+	    	
+	    	while( growing  && toWorkWith.length()<7  ){
+			    //ArrayList<Coord> possible_neighbours = getPossNeighbours(curx, cury);
+			    ArrayList<Coord> possible_direcs = new ArrayList<Coord>();
+			    // use 4 nns
+			    possible_direcs.add(new Coord(1,0));    possible_direcs.add(new Coord(-1,0));
+			    possible_direcs.add(new Coord(0,1));    possible_direcs.add(new Coord(0,-1));
+			    
+
+    			boolean hasNeighbours = true;
+    			while( hasNeighbours ){
+    				int rndm = (int)(Math.random()*possible_direcs.size()  );
+    				Coord next_space = Coord.add( current_coord, possible_direcs.get(rndm) ); 
+    				
+    				if( next_space.getX()<xLength-2  &&  next_space.getY()<yLength-2  &&
+    						next_space.getX()>0  &&  next_space.getY()>0 &&
+    						!visited.contains( next_space )  ){
+    					
+    					visited.add( next_space );
+    					toWorkWith = toWorkWith + grid[ next_space.getX() ][ next_space.getY()  ];
+    					
+    					current_coord = new Coord( next_space );	    					
+    					hasNeighbours=false; //exit loop and start from next_space			
+    				}
+    				else{//nn not suitable
+    					possible_direcs.remove(rndm);
+    					if(possible_direcs.size()==0){ hasNeighbours=false; growing=false; }		
+    				}
+    				
+    			}
+	    			
+	    		
+	    		
+	    		
+	    		
+	    	}
+	    	
+
+  
+			
+	    	
+	    	
+	    	
+	    	
+	    	
+			//for(Integer [] a: squares){
+			//	System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
+			//}
+			
+		}
 		
 		
 		//////********TO IMPLEMENT:  SNAKING WORDS!!!!********/////////
@@ -307,23 +220,34 @@ public class FitWords_wordsearch {
 					//somehow need to put in the actual word grid; 
 					//could use the arraylist of numbers: 'squares' 
 					//grid[init_x - g][init_y + g] = "" + word.charAt(g);	
+						
+					//System.out.println(visited.size());
+					//System.exit(0);
+					
 					int letter=0;
-					for(Integer [] a: squares){
-						if( letter>=word.length() ){ break;}
-						grid[a[0]][a[1]] = "" + word.charAt( letter );
+					for( Coord c: visited ){
+						if( letter>=word.length() ){ break; }
+						grid[c.getX()][c.getY()] = ""+word.charAt(letter);
 						letter++;
-						//break;
 					}
+					
 				}
 					
 				
 
 				// Update Entries list
 				Entry entry = new Entry(init_x, init_y, true, word, definition, dir); //across boolean not sensible for wordsearches
-//				System.out.println(entry.getWord());
-//				System.out.println(entry.palindromic);
 				entries.add(entry);
 			}
 		}
 	}
+	
+	
+	
+	
+
+	
+	
+	
+	
 }
