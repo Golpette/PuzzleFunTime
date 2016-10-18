@@ -106,7 +106,7 @@ public class FitWords_wordsearch {
 	    	
 	    	boolean growing = true;
 	    	
-	    	while( growing  && toWorkWith.length()<7  ){
+	    	while( growing  && toWorkWith.length()<xLength  ){
 			    //ArrayList<Coord> possible_neighbours = getPossNeighbours(curx, cury);
 			    ArrayList<Coord> possible_direcs = new ArrayList<Coord>();
 			    // use 4 nns
@@ -216,21 +216,13 @@ public class FitWords_wordsearch {
 						}
 					}
 				}
-				else if( dir.equals("snaking")  ){
-					//somehow need to put in the actual word grid; 
-					//could use the arraylist of numbers: 'squares' 
-					//grid[init_x - g][init_y + g] = "" + word.charAt(g);	
-						
-					//System.out.println(visited.size());
-					//System.exit(0);
-					
+				else if( dir.equals("snaking")  ){					
 					int letter=0;
 					for( Coord c: visited ){
 						if( letter>=word.length() ){ break; }
 						grid[c.getX()][c.getY()] = ""+word.charAt(letter);
 						letter++;
-					}
-					
+					}		
 				}
 					
 				
