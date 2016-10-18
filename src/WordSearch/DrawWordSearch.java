@@ -107,7 +107,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		extra = new JPanel(new GridBagLayout());
 		notIn = true;
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
-		font3 = new Font("Century Gothic", Font.PLAIN, 16);
+		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		Map fontAttr = font3.getAttributes();
