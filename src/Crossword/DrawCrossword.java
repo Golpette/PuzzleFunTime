@@ -35,10 +35,6 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 
-// DELETE LINE. JUST ALTERED FOR PULL REQUEST PUSH CHECK
-
-
-
 /**
  * Class to take String[][] grid and paint the crossword as it should look
  * complete with all the required components: The clues, grid, clue numbers,
@@ -428,12 +424,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				
 				for (int row = 0; row < x - 2; row++) {
-					for (int col = 0; col < y - 2; col++) {
-						
-						
-
-						
-						
+					for (int col = 0; col < y - 2; col++) {	
 						
 						
 						if (e.getSource() == boxes[row][col]) {
@@ -551,7 +542,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 1;  //i.e. going down
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row+1, col);												
+												highlightWord( row, col);												
 											}
 										}
 									}
@@ -570,7 +561,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 												currentDirection = 0;  //i.e. going across
 												//also make new highlight
 												makeAllWhite();
-												highlightWord( row, col+1);	
+												highlightWord( row, col);	
 											}
 										}
 									}									
@@ -578,75 +569,21 @@ public class DrawCrossword extends JComponent implements ActionListener {
 																
 							}
 							
-							
-							
-							
-							
-							
-							
+												
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-								//System.out.println("Pressed Backspace");
+								// STEVE: Changed this to only delete the highlighted word
 								
-								
-								boolean stuck = true;
-								if (row > 0) {
-									if (boxes[row - 1][col].isEnabled()) {
-										stuck = false;
-									}
-								}
-								if (col > 0) {
-									if (boxes[row][col - 1].isEnabled()) {
-										stuck = false;
-									}
-								}
 								boxes[row][col].setText("");
-								if (col > 0 && row > 0 && !stuck) {
-									if (boxes[row][col - 1].isEnabled()
-											&& !boxes[row][col - 1].getText().equals("")) {
-										boxes[row][col - 1].requestFocus();
-									} else if (boxes[row - 1][col].isEnabled()
-											&& !boxes[row - 1][col].getText().equals("")) {
-										boxes[row - 1][col].requestFocus();
-									} else if (boxes[row][col - 1].isEnabled()) {
-										boxes[row][col - 1].requestFocus();
-									} else if (boxes[row - 1][col].isEnabled()) {
-										boxes[row - 1][col].requestFocus();
-									}
-								} else if (col > 0 && !stuck) {
-									if (boxes[row][col - 1].isEnabled()
-											&& !boxes[row][col - 1].getText().equals("")) {
-										boxes[row][col - 1].requestFocus();
-									} else if (boxes[row][col - 1].isEnabled()) {
-										boxes[row][col - 1].requestFocus();
-									}
-								} else if (row > 0 && !stuck) {
-									if (boxes[row - 1][col].isEnabled()
-											&& !boxes[row - 1][col].getText().equals("")) {
-										boxes[row - 1][col].requestFocus();
-									} else if (boxes[row - 1][col].isEnabled()) {
-										boxes[row - 1][col].requestFocus();
-									}
-								} else {
-									if (!(row == 0 && col == 0) && stuck) {
-									//	System.out.println("Stuck");
-									//	System.out.println("i = " + row + " j = " + col);
-
-										for (int stepsBack = 1; stepsBack <= row * (x - 2) + col; stepsBack++) {
-											if (boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].isEnabled()) {
-												//if (!boxes[((row * (rowWidth - 2) + column) - stepsBack) / (rowWidth - 2)][((row * (rowWidth - 2) + column) - stepsBack) % (rowWidth - 2)].getText().equals("")) {
-													boxes[((row * (x - 2) + col) - stepsBack) / (x - 2)][((row * (x - 2) + col) - stepsBack) % (x - 2)].requestFocus();
-												//}
-												break;
-											}
-										}
-									}
+								
+								if(col>0 && boxes[row][col-1].isEnabled() && boxes[row][col-1].getBackground().getRGB() != -1){
+									boxes[row][col - 1].requestFocus();
+								}
+								else if(row>0 && boxes[row-1][col].isEnabled() && boxes[row-1][col].getBackground().getRGB() != -1){
+									boxes[row-1][col].requestFocus();
 								}
 								
-								
-									
-								
-								
+					
 							}
 						}
 					}
