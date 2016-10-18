@@ -99,7 +99,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(10, 3, 50, 1);
+		model2 = new SpinnerNumberModel(10, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));

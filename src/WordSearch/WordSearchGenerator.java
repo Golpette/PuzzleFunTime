@@ -42,8 +42,8 @@ public class WordSearchGenerator{
 			
 			// Fit specific number of words
 			
-			int num_words_to_fit = 5;
-//			int num_words_to_fit = (int) (Math.pow(wordsearchSize, 2)/10) ;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
+			//int num_words_to_fit = 5;
+			int num_words_to_fit = (int) (Math.pow(wordsearchSize, 2)/10)+8 ;  // TODO: CHOOSE THIS DEPENDING ON GRID SIZE
 			//System.out.println("Number of Words in Puzzle: " + num_words_to_fit);
 
 			int count_tries = 0;
@@ -55,7 +55,7 @@ public class WordSearchGenerator{
 														// AR: could simply set the size to choose between.  Easy= 0,1, Medium = 0,1,2,3, Hard = 0,1,2,3,4,5,6,7
 				
 				//##delete for snaking
-				direc = 9;
+				//direc = 9;
 				//###
 				
 
