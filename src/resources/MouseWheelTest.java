@@ -6,23 +6,16 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-import Sudoku.DrawSudokuSolution;
+import Sudoku.DrawSudoku;
 
 @SuppressWarnings("serial")
 public class MouseWheelTest extends JPanel implements MouseWheelListener {
     private final static String SOME_ACTION = "control 1";
    
+    DrawSudoku sud;
     
     
-    /**
-     * 
-     */
-	DrawSudokuSolution sud;
-	static int[][] grid;
-	/**
-	 * 
-	 */
-	
+    
 	
 	
     public MouseWheelTest() {
@@ -34,11 +27,10 @@ public class MouseWheelTest extends JPanel implements MouseWheelListener {
          * Trying to add sudoku to this for testing
          */
         try {
-			sud = new DrawSudokuSolution(grid, 11, 11);
+			sud= new DrawSudoku(11, 11);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-        sud.generateSudoku();
         /**
          * 
          */
@@ -70,12 +62,15 @@ public class MouseWheelTest extends JPanel implements MouseWheelListener {
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.isControlDown()) {
             if (e.getWheelRotation() < 0) {
+            	//Zoom out here
                 JComponent component = (JComponent)e.getComponent();
                 Action action = component.getActionMap().get(SOME_ACTION);
                 if (action != null)
                     action.actionPerformed( null );
             } else {
                 System.out.println("scrolled down");
+                //Zoom in here
+                //sud.redrawGrid
             }
         }
     }
