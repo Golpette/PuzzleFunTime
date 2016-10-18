@@ -1,6 +1,7 @@
 package WordSearch;
 
 public class Coord {
+	// Coordinate objects for storing snake letter positions
 	
 	public int xcoord;
 	public int ycoord;
@@ -16,18 +17,9 @@ public class Coord {
 		this.ycoord = c.getY();
 	}
 	
-	
-	
-//	public boolean isEqual( Coord c1, Coord c2){
-//		boolean same = false;
-//		if( c1.getX()==c2.getX()  && c1.getY()==c2.getY()  ){
-//			same = true;
-//		}
-//		return same;
-//	}
-//	
-	
-	
+
+	// THE .contains() METHOD IMPLICITLY CALLS EQUALS FUNTCION
+	// WHICH MUST BE OVERRIDDEN FOR NON-PRIMITIVE TYPES!
 	@Override
 	public boolean equals(Object o) 
 	{
@@ -42,12 +34,6 @@ public class Coord {
 	
 	
 
-	
-	
-	
-	
-	
-	
 	public static Coord add(Coord c1, Coord c2){
 		int x3 = c1.getX()+c2.getX();
 		int y3 = c1.getY()+c2.getY();

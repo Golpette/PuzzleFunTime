@@ -94,8 +94,8 @@ public class FitWords_wordsearch {
 				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}
-		//}/////////////////////////////////////////////////
-	    else if( dir.equals("snaking") ){		//Attempt at snaking words
+		//}/////////////////////////////////Attempt at snaking words
+	    else if( dir.equals("snaking") ){		
 
 	    	int curx=init_x;  int cury=init_y;
 	    	Coord current_coord = new Coord(curx, cury);
@@ -135,31 +135,10 @@ public class FitWords_wordsearch {
     				}
     				
     			}
-	    			
-	    		
-	    		
-	    		
 	    		
 	    	}
-	    	
-
-  
-			
-	    	
-	    	
-	    	
-	    	
-	    	
-			//for(Integer [] a: squares){
-			//	System.out.println(squares.indexOf(a) + ": (" + a[0].toString() + ", "+ a[1].toString() +")" );
-			//}
-			
+	 	
 		}
-		
-		
-		//////********TO IMPLEMENT:  SNAKING WORDS!!!!********/////////
-		
-		
 		else{
 			System.out.println("WORDSEARCH DIRECTION NOT DEFINED");  System.exit(1);
 		}
