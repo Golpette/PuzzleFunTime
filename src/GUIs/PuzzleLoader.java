@@ -145,7 +145,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		
 		panel = new JPanel(new GridBagLayout());
 		panel.setBackground(new Color(220,220,250,255));
-		panel.setBounds(0,0,550,400);
+		panel.setBounds(0,0,550,375);
 		panel.setOpaque(false); 
 		
 		
@@ -244,7 +244,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridheight = 1;
-		c.insets = new Insets(52,30,60,15);
+		c.insets = new Insets(42,30,45,15);
 		panel.add(spinner3, c);
 		
 		c.weightx = 1.0;
@@ -265,7 +265,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 2;
-		c.insets = new Insets(52,15,60,30);
+		c.insets = new Insets(42,15,45,30);
 		panel.add(sudDifficulty, c);
 		
 		
