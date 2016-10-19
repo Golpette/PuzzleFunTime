@@ -50,12 +50,12 @@ public class MouseWheelTest extends JPanel implements MouseWheelListener {
             }
         };
 
-        // Control A is used by a text area so try a different key
+         //Control A is used by a text area so try a different key
         textArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
             .put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
         textArea.getActionMap().put(SOME_ACTION, someAction);
         
-        sud.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+        sud.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
         sud.getActionMap().put(SOME_ACTION, someAction);
     }
 
@@ -63,12 +63,16 @@ public class MouseWheelTest extends JPanel implements MouseWheelListener {
         if (e.isControlDown()) {
             if (e.getWheelRotation() < 0) {
             	//Zoom out here
+            	 System.out.println("Zooming out");
                 JComponent component = (JComponent)e.getComponent();
                 Action action = component.getActionMap().get(SOME_ACTION);
                 if (action != null)
                     action.actionPerformed( null );
             } else {
                 System.out.println("scrolled down");
+                sud.setX((sud.getX())+1);
+                sud.setVisible(false);
+                System.out.println("Zooming in");
                 //Zoom in here
                 //sud.redrawGrid
             }
