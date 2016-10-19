@@ -18,6 +18,7 @@ Scroll through the puzzle with arrow keys or mouse and enter solution using keyb
 
 Wordsearch: to highlight word, click on the initial letter, followed by the final letter of the word. You can cheat using 
 the "Show solution" button Difficulty levels restrict word directionality (only vertical and horizontal for easy to
-the inclusiong of "word snakes" for expert - though you can't actually highlight these yet).
+the inclusiong of "word snakes" for expert - though you can't actually highlight these yet). Hover over the word list
+to re-order them as you like.
 
 Sudoku: to do.
