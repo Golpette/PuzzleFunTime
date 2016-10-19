@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -32,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
@@ -43,7 +48,7 @@ import resources.SetUpImages;
 /**
  * Class to draw a word search
  */
-public class DrawWordSearch extends JComponent implements ActionListener {
+public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 40;	
 	int x, y;
@@ -83,6 +88,7 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 	String sortMethod = "random";
 	public int counter = 0;
 	boolean congratulations = false;
+	 private final static String SOME_ACTION = "control 1";
 	boolean reset = true;
 	int x_pos, y_pos;
 	
@@ -114,6 +120,18 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		font4 = new Font(fontAttr);
 		start = true;
+		
+		 @SuppressWarnings("unused")
+		Action someAction = new AbstractAction() {
+	            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+				public void actionPerformed(ActionEvent e) {
+	                System.out.println("do some action");
+	            }
+	        };
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255,255,255,255));
@@ -152,7 +170,11 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		reveal.setFont(font2);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
-
+		reveal.addMouseWheelListener(this);
+		
+		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+		reveal.getActionMap().put(SOME_ACTION, someAction);
+		
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setBorder(border);
@@ -201,6 +223,10 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 		layer.setBackground(clear);
 		layer.setVisible(true);
 		layer.setOpaque(true);
+		layer.addMouseWheelListener(this);
+		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+		layer.getActionMap().put(SOME_ACTION, someAction);
+		
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
@@ -808,4 +834,23 @@ public class DrawWordSearch extends JComponent implements ActionListener {
 			}
 		}
 	}
+	
+	 public void mouseWheelMoved(MouseWheelEvent e) {
+	        if (e.isControlDown()) {
+	            if (e.getWheelRotation() < 0) {
+	                JComponent component = (JComponent)e.getComponent();
+	                Action action = component.getActionMap().get(SOME_ACTION);
+	               
+	                if (action != null)
+	                    action.actionPerformed( null );
+	            } else {
+	                System.out.println("scrolled down");
+	              
+	                x++;y++;
+	                frame.repaint();
+	                frame.pack();
+	            }
+	        }
+	    }
+	
 }
