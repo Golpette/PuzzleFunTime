@@ -51,6 +51,7 @@ import resources.SetUpImages;
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 40;	
+	final static int initialSquareSize = 80;
 	int x, y;
 	JFrame frame;
 	JPanel extra, panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6,
@@ -91,9 +92,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	 private final static String SOME_ACTION = "control 1";
 	boolean reset = true;
 	int x_pos, y_pos;
+	double scale, normalisedScale;
+	final double MAX_SCALE = 20.0;
+	final double MIN_SCALE = 1.0;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
+	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries, double normalisedScale) throws IOException{
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
@@ -112,9 +116,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		orderClues.setFont(font5);
 		extra = new JPanel(new GridBagLayout());
 		notIn = true;
+		scale = 10.0;
+		this.normalisedScale = scale/20;
+		int test = (int)(3*initialSquareSize*normalisedScale/5);
+		System.out.println("Test: " + test);
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
-		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		//font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 		Map fontAttr = font3.getAttributes();
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
@@ -175,33 +184,35 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		reveal.getActionMap().put(SOME_ACTION, someAction);
 		
-		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer.setBorder(border);
-		transparentLayer.setBackground(clear);
-		transparentLayer.setOpaque(false);
-
-		for (int i = 0; i < x-2; i++){
-			for (int j = 0; j < y-2; j++){
-				letters[i][j] = new JLabel();
-				letters[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				letters[i][j].setOpaque(false);
-				letters[i][j].setFont(font);
-				letters[i][j].setForeground(Color.BLACK);
-				letters[i][j].setBackground(clear);
-				letters[i][j].setBorder(null);
-				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-				if(grid[j+1][i+1] != "_"){
-					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
-				}else{
-					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
-				}
-				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
-				letters[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(letters[i][j]);
-				transparentLayer.add(letters[i][j]);
-			}
-		}		
+		DrawGrid();
+		
+//		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
+//		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+//		transparentLayer.setBorder(border);
+//		transparentLayer.setBackground(clear);
+//		transparentLayer.setOpaque(false);
+//
+//		for (int i = 0; i < x-2; i++){
+//			for (int j = 0; j < y-2; j++){
+//				letters[i][j] = new JLabel();
+//				letters[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
+//				letters[i][j].setOpaque(false);
+//				letters[i][j].setFont(font);
+//				letters[i][j].setForeground(Color.BLACK);
+//				letters[i][j].setBackground(clear);
+//				letters[i][j].setBorder(null);
+//				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+//				if(grid[j+1][i+1] != "_"){
+//					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
+//				}else{
+//					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
+//				}
+//				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
+//				letters[i][j].setVerticalAlignment(JTextField.CENTER);
+//				mouseActionlabel(letters[i][j]);
+//				transparentLayer.add(letters[i][j]);
+//			}
+//		}		
 	
 		transparentLayer2 = setUpLayers(letters2, transparentLayer2);
 		transparentLayer3 = setUpLayers(letters3, transparentLayer3);
@@ -641,6 +652,37 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		});
 	}
 	
+	public void DrawGrid(){
+		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
+		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer.setBorder(border);
+		transparentLayer.setBackground(clear);
+		transparentLayer.setOpaque(false);
+
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				letters[i][j] = new JLabel();
+				letters[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
+				letters[i][j].setOpaque(false);
+				letters[i][j].setFont(font);
+				letters[i][j].setForeground(Color.BLACK);
+				letters[i][j].setBackground(clear);
+				letters[i][j].setBorder(null);
+				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+				if(grid[j+1][i+1] != "_"){
+					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
+				}else{
+					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
+				}
+				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
+				letters[i][j].setVerticalAlignment(JTextField.CENTER);
+				mouseActionlabel(letters[i][j]);
+				transparentLayer.add(letters[i][j]);
+			}
+		}		
+	}
+	
+	
 	/**
 	 * Method to Alphabetise arraylist of strings
 	 * @param strings
@@ -836,19 +878,41 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 	
 	 public void mouseWheelMoved(MouseWheelEvent e) {
+		 	
+             
 	        if (e.isControlDown()) {
 	            if (e.getWheelRotation() < 0) {
 	                JComponent component = (JComponent)e.getComponent();
 	                Action action = component.getActionMap().get(SOME_ACTION);
-	               
-	                if (action != null)
-	                    action.actionPerformed( null );
+	                if(scale > MIN_SCALE){
+	                	scale--;
+	                }
+	                normalisedScale = scale/20;
+	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+	    		     font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
+	    		     DrawGrid();
+	                reveal.setFont(font2);
+	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
 	                System.out.println("scrolled down");
 	              
-	                x++;y++;
-	                frame.repaint();
-	                frame.pack();
+	              //  x++;y++;
+	               // frame.repaint();
+	                if(scale < MAX_SCALE){
+	                	scale++;
+	                }
+	                normalisedScale = scale/20;
+	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+	    		     font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
+	    		     DrawGrid();
+	                reveal.setFont(font2);
+	           
+	               
+//	                reveal.repaint();
+//	                layer.repaint();
+//	                this.repaint();
+	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
+	               // frame.pack();
 	            }
 	        }
 	    }
