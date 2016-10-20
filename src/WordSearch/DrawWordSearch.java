@@ -70,7 +70,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JScrollPane area;
 	DrawSolution sol;
 	SetUpImages setImages;
-	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted;
+	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
@@ -102,6 +102,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.y = y;
 		this.grid = grid;
 		this.entries = entries;
+		this.cluesAcross = cluesAcross;
+		this.cluesDown = cluesDown;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
 		completed = new ArrayList<JLabel>();
@@ -124,23 +126,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
 		//font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
-		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+		font = new Font("Century Gothic", Font.PLAIN, (int)(normalisedScale*initialSquareSize / 5 * 3));
 		Map fontAttr = font3.getAttributes();
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		font4 = new Font(fontAttr);
 		start = true;
 		
-		 @SuppressWarnings("unused")
-		Action someAction = new AbstractAction() {
-	            /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-				public void actionPerformed(ActionEvent e) {
-	                System.out.println("do some action");
-	            }
-	        };
+		
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255,255,255,255));
@@ -184,44 +176,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		reveal.getActionMap().put(SOME_ACTION, someAction);
 		
-		DrawGrid();
-		
-//		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-//		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-//		transparentLayer.setBorder(border);
-//		transparentLayer.setBackground(clear);
-//		transparentLayer.setOpaque(false);
-//
-//		for (int i = 0; i < x-2; i++){
-//			for (int j = 0; j < y-2; j++){
-//				letters[i][j] = new JLabel();
-//				letters[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-//				letters[i][j].setOpaque(false);
-//				letters[i][j].setFont(font);
-//				letters[i][j].setForeground(Color.BLACK);
-//				letters[i][j].setBackground(clear);
-//				letters[i][j].setBorder(null);
-//				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//				if(grid[j+1][i+1] != "_"){
-//					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
-//				}else{
-//					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
-//				}
-//				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
-//				letters[i][j].setVerticalAlignment(JTextField.CENTER);
-//				mouseActionlabel(letters[i][j]);
-//				transparentLayer.add(letters[i][j]);
-//			}
-//		}		
 	
-		transparentLayer2 = setUpLayers(letters2, transparentLayer2);
-		transparentLayer3 = setUpLayers(letters3, transparentLayer3);
-		transparentLayer4 = setUpLayers(letters4, transparentLayer4);
-		transparentLayer5 = setUpLayers(letters5, transparentLayer5);
-		transparentLayer6 = setUpLayers(letters6, transparentLayer6);
-		transparentLayer7 = setUpLayers(letters7, transparentLayer7);
-		transparentLayer8 = setUpLayers(letters8, transparentLayer8);
+		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		
+		DrawGrid( normalisedScale, cluesAcross, cluesDown);
 		allLayers.add(letters);
 		allLayers.add(letters2);
 		allLayers.add(letters3);
@@ -229,26 +187,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		allLayers.add(letters5);
 		allLayers.add(letters6);
 		allLayers.add(letters7);
-		allLayers.add(letters8);
-		
+		allLayers.add(letters8);	
 		layer.setBackground(clear);
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.addMouseWheelListener(this);
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
-		
-		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
-		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
-		layer.add(transparentLayer, new Integer(0));
-		layer.add(transparentLayer2, new Integer(0));
-		layer.add(transparentLayer3, new Integer(0));
-		layer.add(transparentLayer4, new Integer(0));
-		layer.add(transparentLayer5, new Integer(0));
-		layer.add(transparentLayer6, new Integer(0));
-		layer.add(transparentLayer7, new Integer(0));
-		layer.add(transparentLayer8, new Integer(0));
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBounds(0,0,squareSize*(x-2),squareSize*(y-2));
@@ -652,9 +597,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		});
 	}
 	
-	public void DrawGrid(){
+	public void DrawGrid(double normalised, ArrayList<String> cluesDown, ArrayList<String> cluesAcross){
+		font = new Font("Century Gothic", Font.PLAIN, (int)(normalisedScale*initialSquareSize / 5 * 3));
+
+	
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		transparentLayer.setBounds((int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised*(x-2)),(int)(initialSquareSize*normalised*(y-2)));
+		System.out.println("squareSize: " + squareSize);
 		transparentLayer.setBorder(border);
 		transparentLayer.setBackground(clear);
 		transparentLayer.setOpaque(false);
@@ -679,9 +628,44 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				mouseActionlabel(letters[i][j]);
 				transparentLayer.add(letters[i][j]);
 			}
-		}		
+		}
+				
+				transparentLayer2 = setUpLayers(letters2, transparentLayer2);
+				transparentLayer3 = setUpLayers(letters3, transparentLayer3);
+				transparentLayer4 = setUpLayers(letters4, transparentLayer4);
+				transparentLayer5 = setUpLayers(letters5, transparentLayer5);
+				transparentLayer6 = setUpLayers(letters6, transparentLayer6);
+				transparentLayer7 = setUpLayers(letters7, transparentLayer7);
+				transparentLayer8 = setUpLayers(letters8, transparentLayer8);
+				
+				layer.removeAll();
+				layer.setBounds(initialSquareSize,initialSquareSize,squareSize*(x-2),squareSize*(y-2));
+				layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
+				layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
+				layer.add(transparentLayer, new Integer(0));
+				layer.add(transparentLayer2, new Integer(0));
+				layer.add(transparentLayer3, new Integer(0));
+				layer.add(transparentLayer4, new Integer(0));
+				layer.add(transparentLayer5, new Integer(0));
+				layer.add(transparentLayer6, new Integer(0));
+				layer.add(transparentLayer7, new Integer(0));
+				layer.add(transparentLayer8, new Integer(0));
+				
+				
 	}
+
 	
+	 @SuppressWarnings("unused")
+		Action someAction = new AbstractAction() {
+	            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+				public void actionPerformed(ActionEvent e) {
+	                System.out.println("do some action");
+	            }
+	        };
 	
 	/**
 	 * Method to Alphabetise arraylist of strings
@@ -879,7 +863,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	 public void mouseWheelMoved(MouseWheelEvent e) {
 		 	
-             
+            
 	        if (e.isControlDown()) {
 	            if (e.getWheelRotation() < 0) {
 	                JComponent component = (JComponent)e.getComponent();
@@ -887,32 +871,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	                if(scale > MIN_SCALE){
 	                	scale--;
 	                }
+	            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
 	    		     font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
-	    		     DrawGrid();
+	    		     main.revalidate();
+	    		     DrawGrid( normalisedScale, cluesAcross, cluesDown);
 	                reveal.setFont(font2);
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
 	                System.out.println("scrolled down");
-	              
-	              //  x++;y++;
-	               // frame.repaint();
 	                if(scale < MAX_SCALE){
 	                	scale++;
 	                }
+	            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
 	    		     font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
-	    		     DrawGrid();
+	    		     DrawGrid( normalisedScale, cluesAcross, cluesDown);
 	                reveal.setFont(font2);
-	           
-	               
-//	                reveal.repaint();
-//	                layer.repaint();
-//	                this.repaint();
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
-	               // frame.pack();
+	               
 	            }
 	        }
 	    }
