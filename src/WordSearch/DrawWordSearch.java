@@ -1,5 +1,6 @@
 package WordSearch;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,7 +8,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -48,7 +52,7 @@ import resources.SetUpImages;
 /**
  * Class to draw a word search
  */
-public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
+public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener, AWTEventListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 40;	
 	final static int initialSquareSize = 80;
@@ -70,7 +74,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JScrollPane area;
 	DrawSolution sol;
 	SetUpImages setImages;
-	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown;
+	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown, randomLetters;
 	ArrayList<JLabel> completed;
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues;
@@ -84,6 +88,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	Dimension screenSize; 
 	double width;
 	double height;
+	double mouseX, mouseY;
 	Border border;
 	String tempWord = "";
 	String sortMethod = "random";
@@ -108,6 +113,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		allClues = new ArrayList<JLabel>();
 		completed = new ArrayList<JLabel>();
 		allLayers = new ArrayList<JLabel[][]>();
+		randomLetters = new ArrayList<String>();
 		tempStrikethrough = new ArrayList<String>();
 		solutions = new ArrayList<String>();
 		struckThrough = new ArrayList<String>();
@@ -131,8 +137,18 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		font4 = new Font(fontAttr);
 		start = true;
+		rand = new Random();
+		for(int i = 0; i < x*y; i++){
+			randomLetters.add(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
+		}
+
 		
-		
+		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK);
+		System.out.print(MouseInfo.getPointerInfo().getLocation() + " | ");
+		Point mouseCoord = MouseInfo.getPointerInfo().getLocation();
+		double mouseX = mouseCoord.getX();
+		double mouseY = mouseCoord.getY();
+		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255,255,255,255));
@@ -164,7 +180,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		rand = new Random();
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
@@ -598,9 +613,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 	
 	public void DrawGrid(double normalised, ArrayList<String> cluesDown, ArrayList<String> cluesAcross){
-		font = new Font("Century Gothic", Font.PLAIN, (int)(normalisedScale*initialSquareSize / 5 * 3));
-
-	
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds((int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised*(x-2)),(int)(initialSquareSize*normalised*(y-2)));
 		System.out.println("squareSize: " + squareSize);
@@ -617,11 +629,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				letters[i][j].setForeground(Color.BLACK);
 				letters[i][j].setBackground(clear);
 				letters[i][j].setBorder(null);
-				letters[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+				letters[i][j].setBounds((int) mouseX, (int) mouseY, squareSize * (x - 2), squareSize * (y - 2));
 				if(grid[j+1][i+1] != "_"){
 					letters[i][j].setText(grid[j+1][i+1].toUpperCase());
 				}else{
-					letters[i][j].setText(Character.toString(randomFill.charAt(rand.nextInt(randomFill.length()))));
+					letters[i][j].setText(randomLetters.get(i*x + j));
 				}
 				letters[i][j].setHorizontalAlignment(JTextField.CENTER);
 				letters[i][j].setVerticalAlignment(JTextField.CENTER);
@@ -639,7 +651,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				transparentLayer8 = setUpLayers(letters8, transparentLayer8);
 				
 				layer.removeAll();
-				layer.setBounds(initialSquareSize,initialSquareSize,squareSize*(x-2),squareSize*(y-2));
+				layer.setBounds((int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised),(int)(initialSquareSize*(x-2)*normalised),(int)(initialSquareSize*(y-2)*normalised));
 				layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 				layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 				layer.add(transparentLayer, new Integer(0));
@@ -863,7 +875,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	 public void mouseWheelMoved(MouseWheelEvent e) {
 		 	
-            
+		 	Point mouseCoord = MouseInfo.getPointerInfo().getLocation();
+			mouseX = mouseCoord.getX();
+			mouseY = mouseCoord.getY();
 	        if (e.isControlDown()) {
 	            if (e.getWheelRotation() < 0) {
 	                JComponent component = (JComponent)e.getComponent();
@@ -891,9 +905,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	    		     DrawGrid( normalisedScale, cluesAcross, cluesDown);
 	                reveal.setFont(font2);
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
+	                System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
 	               
 	            }
 	        }
 	    }
+
+	@Override
+	public void eventDispatched(AWTEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
