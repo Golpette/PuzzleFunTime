@@ -56,7 +56,7 @@ import resources.SetUpImages;
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener, AWTEventListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 40;	
+	private static int squareSize;	
 	final static int initialSquareSize = 80;
 	int x, y;
 	JFrame frame;
@@ -107,12 +107,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries, double normalisedScale) throws IOException{
+		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
 		this.entries = entries;
 		this.cluesAcross = cluesAcross;
 		this.cluesDown = cluesDown;
+		squareSize = 40;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
 		completed = new ArrayList<JLabel>();
@@ -191,7 +193,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temp7 = new Icon [x-2][y-2];
 		temp8 = new Icon [x-2][y-2];
 		
-
 		temporaryIcons.add(temp1);
 		temporaryIcons.add(temp2);
 		temporaryIcons.add(temp3);
@@ -217,7 +218,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		
-		DrawGrid( normalisedScale, cluesAcross, cluesDown);
+		DrawGrid(normalisedScale, cluesAcross, cluesDown);
 		allLayers.add(letters);
 		allLayers.add(letters2);
 		allLayers.add(letters3);
@@ -294,7 +295,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		panel.setBackground(clear);
-		panel.setBackground(clear);
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+		panel.getActionMap().put(SOME_ACTION, someAction);
+		
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -366,6 +369,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		layer = new JPanel(new GridLayout(x-2, y-2));
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		System.out.println("squareSize: "+ squareSize);
 		layer.setBorder(border);
 		layer.setBackground(clear);
 		layer.setOpaque(false);
