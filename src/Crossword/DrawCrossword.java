@@ -663,7 +663,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		l.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {				
+			public void mouseClicked(MouseEvent e) {
+				
+				firsteverclick = false;
+				countClicks=0;
+				
 				
 //				// GET FOCUS IF CLICKING ON CLUE
 //				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
