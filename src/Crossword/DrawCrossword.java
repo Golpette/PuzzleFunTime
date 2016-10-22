@@ -67,6 +67,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	double width;
 	double height;
 	
+	// Define color highlighting current word
+	Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
+	
+	
 	//tracking clicks
 	int lastClick_x = 0;
 	int lastClick_y = 0;
@@ -389,11 +393,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.getRootPane().setDefaultButton(reveal);
 		
 		
-		
-		//Highlight first word to begin
-		//highlightWord_fromClick(0,0);     ////// IS THIS THE ONLY BUG???
-		//firstAutoMove=false;
-		
 	}
 
 
@@ -428,8 +427,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						
 						
 						if (e.getSource() == boxes[row][col]) {
-						
-
 							
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
 								// get rid of all previous highlighting
@@ -496,7 +493,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							
 							
 							
-							
+							// If key presses are letters:
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								
 								countClicks=0;
@@ -506,7 +503,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								
 								
 								//determine initial direction, favouring across
-								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS IN boxes[][]...
 									currentDirection = 0;
 									firstAutoMove=false;
 								}
@@ -778,13 +775,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					if( ent.isAcross()  ) {
 						int length = ent.getWord().length();
 						for( int dbl=0; dbl<length; dbl++ ){
-							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
+							boxes[xstart][ystart+dbl].setBackground(HIGHLIGHT_COLOUR );
 						}													
 					} 
 					else {
 						int length = ent.getWord().length();
 						for( int dbl=0; dbl<length; dbl++ ){
-							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
+							boxes[xstart+dbl][ystart].setBackground(HIGHLIGHT_COLOUR );
 						}														
 					}					
 				}
@@ -797,15 +794,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	// Highlight squares of word from any position
 	public void highlightWord( int xstart, int ystart ){
-		
+		/** Highlight word from any letter **/
 		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			// i.e., if start of word
 			
-			boolean acrossExists=false; int across_l=0; 
-			boolean downExists=false;   int down_l=0;
+			boolean acrossExists=false; 
+			boolean downExists=false;   
 			
 			for( Entry ent : entries ){
 			// go through entries and check if we have across/down/both	
@@ -813,94 +809,45 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){			
 					if( ent.isAcross()  ) {
-						across_l = ent.getWord().length();
 						acrossExists = true;
 					}
 					else{
-						down_l = ent.getWord().length();
 						downExists=true;
 					}			
 				}
 			}
 			// prioritise across over down
 			if( acrossExists ){
-				for( int dbl=0; dbl<across_l; dbl++ ){
-					boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
-				}						
+				colourWord( xstart, ystart, "across" );
 			}
 			else if( downExists ){
-				for( int dbl=0; dbl<down_l; dbl++ ){
-					boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
-				}	
+				colourWord( xstart, ystart, "down" );
 			}
 			
 		}
-
 		//
 		//
 		// edit: allow word to be highlighted from any position, not just first letter
 		else{
-			int xx1=0; int yy1=0;
-			if( ystart>0 && boxes[xstart][ystart-1].isEnabled() && ystart<y-3 &&  boxes[xstart][ystart+1].isEnabled() ){// EDITED 1546
-				//find start point and highlight from there
-				for( int mm=0; mm<y-2; mm++ ){
-					if( !clueNumbers[xstart][ystart-mm].getText().equals("")  ){
-						xx1=xstart;  yy1=ystart-mm;
-						////// replace below with recursive method
-						for( Entry ent : entries ){
-							String nomnom = Integer.toString( ent.getClueNumber()  );
-							if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
 								
-								if( ent.isAcross()  ) {
-									int length = ent.getWord().length();
-									for( int dbl=0; dbl<length; dbl++ ){
-										boxes[xx1][yy1+dbl].setBackground(new Color(20,100,20,100) );
-									}	
-									mm=y; //break
-								} 
-			
-							}
-						}////////replace this with recursive method
-						
-					}
-				}
+			if( ystart>0 && boxes[xstart][ystart-1].isEnabled() && ystart<y-3 &&  boxes[xstart][ystart+1].isEnabled() ){//across
 				
+				colourWord(xstart, ystart, "across");		
 			}
-			else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ){    // WORKS. DOWN
-			//else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ||   
-		///	/	( xstart>0 && boxes[xstart-1][ystart].isEnabled() &&   !boxes[xstart][ystart+1].isEnabled()   )	){   
+			else if( xstart>0 && boxes[xstart-1][ystart].isEnabled()  ){//down
 	
-			
-			
-				//find start point and highlight from there
-				for( int mm=0; mm<x-2; mm++ ){
-					if( !clueNumbers[xstart-mm][ystart].getText().equals("")  ){
-						xx1=xstart-mm;  yy1=ystart;
-						////// replace below with recursive method
-						for( Entry ent : entries ){
-							String nomnom = Integer.toString( ent.getClueNumber()  );
-							if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-								
-								if( !ent.isAcross()  ) {
-									int length = ent.getWord().length();
-									for( int dbl=0; dbl<length; dbl++ ){
-										boxes[xx1+dbl][yy1].setBackground(new Color(20,100,20,100) );
-									}	
-									mm=x; //break; 
-								} 
-								
-							}
-						}////////replace this with recursive method
-						
-					}
-				}		
-				
-			
+				colourWord(xstart, ystart, "down");
+			}
+			// Across words were not highlighting from final position if cell was isolated. QUICK FIX:
+			else if( (ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() && 	ystart>0 && boxes[xstart][ystart-1].isEnabled() )
+					||   ( ystart==y-3 && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() 
+					||   ( xstart==x-3 && ystart<y-3 &&  ystart>0 && boxes[xstart][ystart-1].isEnabled() )
+					||   ( ystart==y-3 && xstart==x-3 )    )      
+					){   
+					
+				colourWord(xstart, ystart, "across");		
 			}
 
-			else{
-				// in coord (0,0) so do nothing
-			}
 			
 		}
 		
@@ -911,37 +858,89 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	
-	
-	
-	
-	
-	// Highlight across/down depending on number of clicks
-	public void highlightWord_fromClick( int xstart, int ystart ){		
+	public void colourWord(int xstart, int ystart, String direc){
+		/** Colour word given one grid point in it  **/
 		
+		int xx1=xstart;  int yy1=ystart;
+		
+		if(direc.equals("across")){		
+			//find start point and highlight from there
+			for( int mm=0; mm<y-2; mm++ ){
+				if( !clueNumbers[xstart][ystart-mm].getText().equals("")  ){
+					xx1=xstart;  yy1=ystart-mm;
+					////// replace below with recursive method
+					for( Entry ent : entries ){
+						String nomnom = Integer.toString( ent.getClueNumber()  );
+						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
+						
+							if( ent.isAcross()  ) {
+								int length = ent.getWord().length();
+								for( int dbl=0; dbl<length; dbl++ ){
+									boxes[xx1][yy1+dbl].setBackground( HIGHLIGHT_COLOUR );
+							}	
+								mm=y; //break
+							} 
+						}
+					}				
+				}
+			}
+			
+		}
+		else if(direc.equals("down")){
+			//find start point and highlight from there
+			for( int mm=0; mm<x-2; mm++ ){
+				if( !clueNumbers[xstart-mm][ystart].getText().equals("")  ){
+					xx1=xstart-mm;  yy1=ystart;
+					////// replace below with recursive method
+					for( Entry ent : entries ){
+						String nomnom = Integer.toString( ent.getClueNumber()  );
+						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
+							
+							if( !ent.isAcross()  ) {
+								int length = ent.getWord().length();
+								for( int dbl=0; dbl<length; dbl++ ){
+									boxes[xx1+dbl][yy1].setBackground( HIGHLIGHT_COLOUR );
+								}	
+								mm=x; //break; 
+							} 
+							
+						}
+					}
+					
+				}
+			}				
+		}
+		else{ System.out.println("direction not defined in colourWord()" );  }
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public void highlightWord_fromClick( int xstart, int ystart ){		
+		/** Highlight from mouse clicks. Across/down depends on number of clicks **/
 		
 		// if clicking on start of a word
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 		
 			boolean acrossExists = false;
 			boolean downExists = false;			
-			int acrossLength=0;   
-			int downLength = 0;
 			
 			for( Entry ent : entries){
 				String nomnom = Integer.toString( ent.getClueNumber()  );
 				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
 					if( ent.isAcross()  ) {
 						acrossExists = true;
-						acrossLength = ent.getWord().length();
 					} 
 					else {
 						downExists = true;
-						downLength = ent.getWord().length();
 					}
 				}
 			}
-			
 			
 			countClicks++;		
 			boolean highlightAcross = true;
@@ -958,33 +957,27 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			else{
 				lastClick_x = xstart;    lastClick_y = ystart;
 				countClicks = 1;
-			}
-			
+			}		
 			
 			for( Entry ent : entries ){
 				String nomnom = Integer.toString( ent.getClueNumber()  );
 				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
 					
-					if( highlightAcross  ) {
-						for( int dbl=0; dbl<acrossLength; dbl++ ){
-							boxes[xstart][ystart+dbl].setBackground(new Color(20,100,20,100) );
-						}													
+					if( highlightAcross  ) {	
+						colourWord(xstart, ystart, "across");
 					} 
-					else {
-						for( int dbl=0; dbl<downLength; dbl++ ){
-							boxes[xstart+dbl][ystart].setBackground(new Color(20,100,20,100) );
-						}														
+					else {														
+						colourWord(xstart, ystart, "down");
 					}
 				}
 			}
 		}
-		//
-		// or if clicking on random part of word
+		// else use highlightWord() method if clicking anywhere else in word other than first letter
 		else{
 			highlightWord(xstart,ystart);
 			countClicks=0;
 		}
-		
+	
 	}
 	
 	
@@ -992,7 +985,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public void makeAllWhite(){
-		//Reset all white 
+		/** Reset entire grid to white **/ 
 		for (int rrrr = 0; rrrr < x - 2; rrrr++) {
 			for (int cccc = 0; cccc < y - 2; cccc++) {
 				if( boxes[rrrr][cccc].isEnabled() ){
@@ -1006,7 +999,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public boolean startOfWord(int x, int y){
-		//Determine if a square is the first letter of a word
+		/**Determine if a square is the first letter of a word**/
 		boolean isStart = false;
 		for( Entry ent : entries){
 			String nomnom = Integer.toString( ent.getClueNumber()  );
