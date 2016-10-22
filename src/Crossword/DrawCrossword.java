@@ -393,11 +393,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.getRootPane().setDefaultButton(reveal);
 		
 		
-		
-		//Highlight first word to begin
-		//highlightWord_fromClick(0,0);     ////// IS THIS THE ONLY BUG???
-		//firstAutoMove=false;
-		
 	}
 
 
@@ -432,8 +427,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						
 						
 						if (e.getSource() == boxes[row][col]) {
-						
-
 							
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
 								// get rid of all previous highlighting
@@ -500,7 +493,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							
 							
 							
-							
+							// If key presses are letters:
 							if (65 <= e.getKeyCode() && e.getKeyCode() <= 90) {
 								
 								countClicks=0;
@@ -510,7 +503,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								
 								
 								//determine initial direction, favouring across
-								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS
+								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS IN boxes[][]...
 									currentDirection = 0;
 									firstAutoMove=false;
 								}
@@ -845,7 +838,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 				colourWord(xstart, ystart, "down");
 			}
-			// Across words were not highlighting across from final position. Quick fix:
+			// Across words were not highlighting from final position if cell was isolated. QUICK FIX:
 			else if( (ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() && 	ystart>0 && boxes[xstart][ystart-1].isEnabled() )
 					||   ( ystart==y-3 && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() 
 					||   ( xstart==x-3 && ystart<y-3 &&  ystart>0 && boxes[xstart][ystart-1].isEnabled() )
@@ -855,9 +848,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				colourWord(xstart, ystart, "across");		
 			}
 
-			else{
-				// in coord (0,0) so do nothing
-			}
 			
 		}
 		
@@ -931,16 +921,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	
-	// Highlight across/down depending on number of clicks
 	public void highlightWord_fromClick( int xstart, int ystart ){		
-		
+		/** Highlight from mouse clicks. Across/down depends on number of clicks **/
 		
 		// if clicking on start of a word
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 		
 			boolean acrossExists = false;
 			boolean downExists = false;			
-
 			
 			for( Entry ent : entries){
 				String nomnom = Integer.toString( ent.getClueNumber()  );
@@ -953,7 +941,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 				}
 			}
-			
 			
 			countClicks++;		
 			boolean highlightAcross = true;
@@ -970,8 +957,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			else{
 				lastClick_x = xstart;    lastClick_y = ystart;
 				countClicks = 1;
-			}
-			
+			}		
 			
 			for( Entry ent : entries ){
 				String nomnom = Integer.toString( ent.getClueNumber()  );
@@ -986,13 +972,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			}
 		}
-		//
-		// or now also if clicking on random part of word
+		// else use highlightWord() method if clicking anywhere else in word other than first letter
 		else{
 			highlightWord(xstart,ystart);
 			countClicks=0;
 		}
-		
+	
 	}
 	
 	
@@ -1000,7 +985,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public void makeAllWhite(){
-		//Reset all white 
+		/** Reset entire grid to white **/ 
 		for (int rrrr = 0; rrrr < x - 2; rrrr++) {
 			for (int cccc = 0; cccc < y - 2; cccc++) {
 				if( boxes[rrrr][cccc].isEnabled() ){
@@ -1014,7 +999,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public boolean startOfWord(int x, int y){
-		//Determine if a square is the first letter of a word
+		/**Determine if a square is the first letter of a word**/
 		boolean isStart = false;
 		for( Entry ent : entries){
 			String nomnom = Integer.toString( ent.getClueNumber()  );
