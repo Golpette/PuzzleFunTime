@@ -897,6 +897,36 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 			
 			}
+			else if(ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() &&
+					ystart>0 && boxes[xstart][ystart-1].isEnabled() ){   
+	
+				// then at end of word. highlight across
+				//find start point and highlight from there
+				for( int mm=0; mm<y-2; mm++ ){
+					if( !clueNumbers[xstart][ystart-mm].getText().equals("")  ){
+						xx1=xstart;  yy1=ystart-mm;
+						////// replace below with recursive method
+						for( Entry ent : entries ){
+							String nomnom = Integer.toString( ent.getClueNumber()  );
+							if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
+								
+								if( ent.isAcross()  ) {
+									int length = ent.getWord().length();
+									for( int dbl=0; dbl<length; dbl++ ){
+										boxes[xx1][yy1+dbl].setBackground(new Color(20,100,20,100) );
+									}	
+									mm=y; //break
+								} 
+			
+							}
+						}////////replace this with recursive method
+						
+					}
+				}
+				
+				
+			
+			}
 
 			else{
 				// in coord (0,0) so do nothing
