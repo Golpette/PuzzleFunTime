@@ -212,8 +212,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		allLayers.add(letters6);
 		allLayers.add(letters7);
 		allLayers.add(letters8);	
-//		layer.setVisible(true);
-//		layer.setOpaque(true);
+		layer.setVisible(true);
+		layer.setOpaque(true);
 		layer.addMouseWheelListener(this);
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
