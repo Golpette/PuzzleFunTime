@@ -897,8 +897,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 			
 			}
-			else if(ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() &&
-					ystart>0 && boxes[xstart][ystart-1].isEnabled() ){   
+			// Across words were not highlighting across from final position
+			else if( (ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() && 	ystart>0 && boxes[xstart][ystart-1].isEnabled() )
+					||   ( ystart==y-3 && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() 
+					||   ( xstart==x-3 && ystart<y-3 &&  ystart>0 && boxes[xstart][ystart-1].isEnabled() )
+					||   ( ystart==y-3 && xstart==x-3 )    )      
+					){   
 	
 				// then at end of word. highlight across
 				//find start point and highlight from there
