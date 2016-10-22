@@ -914,23 +914,24 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						letters[j][i].setBackground(clear);
 					}
 				}
-//				for (int i = 0; i < x-2; i++){
-//					for (int j = 0; j < y-2; j++){
-//						for(JLabel [][] labs: allLayers){
-//								if(temporaryIcons.get(allLayers.indexOf(labs))[i][j] != null){
-//									for(JLabel [][] labs2: allLayers){
-//										labs2[i][j].setOpaque(false);
-//									}
-//									ImageIcon temp = (ImageIcon)temporaryIcons.get(allLayers.indexOf(labs))[i][j];
-//									Image img = temp.getImage();
-//									Image newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
-//									temp = new ImageIcon(newimg);
-//									labs[i][j].setIcon(temp);
-//								}
-//							}
-//						//}
-//					}
-//				}
+				//Insert here a better way of checking the images that need to be loaded
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						for(JLabel [][] labs: allLayers){
+								if(temporaryIcons.get(allLayers.indexOf(labs))[i][j] != null){
+									for(JLabel [][] labs2: allLayers){
+										labs2[i][j].setOpaque(false);
+									}
+									ImageIcon temp = (ImageIcon)temporaryIcons.get(allLayers.indexOf(labs))[i][j];
+									Image img = temp.getImage();
+									Image newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
+									temp = new ImageIcon(newimg);
+									labs[i][j].setIcon(temp);
+								}
+							}
+						//}
+					}
+				}
 			}
 		}
 		if(e.getSource() == orderClues){
