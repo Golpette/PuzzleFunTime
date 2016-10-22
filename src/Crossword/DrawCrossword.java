@@ -667,6 +667,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				// GET FOCUS IF CLICKING ON CLUE
 				firsteverclick = false;
+				countClicks=0;
+
 				
 				for( JLabel cl : cluesAcr ){
 					if( e.getSource()==cl ){
@@ -741,6 +743,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 //					}
 //				}    STEVE REMOVE
 				
+				firsteverclick = false;
 				
 				for( JLabel cl : cluesAcr ){
 					if( e.getSource()==cl ){
@@ -752,13 +755,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						//cl.setOpaque(true);
 						String c_n_string = ""+cl.getText().split("\\.")[0];
 						int c_n = Integer.parseInt( c_n_string   );
-						System.out.println(c_n);
+						//System.out.println(c_n);
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
 								// then highlight this word
-								System.out.println( "x="+ent.getX()+ " y="+ent.getY());
-								colourWord( ent.getY()-1, ent.getX()-1, "across");
-								//highlightWord( ent.getY()-1, ent.getX()-1  );  // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
+								//System.out.println( "x="+ent.getX()+ " y="+ent.getY());
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+								colourWord( ent.getY()-1, ent.getX()-1, "across");   // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
 							}
 						}
 						
@@ -774,13 +777,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						makeAllWhite();
 						String c_n_string = ""+cl.getText().split("\\.")[0];
 						int c_n = Integer.parseInt( c_n_string   );
-						System.out.println(c_n);
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
 								// then highlight this word
-								System.out.println( "x="+ent.getX()+ " y="+ent.getY());
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
 								colourWord( ent.getY()-1, ent.getX()-1, "down");
-								//highlightWord( ent.getY()-1, ent.getX()-1  );  // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
 							}
 						}
 						
