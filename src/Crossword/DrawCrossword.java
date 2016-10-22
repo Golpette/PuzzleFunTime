@@ -665,43 +665,44 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 			public void mouseClicked(MouseEvent e) {				
 				
-				// GET FOCUS IF CLICKING ON CLUE
-				firsteverclick = false;
-				countClicks=0;
-
-				
-				for( JLabel cl : cluesAcr ){
-					if( e.getSource()==cl ){
-						makeAllWhite();
-						String c_n_string = ""+cl.getText().split("\\.")[0];
-						int c_n = Integer.parseInt( c_n_string   );
-						for( Entry ent : entries ){
-							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
-								// then highlight this word
-								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								colourWord( ent.getY()-1, ent.getX()-1, "across");
-							}
-						}
-						
-					}
-			
-				}
-				for( JLabel cl : cluesDwn ){
-					if( e.getSource()==cl ){
-						makeAllWhite();
-						String c_n_string = ""+cl.getText().split("\\.")[0];
-						int c_n = Integer.parseInt( c_n_string   );
-						for( Entry ent : entries ){
-							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
-								// then highlight this word
-								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								colourWord( ent.getY()-1, ent.getX()-1, "down");
-							}
-						}
-						
-					}
-					
-				}
+//				// GET FOCUS IF CLICKING ON CLUE
+//				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
+//				firsteverclick = false;
+//				countClicks=0;
+//
+//				
+//				for( JLabel cl : cluesAcr ){
+//					if( e.getSource()==cl ){
+//						makeAllWhite();
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "across");
+//							}
+//						}
+//						
+//					}
+//			
+//				}
+//				for( JLabel cl : cluesDwn ){
+//					if( e.getSource()==cl ){
+//						makeAllWhite();
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "down");
+//							}
+//						}
+//						
+//					}
+//					
+//				}
 				
 				
 				
