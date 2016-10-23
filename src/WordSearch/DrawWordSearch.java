@@ -150,7 +150,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
 		
-		flow = new JPanel(new FlowLayout());
+		//flow = new JPanel(new BorderLayout());
+		
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBounds(40,30,squareSize*(x-2),2*squareSize*(y-2));
@@ -158,7 +159,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		clues.setVisible(true);
 		clues.setOpaque(false);
 		
-		setUpClues();
+		setUpClues(normalisedScale);
+		
+		//flow.add(clues);
 		
 		extra.addMouseWheelListener(this);
 		extra.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
@@ -248,7 +251,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temporaryIcons.add(icon);
 	}
 	
-	private void setUpClues() {
+	private void setUpClues(double noralisedScale) {
 		clues.removeAll();
 		clueText.clear();
 		sorted.clear();
@@ -568,7 +571,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			for(int i = 0; i < x-2; i++){
 				for (int j = 0; j < y-2; j++){
 					if(e.getSource() == allLetters.get(0)[i][j]){
-						orderClues.setVisible(false);
+						//if(this.equals(frame)){
+						//	orderClues.setVisible(false);	//This is causing strange glitch at puzzle loader when you press wordsearch button
+						//}
+						//}
 						reset = true;
 					}
 				}
@@ -810,19 +816,19 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if(msg.equals("ALPHABETICAL")){
 				orderClues.setVisible(false);
 				sortMethod = "alphabetical";
-				setUpClues();
+				setUpClues(normalisedScale);
 			}else if(msg.equals("BIGGEST")){
 				orderClues.setVisible(false);
 				sortMethod = "biggest";
-				setUpClues();
+				setUpClues(normalisedScale);
 			}else if(msg.equals("SMALLEST")){
 				orderClues.setVisible(false);
 				sortMethod = "smallest";
-				setUpClues();
+				setUpClues(normalisedScale);
 			}else if(msg.equals("RANDOM")){
 				orderClues.setVisible(false);
 				sortMethod = "random";
-				setUpClues();
+				setUpClues(normalisedScale);
 			}
 		}
 	}
