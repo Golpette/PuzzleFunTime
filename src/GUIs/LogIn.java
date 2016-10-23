@@ -27,11 +27,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import Crossword.CrosswordGenerator;
-import Sudoku.SudokuGenerator;
+import crossword.CrosswordGenerator;
+import sudoku.SudokuGenerator;
 import UserCredentials.EmailValidator;
-import WordSearch.WordSearchGenerator;
-package crossword;
+import wordsearch.WordSearchGenerator;
 
 public class LogIn extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;

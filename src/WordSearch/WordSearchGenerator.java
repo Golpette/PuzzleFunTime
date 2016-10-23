@@ -1,4 +1,4 @@
-package wordSearch;
+package wordsearch;
 import java.io.*;
 import java.util.*;
 

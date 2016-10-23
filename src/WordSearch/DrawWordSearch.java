@@ -1,4 +1,4 @@
-package WordSearch;
+package wordsearch;
 
 import java.awt.event.*;
 import java.awt.AWTEvent;
@@ -20,7 +20,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import Crossword.Entry;
+import crossword.Entry;
 import resources.SetUpImages;
 
 /**
