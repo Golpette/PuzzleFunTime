@@ -689,7 +689,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				transparentLayer.add(letters[i][j]);
 			}
 		}
-				
 				transparentLayer2 = setUpLayers(letters2, transparentLayer2, 1);
 				transparentLayer3 = setUpLayers(letters3, transparentLayer3, 2);
 				transparentLayer4 = setUpLayers(letters4, transparentLayer4, 3);
