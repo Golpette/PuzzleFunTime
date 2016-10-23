@@ -1,6 +1,7 @@
 package crossword;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -92,16 +93,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
-<<<<<<< HEAD
-		flow = new JPanel(new FlowLayout());
+		//flow = new JPanel(new FlowLayout());
 		
 		MIN_SCALE = 3.0;
 		MAX_SCALE = 20.0;
 		scale = 10.0;
 		this.normalisedScale = scale/20;
-=======
-		
->>>>>>> parent of 3f7aee4... Zooming from everywhere
+
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
