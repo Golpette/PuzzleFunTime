@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,8 +45,10 @@ import javax.swing.KeyStroke;
  * solution button, hints etc
  */
 public class DrawCrossword extends JComponent implements ActionListener {
+	private final static String SOME_ACTION = "control 1";
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;
+	final static int initialSquareSize = 80;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
@@ -65,8 +70,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	ArrayList<KeyEvent> keys;
 	Action action;
 	Dimension screenSize;
-	double width;
-	double height;
+	double height, width, normalisedScale, scale;
+	final double MAX_SCALE, MIN_SCALE;
 	
 	// Define color highlighting current word
 	Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
@@ -90,7 +95,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
                 
 		flow = new JPanel(new FlowLayout());
 		
-		
+		MIN_SCALE = 3.0;
+		MAX_SCALE = 20.0;
+		scale = 10.0;
+		this.normalisedScale = scale/20;
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
@@ -1137,4 +1145,56 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 		}
 	}
+	
+	Action someAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+                System.out.println("do some action");
+            }
+        };
+	
+	
+	public void mouseWheelMoved(MouseWheelEvent e) {
+	 	
+	 	Point mouseCoord = MouseInfo.getPointerInfo().getLocation();
+        if (e.isControlDown()) {
+            if (e.getWheelRotation() < 0) {
+                JComponent component = (JComponent)e.getComponent();
+                Action action = component.getActionMap().get(SOME_ACTION);
+                if(scale < MAX_SCALE){
+                	scale++;
+                }
+            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+                normalisedScale = scale/20;
+    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
+    		    main.revalidate();
+    		    drawGrid( normalisedScale);
+                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
+            } else {
+                System.out.println("scrolled down");
+                if(scale > MIN_SCALE){
+                	scale--;
+                }
+            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+                normalisedScale = scale/20;
+    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
+    		    main.revalidate();
+    		    drawGrid(normalisedScale);
+            }
+        }
+        
+        //else scroll like normal
+    }
+
+
+
+	private void drawGrid(double normalisedScale) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

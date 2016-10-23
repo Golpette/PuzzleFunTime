@@ -20,7 +20,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	SetUpImages setImages;
 	JFrame frame;
 	ArrayList<JPanel> allLayers;
-	JPanel panel, main, clues, flow;
+	JPanel panel, main, clues;
 	JLayeredPane layer, layer2, extra;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
@@ -50,7 +50,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries, double normalisedScale) throws IOException{
+	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
@@ -150,9 +150,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
 		
-		//flow = new JPanel(new BorderLayout());
-		
-		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
 		clues.setBounds(40,30,squareSize*(x-2),2*squareSize*(y-2));
 		clues.setBackground(clear);
@@ -160,8 +157,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		clues.setOpaque(false);
 		
 		setUpClues(normalisedScale);
-		
-		//flow.add(clues);
 		
 		extra.addMouseWheelListener(this);
 		extra.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
@@ -571,10 +566,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			for(int i = 0; i < x-2; i++){
 				for (int j = 0; j < y-2; j++){
 					if(e.getSource() == allLetters.get(0)[i][j]){
-						//if(this.equals(frame)){
-						//	orderClues.setVisible(false);	//This is causing strange glitch at puzzle loader when you press wordsearch button
-						//}
-						//}
+						orderClues.setVisible(false);
 						reset = true;
 					}
 				}
