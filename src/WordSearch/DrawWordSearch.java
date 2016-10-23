@@ -14,29 +14,10 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.font.TextAttribute;
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-
 import javax.swing.*;
-//import javax.swing.AbstractAction;
-//import javax.swing.Action;
-//import javax.swing.BorderFactory;
-//import javax.swing.Icon;
-//import javax.swing.ImageIcon;
-//import javax.swing.JButton;
-//import javax.swing.JComboBox;
-//import javax.swing.JComponent;
-//import javax.swing.JFrame;
-//import javax.swing.JLabel;
-//import javax.swing.JLayeredPane;
-//import javax.swing.JOptionPane;
-//import javax.swing.JPanel;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextField;
-//import javax.swing.KeyStroke;
-//import javax.swing.SwingConstants;
-//import javax.swing.SwingWorker;
-//import javax.swing.border.Border;
 import javax.swing.border.Border;
 
 import Crossword.Entry;
@@ -561,8 +542,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									            Thread.sleep(3000);
 									            return null;
 									        }
-									        @Override
-									        protected void process(List<String> res){
+									        @SuppressWarnings("unused")
+											protected void process(ArrayList<String> res){
 									            	 try {
 														Thread.sleep(300);
 													} catch (InterruptedException e) {
@@ -713,7 +694,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	 */
 	public ArrayList<String> sortedStrings(ArrayList<String> strings, String method){
 		if(method.equals("alphabetical")){
-		List<String> list = strings;
+		ArrayList<String> list = strings;
 		Collections.sort(list);
 		strings = (ArrayList<String>) list;
 		}
@@ -721,13 +702,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			strings = sortBySize(strings, true);
 		}
 		else if(method.equals("random")){
-			List<String> list = strings;
+			ArrayList<String> list = strings;
 			Collections.shuffle(list);
 			strings = (ArrayList<String>) list;
 		}
 		else if(method.equals("biggest")){
 			strings = sortBySize(strings, false);
-			List<String> list = strings;
+			ArrayList<String> list = strings;
 			Collections.reverse(list);
 			strings = (ArrayList<String>) list;
 		}
@@ -746,7 +727,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	 * @return
 	 */
 	private ArrayList<String> sortBySize(ArrayList<String> strings, boolean filter) {
-			List<String> list = strings;
+			ArrayList<String> list = strings;
 			Collections.sort(list);
 			strings = (ArrayList<String>) list;
 			ArrayList<String> temp = new ArrayList<String>();
