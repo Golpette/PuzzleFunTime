@@ -1,6 +1,7 @@
 package Crossword;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -66,6 +67,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Dimension screenSize;
 	double width;
 	double height;
+	JPanel flow;
 	
 	// Define color highlighting current word
 	Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
@@ -98,6 +100,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		frame.setBackground(new Color(255, 255, 255, 255));
 
 		keys = new ArrayList<KeyEvent>();
+		
+		flow = new JPanel(new FlowLayout());
 
 		cluesDwn = new ArrayList<JLabel>();
 		cluesAcr = new ArrayList<JLabel>();
@@ -117,8 +121,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		height = screenSize.getHeight();
 		
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
-		font2 = new Font("Century Gothic", Font.PLAIN, 24);
-		font3 = new Font("Century Gothic", Font.PLAIN, 15);
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);  //across and down headers
+		font3 = new Font("Century Gothic", Font.PLAIN, 16);  // clues
 		font4 = new Font("Century Gothic", Font.PLAIN, 11);
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
@@ -284,18 +288,24 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		for (JLabel j : cluesAcr) {
 			c.weightx = 1.0;
-			c.weighty = 1.0;
+			c.weighty = 0.3;
 			c.gridx = 0;
 			clue.add(j, c);
 		}
 
 		for (JLabel k : cluesDwn) {
 			c.weightx = 1.0;
-			c.weighty = 1.0;
+			c.weighty = 0.3;
 			c.gridx = 0;
 			clue.add(k, c);
 		}
 
+		
+		flow.add(clue);
+		flow.setBorder(null);
+		flow.setBackground(clear);
+		
+		
 		/**
 		 * This is the layout of the GridBagLayout panel main which holds all
 		 * the crossword components. There are two components inside it: A
@@ -303,18 +313,29 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
+		
+
+		
 
 		c.weighty = 1.0;
 		c.weightx = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		main.add(layer, c);
-
+		
 		c.weighty = 1.0;
 		c.weightx = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
-		main.add(clue, c);
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		main.add(flow, c);
+		
+
+//		c.weighty = 1.0;
+//		c.weightx = 1.0;
+//		c.gridx = 1;
+//		c.gridy = 0;
+//		main.add(clue, c);
 
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
