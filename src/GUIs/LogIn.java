@@ -1,4 +1,4 @@
-package GUIs;
+package guis;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,6 +31,7 @@ import Crossword.CrosswordGenerator;
 import Sudoku.SudokuGenerator;
 import UserCredentials.EmailValidator;
 import WordSearch.WordSearchGenerator;
+package crossword;
 
 public class LogIn extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;

@@ -1,10 +1,10 @@
-package WordSearch;
+package wordSearch;
 import java.io.*;
 import java.util.*;
 
-import Crossword.Entry;
-import Crossword.ReadWords;
-import Crossword.Word;
+import crossword.Entry;
+import crossword.ReadWords;
+import crossword.Word;
 
 public class WordSearchGenerator{
 

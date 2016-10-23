@@ -1,4 +1,4 @@
-package Crossword;
+package crossword;
 import java.io.*;
 import java.util.*;
 
