@@ -254,7 +254,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
 			cluesAcr.add(across);
-			cluesAcr.add(hintA);
+			//cluesAcr.add(hintA);  //STEVE REMOVE
 		}
 
 
@@ -279,7 +279,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			mouseActionlabel(down);
 			mouseActionlabel(hintD);
 			cluesDwn.add(down);
-			cluesDwn.add(hintD);
+			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 
 		for (JLabel j : cluesAcr) {
@@ -609,7 +609,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	}
 	
 	
-	// MOUSE ACTIONS on JTextArea (grid spaces) here ---------------------
+	// MOUSE ACTIONS on JTextField (grid spaces) here ---------------------
 	void mouseActionlabel(JTextField l) {
 			
 		l.addMouseListener(new MouseListener() {
@@ -663,89 +663,170 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		l.addMouseListener(new MouseListener() {
 
-			public void mouseClicked(MouseEvent e) {				
+			public void mouseClicked(MouseEvent e) {
 				
-				for (JLabel k : hints) {
-					k.setText(" ");				//can remove this line if we want to keep showing all hints
-					if (e.getSource() == k) {
-						for (Entry ent : entries) {
-							if (ent.isAcross()) {
-								if (ent.getEntryAcross() == hints.indexOf(k)) {
-									k.setText("      " + ent.getShuffledWord().toUpperCase());
-									//String str = shuffleString(ent.word).toUpperCase();
-									//k.setText("      " + shuffleString(ent.word).toUpperCase());
-								}
-							} else{
-								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)) {
-									k.setText("      " + ent.getShuffledWord().toUpperCase());
-								}
-							}
-						}
-					}
-				}			
+				firsteverclick = false;
+				countClicks=0;
+				
+				
+//				// GET FOCUS IF CLICKING ON CLUE
+//				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
+//				firsteverclick = false;
+//				countClicks=0;
+//
+//				
+//				for( JLabel cl : cluesAcr ){
+//					if( e.getSource()==cl ){
+//						makeAllWhite();
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "across");
+//							}
+//						}
+//						
+//					}
+//			
+//				}
+//				for( JLabel cl : cluesDwn ){
+//					if( e.getSource()==cl ){
+//						makeAllWhite();
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "down");
+//							}
+//						}
+//						
+//					}
+//					
+//				}
+				
+				
+				
+				
+				
+//				for (JLabel k : hints) {
+//					k.setText(" ");				//can remove this line if we want to keep showing all hints
+//					if (e.getSource() == k) {
+//						for (Entry ent : entries ) {
+//							if (ent.isAcross()) {
+//								if (ent.getEntryAcross() == hints.indexOf(k)   ) {
+//									k.setText("      " + ent.getShuffledWord().toUpperCase());
+//									//String str = shuffleString(ent.word).toUpperCase();
+//									//k.setText("      " + shuffleString(ent.word).toUpperCase());
+//								}
+//							} else{
+//								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)  ) {
+//									k.setText("      " + ent.getShuffledWord().toUpperCase());
+//								}
+//							}
+//						}
+//					}
+//				}
+				
+
+				
+				
 				
 				
 			}
 
 					/////////////////CHECK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 			public void mouseEntered(MouseEvent e) {
-				for (JLabel i : hints) {
-					if (e.getSource() == i) {
-						if(i.getText().equals(" ")){
-							i.setText("      HINT");
+//				for (JLabel i : hints) {
+//					if (e.getSource() == i) {
+//						if(i.getText().equals(" ")){
+//							i.setText("      HINT");
+//						}
+//					}
+//				}    STEVE REMOVE
+				
+				firsteverclick = false;
+				
+				for( JLabel cl : cluesAcr ){
+					if( e.getSource()==cl ){
+						cl.setBackground(HIGHLIGHT_COLOUR);
+						cl.setOpaque(true);	
+						
+						makeAllWhite();
+						//cl.setBackground(HIGHLIGHT_COLOUR);
+						//cl.setOpaque(true);
+						String c_n_string = ""+cl.getText().split("\\.")[0];
+						int c_n = Integer.parseInt( c_n_string   );
+						//System.out.println(c_n);
+						for( Entry ent : entries ){
+							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
+								// then highlight this word
+								//System.out.println( "x="+ent.getX()+ " y="+ent.getY());
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+								colourWord( ent.getY()-1, ent.getX()-1, "across");   // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
+							}
 						}
-					
-//						for (Entry ent : entries) {
-//							if (ent.isAcross()) {
-//								if (ent.getEntryAcross() == hints.indexOf(i)) {
-//									i.setText("      " + shuffleString(ent.word).toUpperCase());
-//								}
-//							} 
-//						}
-						//boxes[3][3].setBackground(Color.YELLOW);
+						
+						
 					}
+			
 				}
-//				for (JLabel j : cluesAcr) {
-//					if (e.getSource() == j) {
-//						if (!hints.contains(j)) {
-//							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText("      HINT");
-//						}
-//					}
-//				}
-//				for (JLabel k : cluesDwn) {
-//					if (e.getSource() == k) {
-//						if (!hints.contains(k)) {
-//							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText("      HINT");
-//						}
-//					}
-//				}
+				for( JLabel cl : cluesDwn ){
+					if( e.getSource()==cl ){
+						cl.setBackground(HIGHLIGHT_COLOUR);
+						cl.setOpaque(true);	
+						
+						makeAllWhite();
+						String c_n_string = ""+cl.getText().split("\\.")[0];
+						int c_n = Integer.parseInt( c_n_string   );
+						for( Entry ent : entries ){
+							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+								// then highlight this word
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+								colourWord( ent.getY()-1, ent.getX()-1, "down");
+							}
+						}
+						
+						
+						
+					}					
+				}
+				
+				
+				
+
+				
+				
 			}
 
 			public void mouseExited(MouseEvent e) {
 
-				for (JLabel i : hints) {
-					if (e.getSource() == i) {
-						if(i.getText().equals("      HINT")){
-							i.setText(" ");
-						}
-						
-						//boxes[3][3].setBackground(Color.WHITE);
+//				for (JLabel i : hints) {
+//					if (e.getSource() == i) {
+//						if(i.getText().equals("      HINT")){
+//							i.setText(" ");
+//						}
+//						
+//						//boxes[3][3].setBackground(Color.WHITE);
+//					}
+//				}   // STEVE REMOVE
+
+				for( JLabel cl : cluesAcr ){
+					if( e.getSource()==cl ){
+						cl.setBackground(Color.WHITE);
+						cl.setOpaque(true);						
 					}
+			
 				}
-//				for (JLabel j : cluesAcr) {
-//					if (e.getSource() == j) {
-//						if (!hints.contains(j)) {
-//							cluesAcr.get(cluesAcr.indexOf(j) + 1).setText(" ");
-//						}
-//					}
-//				}
-//				for (JLabel k : cluesDwn) {
-//					if (e.getSource() == k) {
-//						if (!hints.contains(k)) {
-//							cluesDwn.get(cluesDwn.indexOf(k) + 1).setText(" ");
-//						}
-//					}
-//				}
+				for( JLabel cl : cluesDwn ){
+					cl.setBackground(Color.WHITE);
+					cl.setOpaque(true);							
+				}
+				
+				
 			}
 			
 			
