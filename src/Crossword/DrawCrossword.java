@@ -1,7 +1,6 @@
 package crossword;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -52,7 +51,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private String[][] grid;
 	private JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crosswordGrid, clue, clueNums, main, flow;
+	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
 	JButton reveal;
@@ -93,12 +92,16 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
+<<<<<<< HEAD
 		flow = new JPanel(new FlowLayout());
 		
 		MIN_SCALE = 3.0;
 		MAX_SCALE = 20.0;
 		scale = 10.0;
 		this.normalisedScale = scale/20;
+=======
+		
+>>>>>>> parent of 3f7aee4... Zooming from everywhere
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
@@ -295,23 +298,18 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		for (JLabel j : cluesAcr) {
 			c.weightx = 1.0;
-			c.weighty = 0.0;
+			c.weighty = 1.0;
 			c.gridx = 0;
-			c.anchor = GridBagConstraints.FIRST_LINE_START;
-			c.fill = GridBagConstraints.BOTH;
 			clue.add(j, c);
 		}
 
 		for (JLabel k : cluesDwn) {
 			c.weightx = 1.0;
-			c.weighty = 0.0;
+			c.weighty = 1.0;
 			c.gridx = 0;
 			clue.add(k, c);
 		}
 
-		flow.add(clue);
-		flow.setBorder(null);
-		flow.setBackground(clear);
 		/**
 		 * This is the layout of the GridBagLayout panel main which holds all
 		 * the crossword components. There are two components inside it: A
@@ -330,8 +328,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weightx = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		main.add(flow, c);
+		main.add(clue, c);
 
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
