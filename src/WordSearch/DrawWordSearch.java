@@ -18,16 +18,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	SetUpImages setImages;
 	JFrame frame;
 	ArrayList<JPanel> allLayers;
-<<<<<<< HEAD
 
-	JLayeredPane layer, layer2, extra;
+
+	JLayeredPane layer, layer2;
+	JPanel extra;
 
 	JPanel panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6, transparentLayer7, transparentLayer8, main, clues;
 
-=======
-	JPanel extra, panel, main, clues;
-	JLayeredPane layer, layer2;
->>>>>>> parent of 3f7aee4... Zooming from everywhere
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
 	JButton reveal;
@@ -80,11 +77,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		orderClues = new JComboBox(ordering);
 		orderClues.addActionListener(this);
 		orderClues.setFont(font5);
-<<<<<<< HEAD
-		//extra = new JPanel(new GridBagLayout());
-=======
 		extra = new JPanel(new GridBagLayout());
->>>>>>> parent of 3f7aee4... Zooming from everywhere
 		notIn = true;
 		scale = 10.0;
 		counter = 0;
@@ -181,28 +174,22 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		orderClues.setBackground(clear);
 		orderClues.setOpaque(false);
 		orderClues.setVisible(false);
-<<<<<<< HEAD
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		extra.add(orderClues, c);
-=======
->>>>>>> parent of 3f7aee4... Zooming from everywhere
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
-<<<<<<< HEAD
-=======
 		c.gridy = 0;
 		extra.add(orderClues, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
->>>>>>> parent of 3f7aee4... Zooming from everywhere
 		c.gridy = 1;
 		c.insets = new Insets(0, -50, 0, 0);
 		extra.add(clues, c);
