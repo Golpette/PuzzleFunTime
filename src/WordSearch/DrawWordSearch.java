@@ -18,7 +18,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	SetUpImages setImages;
 	JFrame frame;
 	ArrayList<JPanel> allLayers;
-	JPanel extra, panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6, transparentLayer7, transparentLayer8, main, clues;
+	JPanel extra, panel, main, clues;
 	JLayeredPane layer, layer2;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
@@ -42,7 +42,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	private final static String SOME_ACTION = "control 1";
 	private static final long serialVersionUID = 1L;
 	double width, height, mouseX, mouseY, scale, normalisedScale;
-	final double MAX_SCALE, MIN_SCALE;
+	final double MAX_SCALE, MIN_SCALE, NUMBER_OF_LAYERS;
 	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize;
 	final static int initialSquareSize = 80;
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
@@ -78,6 +78,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		counter = 0;
 		MAX_SCALE = 20.0;
 		MIN_SCALE = 3.0;
+		NUMBER_OF_LAYERS = 8;
 		tempWord = "";
 		sortMethod = "random";
 		randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
@@ -123,8 +124,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		border = BorderFactory.createLineBorder(Color.BLACK);
 		layer = new JLayeredPane();
 		layer2 = new JLayeredPane();
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < NUMBER_OF_LAYERS; i++){
 			setUpIcons(temporaryIcons);
+			setUpLetters(allLetters);
 		}
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -135,16 +137,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
-		
 		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		reveal.getActionMap().put(SOME_ACTION, someAction);
 		
-		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-		for(int i = 0; i < 8; i++){
-			setUpLetters(allLetters);
-		}
 		drawGrid(normalisedScale);
-		
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
@@ -623,39 +619,17 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 	
 	public void drawGrid(double normalised){
-//		layer.removeAll();
-//		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
-//		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
-//		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
-//		for(int i = 0; i < 8; i++){
-//			JPanel transparentLayer = new JPanel(new GridLayout(x-2, y-2));
-//			allLayers.add(transparentLayer);
-//			layer.add(transparentLayer, new Integer(0));
-//		}
-		
-		
-
-		
-		transparentLayer = setUpLayers(allLetters.get(0), transparentLayer, 0);
-		transparentLayer2 = setUpLayers(allLetters.get(1), transparentLayer2, 1);
-		transparentLayer3 = setUpLayers(allLetters.get(2), transparentLayer3, 2);
-		transparentLayer4 = setUpLayers(allLetters.get(3), transparentLayer4, 3);
-		transparentLayer5 = setUpLayers(allLetters.get(4), transparentLayer5, 4);
-		transparentLayer6 = setUpLayers(allLetters.get(5), transparentLayer6, 5);
-		transparentLayer7 = setUpLayers(allLetters.get(6), transparentLayer7, 6);
-		transparentLayer8 = setUpLayers(allLetters.get(7), transparentLayer8, 7);
 		layer.removeAll();
+		allLayers.clear();
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
-		layer.add(transparentLayer, new Integer(0));
-		layer.add(transparentLayer2, new Integer(0));
-		layer.add(transparentLayer3, new Integer(0));
-		layer.add(transparentLayer4, new Integer(0));
-		layer.add(transparentLayer5, new Integer(0));
-		layer.add(transparentLayer6, new Integer(0));
-		layer.add(transparentLayer7, new Integer(0));
-		layer.add(transparentLayer8, new Integer(0));		
+		for(int i = 0; i < NUMBER_OF_LAYERS; i++){
+			JPanel transparentLayer = new JPanel(new GridLayout(x-2, y-2));
+			transparentLayer = setUpLayers(allLetters.get(i), transparentLayer, i);
+			allLayers.add(transparentLayer);
+			layer.add(transparentLayer, new Integer(0));
+		}	
 	}
 	
 	Action someAction = new AbstractAction() {
@@ -835,18 +809,17 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						for(JLabel [][] labs: allLetters){
-								if(temporaryIcons.get(allLetters.indexOf(labs))[i][j] != null){
-									for(JLabel [][] labs2: allLetters){
-										labs2[i][j].setOpaque(false);
-									}
-									ImageIcon temp = (ImageIcon)temporaryIcons.get(allLetters.indexOf(labs))[i][j];
-									Image img = temp.getImage();
-									Image newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
-									temp = new ImageIcon(newimg);
-									labs[i][j].setIcon(temp);
+							if(temporaryIcons.get(allLetters.indexOf(labs))[i][j] != null){
+								for(JLabel [][] labs2: allLetters){
+									labs2[i][j].setOpaque(false);
 								}
+								ImageIcon temp = (ImageIcon)temporaryIcons.get(allLetters.indexOf(labs))[i][j];
+								Image img = temp.getImage();
+								Image newimg = img.getScaledInstance(squareSize, squareSize, java.awt.Image.SCALE_SMOOTH ) ; 
+								temp = new ImageIcon(newimg);
+								labs[i][j].setIcon(temp);
 							}
-						//}
+						}
 					}
 				}
 			}
@@ -918,8 +891,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 	@Override
 	public void eventDispatched(AWTEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
