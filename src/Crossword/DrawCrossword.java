@@ -623,15 +623,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j])){
 							makeAllWhite();
-							/////
-							lastClick_x=i; lastClick_y=j;
-						//////////////////////	
-						
 							highlightWord_fromClick(i,j);
 						}
-						for (JLabel lb : hints) {
-							lb.setText(" ");
-						}
+						//for (JLabel lb : hints) {
+						//	lb.setText(" ");
+						//}
 					}
 				}			
 			}
@@ -1031,13 +1027,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			else if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2==0 && downExists ){
 				highlightAcross = false;
 			}
+			else if( acrossExists  ){
+				highlightAcross = true;	
+				countClicks = 1;
+				lastClick_x = xstart;    lastClick_y = ystart;
+			}			
 			else if( !acrossExists && downExists ){
 				highlightAcross =  false;	
 				countClicks = 0;
-			}
-			else{
 				lastClick_x = xstart;    lastClick_y = ystart;
-				countClicks = 1;
 			}		
 			
 			for( Entry ent : entries ){
@@ -1053,6 +1051,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			}
 		}
+		
+		
 		// else use highlightWord() method if clicking anywhere else in word other than first letter
 		else{
 			highlightWord(xstart,ystart);
