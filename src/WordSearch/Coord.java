@@ -1,4 +1,4 @@
-package WordSearch;
+package wordsearch;
 
 public class Coord {
 	// Coordinate objects for storing snake letter positions

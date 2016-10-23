@@ -1,4 +1,4 @@
-package Crossword;
+package crossword;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;

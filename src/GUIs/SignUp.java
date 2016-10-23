@@ -1,4 +1,4 @@
-package GUIs;
+package guis;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,10 +28,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import Crossword.CrosswordGenerator;
-import Sudoku.SudokuGenerator;
-import UserCredentials.EmailValidator;
-import WordSearch.WordSearchGenerator;
+import crossword.CrosswordGenerator;
+import sudoku.SudokuGenerator;
+import user.EmailValidator;
+import wordsearch.WordSearchGenerator;
 
 public class SignUp extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
