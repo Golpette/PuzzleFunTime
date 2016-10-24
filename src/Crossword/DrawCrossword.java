@@ -2,6 +2,7 @@ package Crossword;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+//import java.awt.MigLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -105,7 +106,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		keys = new ArrayList<KeyEvent>();
 		
-		flow = new JPanel(new FlowLayout());
+		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 200, 0));
 		//flow2 = new JPanel(new FlowLayout());
 
 		
@@ -228,24 +229,32 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
 		layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 
+
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */
+		
+		
+		//clue = new JPanel(new FlowLayout(FlowLayout.LEFT , 0, 5));
+		//clue = new JPanel(new FlowLayout());
 		clue = new JPanel(new GridBagLayout());
+		
+		
 		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
-		clue.setAlignmentY(0);
+		//clue.setAlignmentY(0);
+		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
-		clue2 = new JPanel(new GridBagLayout());
+		clue2 = new JPanel(new GridBagLayout()     );
 		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		c2 = new GridBagConstraints();
 		c2.fill = GridBagConstraints.BOTH;
 		clue2.setBackground(clear);
-		clue2.setAlignmentY(0);
+		//clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
 		
 		
@@ -333,7 +342,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		for (JTextArea k : cluesDwn) {
 			c2.weightx = 1.0;
 			c2.weighty = 1;
-			c2.gridx = 20;
+			c2.gridx = 0;
 			clue2.add(k, c);
 		}
 
@@ -343,6 +352,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		flow.setBackground(clear);
 		
 		flow.add(clue2);
+		
+		flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
+		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
+		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
+		
+		
 		
 //		flow2.add(clue2);
 //		flow2.setBorder(null);
@@ -354,6 +369,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * the crossword components. There are two components inside it: A
 		 * JLayeredPane and a GridBagLayout
 		 */
+		
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
 		
