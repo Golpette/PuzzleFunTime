@@ -253,6 +253,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
 		layer.addMouseWheelListener(this);
+	
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
@@ -362,7 +363,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
 		
-
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
 		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
@@ -1183,16 +1183,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			mouseY = mouseCoord.getY();
 	        if (e.isControlDown()) {
 	            if (e.getWheelRotation() < 0) {
-//	                JComponent component = (JComponent)e.getComponent();
-//	                Action action = component.getActionMap().get(SOME_ACTION);
 	                if(scale < MAX_SCALE){
 	                	scale++;
 	                }
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-//	    		 	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
-//	    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
-	    		 	
 	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
 	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
 	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
@@ -1201,38 +1196,29 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    		    main.revalidate();
 	    		    System.out.println("Got here \\n\n\n");
 	    		    drawGrid( normalisedScale);
-	    		   // setUpClues(normalisedScale);
-	               // reveal.setFont(font2);
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
 	                System.out.println("scrolled down");
 	                if(scale > MIN_SCALE){
 	                	scale--;
 	                }
-	            	
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-//	    		 	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
-//	    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
-	    		 	
-
 	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
 	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
 	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
 	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-	    			
-	    		 	
 	    		    main.revalidate();
 	    		    drawGrid(normalisedScale);
-	    		    //setUpClues(normalisedScale);
-	                //reveal.setFont(font2);
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
 	                System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
 	               
 	            }
 	        }
-	        
-	        //else scroll like normal
+//	        if(e.getWheelRotation() < 0){
+//	    	area.scrollRectToVisible(area.getBounds());
+//	        //else scroll like normal
+//	        }
 	    }
 
 
