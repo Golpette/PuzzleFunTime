@@ -61,7 +61,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries, double normalisedScale) throws IOException{
+	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,  ArrayList<Entry> entries) throws IOException{
 		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
@@ -69,7 +69,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.entries = entries;
 		this.cluesAcross = cluesAcross;
 		this.cluesDown = cluesDown;
-		this.normalisedScale = scale/20;
+		scale = 10.0;
+		normalisedScale = scale/20;
 		squareSize = 40;
 		fullGrid = new ArrayList<String>();
 		allClues = new ArrayList<JLabel>();
@@ -86,7 +87,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		orderClues.setFont(font5);
 		extra = new JPanel(new GridBagLayout());
 		notIn = true;
-		scale = 10.0;
+	
 		counter = 0;
 		MAX_SCALE = 20.0;
 		MIN_SCALE = 3.0;
@@ -170,7 +171,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
-		
 		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		reveal.getActionMap().put(SOME_ACTION, someAction);
 		
@@ -944,9 +944,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	                if(scale < MAX_SCALE){
 	                	scale++;
 	                }
-	            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+	    		 	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 	    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
 	    		    main.revalidate();
 	    		    drawGrid( normalisedScale);
@@ -958,9 +958,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	                if(scale > MIN_SCALE){
 	                	scale--;
 	                }
-	            	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+	            	
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
+	    		 	font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
 	    		    font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
 	    		    main.revalidate();
 	    		    drawGrid(normalisedScale);
