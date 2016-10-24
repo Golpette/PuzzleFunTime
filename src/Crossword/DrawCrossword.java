@@ -27,6 +27,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
 // Steve: need these to remove automatic arrow key scrolling in JScrollPane
@@ -47,13 +48,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	private String[][] grid;
 	private JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crosswordGrid, clue, clueNums, main;
+	JPanel panel, crosswordGrid, clue, clue2, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
 	JButton reveal;
 	JLabel[][] clueNumbers;
-	ArrayList<JLabel> cluesDwn, cluesAcr, hints;
+	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
 	GridBagConstraints c;
+	GridBagConstraints c2;
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
@@ -61,13 +63,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	Random rand;
 	Border border;
 	Color clear, red, green, blue, black;
-	JLabel hintD, hintA;
+	JTextArea hintD, hintA;
 	ArrayList<KeyEvent> keys;
 	Action action;
 	Dimension screenSize;
 	double width;
 	double height;
 	JPanel flow;
+	//JPanel flow2;
+	
 	
 	// Define color highlighting current word
 	Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
@@ -102,9 +106,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		keys = new ArrayList<KeyEvent>();
 		
 		flow = new JPanel(new FlowLayout());
+		//flow2 = new JPanel(new FlowLayout());
 
-		cluesDwn = new ArrayList<JLabel>();
-		cluesAcr = new ArrayList<JLabel>();
+		
+		cluesDwn = new ArrayList<JTextArea>();
+		cluesAcr = new ArrayList<JTextArea>();
 		clear = new Color(255, 255, 255, 255);
 		red = new Color(255, 0, 0, 255);
 		green = new Color(0, 255, 0, 255);
@@ -232,12 +238,29 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
 		clue.setAlignmentY(0);
-		clue.setBounds(300, 300, 200, 200);
-		hints = new ArrayList<JLabel>();
+		//clue.setBounds(200, 200, 200, 200);
+		
+		clue2 = new JPanel(new GridBagLayout());
+		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		c2 = new GridBagConstraints();
+		c2.fill = GridBagConstraints.BOTH;
+		clue2.setBackground(clear);
+		clue2.setAlignmentY(0);
+		//clue2.setBounds(200, 200, 200, 200);
+		
+		
+		
+		hints = new ArrayList<JTextArea>();
 
-		JLabel first = new JLabel("Across");
+		//JLabel first = new JLabel("Across");   // STEVE JTEXTARE FOR WRAPPING
+		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTARE FOR WRAPPING
+
 		first.setFont(font2);
+		//first.setSize(100,1);
+		
 		cluesAcr.add(first);
+		
+		
 		int len = 0;
 		for (String s : cluesAcross) {
 			for(Entry e: entries){
@@ -247,24 +270,32 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			}
 			
 			String clue = s + " (" + len + ")";
-			JLabel across = new JLabel(clue);
+			JTextArea across = new JTextArea(clue);
 			//add word length here.
 			
 			across.setFont(font3);
-			hintA = new JLabel(" ");
+			hintA = new JTextArea(" ");
 			hintA.setFont(font3);
 			hintA.setForeground(Color.BLUE);
 			hints.add(hintA);
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
+			
+			across.setLineWrap(true);
+		    across.setWrapStyleWord(true);
+		    //across.setSize(100,1);
+		    across.setColumns(25); 
+
+			
 			cluesAcr.add(across);
+			
 			//cluesAcr.add(hintA);  //STEVE REMOVE
 		}
 
 
 
 		
-		JLabel second = new JLabel("Down\n");
+		JTextArea second = new JTextArea("Down\n");
 		second.setFont(font2);
 		cluesDwn.add(second);
 		for (String s : cluesDown) {
@@ -274,36 +305,48 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				}
 			}
 			String clue = s + " (" + len + ")";
-			JLabel down = new JLabel(clue);
+			JTextArea down = new JTextArea(clue);
 			down.setFont(font3);
-			hintD = new JLabel(" ");
+			hintD = new JTextArea(" ");
 			hintD.setFont(font3);
 			hintD.setForeground(Color.BLUE);
 			hints.add(hintD);
 			mouseActionlabel(down);
 			mouseActionlabel(hintD);
+			
+			down.setLineWrap(true);
+		    down.setWrapStyleWord(true);
+		    //across.setSize(100,1);
+		    down.setColumns(25); 
+			
 			cluesDwn.add(down);
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 
-		for (JLabel j : cluesAcr) {
+		for (JTextArea j : cluesAcr) {
 			c.weightx = 1.0;
-			c.weighty = 0.3;
+			c.weighty = 1;
 			c.gridx = 0;
-			clue.add(j, c);
+			clue.add(j,c);
 		}
 
-		for (JLabel k : cluesDwn) {
-			c.weightx = 1.0;
-			c.weighty = 0.3;
-			c.gridx = 0;
-			clue.add(k, c);
+		for (JTextArea k : cluesDwn) {
+			c2.weightx = 1.0;
+			c2.weighty = 1;
+			c2.gridx = 20;
+			clue2.add(k, c);
 		}
 
 		
 		flow.add(clue);
 		flow.setBorder(null);
 		flow.setBackground(clear);
+		
+		flow.add(clue2);
+		
+//		flow2.add(clue2);
+//		flow2.setBorder(null);
+//		flow2.setBackground(clear);
 		
 		
 		/**
@@ -329,6 +372,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		main.add(flow, c);
+		
+		
+		//main.add(flow2,c2);
 		
 
 //		c.weighty = 1.0;
@@ -675,7 +721,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 	
 	// MOUSE ACTIONS on JLabel (hints) here ---------------------
-	void mouseActionlabel(JLabel l) {
+	void mouseActionlabel(JTextArea l) {
 		
 		
 		l.addMouseListener(new MouseListener() {
@@ -767,7 +813,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				
 				firsteverclick = false;
 				
-				for( JLabel cl : cluesAcr ){
+				for( JTextArea cl : cluesAcr ){
 					if( e.getSource()==cl ){
 						cl.setBackground(HIGHLIGHT_COLOUR);
 						cl.setOpaque(true);	
@@ -791,7 +837,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 			
 				}
-				for( JLabel cl : cluesDwn ){
+				for( JTextArea cl : cluesDwn ){
 					if( e.getSource()==cl ){
 						cl.setBackground(HIGHLIGHT_COLOUR);
 						cl.setOpaque(true);	
@@ -831,14 +877,14 @@ public class DrawCrossword extends JComponent implements ActionListener {
 //					}
 //				}   // STEVE REMOVE
 
-				for( JLabel cl : cluesAcr ){
+				for( JTextArea cl : cluesAcr ){
 					if( e.getSource()==cl ){
 						cl.setBackground(Color.WHITE);
 						cl.setOpaque(true);						
 					}
 			
 				}
-				for( JLabel cl : cluesDwn ){
+				for( JTextArea cl : cluesDwn ){
 					cl.setBackground(Color.WHITE);
 					cl.setOpaque(true);							
 				}
