@@ -277,6 +277,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		clue.setBounds(300, 300, 200, 200);
 		hints = new ArrayList<JLabel>();
 
+	
 		JLabel first = new JLabel("Across");
 		first.setFont(font2);
 		cluesAcr.add(first);
@@ -1256,11 +1257,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
 	                System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
 	            }
-	        }
+	        }else if(!e.isControlDown()){
+	        System.out.println("Scrolled HERE!!!!");
+	        //area.setAutoscrolls(true);
+	       // area.scrollRectToVisible(getVisibleRect());
+	        area.setWheelScrollingEnabled(true);
 //	        if(e.getWheelRotation() < 0){
 //	    	area.scrollRectToVisible(area.getBounds());
 //	        //else scroll like normal
 //	        }
+	        }
 	    }
 
 
