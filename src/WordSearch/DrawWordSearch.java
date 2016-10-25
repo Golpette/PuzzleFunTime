@@ -226,6 +226,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		main.setBackground(clear);
 		main.setVisible(true);
 		main.setOpaque(false);
+		//main.setBounds((int)(mouseX-((mouseX - frame.getX())*normalisedScale)),(int)(mouseY-((mouseY - frame.getY())*normalisedScale)),squareSize*(x-2),squareSize*(y-2));
+
 		
 		c.weightx = 0.0;
 		c.weighty = 1.0;
@@ -321,6 +323,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public JPanel setUpLayers(JLabel[][] labels, JPanel layer, int level){
 		
 		layer = new JPanel(new GridLayout(x-2, y-2));
+		//layer.setBounds((int)(squareSize+ mouseX-((mouseX - frame.getX())*normalisedScale)),(int)(squareSize + mouseY-((mouseY - frame.getY())*normalisedScale)),squareSize*(x-2),squareSize*(y-2));
 		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		System.out.println("squareSize: "+ squareSize);
 		layer.setBorder(border);
@@ -647,7 +650,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public void drawGrid(double normalised){
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		//Try this to play around with mouse positions
-		//transparentLayer.setBounds((int)(squareSize -mouseX/5),(int)(squareSize - mouseY/5),squareSize*(x-2),squareSize*(y-2));
+		//transparentLayer.setBounds((int)(squareSize + mouseX-((mouseX - frame.getX())*normalisedScale)),(int)(squareSize + mouseY-((mouseY - frame.getY())*normalisedScale)),squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		System.out.println("squareSize: " + squareSize);
 		transparentLayer.setBorder(border);
@@ -700,7 +703,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				transparentLayer8 = setUpLayers(letters8, transparentLayer8, 7);
 				
 				layer.removeAll();
-				layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+				layer.setBounds((int)(mouseX-((mouseX - frame.getX())*normalisedScale)),(int)(mouseY-((mouseY - frame.getY())*normalisedScale)),squareSize*(x-2),squareSize*(y-2));
+				//layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 				//layer.setBounds((int)(initialSquareSize*normalised),(int)(initialSquareSize*normalised),(int)(initialSquareSize*(x-2)*normalised),(int)(initialSquareSize*(y-2)*normalised));
 				layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 				layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
