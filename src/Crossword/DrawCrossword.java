@@ -51,6 +51,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private static int squareSize;
 	private String[][] grid;
 	private JTextField[][] boxes;
+	public JTextField[][] tempBoxes;
 	int x, y, frameSizeX, frameSizeY;
 	JPanel panel, crosswordGrid, clue, clueNums, main;
 	JLayeredPane layer;
@@ -101,6 +102,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
+		
 		squareSize = 30;
 		MIN_SCALE = 3.0;
 		MAX_SCALE = 20.0;
@@ -229,6 +231,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //			}
 //		}
 
+		tempBoxes = new JTextField[x-2][y-2];
+		
+		for(int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				tempBoxes[i][j] = new JTextField(); 
+			}
+		}
 		
 		
 		drawGrid(normalisedScale);
@@ -1186,6 +1195,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                if(scale < MAX_SCALE){
 	                	scale++;
 	                }
+	                for(int i = 0; i < x-2; i++){
+	                	for (int j = 0; j < y-2; j++){
+	                		tempBoxes[i][j].setText(boxes[i][j].getText());
+	                	}
+	                }
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
 	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
@@ -1202,6 +1216,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                if(scale > MIN_SCALE){
 	                	scale--;
 	                }
+	                for(int i = 0; i < x-2; i++){
+	                	for (int j = 0; j < y-2; j++){
+	                		tempBoxes[i][j].setText(boxes[i][j].getText());
+	                	}
+	                }
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
 	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
@@ -1212,7 +1231,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    		    drawGrid(normalisedScale);
 	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
 	                System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
-	               
 	            }
 	        }
 //	        if(e.getWheelRotation() < 0){
@@ -1226,6 +1244,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private void drawGrid(double normalisedScale) {
 		// TODO Auto-generated method stub
 
+		
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
@@ -1265,7 +1284,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 			}
 		}
-		
+
+		for(int i = 0; i < x-2; i++){
+        	for (int j = 0; j < y-2; j++){
+        		String str = tempBoxes[i][j].getText();
+        		boxes[i][j].setText(str);
+        	}
+        }
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
