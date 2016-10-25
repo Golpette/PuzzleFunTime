@@ -646,6 +646,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	public void drawGrid(double normalised){
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
+		//Try this to play around with mouse positions
+		//transparentLayer.setBounds((int)(squareSize -mouseX/5),(int)(squareSize - mouseY/5),squareSize*(x-2),squareSize*(y-2));
 		transparentLayer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
 		System.out.println("squareSize: " + squareSize);
 		transparentLayer.setBorder(border);

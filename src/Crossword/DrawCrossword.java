@@ -1147,7 +1147,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		return isStart;
 	}
 	
-	
+	/**
+	 * This does something or other
+	 */
 	public void revealSolution(){
 		reveal.setText("Hide Solution");
 		for (int i = 0; i < x - 2; i++) {
@@ -1250,8 +1252,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
+		//Muck around with this to get the grid positioned based on mouse position
+		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
 		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-		
+
 		crosswordGrid.setOpaque(false);  
 		boxes = new JTextField[x - 2][y - 2];
 		border = BorderFactory.createLineBorder(Color.BLACK);
