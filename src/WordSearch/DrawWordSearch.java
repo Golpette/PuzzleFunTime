@@ -135,7 +135,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		int test = (int)(3*initialSquareSize*normalisedScale/5);
 		System.out.println("Test: " + test);
 		font3 = new Font("Century Gothic", Font.PLAIN, 18);
-		font2 = new Font("Century Gothic", Font.PLAIN, (int)(3*initialSquareSize*normalisedScale/5));
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font = new Font("Century Gothic", Font.PLAIN, (int)(normalisedScale*initialSquareSize / 5 * 3));
 		Map fontAttr = font3.getAttributes();
 		fontAttr.put (TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
@@ -181,6 +181,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
+		//System.out.println("reveal:"+ reveal.getText());
 		reveal.setFont(font2);
 		reveal.setEnabled(true);
 		reveal.addActionListener(this);
@@ -194,7 +195,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			setUpLetters(allLetters);
 		}
 		drawGrid(normalisedScale);
-		
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
@@ -230,12 +230,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.gridy = 0;
 		extra.add(orderClues, c);
 		
-//		c.weightx = 0.0;
-//		c.weighty = 0.0;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		extra.add(orderClues, c);
-//		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
@@ -288,7 +282,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.ipady = 40;
+		c.ipady = 10;
 		panel.add(reveal, c);
 		
 		if(squareSize*(x+6) > width && squareSize*(y+2) > height-30){
