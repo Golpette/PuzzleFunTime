@@ -73,7 +73,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	String[] ordering = { "RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST" },
 			loopDirections = { "top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft" };
 	String tempWord, sortMethod, randomFill;
-	private final static String SOME_ACTION = "control 1";
 	private static final long serialVersionUID = 1L;
 	double width, height, mouseX, mouseY, scale, normalisedScale;
 	final double MAX_SCALE, MIN_SCALE;
@@ -110,8 +109,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		notIn = true;
 		scale = 10.0;
 		counter = 0;
-		MAX_SCALE = 20.0;
-		MIN_SCALE = 3.0;
+		MAX_SCALE = 17.0;
+		MIN_SCALE = 3.5;
 		tempWord = "";
 		sortMethod = "random";
 		randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
@@ -315,9 +314,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	 */
 	public JPanel setUpLayers(JLabel[][] labels, JPanel layer, int level) {
 		layer = new JPanel(new GridLayout(x - 2, y - 2));
+		//layer.setBounds((int)(squareSize*normalisedScale - normalisedScale*(mouseX-frame.getX())), (int)(squareSize*normalisedScale - normalisedScale*(mouseY-frame.getY())), squareSize * (x - 2), squareSize * (y - 2));
 		layer.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 		layer.setBorder(border);
 		layer.setBackground(clear);
+		layer.setOpaque(false);
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				ImageIcon temp;
@@ -558,6 +559,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 	public void drawGrid(double normalised) {
 		layer.removeAll();
+		//layer.setBounds((int)((mouseX-frame.getX())- squareSize*normalisedScale), (int)((mouseY-frame.getY())- squareSize*normalisedScale), squareSize * (x - 2), squareSize * (y - 2));
 		layer.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
 		layer.setMinimumSize(new Dimension(squareSize * (x), squareSize * (y + 2)));
@@ -785,7 +787,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
-
 		Point mouseCoord = MouseInfo.getPointerInfo().getLocation();
 		mouseX = mouseCoord.getX();
 		mouseY = mouseCoord.getY();
