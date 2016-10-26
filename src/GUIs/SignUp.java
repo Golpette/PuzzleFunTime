@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
 
 import crossword.CrosswordGenerator;
 import sudoku.SudokuGenerator;
-import UserCredentials.EmailValidator;
+import user.EmailValidator;
 import wordsearch.WordSearchGenerator;
 
 public class SignUp extends JComponent implements ActionListener{

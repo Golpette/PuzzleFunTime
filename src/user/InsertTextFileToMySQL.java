@@ -1,4 +1,4 @@
-package UserCredentials;
+package user;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
