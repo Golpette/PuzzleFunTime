@@ -1,6 +1,3 @@
-
-
-
 package wordsearch;
 
 import java.awt.AWTEvent;
@@ -52,24 +49,14 @@ import javax.swing.border.Border;
 import crossword.Entry;
 import resources.SetUpImages;
 
-
-
-
-
 /**
  * Class to draw a word search
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener, AWTEventListener {
 	SetUpImages setImages;
 	JFrame frame;
-	ArrayList<JPanel> allLayers;
-
-
 	JLayeredPane layer, layer2, extra;
-	//JPanel extra;
-
 	JPanel panel, transparentLayer, transparentLayer2, transparentLayer3, transparentLayer4, transparentLayer5, transparentLayer6, transparentLayer7, transparentLayer8, main, clues;
-
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
 	JButton reveal;
@@ -79,15 +66,15 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	ArrayList<Entry> entries;
 	ArrayList<JLabel> allClues, completed;
 	ArrayList<JLabel[][]> allLetters;
+	ArrayList<JPanel> allLayers;
+	ArrayList<Icon [][]> temporaryIcons;
 	Font font, font2, font3, font4, font5;
 	Random rand;
 	Color grey, clear;
 	Dimension screenSize; 
 	Border border;
-	ArrayList<Icon [][]> temporaryIcons;
 	String[][] grid;
-	String [] ordering = {"RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST"};
-	String [] loopDirections = {"top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"};
+	String [] ordering = {"RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST"}, loopDirections = {"top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"};
 	String tempWord, sortMethod, randomFill;
 	private final static String SOME_ACTION = "control 1";
 	private static final long serialVersionUID = 1L;
@@ -203,7 +190,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		layer.getActionMap().put(SOME_ACTION, someAction);
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size()+cluesDown.size(), 1));
-		clues.setBounds(0,40,squareSize*(x-2),squareSize*(y-2));
+		clues.setBounds(0,40,18*x,squareSize*(y-2));
 		clues.setBackground(clear);
 		clues.setVisible(true);
 		clues.setOpaque(true);
@@ -218,7 +205,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		extra.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		extra.getActionMap().put(SOME_ACTION, someAction);
 		
-		orderClues.setBounds(0,0,squareSize*(x-2),30);
+		orderClues.setBounds(0,0,18*x,30);
 		orderClues.setBorder(border);
 		orderClues.setBackground(clear);
 		orderClues.setOpaque(false);
@@ -604,7 +591,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		transparentLayer7 = setUpLayers(allLetters.get(6), transparentLayer7, 6);
 		transparentLayer8 = setUpLayers(allLetters.get(7), transparentLayer8, 7);
 		layer.removeAll();
-		layer.setBounds(squareSize,squareSize,squareSize*(x-2),squareSize*(y-2));
+		layer.setBounds(squareSize,100,squareSize*(x-2),squareSize*(y-2));
 		layer.setPreferredSize(new Dimension(squareSize*(x),squareSize*(y)));
 		layer.setMinimumSize(new Dimension(squareSize*(x),squareSize*(y+2)));
 		layer.add(transparentLayer, new Integer(0));
@@ -871,7 +858,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	               
 	            }
 	        }
-	        
+	        if(e.getWheelRotation() < 0) {
+	        	System.out.println("Scrolling Up...");
+	        }else{
+	        	System.out.println("Scrolling Down...");
+	        }
 	        //else scroll like normal
 	    }
 
