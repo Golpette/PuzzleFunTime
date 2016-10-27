@@ -567,8 +567,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public void drawGrid(double normalised) {
 		layer.removeAll();
 		if(tempScale != normalisedScale){
-			layerX = (int)(tempLayerX + ((mouseX - frame.getX())/(tempLayerWidth*(tempScale - normalisedScale))));
-			layerY = (int)(tempLayerY + ((mouseY - frame.getY())/(tempLayerHeight*(tempScale - normalisedScale))));
+			layerX = (int)(tempLayerX + ((mouseX - frame.getX())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale)/2)));
+			layerY = (int)(tempLayerY + ((mouseY - frame.getY())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale)/2)));
 		}
 		if(layer.getWidth()<(x-2)*INITIAL_SQUARE_SIZE){
 			layer.setBounds(40,40, squareSize * (x - 2), squareSize * (y - 2));
