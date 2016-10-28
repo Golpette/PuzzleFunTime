@@ -1,4 +1,5 @@
 package Crossword;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -139,7 +140,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
-		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
+		crosswordGrid = new JPanel(new GridLayout(x-2 , y-2 ));
 		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 		
 		crosswordGrid.setOpaque(false);  
@@ -241,20 +242,22 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		clue = new JPanel(new GridBagLayout());
 		
 		
-		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+//		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		clue.setMinimumSize(new Dimension( 200, 600)  );
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
-		//clue.setAlignmentY(0);
+		clue.setAlignmentY(0);
 		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
 		clue2 = new JPanel(new GridBagLayout()     );
-		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+//		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		clue2.setMinimumSize(new Dimension(200 ,  600 )  );
 		c2 = new GridBagConstraints();
 		c2.fill = GridBagConstraints.BOTH;
 		clue2.setBackground(clear);
-		//clue2.setAlignmentY(0);
+		clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
 		
 		
@@ -267,7 +270,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		first.setFont(font2);
 		//first.setSize(100,1);
 		
+		//add space at top
+		cluesAcr.add(new JTextArea(""));
+		//
 		cluesAcr.add(first);
+		
 		
 		
 		int len = 0;
@@ -305,8 +312,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		
 		JTextArea second = new JTextArea("Down\n");
+		//add space at top
+		cluesAcr.add(new JTextArea(""));
+		//
 		second.setFont(font2);
 		cluesDwn.add(second);
+		
+		
 		for (String s : cluesDown) {
 			for(Entry e: entries){
 				if(e.definition.equals(s)){
@@ -337,6 +349,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c.weighty = 1;
 			c.gridx = 0;
 			clue.add(j,c);
+			clue.add(new JTextArea(""), c);
 		}
 
 		for (JTextArea k : cluesDwn) {
@@ -344,14 +357,19 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c2.weighty = 1;
 			c2.gridx = 0;
 			clue2.add(k, c);
+			clue2.add(new JTextArea(""),c);
 		}
 
+
 		
-		flow.add(clue);
+		// Add the 2 clue JPanels to flow JPanel
+		flow.add(clue, BorderLayout.CENTER );
+		flow.add(clue2, BorderLayout.EAST );
+
+		
 		flow.setBorder(null);
 		flow.setBackground(clear);
 		
-		flow.add(clue2);
 		
 		flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
@@ -386,19 +404,25 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.weightx = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		//c.anchor = GridBagConstraints.FIRST_LINE_START;
+		
+		
+		
 		main.add(flow, c);
 		
 		
 		//main.add(flow2,c2);
-		
-
 //		c.weighty = 1.0;
 //		c.weightx = 1.0;
 //		c.gridx = 1;
 //		c.gridy = 0;
 //		main.add(clue, c);
 
+		
+		
+		
+		
+		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
 		 * clues pane and makes them scrollable.
