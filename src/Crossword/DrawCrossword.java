@@ -129,9 +129,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		height = screenSize.getHeight();
 		
 		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
-		font2 = new Font("Century Gothic", Font.PLAIN, 24);  //across and down headers
+		font2 = new Font("Century Gothic", Font.PLAIN, 24);  // across and down headers
 		font3 = new Font("Century Gothic", Font.PLAIN, 16);  // clues
-		font4 = new Font("Century Gothic", Font.PLAIN, 11);
+		font4 = new Font("Century Gothic", Font.BOLD, 14);  // clue numbers in grid
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
