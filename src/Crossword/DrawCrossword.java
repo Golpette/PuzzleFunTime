@@ -46,7 +46,7 @@ import javax.swing.KeyStroke;
  */
 public class DrawCrossword extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 30;
+	private static int squareSize = 38;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	int x, y, frameSizeX, frameSizeY;
@@ -145,6 +145,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		crosswordGrid.setOpaque(false);  
  		
+		// JTextArea array for actual functional crossword grid.
 		boxes = new JTextField[x - 2][y - 2];
 		border = BorderFactory.createLineBorder(Color.BLACK);
 	
@@ -237,11 +238,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		
 		
-		//clue = new JPanel(new FlowLayout(FlowLayout.LEFT , 0, 5));
-		//clue = new JPanel(new FlowLayout());
-		clue = new JPanel(new GridBagLayout());
-		
-		
+		clue = new JPanel(new GridBagLayout());		
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		c = new GridBagConstraints();
@@ -264,15 +261,16 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		hints = new ArrayList<JTextArea>();
 
-		//JLabel first = new JLabel("Across");   // STEVE JTEXTARE FOR WRAPPING
+		//JLabel first = new JLabel("Across");   
 		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTARE FOR WRAPPING
-
+		first.setEditable(false);
 		first.setFont(font2);
-		//first.setSize(100,1);
 		
 		//add space at top
-		cluesAcr.add(new JTextArea(""));
-		//
+		JTextArea blnk = new JTextArea("");
+		blnk.setEditable(false);
+		cluesAcr.add(blnk);
+		
 		cluesAcr.add(first);
 		
 		
@@ -287,6 +285,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			
 			String clue = s + " (" + len + ")";
 			JTextArea across = new JTextArea(clue);
+			across.setEditable(false);
+			
 			//add word length here.
 			
 			across.setFont(font3);
@@ -297,7 +297,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
 			
-			across.setLineWrap(true);
+			across.setLineWrap(true); /// all set manually for down clues aswell. see below. make sure consistent.
 		    across.setWrapStyleWord(true);
 		    //across.setSize(100,1);
 		    across.setColumns(25); 
@@ -313,8 +313,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		
 		JTextArea second = new JTextArea("Down\n");
 		//add space at top
-		cluesAcr.add(new JTextArea(""));
+		cluesDwn.add( blnk );
 		//
+		second.setEditable(false);
 		second.setFont(font2);
 		cluesDwn.add(second);
 		
@@ -328,6 +329,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			String clue = s + " (" + len + ")";
 			JTextArea down = new JTextArea(clue);
 			down.setFont(font3);
+			down.setEditable(false);
+			
 			hintD = new JTextArea(" ");
 			hintD.setFont(font3);
 			hintD.setForeground(Color.BLUE);
@@ -349,7 +352,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c.weighty = 1;
 			c.gridx = 0;
 			clue.add(j,c);
-			clue.add(new JTextArea(""), c);
+			
+			JTextArea blankline = new JTextArea("");
+			blankline.setEditable(false);
+			clue.add(blankline, c);//spacing between clues
 		}
 
 		for (JTextArea k : cluesDwn) {
@@ -357,9 +363,17 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			c2.weighty = 1;
 			c2.gridx = 0;
 			clue2.add(k, c);
-			clue2.add(new JTextArea(""),c);
+			
+			JTextArea blankline = new JTextArea("");
+			blankline.setEditable(false);
+			clue2.add(blankline,c);
 		}
 
+		
+		
+		
+		clue.setBorder(border);
+		clue2.setBorder(border);
 
 		
 		// Add the 2 clue JPanels to flow JPanel
