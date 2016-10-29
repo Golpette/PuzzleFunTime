@@ -1,9 +1,9 @@
-package wordsearch;
+package WordSearch;
 import java.util.*;
 
-import crossword.Entry;
-import crossword.Search;
-import crossword.Word;
+import Crossword.Entry;
+import Crossword.Search;
+import Crossword.Word;
 
 import java.lang.Math;
 

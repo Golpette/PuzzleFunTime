@@ -1,4 +1,4 @@
-package sudoku;
+package Sudoku;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import crossword.JTextFieldLimit;
+import Crossword.JTextFieldLimit;
 
 /**
  * Class to draw a word search

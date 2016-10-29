@@ -1,4 +1,4 @@
-package guis;
+package GUIs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -27,16 +27,23 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import crossword.CrosswordGenerator;
-import sudoku.SudokuGenerator;
+//<<<<<<< HEAD
+import Crossword.CrosswordGenerator;
+import Sudoku.SudokuGenerator;
 import user.EmailValidator;
-import wordsearch.WordSearchGenerator;
+import WordSearch.WordSearchGenerator;
+//=======
+//import Crossword.CrosswordGenerator;
+//import Sudoku.SudokuGenerator;
+//import UserCredentials.EmailValidator;
+//import WordSearch.WordSearchGenerator;
+//>>>>>>> mergeTest
 
 public class LogIn extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	public CrosswordGenerator crossword;
-	public WordSearchGenerator wordsearch;
-	public SudokuGenerator sudoku;
+	public Crossword.CrosswordGenerator crossword;
+	public WordSearch.WordSearchGenerator wordsearch;
+	public Sudoku.SudokuGenerator sudoku;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
 	JPanel panel;

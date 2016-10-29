@@ -22,7 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
-import sudoku.DrawSudoku;
+import Sudoku.DrawSudoku;
 
 @SuppressWarnings("serial")
 public class MouseWheelTest extends JPanel implements MouseWheelListener {
@@ -42,7 +42,7 @@ public class MouseWheelTest extends JPanel implements MouseWheelListener {
     	int x = 100;
     	int y = 100;
     	button = new JButton("This is a button");
-    	label = new JLabel("£sdfglkj");
+    	label = new JLabel("ï¿½sdfglkj");
     	frame = new JFrame("MouseWheelTest");
     	textField = new JTextField();
     	textField.addMouseWheelListener(this);
