@@ -53,7 +53,7 @@ import javax.swing.KeyStroke;
  */
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 38;
+	private static int squareSize;
 
 	private String[][] grid;
 	private JTextField[][] boxes;
@@ -112,7 +112,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		tempHighlighted = new int [2];
-		squareSize = 30;
+		squareSize = 38;
 		MIN_SCALE = 7.0;
 		MAX_SCALE = 18.0;
 		scale = 10.0;
@@ -148,61 +148,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		width = screenSize.getWidth();
 		height = screenSize.getHeight();
 		
-//		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
-//		font2 = new Font("Century Gothic", Font.PLAIN, 26);  // across and down headers + actual crossword letters
-//		font3 = new Font("Century Gothic", Font.PLAIN, 16);  // clues
-//		font4 = new Font("Century Gothic", Font.BOLD, 14);  // clue numbers in grid
-//		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
-//		rand = new Random();
-//		
-//
-//		/**
-//		 * This is where all the crossword boxes are filled black or provide a
-//		 * usable JTextfield. This is layered on top of the transparentLayer
-//		 */
-//		crosswordGrid = new JPanel(new GridLayout(x-2 , y-2 ));
-//		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//		
-//		crosswordGrid.setOpaque(false);  
-// 		
-//		// JTextArea array for actual functional crossword grid.
-//		boxes = new JTextField[x - 2][y - 2];
-//		border = BorderFactory.createLineBorder(Color.BLACK);
-//	
-//        
-//
-//		for (int i = 0; i < x - 2; i++) {
-//			for (int j = 0; j < y - 2; j++) {
-//				
-//				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
-//				
-//	            mouseActionlabel(boxes[i][j]);
-//				
-//				//trying to stop 'dinging' sound when moving cursor between boxes
-//				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
-//				action.setEnabled(false);
-//				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
-//				boxes[i][j].setBorder(border);
-//				boxes[i][j].setDocument(new JTextFieldLimit(1, true));
-//				if (grid[j+1][i+1] == "_") {
-//					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
-//					boxes[i][j].setEnabled(false);
-//				} else {
-//					boxes[i][j].setBackground(new Color(255, 255, 255, 105));
-//										
-//					keyActionTextField(boxes[i][j]);
-//				}			
-//				
-//				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-//				boxes[i][j].setFont(font2);
-//				crosswordGrid.add(boxes[i][j]);	
+
+		
 
 
-// ANDY
 		font = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale*squareSize / 5 * 3));
-		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
+		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 26));
+		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 16));
+		font4 = new Font("Century Gothic", Font.BOLD, (int) (2*normalisedScale* 14));
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
@@ -215,84 +168,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
-//		
-//		/**
-//		 * This is where all the crossword boxes are filled black or provide a
-//		 * usable JTextfield. This is layered on top of the transparentLayer
-//		 */
-//		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
-//		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//		
-//		crosswordGrid.setOpaque(false);  
-// 		
-//		boxes = new JTextField[x - 2][y - 2];
-//		border = BorderFactory.createLineBorder(Color.BLACK);
-//	
-//        
-//
-//		for (int i = 0; i < x - 2; i++) {
-//			for (int j = 0; j < y - 2; j++) {
-//				
-//				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
-//				
-//	            mouseActionlabel(boxes[i][j]);
-//				
-//				//trying to stop 'dinging' sound when moving cursor between boxes
-//				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
-//				action.setEnabled(false);
-//				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
-//				boxes[i][j].setBorder(border);
-//				boxes[i][j].setDocument(new JTextFieldLimit(1, true));
-//				if (grid[j+1][i+1] == "_") {
-//					boxes[i][j].setBackground(new Color(0, 0, 0, 255));
-//					boxes[i][j].setEnabled(false);
-//				} else {
-//					boxes[i][j].setBackground(new Color(255, 255, 255, 105));
-//										
-//					keyActionTextField(boxes[i][j]);
-//				}			
-//				
-//				boxes[i][j].setHorizontalAlignment(JTextField.CENTER);
-//				boxes[i][j].setFont(font2);
-//				crosswordGrid.add(boxes[i][j]);	
-//
-//				
-//			}
-//		}
-//		
-//		
-//		
-//		
-//		
-//		/**
-//		 * This is where the transparentLayer to hold all the clue numbers is
-//		 * created. It sets all the cells with question numbers with the correct
-//		 * number in the top left corner of a GridLayout cell.
-//		 */
-//		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
-//		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
-//		clueNums.setOpaque(false);  //#### originally false
-//		clueNumbers = new JLabel[x - 2][y - 2];
-//
-//		for (int i = 0; i < x - 2; i++) {
-//			for (int j = 0; j < y - 2; j++) {
-//				clueNumbers[i][j] = new JLabel();
-//				clueNumbers[i][j].setBackground(new Color(255, 255, 255, 255));
-//				clueNumbers[i][j].setForeground(Color.BLACK);
-//				clueNumbers[i][j].setVisible(true);
-//				clueNumbers[i][j].setFont(font4);
-//				clueNumbers[i][j].setOpaque(false);//was false
-//				if (!gridInit[j + 1][i + 1].equals("_")) {
-//					clueNumbers[i][j].setText(gridInit[j + 1][i + 1]);
-//				}
-//				clueNumbers[i][j].setVerticalAlignment(JTextField.TOP);
-//				clueNums.setOpaque(false);
-//
-//				
-//				clueNums.add(clueNumbers[i][j]);
-//			}
-//		}
-// END ANDY
+		
+		
 		
 		
 		tempBoxes = new JTextField[x-2][y-2];
@@ -339,6 +216,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		
+		
+		
 	
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -361,26 +240,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); /// CHANGING THESE DIMENSKONS AFFECTS NOTHING
 
 
-		
-		
-		
-//		layer = new JLayeredPane();
-//		layer.setBackground(new Color(255, 255, 255, 255));
-//		
-//		// STEVE: SWITCHED THESE
-//		layer.add(clueNums, new Integer(1));
-//		layer.add(crosswordGrid, new Integer(0));
-//		
-//		layer.setVisible(true);
-//		layer.setOpaque(true);
-//		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-//		layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
-//		layer.addMouseWheelListener(this);
 		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		layer.getActionMap().put(SOME_ACTION, someAction);
 		layer.addMouseWheelListener(this);
 	
 
+		
+		
+		
+		
+		
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
@@ -419,13 +288,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		JTextArea blnk = new JTextArea("");
 		blnk.setEditable(false);
 		cluesAcr.add(blnk);
-		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTARE FOR WRAPPING
+		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTAREA FOR WRAPPING
 		first.setEditable(false);
 		first.setFont(font2);		
-	
-//		JLabel first = new JLabel("Across");
-//		first.setFont(font2);
-
 		cluesAcr.add(first);
 		
 		
@@ -441,25 +306,21 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			String clue = s + " (" + len + ")";
 			JTextArea across = new JTextArea(clue);
 			across.setEditable(false);
-			across.setHighlighter(null);  // WHY DOES THIS OD NOTHING?
-			//across.setEnabled(false);
-			
-			//add word length here.
-			
+			across.setHighlighter(null);  // WHY DOES THIS OD NOTHING?			
 			across.setFont(font3);
+			across.setLineWrap(true); 
+		    across.setWrapStyleWord(true);
+		    across.setColumns(25);   // CONTROLS HOW FAR TO GO BEFORE WRAPPING LINE
+			mouseActionlabel(across);
+			
 			hintA = new JTextArea(" ");
 			hintA.setFont(font3);
 			hintA.setForeground(Color.BLUE);
 			hints.add(hintA);
-			mouseActionlabel(across);
 			mouseActionlabel(hintA);
 			
-			across.setLineWrap(true); 
-		    across.setWrapStyleWord(true);
-		    across.setColumns(25);   // CONTROLS HOW FAR TO GO BEFORE WRAPPING LINE
 
 			cluesAcr.add(across);
-			
 			//cluesAcr.add(hintA);  //STEVE REMOVE
 		}
 
@@ -483,18 +344,18 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			JTextArea down = new JTextArea(clue);
 			down.setFont(font3);
 			down.setEditable(false);
-			
+			down.setHighlighter(null); 
+			down.setLineWrap(true);
+		    down.setWrapStyleWord(true);
+		    down.setColumns(25); 
+
 			hintD = new JTextArea(" ");
 			hintD.setFont(font3);
 			hintD.setForeground(Color.BLUE);
 			hints.add(hintD);
 			mouseActionlabel(down);
 			mouseActionlabel(hintD);
-			
-			down.setLineWrap(true);
-		    down.setWrapStyleWord(true);
-		    down.setColumns(25); 
-			
+					
 			cluesDwn.add(down);
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
@@ -539,20 +400,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 100, 0));
 		////flow = new JPanel(new GridLayout(2,4,1,1));
-
-		
-		//flow = new JPanel(new FlowLayout(FlowLayout.CENTER , 200, 0));
-
-		//flow = new JPanel();
 //		flow.add(clue );
 //		flow.add(clue2 );		
-		
 		// Add the 2 clue JPanels to flow JPanel
 		flow.add(clue, zzz );
 		flow.add(clue2, zzz );
-
 		flow.setBackground(clear);
-		
 		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
@@ -566,6 +419,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		clue.getActionMap().put(SOME_ACTION, someAction);
 		clue.addMouseWheelListener(this);
 
+		
+		
 		
 		
 		/**
@@ -585,10 +440,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		gbc_main.fill = GridBagConstraints.BOTH;
 		
-		//layer.setAlignmentY(0);
 		main.add(layer, gbc_main);
 		
-
 		gbc_main.gridx = 1; // NEED THIS
 		
 		//flow.setAlignmentY(0);
@@ -624,6 +477,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		    }});
+		
+		
+		
+		
+		
 		
 		/**
 		 * This is the button which generates a solution for the given crossword
@@ -957,7 +815,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					}
 				}
 				
-				// higjlight approp. clue
+				// highlight approp. clue
 				makeAllCluesWhite();
 				colorAppropriateClue();
 				
@@ -996,7 +854,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				countClicks=0;
 				
 				
-//				// GET FOCUS IF CLICKING ON CLUE
+//				// GET FOCUS IF CLICKING ON CLUE   ///////////////////////////////////////////
 //				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
 //				firsteverclick = false;
 //				countClicks=0;
@@ -1033,7 +891,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //						
 //					}
 //					
-//				}
+//				}    //////////////////////////////////////////////////////////////////////////
 				
 				
 				
@@ -1381,15 +1239,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	
 	public void colorAppropriateClue(){
-		/** Highlight clue of any word that is highlighted in grid **/
+		/** Highlight clue of any word that is highlighted in grid */
 		
-		makeAllCluesWhite();
+		//makeAllCluesWhite();
 		
 		// FIND ANY COLOURED SQUARE
 		int coloredX=0;  int coloredY=0;
 		for( int abc=0; abc<x-2; abc++ ){
 			for( int xyz=0; xyz<y-2; xyz++ ){
-				if( boxes[abc][xyz].getBackground().getRGB() == HIGHLIGHT_COLOUR.getRGB()  ){  // mioght be better to check it is the highlight color and not just "not white"
+				if( boxes[abc][xyz].getBackground().getRGB() == HIGHLIGHT_COLOUR.getRGB()  ){ 
 					coloredY = abc;  coloredX = xyz;
 					//break;
 				}
@@ -1420,7 +1278,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 					cn_h = Integer.parseInt( clueNumbers[coloredY][coloredX-gg].getText()  );
 										
-					makeAllCluesWhite();
+					//makeAllCluesWhite();
 					
 					// highlight appropriate clue
 					for( JTextArea cl : cluesAcr ){		
@@ -1448,7 +1306,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 					cn_h = Integer.parseInt( clueNumbers[coloredY-gg][coloredX].getText()  );
 										
-					makeAllCluesWhite();
+					//makeAllCluesWhite();
 					
 					// highlight appropriate clue
 					for( JTextArea cl : cluesDwn ){		
@@ -1466,11 +1324,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					break;										
 				}
 			}
-		
 		}
-		
-		
-
 	}
 	
 	
@@ -1620,11 +1474,19 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    }
 
 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 
-	private void drawGrid(double normalisedScale) {
-		// TODO Auto-generated method stub
-
-		
+	private void drawGrid(double normalisedScale) {	
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
