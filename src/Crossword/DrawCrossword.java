@@ -56,8 +56,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	JButton reveal;
 	JLabel[][] clueNumbers;
 	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
-	GridBagConstraints c;
-	GridBagConstraints c2;
+	GridBagConstraints c, c2, c3, gbc_main;
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
@@ -238,11 +237,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		
 		
+		
+		
+		// Two JPanels for holding across and down clues. Will hold these as JTextAreas with GridBagLayout c3.
+		
 		clue = new JPanel(new GridBagLayout());		
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
 		clue.setBackground(clear);
 		clue.setAlignmentY(0);
 		clue.setAlignmentX(0);
@@ -251,26 +252,30 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		clue2 = new JPanel(new GridBagLayout()     );
 //		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue2.setMinimumSize(new Dimension(200 ,  600 )  );
-		c2 = new GridBagConstraints();
-		c2.fill = GridBagConstraints.BOTH;
 		clue2.setBackground(clear);
 		clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
+		
+		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
+		c3 = new GridBagConstraints();
+		c3.fill = GridBagConstraints.BOTH;
+		c3.weightx = 1.0;
+		c3.weighty = 1;
+		c3.gridx = 0;
+		
 		
 		
 		
 		hints = new ArrayList<JTextArea>();
 
-		//JLabel first = new JLabel("Across");   
-		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTARE FOR WRAPPING
-		first.setEditable(false);
-		first.setFont(font2);
 		
-		//add space at top
+		//add space at top and "Across" title
 		JTextArea blnk = new JTextArea("");
 		blnk.setEditable(false);
 		cluesAcr.add(blnk);
-		
+		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTARE FOR WRAPPING
+		first.setEditable(false);
+		first.setFont(font2);		
 		cluesAcr.add(first);
 		
 		
@@ -297,12 +302,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			mouseActionlabel(across);
 			mouseActionlabel(hintA);
 			
-			across.setLineWrap(true); /// all set manually for down clues aswell. see below. make sure consistent.
+			across.setLineWrap(true); // all set manually for down clues as well. see below. make sure consistent.
 		    across.setWrapStyleWord(true);
-		    //across.setSize(100,1);
-		    across.setColumns(25); 
+		    across.setColumns(25);   // CONTROLS HOW FAR TO GO BEFORE WRAPPING LINE
 
-			
 			cluesAcr.add(across);
 			
 			//cluesAcr.add(hintA);  //STEVE REMOVE
@@ -310,11 +313,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 
 
-		
-		JTextArea second = new JTextArea("Down\n");
-		//add space at top
+		//add space at top and "Down" title
 		cluesDwn.add( blnk );
-		//
+		JTextArea second = new JTextArea("Down\n");
 		second.setEditable(false);
 		second.setFont(font2);
 		cluesDwn.add(second);
@@ -340,60 +341,56 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			
 			down.setLineWrap(true);
 		    down.setWrapStyleWord(true);
-		    //across.setSize(100,1);
 		    down.setColumns(25); 
 			
 			cluesDwn.add(down);
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
+		
+		
+
 
 		for (JTextArea j : cluesAcr) {
-			c.weightx = 1.0;
-			c.weighty = 1;
-			c.gridx = 0;
-			clue.add(j,c);
-			
+
+			clue.add(j, c3);
+
 			JTextArea blankline = new JTextArea("");
 			blankline.setEditable(false);
-			clue.add(blankline, c);//spacing between clues
+			clue.add(blankline, c3);//spacing between clues
+
 		}
 
 		for (JTextArea k : cluesDwn) {
-			c2.weightx = 1.0;
-			c2.weighty = 1;
-			c2.gridx = 0;
-			clue2.add(k, c);
+
+			clue2.add(k, c3);
 			
 			JTextArea blankline = new JTextArea("");
 			blankline.setEditable(false);
-			clue2.add(blankline,c);
+			clue2.add(blankline,c3);
 		}
 
 		
 		
 		
-		clue.setBorder(border);
-		clue2.setBorder(border);
+		//clue.setBorder(border);
+		//clue2.setBorder(border);
 
 		
 		// Add the 2 clue JPanels to flow JPanel
-		flow.add(clue, BorderLayout.CENTER );
-		flow.add(clue2, BorderLayout.EAST );
+		flow.add(clue );
+		flow.add(clue2 );
 
-		
-		flow.setBorder(null);
 		flow.setBackground(clear);
-		
 		
 		flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
 		
 		
+
 		
-//		flow2.add(clue2);
-//		flow2.setBorder(null);
-//		flow2.setBackground(clear);
+		
+		
 		
 		
 		/**
@@ -405,34 +402,25 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		main = new JPanel(new GridBagLayout());
 		main.setBackground(clear);
 		
-
+		gbc_main = new GridBagConstraints();
+		gbc_main.weighty = 1.0;
+		gbc_main.weightx = 1.0;
+		gbc_main.gridx = 0;
+		gbc_main.gridy = 0;
+		
+		gbc_main.fill = GridBagConstraints.BOTH;
+		
+		//layer.setAlignmentY(0);
+		main.add(layer, gbc_main);
 		
 
-		c.weighty = 1.0;
-		c.weightx = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		main.add(layer, c);
+		gbc_main.gridx = 1; // NEED THIS
 		
-		c.weighty = 1.0;
-		c.weightx = 1.0;
-		c.gridx = 1;
-		c.gridy = 0;
-		//c.anchor = GridBagConstraints.FIRST_LINE_START;
+		//flow.setAlignmentY(0);
+		main.add(flow, gbc_main);
 		
 		
-		
-		main.add(flow, c);
-		
-		
-		//main.add(flow2,c2);
-//		c.weighty = 1.0;
-//		c.weightx = 1.0;
-//		c.gridx = 1;
-//		c.gridy = 0;
-//		main.add(clue, c);
 
-		
 		
 		
 		
@@ -476,6 +464,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		 */
 		panel = new JPanel(new GridBagLayout());
 
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		
 		c.weighty = 1.0;
 		c.ipadx = 1;
 		c.gridx = 0;
