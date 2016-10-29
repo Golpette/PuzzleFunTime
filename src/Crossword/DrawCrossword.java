@@ -106,8 +106,6 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		keys = new ArrayList<KeyEvent>();
 		
-		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 200, 0));
-		//flow2 = new JPanel(new FlowLayout());
 
 		
 		cluesDwn = new ArrayList<JTextArea>();
@@ -375,14 +373,35 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		//clue.setBorder(border);
 		//clue2.setBorder(border);
 
+		clue.setAlignmentY(0);
+		clue2.setAlignmentY(0);
+		clue.setAlignmentX(0);
+		clue2.setAlignmentX(0);
+		
+	    GridBagConstraints zzz = new GridBagConstraints();
+		zzz.fill = GridBagConstraints.HORIZONTAL;
+		zzz.gridx=0;
+		zzz.gridy=0;
+		
+		
+		
+		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 100, 0));
+		////flow = new JPanel(new GridLayout(2,4,1,1));
+
+		
+		//flow = new JPanel(new FlowLayout(FlowLayout.CENTER , 200, 0));
+
+		//flow = new JPanel();
+//		flow.add(clue );
+//		flow.add(clue2 );		
 		
 		// Add the 2 clue JPanels to flow JPanel
-		flow.add(clue );
-		flow.add(clue2 );
+		flow.add(clue, zzz );
+		flow.add(clue2, zzz );
 
 		flow.setBackground(clear);
 		
-		flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
+		//flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
 		
