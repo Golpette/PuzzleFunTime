@@ -35,9 +35,9 @@ import WordSearch.WordSearchGenerator;
 
 public class SignUp extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	public CrosswordGenerator crossword;
-	public WordSearchGenerator wordsearch;
-	public SudokuGenerator sudoku;
+	public Crossword.CrosswordGenerator crossword;
+	public WordSearch.WordSearchGenerator wordsearch;
+	public Sudoku.SudokuGenerator sudoku;
 	public static PuzzleLoader puzzle;
 	JFrame frame;
 	JLayeredPane layer;

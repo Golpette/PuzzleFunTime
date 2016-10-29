@@ -31,6 +31,23 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 30;	
 	int x, y;
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+
 	JFrame frame;
 	JPanel panel, transparentLayer, largeGrid;
 	JLayeredPane layer;

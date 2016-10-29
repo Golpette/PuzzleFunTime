@@ -32,10 +32,10 @@ import resources.SetUpImages;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	public CrosswordGenerator crossword;
-	public WordSearchGenerator wordsearch;
-	public SudokuGenerator sudoku;
-	public SudokuGenerator sudo;
+	public Crossword.CrosswordGenerator crossword;
+	public WordSearch.WordSearchGenerator wordsearch;
+	public Sudoku.SudokuGenerator sudoku;
+	public Sudoku.SudokuGenerator sudo;
 	public SetUpImages imageSetUp, imageSetUp2, imageSetUp3, imageSetUp4;
 	public SignUp signUp;
 	public LogIn logIn;
@@ -156,7 +156,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(10, 4, 50, 1);
+		model2 = new SpinnerNumberModel(6, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));

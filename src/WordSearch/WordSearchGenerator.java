@@ -2,9 +2,7 @@ package WordSearch;
 import java.io.*;
 import java.util.*;
 
-import Crossword.Entry;
-import Crossword.ReadWords;
-import Crossword.Word;
+import Crossword.*;
 
 public class WordSearchGenerator{
 
@@ -27,8 +25,8 @@ public class WordSearchGenerator{
 		grid = new String[x][y];
 		acrossClues = new ArrayList<String>();
 		downClues = new ArrayList<String>();
-		ArrayList<Word> words = new ArrayList<Word>();
-		words = ReadWords.getWordsandDefs("words_cambridge.txt");		
+		ArrayList<Crossword.Word> words = new ArrayList<Crossword.Word>();
+		words = Crossword.ReadWords.getWordsandDefs("words_cambridge.txt");		
 			grid = new String[x][y];		
 			for(int i = 0; i < y; i++){
 				for( int j = 0; j < x; j++){
