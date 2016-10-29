@@ -210,6 +210,10 @@ public class DrawCrossword extends JComponent implements ActionListener {
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
+		
+		
+		
+		
 
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
@@ -226,16 +230,17 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); /// CHANGING THESE DIMENSKONS AFFECTS NOTHING
 
 
+		
+		
+		
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */
-		
-		
-		
 		
 		// Two JPanels for holding across and down clues. Will hold these as JTextAreas with GridBagLayout c3.
 		
@@ -289,6 +294,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 			String clue = s + " (" + len + ")";
 			JTextArea across = new JTextArea(clue);
 			across.setEditable(false);
+			across.setHighlighter(null);
+			//across.setEnabled(false);
 			
 			//add word length here.
 			
@@ -401,7 +408,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 
 		flow.setBackground(clear);
 		
-		//flow.setBorder( BorderFactory.createEmptyBorder(0, -200, 0, 0) ); 
+		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
 		
@@ -499,6 +506,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		c.ipady = 10;
 		panel.add(reveal, c);
 
+		
+		
+		
 		/**
 		 * Overall JFrame to hold all components This has the main panel
 		 * assigned to it
