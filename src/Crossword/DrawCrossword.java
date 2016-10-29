@@ -75,7 +75,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	// Define color highlighting current word
-	Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
+	//Color HIGHLIGHT_COLOUR = new Color(20,100,20,100) ;
+	// STOP USING TRANSPARENCY AND JUST USE (R,G,B) TRIPLET.  STUFF KEEPS OVERLAPPING
+	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);
 	
 	
 	//tracking clicks
@@ -559,7 +561,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					firsteverclick=false;
 				}
 
-				makeAllCluesWhite();
+				//makeAllCluesWhite();
 					
 						
 				
@@ -740,8 +742,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 							}
 							
 							
-//							makeAllCluesWhite();
-//							colorAppropriateClue();
+							makeAllCluesWhite();
+							colorAppropriateClue();
 
 							
 							
@@ -801,7 +803,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						//	lb.setText(" ");
 						//}
 					}
-				}			
+				}
+				
+				// higlhight approp. clue
+				makeAllCluesWhite();
+				colorAppropriateClue();
+				
 			}
 			
 			public void mouseEntered(MouseEvent e) {
@@ -1248,6 +1255,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	
 	public void colorAppropriateClue(){
+		/** Highlight clue of any word that is highlighted in grid **/
 		
 		makeAllCluesWhite();
 		
