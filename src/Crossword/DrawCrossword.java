@@ -559,6 +559,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					firsteverclick=false;
 				}
 
+				makeAllCluesWhite();
 					
 						
 				
@@ -568,6 +569,7 @@ public class DrawCrossword extends JComponent implements ActionListener {
 						
 						
 						if (e.getSource() == boxes[row][col]) {
+							makeAllCluesWhite();
 							
 							if (e.getKeyCode() == KeyEvent.VK_UP) {			
 								// get rid of all previous highlighting
@@ -584,11 +586,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										boxes[ (newstart-i) ][col].requestFocus();
 										// highlight any words that *start* from this square
 										highlightWord( newstart-i, col);
-										colorAppropriateClue();
+//										colorAppropriateClue();
 										break;
 									}
 								}	
-								
+								makeAllCluesWhite();
+								colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
 								makeAllWhite();
@@ -602,7 +605,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										highlightWord(newstart+i,col);
 										break;
 									}						
-								}																							
+								}	
+								makeAllCluesWhite();
+								colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 								makeAllWhite();
@@ -616,7 +621,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										highlightWord(row, newstart+i);
 										break;
 									}
-								}								
+								}		
+								makeAllCluesWhite();
+								colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 								makeAllWhite();
@@ -630,7 +637,9 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										highlightWord(row,newstart-i);
 										break;
 									}
-								}															
+								}	
+								makeAllCluesWhite();
+								colorAppropriateClue();
 							}
 							
 							
@@ -706,7 +715,11 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										}
 									}									
 								}
-																
+									
+								
+								makeAllCluesWhite();
+								colorAppropriateClue();
+								
 							}
 							
 												
@@ -725,6 +738,13 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								
 					
 							}
+							
+							
+//							makeAllCluesWhite();
+//							colorAppropriateClue();
+
+							
+							
 						}
 					}
 
@@ -1229,6 +1249,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 	
 	public void colorAppropriateClue(){
 		
+		makeAllCluesWhite();
+		
 		// get a coloured square
 		int coloredX=0;  int coloredY=0;
 		for( int abc=0; abc<x-2; abc++ ){
@@ -1258,11 +1280,12 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		// get clue number 
 		int cn_h = -1;
 		
-		if( dd.equals("across") ){
+		if( dd.equalsIgnoreCase("across") ){
 			System.out.println("across");
 			for( int gg=0; gg<x-2; gg++ ){
 				
-				if( !clueNumbers[coloredY][coloredX-gg].getText().equals("") ){
+				if( (!clueNumbers[coloredY][coloredX-gg].getText().equals("") && coloredX-gg==0)
+						|| (!clueNumbers[coloredY][coloredX-gg].getText().equals("") && !boxes[coloredY][coloredX-gg-1].isEnabled() )  ){
 					
 					cn_h = Integer.parseInt( clueNumbers[coloredY][coloredX-gg].getText()  );
 					
@@ -1285,18 +1308,40 @@ public class DrawCrossword extends JComponent implements ActionListener {
 					}
 					break;										
 				}
-
-				
 			}
 		}
 		else if( dd.equalsIgnoreCase("down") ){
-			
+						
+			for( int gg=0; gg<y-2; gg++ ){
+				
+				if( (!clueNumbers[coloredY-gg][coloredX].getText().equals("")  && coloredY-gg==0 )     ||
+					( !clueNumbers[coloredY-gg][coloredX].getText().equals("")  &&  !boxes[coloredY-gg-1][coloredX].isEnabled()   )    ){
+					
+					cn_h = Integer.parseInt( clueNumbers[coloredY-gg][coloredX].getText()  );
+										
+					makeAllCluesWhite();
+					
+					// highlight appropriate clue
+					for( JTextArea cl : cluesDwn ){		
+						
+						if( cl.getText().contains(".") ){
+							String c_n_string = ""+cl.getText().split("\\.")[0];
+							int c_n = Integer.parseInt( c_n_string   );
+						
+							if( c_n == cn_h ){
+								cl.setBackground(HIGHLIGHT_COLOUR);
+								cl.setOpaque(true);	
+							}	
+						}
+					}
+					break;										
+				}
+			}
+		
 		}
 		
 		
-		// make all clues white
-		
-		// color appropriate clue
+
 	}
 	
 	
@@ -1317,9 +1362,15 @@ public class DrawCrossword extends JComponent implements ActionListener {
 		}	
 	}
 	
+	
+	
 	public void makeAllCluesWhite(){
 		//make all other clues white
 		for( JTextArea cl : cluesAcr ){
+			cl.setBackground(Color.WHITE);
+			cl.setOpaque(true);											
+		}
+		for( JTextArea cl : cluesDwn ){
 			cl.setBackground(Color.WHITE);
 			cl.setOpaque(true);											
 		}
