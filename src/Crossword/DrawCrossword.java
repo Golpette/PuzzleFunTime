@@ -592,8 +592,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										break;
 									}
 								}	
-								makeAllCluesWhite();
-								colorAppropriateClue();
+								//makeAllCluesWhite();
+								//colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
 								makeAllWhite();
@@ -608,8 +608,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										break;
 									}						
 								}	
-								makeAllCluesWhite();
-								colorAppropriateClue();
+								//makeAllCluesWhite();
+								//colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 								makeAllWhite();
@@ -624,8 +624,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										break;
 									}
 								}		
-								makeAllCluesWhite();
-								colorAppropriateClue();
+								//makeAllCluesWhite();
+								//colorAppropriateClue();
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 								makeAllWhite();
@@ -640,8 +640,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 										break;
 									}
 								}	
-								makeAllCluesWhite();
-								colorAppropriateClue();
+								//makeAllCluesWhite();
+								//colorAppropriateClue();
 							}
 							
 							
@@ -719,8 +719,8 @@ public class DrawCrossword extends JComponent implements ActionListener {
 								}
 									
 								
-								makeAllCluesWhite();
-								colorAppropriateClue();
+								//makeAllCluesWhite();
+								//colorAppropriateClue();
 								
 							}
 							
