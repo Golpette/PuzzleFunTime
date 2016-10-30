@@ -155,7 +155,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		font = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale*squareSize / 5 * 3));
 		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 26));
 		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 16));
-		font4 = new Font("Century Gothic", Font.BOLD, (int) (2*normalisedScale* 14));
+		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 12));  //clue numbers in grid
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
@@ -235,17 +235,21 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
+		
+		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		//layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); /// CHANGING THESE DIMENSKONS AFFECTS NOTHING
 
 
-		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-		layer.getActionMap().put(SOME_ACTION, someAction);
-		layer.addMouseWheelListener(this);
-	
-
 		
+// UNCOMMENT THIS LINE TO REMOVE THE SCROLL WHEN MOUSE IS OVER GRID. I THINK IT SOMEHOW OVERRIDES
+// THE SCROLL FROM "area" COMPONENT
+//		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+//		layer.getActionMap().put(SOME_ACTION, someAction);
+//		layer.addMouseWheelListener(this);
+//	
+//
+//		
 		
 		
 		
@@ -266,7 +270,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		clue2 = new JPanel(new GridBagLayout()     );
 //		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
-		clue2.setMinimumSize(new Dimension(200 ,  600 )  );
+		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
 		clue2.setBackground(clear);
 		clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
@@ -412,17 +416,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
 		
-		
 
-		
-		
 	
-		clue.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-		clue.getActionMap().put(SOME_ACTION, someAction);
-		clue.addMouseWheelListener(this);
+//		clue.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+//		clue.getActionMap().put(SOME_ACTION, someAction);
+//		clue.addMouseWheelListener(this);
 
-		
-		
 		
 		
 		/**
@@ -443,6 +442,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		gbc_main.fill = GridBagConstraints.BOTH;
 		
 		main.add(layer, gbc_main);
+		//main.add(new JScrollPane(layer), gbc_main);
+
+		
 		
 		gbc_main.gridx = 1; // NEED THIS
 		
@@ -466,6 +468,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		area.setBackground(clear);
 		
+		// Scrolling as opposed to zooming. TODO: WILL NOT SCROLL WHEN MOUSE OVER GRID??
+		area.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
+		area.getActionMap().put(SOME_ACTION, someAction);
+		area.addMouseWheelListener(this);
+		
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
 		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
@@ -481,6 +488,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		    }});
 		
 		
+
 		
 		
 		
@@ -543,6 +551,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
+		
+		//area.getViewport().setViewPosition(new Point(0,0));
+
 		
 		
 	}
@@ -855,45 +866,42 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				firsteverclick = false;
 				countClicks=0;
 				
-				
 //				// GET FOCUS IF CLICKING ON CLUE   ///////////////////////////////////////////
 //				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
-//				firsteverclick = false;
-//				countClicks=0;
-//
-//				
-//				for( JLabel cl : cluesAcr ){
-//					if( e.getSource()==cl ){
-//						makeAllWhite();
-//						String c_n_string = ""+cl.getText().split("\\.")[0];
-//						int c_n = Integer.parseInt( c_n_string   );
-//						for( Entry ent : entries ){
-//							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
-//								// then highlight this word
-//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-//								colourWord( ent.getY()-1, ent.getX()-1, "across");
-//							}
-//						}
-//						
-//					}
-//			
-//				}
-//				for( JLabel cl : cluesDwn ){
-//					if( e.getSource()==cl ){
-//						makeAllWhite();
-//						String c_n_string = ""+cl.getText().split("\\.")[0];
-//						int c_n = Integer.parseInt( c_n_string   );
-//						for( Entry ent : entries ){
-//							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
-//								// then highlight this word
-//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-//								colourWord( ent.getY()-1, ent.getX()-1, "down");
-//							}
-//						}
-//						
-//					}
-//					
-//				}    //////////////////////////////////////////////////////////////////////////
+				// BETTER LEAVE IT IN: since trying to click on clues will defocus grid otherwise
+				
+				for( JTextArea cl : cluesAcr ){
+					if( e.getSource()==cl ){
+						//makeAllWhite();
+						String c_n_string = ""+cl.getText().split("\\.")[0];
+						int c_n = Integer.parseInt( c_n_string   );
+						for( Entry ent : entries ){
+							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
+								// then highlight this word
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+								//colourWord( ent.getY()-1, ent.getX()-1, "across");
+							}
+						}
+						
+					}
+			
+				}
+				for( JTextArea cl : cluesDwn ){
+					if( e.getSource()==cl ){
+						//makeAllWhite();
+						String c_n_string = ""+cl.getText().split("\\.")[0];
+						int c_n = Integer.parseInt( c_n_string   );
+						for( Entry ent : entries ){
+							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+								// then highlight this word
+								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+								//colourWord( ent.getY()-1, ent.getX()-1, "down");
+							}
+						}
+						
+					}
+					
+				}    //////////////////////////////////////////////////////////////////////////
 				
 				
 				
@@ -1422,6 +1430,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			mouseX = mouseCoord.getX();
 			mouseY = mouseCoord.getY();
 	        if (e.isControlDown()) {
+	        	
+	        	// no scrolling if ctrl is pressed
+	        	area.setWheelScrollingEnabled(false);
+
+	        	
 	            if (e.getWheelRotation() < 0) {
 	                if(scale < MAX_SCALE){
 	                	scale++;
@@ -1439,11 +1452,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
 	    			
 	    		    main.revalidate();
-	    		    System.out.println("Got here \\n\n\n");
+	    		    //System.out.println("Got here \\n\n\n");
 	    		    drawGrid( normalisedScale);
-	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
+	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
-	                System.out.println("scrolled down");
+	                //System.out.println("scrolled down");
 	                if(scale > MIN_SCALE){
 	                	scale--;
 	                }
@@ -1460,18 +1473,19 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
 	    		    main.revalidate();
 	    		    drawGrid(normalisedScale);
-	                System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
-	                System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
+	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
+	                //System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
 	            }
-	        }else if(!e.isControlDown()){
-	        System.out.println("Scrolled HERE!!!!");
-	        //area.setAutoscrolls(true);
-	       // area.scrollRectToVisible(getVisibleRect());
-	        area.setWheelScrollingEnabled(true);
-//	        if(e.getWheelRotation() < 0){
-//	    	area.scrollRectToVisible(area.getBounds());
-//	        //else scroll like normal
-//	        }
+	        }
+	        else if(!e.isControlDown()){
+	        	//System.out.println("Scrolled HERE!!!!");
+	        	//area.setAutoscrolls(true);
+	        	// area.scrollRectToVisible(getVisibleRect());
+	        	area.setWheelScrollingEnabled(true);
+//	     	   if(e.getWheelRotation() < 0){
+//	  		  	area.scrollRectToVisible(area.getBounds());
+//		        //else scroll like normal
+//	 	       }
 	        }
 	    }
 
