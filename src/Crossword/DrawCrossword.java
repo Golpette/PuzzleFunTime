@@ -461,8 +461,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * This is the largest area of the GUI which holds the crossword and
 		 * clues pane and makes them scrollable.
 		 */
+		
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+	
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -472,7 +474,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		area.getActionMap().put(SOME_ACTION, someAction);
 		area.addMouseWheelListener(this);
-		
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
 		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
@@ -508,15 +509,17 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * This is the panel for the main area of the program. It holds two
 		 * components: A JScrollPane and a JButton
 		 */
+		
+		
 		panel = new JPanel(new GridBagLayout());
 
 		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		
+		c.fill = GridBagConstraints.BOTH;		
 		c.weighty = 1.0;
-		c.ipadx = 1;
-		c.gridx = 0;
-		c.gridy = 0;
+//		c.ipadx = 0;
+		//c.gridx = 0;
+		//c.gridy = 0;
+		
 		panel.add(area, c);
 
 		c.weightx = 1.0;
@@ -524,6 +527,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
+		
 		panel.add(reveal, c);
 
 		
@@ -552,9 +556,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
 		
-		//area.getViewport().setViewPosition(new Point(0,0));
 
 		
+	
 		
 	}
 
