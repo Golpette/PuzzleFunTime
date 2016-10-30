@@ -185,7 +185,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		drawGrid(normalisedScale);
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size(), 1));
-		clues.setBounds(0, 40, 18 * x, squareSize * (y - 2));
+		clues.setBounds(0, 40, 18 * x, font3.getSize()*(cluesAcross.size()+cluesDown.size()));
 		clues.setBackground(clear);
 		clues.setVisible(true);
 		clues.setOpaque(true);
@@ -195,7 +195,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		extra.setBackground(clear);
 		extra.setVisible(true);
 		extra.setOpaque(true);
-		extra.setBounds(squareSize * (x), 0, squareSize * (x - 2), squareSize * (y - 2));
+		extra.setBounds(squareSize * (x-1)+40, 0, squareSize * (x - 2), font3.getSize()*allClues.size());
 		extra.addMouseWheelListener(this);
 
 		orderClues.setBounds(0, 0, 18 * x, 30);
