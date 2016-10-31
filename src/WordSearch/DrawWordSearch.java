@@ -245,6 +245,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		area.setBackground(clear);
 		area.setVisible(true);
 		area.setOpaque(true);
+		area.addMouseWheelListener(this);
+		area.setWheelScrollingEnabled(true);
 
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
@@ -827,9 +829,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			}
 		}
 		if (e.getWheelRotation() < 0) {
+			area.setWheelScrollingEnabled(true);
 			//System.out.println("Scrolling Up...");
 		} else {
 			//System.out.println("Scrolling Down...");
+			area.setWheelScrollingEnabled(true);
 		}
 		// else scroll like normal
 	}
