@@ -293,20 +293,20 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.fill = GridBagConstraints.BOTH;	
 		c.weightx = 0.0;
 		c.weighty = 0.0;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.ipady = 5;
-		c.insets = new Insets(60,30,40,15);
+		c.insets = new Insets(60,10,45,260);
 		panel.add(spinner1, c);
 		
 		c.weightx = 0.0;
 		c.weighty = 0.0;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(30,30,40,15);
+		c.insets = new Insets(30,10,45,260);
 		panel.add(spinner2, c);
 		
 //		c.weightx = 0.0;
@@ -317,25 +317,25 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 //		c.insets = new Insets(40,30,45,15);
 //		panel.add(spinner3, c);
 		
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 0.0;
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 0;
-		c.insets = new Insets(60,15,40,30);
+		c.insets = new Insets(60,10,50,0);
 		panel.add(cwdDifficulty, c);
 		
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 0.0;
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 1;
-		c.insets = new Insets(30,15,40,30);
+		c.insets = new Insets(30,10,50,0);
 		panel.add(wdsDifficulty, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(40,15,45,30);
+		c.insets = new Insets(40,10,50,0);
 		panel.add(sudDifficulty, c);
 		
 		
