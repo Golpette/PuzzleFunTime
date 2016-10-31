@@ -49,7 +49,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	JLayeredPane layer;
 	JPanel panel, grid, country, country2;
 	JButton cwd, wds, sud, signup, login;
-	JLabel intro, pic, flag, flag2, arrow;
+	JLabel intro, pic, flag, flag2, arrow, clueLanguage, solutionLanguage;
 	Font font, font2, font3, font4;
 	/// STEVE: these weren't initialised when automatic scroller difficulty was used
 	///     2 implies defualt is "EASY" -- need to change this if we change defualt scroller value
@@ -80,6 +80,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		font3 = new Font("Century Gothic", Font.PLAIN, 16);
+		
+		
+		clueLanguage = new JLabel("CLUES");
+		clueLanguage.setFont(font3);
+		solutionLanguage = new JLabel("SOLUTIONS");
+		solutionLanguage.setFont(font3);
 		
 		flag = new JLabel();
 		flag.setBorder(BorderFactory.createEmptyBorder());
@@ -117,12 +123,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setBorder(null);
 		
 		country = new JPanel(new GridBagLayout());
-		country.setBounds(365,0,155, 30);
+		country.setBounds(365,10,155, 40);
 		country.setVisible(true);
 		country.setOpaque(false);
 		
 		country2 = new JPanel(new GridBagLayout());
-		country2.setBounds(242,0,120, 30);
+		country2.setBounds(242,10,120, 40);
 		country2.setVisible(true);
 		country2.setOpaque(false);
 		
@@ -156,7 +162,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(6, 4, 50, 1);
+		model2 = new SpinnerNumberModel(15, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
@@ -256,6 +262,22 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridheight = 1;		
 		country2.add(language, c);
 		
+		c.weightx = 0.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;	
+		c.gridwidth = 1;
+		c.insets = new Insets(0,10,0,0);
+		country2.add(clueLanguage, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;	
+		c.gridwidth = 1;
+		c.insets = new Insets(0,0,0,0);
+		country.add(solutionLanguage, c);
+		
 		grid.add(cwd);
 		grid.add(wds);
 		grid.add(sud);
@@ -276,7 +298,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.ipady = 5;
-		c.insets = new Insets(40,30,40,15);
+		c.insets = new Insets(60,30,40,15);
 		panel.add(spinner1, c);
 		
 		c.weightx = 0.0;
@@ -284,36 +306,36 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(45,30,40,15);
+		c.insets = new Insets(30,30,40,15);
 		panel.add(spinner2, c);
 		
-		c.weightx = 0.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 2;
-		c.gridheight = 1;
-		c.insets = new Insets(42,30,45,15);
-		panel.add(spinner3, c);
+//		c.weightx = 0.0;
+//		c.weighty = 0.0;
+//		c.gridx = 1;
+//		c.gridy = 2;
+//		c.gridheight = 1;
+//		c.insets = new Insets(40,30,45,15);
+//		panel.add(spinner3, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 0;
-		c.insets = new Insets(40,15,40,30);
+		c.insets = new Insets(60,15,40,30);
 		panel.add(cwdDifficulty, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 1;
-		c.insets = new Insets(45,15,40,30);
+		c.insets = new Insets(30,15,40,30);
 		panel.add(wdsDifficulty, c);
 		
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 2;
 		c.gridy = 2;
-		c.insets = new Insets(42,15,45,30);
+		c.insets = new Insets(40,15,45,30);
 		panel.add(sudDifficulty, c);
 		
 		

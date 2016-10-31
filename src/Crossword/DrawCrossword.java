@@ -44,6 +44,7 @@ import javax.swing.InputMap;
 import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 
 
 /**
@@ -405,6 +406,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 100, 0));
+		flow.setAlignmentX(SwingConstants.NORTH_EAST);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
 //		flow.add(clue );
 //		flow.add(clue2 );		
