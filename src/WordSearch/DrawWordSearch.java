@@ -843,7 +843,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		normalisedScale = scale / 20;
 		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE);
 		main.revalidate();
-		font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
+		//font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
 		font2 = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		drawGrid(normalisedScale);
