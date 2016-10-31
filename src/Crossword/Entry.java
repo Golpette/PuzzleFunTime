@@ -1,4 +1,4 @@
-package Crossword;
+package crossword;
 
 import java.util.ArrayList;
 import java.util.Random;

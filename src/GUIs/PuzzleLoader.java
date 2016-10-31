@@ -1,4 +1,4 @@
-package GUIs;
+package guis;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,17 +25,17 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import Crossword.CrosswordGenerator;
-import Sudoku.SudokuGenerator;
-import WordSearch.WordSearchGenerator;
+import crossword.CrosswordGenerator;
+import sudoku.SudokuGenerator;
+import wordsearch.WordSearchGenerator;
 import resources.SetUpImages;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	public Crossword.CrosswordGenerator crossword;
-	public WordSearch.WordSearchGenerator wordsearch;
-	public Sudoku.SudokuGenerator sudoku;
-	public Sudoku.SudokuGenerator sudo;
+	public crossword.CrosswordGenerator crossword;
+	public wordsearch.WordSearchGenerator wordsearch;
+	public sudoku.SudokuGenerator sudoku;
+	public sudoku.SudokuGenerator sudo;
 	public SetUpImages imageSetUp, imageSetUp2, imageSetUp3, imageSetUp4;
 	public SignUp signUp;
 	public LogIn logIn;

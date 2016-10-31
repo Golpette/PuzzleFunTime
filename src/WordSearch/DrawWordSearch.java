@@ -1,4 +1,4 @@
-package WordSearch;
+package wordsearch;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +42,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
-import Crossword.Entry;
+import crossword.Entry;
 import resources.SetUpImages;
 
 /**

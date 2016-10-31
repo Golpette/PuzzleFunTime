@@ -1,4 +1,4 @@
-package Crossword;
+package crossword;
 import java.awt.BorderLayout;
 
 import java.awt.AWTEvent;
