@@ -44,12 +44,13 @@ import javax.swing.border.Border;
 
 import crossword.Entry;
 import resources.SetUpImages;
+import wordsearch.Coord;
 
 /**
  * Class to draw a word search
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
-	SetUpImages setImages;
+	SetUpImages setImages, tempImage, tempHead;
 	JFrame frame;
 	JLayeredPane layer, layer2, extra;
 	JPanel panel, main, clues;
@@ -71,7 +72,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	Border border;
 	String[][] grid;
 	String[] ordering = { "RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST" },
-			loopDirections = { "top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft" };
+			loopDirections = {"TopLeft", "Left", "BottomLeft", "Top", "Bottom", "TopRight", "Right", "BottomRight"};
 	String tempWord, sortMethod, randomFill;
 	private static final long serialVersionUID = 1L;
 	double width, height, mouseX, mouseY, scale, normalisedScale, tempLayerWidth, tempLayerHeight, tempScale;
@@ -389,37 +390,56 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 													struckThrough.add(temp.getText());
 												}
 												String[] images = setImageDirections(a.direction);
-												Icon[] icons = new Icon[5];
+												Icon[] icons = new Icon[9];
+												Icon[] icons2 = new Icon[8];
 												setImages = new SetUpImages(images, squareSize, squareSize, icons);
-												setDiagonalImages(a.end_y - 1, a.end_x - 1, 2, icons);
-												setDiagonalImages(a.start_y - 1, a.start_x - 1, 0, icons);
-												int[] t = setIncrements(a.direction);
-												for (int c = 0; c < a.getWordLength() - 1; c++) {
-													if (!(c == 0)) {
-														setDiagonalImages(a.start_y - 1 + c * t[1],
-																a.start_x - 1 + c * t[0], 1, icons);
+												tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
+												if(a.direction.equals("snaking")){
+													System.out.println("Got here!!");
+													ArrayList<Coord> letterCoords = a.getLetterCoords();
+													//set up snake head image
+													int x = letterCoords.get(0).xcoord;
+													int y = letterCoords.get(0).ycoord;
+													int nextX = letterCoords.get(1).xcoord;
+													int nextY = letterCoords.get(1).ycoord;
+													int penX = letterCoords.get(a.getWordLength()-2).xcoord;
+													int penY = letterCoords.get(a.getWordLength()-2).ycoord;
+													int lastX = letterCoords.get(a.getWordLength()-1).xcoord;
+													int lastY = letterCoords.get(a.getWordLength()-1).ycoord;
+													setSnakeHead(x, y, nextX, nextY, icons2);
+													//set middle images
+													
+													for(int c = 1; c < a.getWordLength()-1; c++){
+														setSnakingImages(letterCoords.get(c-1).xcoord, letterCoords.get(c-1).ycoord, letterCoords.get(c).xcoord, letterCoords.get(c).ycoord, letterCoords.get(c+1).xcoord, letterCoords.get(c+1).ycoord, icons);
 													}
-													if (a.isDiagonal) {
-														if (a.direction.equals("BLTRdiagonal")) {
-															setDiagonalImages(a.start_y - 2 + c * t[1],
-																	a.start_x - 1 + c * t[0], 3, icons);
+													//set up snake tail image
+													setSnakeHead(lastX, lastY, penX, penY, icons2);
+													
+												}else{
+													setDiagonalImages(a.end_y - 1, a.end_x - 1, 2, icons);
+													setDiagonalImages(a.start_y - 1, a.start_x - 1, 0, icons);
+													int[] t = setIncrements(a.direction);
+													for (int c = 0; c < a.getWordLength() - 1; c++) {
+														if (!(c == 0)) {
 															setDiagonalImages(a.start_y - 1 + c * t[1],
-																	a.start_x + c * t[0], 4, icons);
-														} else if (a.direction.equals("backwardsBLTRdiagonal")) {
-															setDiagonalImages(a.start_y + c * t[1],
-																	a.start_x - 2 + (c - 1) * t[0], 3, icons);
-															setDiagonalImages(a.start_y - 1 + c * t[1],
-																	a.start_x - 2 + c * t[0], 4, icons);
-														} else if (a.direction.equals("diagonal")) {
-															setDiagonalImages(a.start_y - 1 + c * t[1],
-																	a.start_x - 1 + (c + 1) * t[0], 3, icons);
-															setDiagonalImages(a.start_y + c * t[1],
-																	a.start_x - 1 + c * t[0], 4, icons);
-														} else {
-															setDiagonalImages(a.start_y - 1 + c * t[1],
-																	a.start_x - 2 + c * t[0], 3, icons);
-															setDiagonalImages(a.start_y - 2 + c * t[1],
-																	a.start_x - 1 + c * t[0], 4, icons);
+																	a.start_x - 1 + c * t[0], 1, icons);
+														}
+														if (a.isDiagonal) {
+															if (a.direction.equals("BLTRdiagonal")) {
+																setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 3, icons);
+																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x + c * t[0], 4, icons);
+															} else if (a.direction.equals("backwardsBLTRdiagonal")) {
+																setDiagonalImages(a.start_y + c * t[1], a.start_x - 2 + (c - 1) * t[0], 3, icons);
+																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 4, icons);
+															} else if (a.direction.equals("diagonal")) {
+																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 1 + (c + 1) * t[0], 3, icons);
+																setDiagonalImages(a.start_y + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+															} else if(a.direction.equals("backwardsdiagonal")){
+																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 3, icons);
+																setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+															}else if(a.direction.equals("snaking")){
+																//set
+															}
 														}
 													}
 												}
@@ -484,6 +504,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						}
 					}
 				}
+			}
+
+			private String[] setImageHeads() {
+				// TODO Auto-generated method stub
+				
+				return null;
 			}
 
 			private int[] setIncrements(String direction) {
@@ -553,6 +579,84 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		});
 	}
 
+	public void setSnakingImages(int prevY, int prevX, int y, int x, int nextY, int nextX, Icon [] icons){
+		System.out.println("Starting snake body");
+		System.out.println("icons: " + icons.toString()+ " length: " + icons.length);
+		int image = 0;
+		for (JLabel[][] lab : allLetters) {
+			if (!buttonPushed) {
+				lab[x-1][y-1].setOpaque(false);
+			}
+			if (temporaryIcons.get(allLetters.indexOf(lab))[x-1][y-1] == null && lab[x-1][y-1].getText().equals("")) {
+				if(prevY == y && nextY == y){
+					image = 4;
+				}
+				else if(prevX == x && nextX == x){
+					image = 3;
+				}
+				else if((prevX == x+1 && nextX == x && prevY == y && nextY == y-1)||(prevX == x && nextX == x+1 && prevY == y-1 && nextY == y)){
+					//"TopRightJoin"; //done
+					System.out.println("Got toprightjoin");
+					image = 8;
+				}
+				else if((prevX == x+1 && nextX == x && prevY == y && nextY == y+1)||(prevX == x && nextX == x+1 && prevY == y+1 && nextY == y)){
+					//"BottomRightJoin"; //done
+					image = 6;			
+				}
+				else if((prevX == x-1 && nextX == x && prevY == y && nextY == y-1)||(prevX == x && nextX == x-1 && prevY == y-1 && nextY == y)){
+					//"TopLeftJoin"; //done
+					image = 7;
+				}
+				else if((prevX == x-1 && nextX == x && prevY == y && nextY == y+1)||(prevX == x && nextX == x-1 && prevY == y+1 && nextY == y)){
+					//"BottomLeftJoin";
+					image = 5;
+				}
+				System.out.println("image:"+image);
+				lab[x-1][y-1].setIcon(icons[image]);
+				temporaryIcons.get(allLetters.indexOf(lab))[x-1][y-1] = icons[image];
+				lab[x-1][y-1].setText(" ");
+				break;
+			}
+		}
+	}
+	
+	public void setSnakeHead(int y, int x, int nextY, int nextX, Icon [] icons2) {
+		int image = 0;
+		System.out.println("Starting snake head");
+		//String image = "";
+		for (JLabel[][] lab : allLetters) {
+			if (!buttonPushed) {
+				lab[x-1][y-1].setOpaque(false);
+			}
+			if (temporaryIcons.get(allLetters.indexOf(lab))[x-1][y-1] == null && lab[x-1][y-1].getText().equals("")) {
+				if(x < nextX && y < nextY){
+					image = 0;
+				}else if(x < nextX && y == nextY){
+					image = 3;
+				}else if(x < nextX && y > nextY){
+					image = 5;
+				}else if(x == nextX && y < nextY){
+					image = 1;
+				}else if(x == nextX && y > nextY){
+					image = 6;
+				}else if(x > nextX && y < nextY){
+					image = 2;
+				}else if(x > nextX && y == nextY){
+					image = 4;
+				}else if(x > nextX && y > nextY){
+					image = 7;
+				}
+				System.out.println("Image: "+image);
+				//Icon icon = null;
+				//setImages = new SetUpImages(image, squareSize, squareSize, icon);
+				lab[x-1][y-1].setIcon(icons2[image]);
+				temporaryIcons.get(allLetters.indexOf(lab))[x-1][y-1] = icons2[image];
+				lab[x-1][y-1].setText(" ");
+				break;
+			}
+		}
+	}
+	
 	public void setDiagonalImages(int x, int y, int image, Icon[] icons) {
 		for (JLabel[][] lab : allLetters) {
 			if (!buttonPushed) {
@@ -688,8 +792,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		String middle = "";
 		String start = "";
 		String end = "";
-		String corner1 = "";
-		String corner2 = "";
+		String corner1 = "Horizontal";
+		String corner2 = "Vertical";
+		String snakeTR ="TopRightJoin";
+		String snakeBR ="BottomRightJoin";
+		String snakeTL ="TopLeftJoin";
+		String snakeBL ="BottomLeftJoin";
 		if (direction.equals("across")) {
 			start = "Left";
 			middle = "Horizontal";
@@ -730,14 +838,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			end = "BottomLeft";
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
-		} else {
-			start = "Left";
-			middle = "Horizontal";
-			end = "Right";
-			corner1 = "";
-			corner2 = "";
 		}
-		String[] images = { start, middle, end, corner1, corner2 };
+		String[] images = {start, middle, end, corner1, corner2, snakeTR, snakeBR, snakeTL, snakeBL};
 		return images;
 	}
 

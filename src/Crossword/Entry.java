@@ -3,6 +3,8 @@ package crossword;
 import java.util.ArrayList;
 import java.util.Random;
 
+import wordsearch.Coord;
+
 /**
  * Object for each crossword entry. Holds starting position, direction, word,
  * definition.
@@ -13,6 +15,7 @@ public class Entry {
 	public int end_x;
 	public int end_y;
 	int wordLength;
+	ArrayList<Coord> letterCoords;
 	Random rand;
 	Boolean across;
 	public Boolean isDiagonal;
@@ -57,7 +60,12 @@ public class Entry {
 		this.wordLength = wordLength;
 	}
 
-	public Entry(int start_x, int start_y, boolean across, String word, String definition, String direction) {
+	public Entry(int start_x, int start_y, boolean across, String word, String definition, String direction, ArrayList<Coord> letterCoords) {
+		this.letterCoords = letterCoords;
+		System.out.println("first:");
+		for(int i = 0; i < letterCoords.size(); i++){
+			System.out.println("letterCoords: (" + letterCoords.get(i).xcoord +","+letterCoords.get(i).ycoord + ")");
+		}
 		this.start_x = start_x;
 		this.start_y = start_y;
 		this.across = across;
@@ -101,7 +109,18 @@ public class Entry {
 			end_x = start_x - wordLength+1;
 			end_y = start_y + wordLength-1;
 			isDiagonal = true;
+		} else if (direction.equals("snaking")){
+			end_x = letterCoords.get(wordLength-1).xcoord;
+			end_y = letterCoords.get(wordLength-1).ycoord;
 		}
+	}
+	
+	public ArrayList<Coord> getLetterCoords() {
+		return letterCoords;
+	}
+
+	public void setLetterCoords(ArrayList<Coord> letterCoords) {
+		this.letterCoords = letterCoords;
 	}
 
 	public String shuffleString(String string) {

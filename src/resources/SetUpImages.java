@@ -29,6 +29,7 @@ public class SetUpImages {
 		else if(operatingSystem.contains("windows")){
 			imagePath = "src\\resources\\";
 		}		
+		
 		icon = setImage(setPath(imageName), imageX, imageY);
 	}
 	

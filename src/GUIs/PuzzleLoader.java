@@ -162,7 +162,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(15, 4, 50, 1);
+		model2 = new SpinnerNumberModel(8, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
@@ -298,7 +298,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.ipady = 5;
-		c.insets = new Insets(60,10,45,260);
+		c.insets = new Insets(60,10,50,260);
 		panel.add(spinner1, c);
 		
 		c.weightx = 0.0;
@@ -306,7 +306,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 2;
 		c.gridy = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(30,10,45,260);
+		c.insets = new Insets(30,10,50,260);
 		panel.add(spinner2, c);
 		
 //		c.weightx = 0.0;
@@ -335,7 +335,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 0.0;
 		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(40,10,50,0);
+		c.insets = new Insets(10,10,50,0);
 		panel.add(sudDifficulty, c);
 		
 		
