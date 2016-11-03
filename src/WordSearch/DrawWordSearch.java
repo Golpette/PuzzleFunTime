@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
+//import java.util.logging.Handler;
+//import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -52,7 +52,7 @@ import wordsearch.Coord;
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	SetUpImages setImages, tempImage, tempHead;
-	Logger logger;
+	//Logger logger;
 	JFrame frame;
 	JLayeredPane layer, layer2, extra;
 	JPanel panel, main, clues;
@@ -350,7 +350,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				if (level == 0) {
 					if (grid[j + 1][i + 1] != "_") {
 						if (buttonPushed) {
-							labels[i][j].setOpaque(true);
+							//labels[i][j].setOpaque(false);
 							labels[i][j].setBackground(Color.GREEN);
 						}
 							labels[i][j].setText(grid[j + 1][i + 1].toUpperCase());
@@ -375,116 +375,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					for (int j = 0; j < y - 2; j++) {
 						if (e.getSource().equals(allLetters.get(0)[i][j])) {
 							for (Entry a : entries) {
-								x_pos = a.end_x;
-								y_pos = a.end_y;
-								if (a.palindromic && !start) {
-									x_pos = a.start_x;
-									y_pos = a.start_y;
-								}
-								if (x_pos == j + 1 && y_pos == i + 1) {
-									if (tempStrikethrough.contains(a.getWord())) {
-										for (JLabel temp : allClues) {
-											if (temp.getText().equals(a.getWord().toUpperCase())
-													&& !(struckThrough.contains(temp.getText()))) {
-												if (!solutions.contains(temp.getText())) {
-													solutions.add(temp.getText());
-													counter++;
-													temp.setFont(font4);
-													struckThrough.add(temp.getText());
-												}
-												String[] images = setImageDirections(a.direction);
-												Icon[] icons = new Icon[9];
-												Icon[] icons2 = new Icon[8];
-												setImages = new SetUpImages(images, squareSize, squareSize, icons);
-												tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
-												if(a.direction.equals("snaking")){
-													System.out.println("Got here!!");
-													ArrayList<Coord> letterCoords = a.getLetterCoords();
-													//set up snake head image
-													int x = letterCoords.get(0).xcoord;
-													int y = letterCoords.get(0).ycoord;
-													int nextX = letterCoords.get(1).xcoord;
-													int nextY = letterCoords.get(1).ycoord;
-													int penX = letterCoords.get(a.getWordLength()-2).xcoord;
-													int penY = letterCoords.get(a.getWordLength()-2).ycoord;
-													int lastX = letterCoords.get(a.getWordLength()-1).xcoord;
-													int lastY = letterCoords.get(a.getWordLength()-1).ycoord;
-													setSnakeHead(x, y, nextX, nextY, icons2);
-													//set middle images
-													
-													for(int c = 1; c < a.getWordLength()-1; c++){
-														setSnakingImages(letterCoords.get(c-1).xcoord, letterCoords.get(c-1).ycoord, letterCoords.get(c).xcoord, letterCoords.get(c).ycoord, letterCoords.get(c+1).xcoord, letterCoords.get(c+1).ycoord, icons);
-													}
-													//set up snake tail image
-													setSnakeHead(lastX, lastY, penX, penY, icons2);
-													
-												}else{
-													setDiagonalImages(a.end_y - 1, a.end_x - 1, 2, icons);
-													setDiagonalImages(a.start_y - 1, a.start_x - 1, 0, icons);
-													int[] t = setIncrements(a.direction);
-													for (int c = 0; c < a.getWordLength() - 1; c++) {
-														if (!(c == 0)) {
-															setDiagonalImages(a.start_y - 1 + c * t[1],
-																	a.start_x - 1 + c * t[0], 1, icons);
-														}
-														if (a.isDiagonal) {
-															if (a.direction.equals("BLTRdiagonal")) {
-																setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 3, icons);
-																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x + c * t[0], 4, icons);
-															} else if (a.direction.equals("backwardsBLTRdiagonal")) {
-																setDiagonalImages(a.start_y + c * t[1], a.start_x - 2 + (c - 1) * t[0], 3, icons);
-																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 4, icons);
-															} else if (a.direction.equals("diagonal")) {
-																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 1 + (c + 1) * t[0], 3, icons);
-																setDiagonalImages(a.start_y + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
-															} else if(a.direction.equals("backwardsdiagonal")){
-																setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 3, icons);
-																setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
-															}else if(a.direction.equals("snaking")){
-																//set
-															}
-														}
-													}
-												}
-												tempStrikethrough.clear();
-											}
-										}
-									}
-								}
-								if (counter == entries.size() && !congratulations) {
-									JOptionPane.showMessageDialog(frame, "Congratulations!");
-									SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
-
-										/**
-										 * To implement threads Allow GUI to run
-										 * without pausing while congratulations
-										 * comes up later
-										 * 
-										 * @Override(non-Javadoc) @see
-										 *                        javax.swing.
-										 *                        SwingWorker#
-										 *                        doInBackground
-										 *                        ()
-										 */
-										protected Void doInBackground() throws Exception {
-											this.publish("Everything");
-											Thread.sleep(3000);
-											return null;
-										}
-
-										@SuppressWarnings("unused")
-										protected void process(ArrayList<String> res) {
-											try {
-												Thread.sleep(300);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-											JOptionPane.showMessageDialog(frame, "Congratulations!");
-										}
-									};
-									worker.execute();
-									congratulations = true;
-								}
+								loopAroundWord(i, j, a);
 							}
 							tempStrikethrough.clear();
 							for (Entry b : entries) {
@@ -507,42 +398,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						}
 					}
 				}
-			}
-
-			private String[] setImageHeads() {
-				// TODO Auto-generated method stub
-				
-				return null;
-			}
-
-			private int[] setIncrements(String direction) {
-				int[] inc = new int[2];
-				if (direction.equals("across")) {
-					inc[0] = 1;
-					inc[1] = 0;
-				} else if (direction.equals("backwards")) {
-					inc[0] = -1;
-					inc[1] = 0;
-				} else if (direction.equals("down")) {
-					inc[0] = 0;
-					inc[1] = 1;
-				} else if (direction.equals("up")) {
-					inc[0] = 0;
-					inc[1] = -1;
-				} else if (direction.equals("diagonal")) {
-					inc[0] = 1;
-					inc[1] = 1;
-				} else if (direction.equals("backwardsdiagonal")) {
-					inc[0] = -1;
-					inc[1] = -1;
-				} else if (direction.equals("BLTRdiagonal")) {
-					inc[0] = 1;
-					inc[1] = -1;
-				} else if (direction.equals("backwardsBLTRdiagonal")) {
-					inc[0] = -1;
-					inc[1] = 1;
-				}
-				return inc;
 			}
 
 			public void mouseEntered(MouseEvent e) {
@@ -580,6 +435,219 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 			}
 		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public void loopAroundWord(int i, int j, Entry a){
+			x_pos = a.end_x;
+			y_pos = a.end_y;
+			if (a.palindromic && !start) {
+				x_pos = a.start_x;
+				y_pos = a.start_y;
+			}
+			if (x_pos == j + 1 && y_pos == i + 1) {
+				if (tempStrikethrough.contains(a.getWord())) {
+					for (JLabel temp : allClues) {
+						if (temp.getText().equals(a.getWord().toUpperCase())
+								&& !(struckThrough.contains(temp.getText()))) {
+							if (!solutions.contains(temp.getText())) {
+								solutions.add(temp.getText());
+								counter++;
+								temp.setFont(font4);
+								struckThrough.add(temp.getText());
+							}
+							String[] images = setImageDirections(a.direction);
+							Icon[] icons = new Icon[9];
+							Icon[] icons2 = new Icon[8];
+							setImages = new SetUpImages(images, squareSize, squareSize, icons);
+							tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
+							if(a.direction.equals("snaking")){
+								System.out.println("Looping snaking style!");
+								ArrayList<Coord> letterCoords = a.getLetterCoords();
+								//set up snake head image
+								int x = letterCoords.get(0).xcoord;
+								int y = letterCoords.get(0).ycoord;
+								int nextX = letterCoords.get(1).xcoord;
+								int nextY = letterCoords.get(1).ycoord;
+								int penX = letterCoords.get(a.getWordLength()-2).xcoord;
+								int penY = letterCoords.get(a.getWordLength()-2).ycoord;
+								int lastX = letterCoords.get(a.getWordLength()-1).xcoord;
+								int lastY = letterCoords.get(a.getWordLength()-1).ycoord;
+								setSnakeHead(x, y, nextX, nextY, icons2);
+								//set middle images
+								
+								for(int c = 1; c < a.getWordLength()-1; c++){
+									setSnakingImages(letterCoords.get(c-1).xcoord, letterCoords.get(c-1).ycoord, letterCoords.get(c).xcoord, letterCoords.get(c).ycoord, letterCoords.get(c+1).xcoord, letterCoords.get(c+1).ycoord, icons);
+								}
+								//set up snake tail image
+								setSnakeHead(lastX, lastY, penX, penY, icons2);
+								
+							}else{
+								setDiagonalImages(a.end_y - 1, a.end_x - 1, 2, icons);
+								setDiagonalImages(a.start_y - 1, a.start_x - 1, 0, icons);
+								int[] t = setIncrements(a.direction);
+								for (int c = 0; c < a.getWordLength() - 1; c++) {
+									if (!(c == 0)) {
+										setDiagonalImages(a.start_y - 1 + c * t[1],
+												a.start_x - 1 + c * t[0], 1, icons);
+									}
+									if (a.isDiagonal) {
+										if (a.direction.equals("BLTRdiagonal")) {
+											setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 3, icons);
+											setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x + c * t[0], 4, icons);
+										} else if (a.direction.equals("backwardsBLTRdiagonal")) {
+											setDiagonalImages(a.start_y + c * t[1], a.start_x - 2 + (c - 1) * t[0], 3, icons);
+											setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 4, icons);
+										} else if (a.direction.equals("diagonal")) {
+											setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 1 + (c + 1) * t[0], 3, icons);
+											setDiagonalImages(a.start_y + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+										} else if(a.direction.equals("backwardsdiagonal")){
+											setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 3, icons);
+											setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+										}
+									}
+								}
+							}
+							tempStrikethrough.clear();
+						}
+					}
+				}
+			}
+			if (counter == entries.size() && !congratulations) {
+				JOptionPane.showMessageDialog(frame, "Congratulations!");
+				SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+
+					/**
+					 * To implement threads Allow GUI to run
+					 * without pausing while congratulations
+					 * comes up later
+					 * 
+					 * @Override(non-Javadoc) @see
+					 *                        javax.swing.
+					 *                        SwingWorker#
+					 *                        doInBackground
+					 *                        ()
+					 */
+					protected Void doInBackground() throws Exception {
+						this.publish("Everything");
+						Thread.sleep(3000);
+						return null;
+					}
+
+					@SuppressWarnings("unused")
+					protected void process(ArrayList<String> res) {
+						try {
+							Thread.sleep(300);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(frame, "Congratulations!");
+					}
+				};
+				worker.execute();
+				congratulations = true;
+			}
+		}
+	
+	
+	
+	
+	public void loopAroundWord2(int i, int j, Entry a){
+		x_pos = a.end_x;
+		y_pos = a.end_y;
+		if (x_pos == j + 1 && y_pos == i + 1) {
+			System.out.println("Loop!");
+			String[] images = setImageDirections(a.direction);
+			Icon[] icons = new Icon[9];
+			Icon[] icons2 = new Icon[8];
+			setImages = new SetUpImages(images, squareSize, squareSize, icons);
+			tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
+			if(a.direction.equals("snaking")){
+				System.out.println("Looping snaking style!");
+				ArrayList<Coord> letterCoords = a.getLetterCoords();
+				int x = letterCoords.get(0).xcoord;
+				int y = letterCoords.get(0).ycoord;
+				int nextX = letterCoords.get(1).xcoord;
+				int nextY = letterCoords.get(1).ycoord;
+				int penX = letterCoords.get(a.getWordLength()-2).xcoord;
+				int penY = letterCoords.get(a.getWordLength()-2).ycoord;
+				int lastX = letterCoords.get(a.getWordLength()-1).xcoord;
+				int lastY = letterCoords.get(a.getWordLength()-1).ycoord;
+				setSnakeHead(x, y, nextX, nextY, icons2);
+				for(int c = 1; c < a.getWordLength()-1; c++){
+					setSnakingImages(letterCoords.get(c-1).xcoord, letterCoords.get(c-1).ycoord, letterCoords.get(c).xcoord, letterCoords.get(c).ycoord, letterCoords.get(c+1).xcoord, letterCoords.get(c+1).ycoord, icons);
+				}
+				setSnakeHead(lastX, lastY, penX, penY, icons2);
+			}else{
+				System.out.println("Looping normal!");
+				setDiagonalImages(a.end_y - 1, a.end_x - 1, 2, icons);
+				setDiagonalImages(a.start_y - 1, a.start_x - 1, 0, icons);
+				int[] t = setIncrements(a.direction);
+				for (int c = 0; c < a.getWordLength() - 1; c++) {
+					if (!(c == 0)) {
+						setDiagonalImages(a.start_y - 1 + c * t[1],a.start_x - 1 + c * t[0], 1, icons);
+					}
+					if (a.isDiagonal) {
+						if (a.direction.equals("BLTRdiagonal")) {
+							setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 3, icons);
+							setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x + c * t[0], 4, icons);
+						} else if (a.direction.equals("backwardsBLTRdiagonal")) {
+							setDiagonalImages(a.start_y + c * t[1], a.start_x - 2 + (c - 1) * t[0], 3, icons);
+							setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 4, icons);
+						} else if (a.direction.equals("diagonal")) {
+							setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 1 + (c + 1) * t[0], 3, icons);
+							setDiagonalImages(a.start_y + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+						} else if(a.direction.equals("backwardsdiagonal")){
+							setDiagonalImages(a.start_y - 1 + c * t[1], a.start_x - 2 + c * t[0], 3, icons);
+							setDiagonalImages(a.start_y - 2 + c * t[1], a.start_x - 1 + c * t[0], 4, icons);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	private int[] setIncrements(String direction) {
+		int[] inc = new int[2];
+		if (direction.equals("across")) {
+			inc[0] = 1;
+			inc[1] = 0;
+		} else if (direction.equals("backwards")) {
+			inc[0] = -1;
+			inc[1] = 0;
+		} else if (direction.equals("down")) {
+			inc[0] = 0;
+			inc[1] = 1;
+		} else if (direction.equals("up")) {
+			inc[0] = 0;
+			inc[1] = -1;
+		} else if (direction.equals("diagonal")) {
+			inc[0] = 1;
+			inc[1] = 1;
+		} else if (direction.equals("backwardsdiagonal")) {
+			inc[0] = -1;
+			inc[1] = -1;
+		} else if (direction.equals("BLTRdiagonal")) {
+			inc[0] = 1;
+			inc[1] = -1;
+		} else if (direction.equals("backwardsBLTRdiagonal")) {
+			inc[0] = -1;
+			inc[1] = 1;
+		}
+		return inc;
 	}
 
 	public void setSnakingImages(int prevY, int prevX, int y, int x, int nextY, int nextX, Icon [] icons){
@@ -663,7 +731,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public void setDiagonalImages(int x, int y, int image, Icon[] icons) {
 		for (JLabel[][] lab : allLetters) {
 			if (!buttonPushed) {
-				lab[x][y].setOpaque(false);
+				//lab[x][y].setOpaque(false);
 			}
 			if (temporaryIcons.get(allLetters.indexOf(lab))[x][y] == null && lab[x][y].getText().equals("")) {
 				lab[x][y].setIcon(icons[image]);
@@ -852,23 +920,36 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			buttonPushed = !buttonPushed;
 			if (buttonPushed) {
 				reveal.setText("Hide Solution");
-				for (int i = 0; i < x - 1; i++) {
-					for (int j = 0; j < y - 1; j++) {
-						if (!grid[i][j].equals("_")) {
-							allLetters.get(0)[j - 1][i - 1].setIcon(null);
-							allLetters.get(0)[j - 1][i - 1].setOpaque(true);
-							allLetters.get(0)[j - 1][i - 1].setBackground(Color.GREEN);
+				for (int i = 1; i < x - 1; i++) {
+					for (int j = 1; j < y - 1; j++) {
+							if (!grid[i][j].equals("_")) {
+								for(Entry a: entries){
+							loopAroundWord2(i-0, j-0, a);
+							allLetters.get(0)[j-1][i-1].setOpaque(true);
+							allLetters.get(0)[j-1][i-1].setBackground(clear);
+						//	allLetters.get(0)[j-1][i-1].setBackground(Color.GREEN);
+							}
 						}
+//						if (!grid[i][j].equals("_")) {
+//							allLetters.get(0)[j - 1][i - 1].setIcon(null);
+//							allLetters.get(0)[j - 1][i - 1].setOpaque(true);
+//							allLetters.get(0)[j - 1][i - 1].setBackground(Color.GREEN);
+//						}
 					}
 				}
 			} else {
 				reveal.setText("Show Solution");
 				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
-						allLetters.get(0)[j][i].setOpaque(true);
+						for (JLabel[][] lab : allLetters) {
+							lab[i][j].setIcon(null);
+						}
+						//allLetters.get(0)[j][i].setOpaque(true);
 						allLetters.get(0)[j][i].setBackground(clear);
+						//resetSizes();
 					}
 				}
+				resetSizes();
 				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						for (JLabel[][] labs : allLetters) {

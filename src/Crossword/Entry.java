@@ -62,10 +62,6 @@ public class Entry {
 
 	public Entry(int start_x, int start_y, boolean across, String word, String definition, String direction, ArrayList<Coord> letterCoords) {
 		this.letterCoords = letterCoords;
-		System.out.println("first:");
-		for(int i = 0; i < letterCoords.size(); i++){
-			System.out.println("letterCoords: (" + letterCoords.get(i).xcoord +","+letterCoords.get(i).ycoord + ")");
-		}
 		this.start_x = start_x;
 		this.start_y = start_y;
 		this.across = across;
