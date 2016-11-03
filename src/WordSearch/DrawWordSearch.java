@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -51,6 +52,7 @@ import wordsearch.Coord;
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	SetUpImages setImages, tempImage, tempHead;
+	Logger logger;
 	JFrame frame;
 	JLayeredPane layer, layer2, extra;
 	JPanel panel, main, clues;
@@ -145,6 +147,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		double mouseY = mouseCoord.getY();
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 
+		//logger.addHandler(null);
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255, 255, 255, 255));
 		frame.setMinimumSize(new Dimension(550, 400));
