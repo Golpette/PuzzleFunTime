@@ -202,14 +202,14 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		pic.setBorder(null);
 		
 		icons = new Icon[3];
-		imageSetUp = new SetUpImages(images, 100, 100, icons);
+		imageSetUp = new SetUpImages(images, 100, 100, icons, 0);
 		
 		flags = new Icon [5];
 		flags2 = new Icon [5];
 		arr1 = new Icon[1];
-		imageSetUp2 = new SetUpImages(countries, 20, 30, flags);
-		imageSetUp3 = new SetUpImages(countries, 20, 30, flags2);
-		imageSetUp4 = new SetUpImages(arrows, 20, 30, arr1);
+		imageSetUp2 = new SetUpImages(countries, 20, 30, flags, 0);
+		imageSetUp3 = new SetUpImages(countries, 20, 30, flags2, 0);
+		imageSetUp4 = new SetUpImages(arrows, 20, 30, arr1, 0);
 		
 		cwd.setIcon(icons[0]);
 		wds.setIcon(icons[1]);

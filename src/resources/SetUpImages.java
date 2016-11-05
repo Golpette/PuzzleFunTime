@@ -7,18 +7,23 @@ import javax.swing.ImageIcon;
 public class SetUpImages {
 	String operatingSystem;
 	String imagePath = "";
+	String versionString = "";
 	String imageName;
 	String [] imageNames;
 	int imageX;
 	int imageY;
+	int version;
 	Icon icon;
 	Icon [] icons;
 	
-	public SetUpImages(String imageName, int imageY, int imageX, Icon icon){
+	public SetUpImages(String imageName, int imageY, int imageX, Icon icon, int version){
 		this.imageName = imageName;
 		this.imageX = imageX;
 		this.imageY = imageY;
-		
+		this.version = version;
+		if(version > 0){
+			versionString = Integer.toString(version);
+		}
 		/**
 		 *  Set image path depending on OS
 		 */
@@ -31,13 +36,17 @@ public class SetUpImages {
 		}		
 		
 		icon = setImage(setPath(imageName), imageX, imageY);
+		System.out.println("path: "+setPath(imageName));
 	}
 	
-	public SetUpImages(String [] imageNames, int imageY, int imageX, Icon [] icons){
+	public SetUpImages(String [] imageNames, int imageY, int imageX, Icon [] icons, int version){
 		this.imageNames = imageNames;
 		this.imageX = imageX;
 		this.imageY = imageY;
-		
+		this.version = version;
+		if(version > 0){
+			versionString = Integer.toString(version);
+		}
 		/**
 		 *  Set image path depending on OS
 		 */
@@ -58,7 +67,7 @@ public class SetUpImages {
 	 * appropriate path according to operating system to the beginning and then appends ".png" to the end.
 	 */
 	public String setPath(String imageName){
-		return (imagePath + imageName + ".png");	
+		return (imagePath + imageName + versionString + ".png");	
 	}
 
 	/**

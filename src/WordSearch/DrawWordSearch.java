@@ -473,8 +473,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							String[] images = setImageDirections(a.direction);
 							Icon[] icons = new Icon[9];
 							Icon[] icons2 = new Icon[8];
-							setImages = new SetUpImages(images, squareSize, squareSize, icons);
-							tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
+							setImages = new SetUpImages(images, squareSize, squareSize, icons, 0);
+							tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2, 0);
 							if(a.direction.equals("snaking")){
 								System.out.println("Looping snaking style!");
 								ArrayList<Coord> letterCoords = a.getLetterCoords();
@@ -572,8 +572,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		String[] images = setImageDirections(a.direction);
 		Icon[] icons = new Icon[9];
 		Icon[] icons2 = new Icon[8];
-		setImages = new SetUpImages(images, squareSize, squareSize, icons);
-		tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2);
+		setImages = new SetUpImages(images, squareSize, squareSize, icons, 2);
+		tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2, 2);
 		if(a.direction.equals("snaking")){
 //			System.out.println("Looping snaking style!");
 			ArrayList<Coord> letterCoords = a.getLetterCoords();
