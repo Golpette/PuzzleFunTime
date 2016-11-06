@@ -95,18 +95,18 @@ public class FitWords_wordsearch {
 			}
 		}
 		//}/////////////////////////////////Attempt at snaking words
-	    else if( dir.equals("snaking") ){		
+	    else if(dir.equals("snaking")){		
 
 	    	int curx=init_x;  int cury=init_y;
 	    	Coord current_coord = new Coord(curx, cury);
 	    	
 	    	visited.clear();
-	    	visited.add( current_coord );
+	    	visited.add(current_coord);
 	    	toWorkWith = toWorkWith + grid[curx][cury];
 	    	
 	    	boolean growing = true;
 	    	
-	    	while( growing  && toWorkWith.length()<xLength  ){
+	    	while(growing  && toWorkWith.length()<xLength){
 			    //ArrayList<Coord> possible_neighbours = getPossNeighbours(curx, cury);
 			    ArrayList<Coord> possible_direcs = new ArrayList<Coord>();
 			    // use 4 nns
@@ -115,18 +115,18 @@ public class FitWords_wordsearch {
 			    
 
     			boolean hasNeighbours = true;
-    			while( hasNeighbours ){
+    			while(hasNeighbours){
     				int rndm = (int)(Math.random()*possible_direcs.size()  );
-    				Coord next_space = Coord.add( current_coord, possible_direcs.get(rndm) ); 
+    				Coord next_space = Coord.add(current_coord, possible_direcs.get(rndm)); 
     				
     				if( next_space.getX()<xLength-2  &&  next_space.getY()<yLength-2  &&
     						next_space.getX()>0  &&  next_space.getY()>0 &&
     						!visited.contains( next_space )  ){
     					
-    					visited.add( next_space );
-    					toWorkWith = toWorkWith + grid[ next_space.getX() ][ next_space.getY()  ];
+    					visited.add(next_space);
+    					toWorkWith = toWorkWith + grid[next_space.getX()][next_space.getY()];
     					
-    					current_coord = new Coord( next_space );	    					
+    					current_coord = new Coord(next_space);	    					
     					hasNeighbours=false; //exit loop and start from next_space			
     				}
     				else{//nn not suitable
@@ -207,7 +207,7 @@ public class FitWords_wordsearch {
 				
 
 				// Update Entries list
-				Entry entry = new Entry(init_x, init_y, true, word, definition, dir); //across boolean not sensible for wordsearches
+				Entry entry = new Entry(init_x, init_y, true, word, definition, dir, visited); //across boolean not sensible for wordsearches
 				entries.add(entry);
 			}
 		}

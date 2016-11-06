@@ -162,7 +162,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(15, 4, 50, 1);
+		model2 = new SpinnerNumberModel(8, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
@@ -202,14 +202,14 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		pic.setBorder(null);
 		
 		icons = new Icon[3];
-		imageSetUp = new SetUpImages(images, 100, 100, icons);
+		imageSetUp = new SetUpImages(images, 100, 100, icons, 0);
 		
 		flags = new Icon [5];
 		flags2 = new Icon [5];
 		arr1 = new Icon[1];
-		imageSetUp2 = new SetUpImages(countries, 20, 30, flags);
-		imageSetUp3 = new SetUpImages(countries, 20, 30, flags2);
-		imageSetUp4 = new SetUpImages(arrows, 20, 30, arr1);
+		imageSetUp2 = new SetUpImages(countries, 20, 30, flags, 0);
+		imageSetUp3 = new SetUpImages(countries, 20, 30, flags2, 0);
+		imageSetUp4 = new SetUpImages(arrows, 20, 30, arr1, 0);
 		
 		cwd.setIcon(icons[0]);
 		wds.setIcon(icons[1]);
@@ -298,7 +298,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.ipady = 5;
-		c.insets = new Insets(60,10,45,260);
+		c.insets = new Insets(60,10,50,260);
 		panel.add(spinner1, c);
 		
 		c.weightx = 0.0;
@@ -306,7 +306,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 2;
 		c.gridy = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(30,10,45,260);
+		c.insets = new Insets(30,10,50,260);
 		panel.add(spinner2, c);
 		
 //		c.weightx = 0.0;
@@ -335,7 +335,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.weighty = 0.0;
 		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(40,10,50,0);
+		c.insets = new Insets(10,10,50,0);
 		panel.add(sudDifficulty, c);
 		
 		

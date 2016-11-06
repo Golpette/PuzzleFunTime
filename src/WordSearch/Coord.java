@@ -39,9 +39,7 @@ public class Coord {
 		int y3 = c1.getY()+c2.getY();
 		Coord c3 = new Coord( x3, y3 );
 		return c3;
-	}
-	
-	
+	}	
 	
 	public int getX(){
 		return this.xcoord;
