@@ -265,8 +265,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
-		clue.setAlignmentY(0);
-		clue.setAlignmentX(0);
+//		clue.setAlignmentY(0);
+//		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
 		clue2 = new JPanel(new GridBagLayout()     );
@@ -280,7 +280,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c3 = new GridBagConstraints();
 		c3.fill = GridBagConstraints.BOTH;
 		c3.weightx = 1.0;
-		c3.weighty = 1;
+		c3.weighty = 1.0;
 		c3.gridx = 0;
 		
 		
@@ -367,7 +367,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 		
-	
+		if(cluesAcross.size() > cluesDown.size()){
+			for(int i = cluesDown.size(); i < cluesAcross.size(); i++){
+				cluesDown.add(" ");
+			}
+		}else{
+			for(int i = cluesAcross.size(); i < cluesDown.size(); i++){
+				cluesAcross.add(" ");
+			}
+		}
 
 
 		for (JTextArea j : cluesAcr) {
@@ -405,8 +413,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		
-		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 100, 0));
-		flow.setAlignmentX(SwingConstants.NORTH_EAST);
+		flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
+		//flow.setAlignmentX(SwingConstants.NORTH_EAST);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
 //		flow.add(clue );
 //		flow.add(clue2 );		
