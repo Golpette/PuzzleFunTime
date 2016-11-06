@@ -27,13 +27,13 @@ import javax.swing.border.Border;
  */
 public class DrawSudokuSolution extends JComponent{
 	private static final long serialVersionUID = 1L;
-	private int squareSize = 30;	
+	private int squareSize = 70;	
 	int x, y;
 	JFrame frame;
 	JPanel panel, largeGrid, transparentLayer;
 	JLayeredPane layer;
 	JLabel [][] numbers, threeByThreeGrid;
-	static int[][] grid;
+	//static int[][] grid;
 	String[][] grid2;
 	GridBagConstraints c;
 	DrawSudoku sol;
@@ -47,12 +47,12 @@ public class DrawSudokuSolution extends JComponent{
 	boolean buttonPushed, complete;
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudokuSolution(int[][] grid, int x, int y) throws IOException{
+	public DrawSudokuSolution(int x, int y) throws IOException{
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		this.x = x;
 		this.y = y;
-		this.grid = grid;
+		//this.grid = grid;
 		row = new ArrayList<Integer>();
 		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
@@ -127,7 +127,7 @@ public class DrawSudokuSolution extends JComponent{
 		frame.setVisible(false);
 	}
 
-		public void generateSudoku(){
+		public void generateSudoku(int[][] grid){
 			boxes.clear();
 			cols.clear();
 			row.clear();
@@ -175,7 +175,7 @@ public class DrawSudokuSolution extends JComponent{
 						if(i != 8 || j != 8){
 							//System.out.println("got here first");
 							
-							generateSudoku();
+							generateSudoku(grid);
 						}else{
 							//System.out.println("got here");
 							complete = true;
@@ -220,17 +220,30 @@ public class DrawSudokuSolution extends JComponent{
 				for(int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						numbers[i][j].setText(""+ correct.get(j*(x-2) + i));
+						
+						grid[i][j] = correct.get(j*(x-2) + i);
+						
 					}
 				}
 			}
 		}
 	
-	public static void main (String [] args){
-		try {
-			DrawSudokuSolution sud = new DrawSudokuSolution(grid, 11, 11);
-			sud.generateSudoku();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+		
+		
+		
+		
+		
+		
+//	public static void main (String [] args){
+//		try {
+//			DrawSudokuSolution sud = new DrawSudokuSolution(grid, 11, 11);
+//			sud.generateSudoku();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+		
+		
+		
+		
 }
