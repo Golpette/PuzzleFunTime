@@ -1,6 +1,4 @@
 package crossword;
-import java.awt.BorderLayout;
-
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,8 +24,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+// Steve: need these to remove automatic arrow key scrolling in JScrollPane
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -35,16 +36,14 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultEditorKit;
-// Steve: need these to remove automatic arrow key scrolling in JScrollPane
-import javax.swing.InputMap;
-import javax.swing.UIManager;
-import javax.swing.AbstractAction;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultEditorKit;
 
 
 /**
@@ -55,7 +54,7 @@ import javax.swing.SwingConstants;
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
-
+	private boolean buttonPushed;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
@@ -112,6 +111,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
+		buttonPushed = false;
 		tempHighlighted = new int [2];
 		squareSize = 38;
 		MIN_SCALE = 7.0;
@@ -367,7 +367,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 		
-		
+	
 
 
 		for (JTextArea j : cluesAcr) {
@@ -392,11 +392,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		
 
-
-		clue.setAlignmentY(0);
-		clue2.setAlignmentY(0);
-		clue.setAlignmentX(0);
-		clue2.setAlignmentX(0);
+		
+//		clue.setAlignmentY(0);
+//		clue2.setAlignmentY(0);
+//		clue.setAlignmentX(0);
+//		clue2.setAlignmentX(0);
 		
 	    GridBagConstraints zzz = new GridBagConstraints();
 		zzz.fill = GridBagConstraints.HORIZONTAL;
@@ -457,15 +457,22 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		
 		
-		
+	
 		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
 		 * clues pane and makes them scrollable.
 		 */
 		
-		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+		area = new JScrollPane(main);
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		   public void run() { 
+		       area.getVerticalScrollBar().setValue(0);
+		   }
+		});
+		
+		//area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		//		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
 	
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
@@ -476,6 +483,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		area.getActionMap().put(SOME_ACTION, someAction);
 		area.addMouseWheelListener(this);
+		//area.getVerticalScrollBar().setValue(0);
+		area.scrollRectToVisible(null);
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
 		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
@@ -1421,8 +1430,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		if (e.getSource() == reveal) {
-			sol.frame.setVisible(!sol.frame.isVisible());
-			if (sol.frame.isVisible()) {
+			sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
+//			if (sol.frame.isVisible()) {
+			buttonPushed = !buttonPushed;
+			if(buttonPushed){
 				revealSolution();
 			} else {
 				hideSolution();
