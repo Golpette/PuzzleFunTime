@@ -29,7 +29,7 @@ import crossword.JTextFieldLimit;
  */
 public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 70;	
+	private static int squareSize =60;	
 	int x, y;
 	public int getX() {
 		return x;
@@ -105,8 +105,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		rand = new Random();
-		Border border = BorderFactory.createLineBorder(Color.BLACK);	
-		Border border2 = BorderFactory.createLineBorder(Color.BLACK);
+		Border border = BorderFactory.createLineBorder(Color.GRAY);	  // this is border for single grids
+		Border border2 = BorderFactory.createLineBorder(Color.BLACK);     //  border for 3x3 squares
+		//Border border3 = BorderFactory.createLineBorder(Color.BLACK, 4, true);
 		buttonPushed = false;
 		
 		reveal = new JButton("Show Solution");
@@ -116,8 +117,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
-		transparentLayer.setOpaque(true);
-//		transparentLayer.setOpaque(false); // STEVE
+		//transparentLayer.setOpaque(true);
+		transparentLayer.setOpaque(false); // STEVE
 		transparentLayer.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		
 		largeGrid = new JPanel(new GridLayout(3, 3));
@@ -142,8 +143,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		for(int i = 0; i < 3; i++){
 			for(int j = 0; j < 3; j++){
 				threeByThreeGrid[i][j] = new JLabel();
-				threeByThreeGrid[i][j].setBorder(border2);
 				threeByThreeGrid[i][j].setBorder(BorderFactory.createStrokeBorder(new BasicStroke(2.0f)));
+				//threeByThreeGrid[i][j].setBorder(border2);
+				//threeByThreeGrid[i][j].setBorder(border3);
 				largeGrid.add(threeByThreeGrid[i][j]);
 			}
 		}
@@ -181,22 +183,64 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 		
+		
+		
 		// Modify grid[][] to starting configuration
-		// TODO
-		SudokuMethods.makeEasy( grid );		
+		int[][] initial_config = new int[9][9];
+		
+//		initial_config = SudokuMethods.makeEasy( grid );		
+		initial_config = SudokuMethods.makeUnknownDiff( grid );  // NEW METHOD
+		
+		
 		
 		// Put starting config into nums[][] JTextFields
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
-				if( grid[i][j] != -1 ){                      // TODO: CHANGE THIS -1 THING
-					nums[i][j].setText( Integer.toString( grid[i][j])  );
+				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
+					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
 					nums[i][j].setEditable(false);
-					nums[i][j].setForeground(Color.GRAY);
+					//nums[i][j].setForeground(new Color( 163 , 194,  163));
+					nums[i][j].setForeground(Color.BLACK);
 					nums[i][j].setHighlighter(null);
+					nums[i][j].setBackground(Color.WHITE);;
 				}
 			}
 		}
-				
+		
+
+		
+		
+		
+		
+		
+		
+		// CARE. HERE INITIAL_CONFIG HAS LOTS OF -1 ENTRIES
+		
+		
+//		for (int i = 0; i < x-2; i++){
+//			for (int j = 0; j < y-2; j++){
+//				System.out.print( initial_config[i][j] + " ");
+//			}
+//		}
+		
+		
+		
+//		int[][] solved_config = new int[9][9];
+//		solved_config = SudokuMethods.solver_easy(  initial_config );
+//				
+//		
+//		
+//		// UPDATE AFTER SOLVING
+//		for (int i = 0; i < x-2; i++){
+//			for (int j = 0; j < y-2; j++){
+//				if( solved_config[i][j] != 0 ){       
+//					nums[i][j].setText( Integer.toString( solved_config[i][j])  );
+//				}
+//			}
+//		}
+		
+		
+		
 		
 		
 	}
@@ -306,7 +350,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				reveal.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
-						nums[i][j].setForeground(new Color(0,0,0,255));
+						nums[i][j].setForeground(new Color(0,0,0));
 					}
 				}
 			}
