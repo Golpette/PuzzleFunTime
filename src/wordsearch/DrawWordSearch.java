@@ -195,7 +195,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		clues.setVisible(true);
 		clues.setOpaque(true);
 
-		setUpClues(normalisedScale);
+		setUpClues();
 
 		extra.setBackground(clear);
 		extra.setVisible(true);
@@ -298,7 +298,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temporaryIcons2.add(icon2);
 	}
 
-	private void setUpClues(double noralisedScale) {
+	private void setUpClues() {
 		clues.removeAll();
 		clueText.clear();
 		sorted.clear();
@@ -306,20 +306,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		for (Entry entry : entries) {
 			clueText.add(entry.getWord().toUpperCase());
 		}
-		sorted = sortedStrings(clueText, sortMethod);
+		clueText = sortedStrings(clueText, sortMethod);
+		for(String a: clueText){
+			if(!struckThrough.contains(a)){
+				sorted.add(a);
+			}
+		}
+		struckThrough = sortedStrings(struckThrough, sortMethod);
 		for (String a : sorted) {
 			JLabel temp = new JLabel(a);
 			mouseActionlabel(temp);
-			if (struckThrough.contains(a)) {
-				temp.setFont(font4);
-			} else {
-				temp.setFont(font3);
-			}
-
+			temp.setFont(font3);
 			allClues.add(temp);
+			}
+		for(String b: struckThrough){
+			JLabel temp2 = new JLabel(b);
+			mouseActionlabel(temp2);
+			temp2.setFont(font4);
+			allClues.add(temp2);
 		}
-		for (JLabel temp : allClues) {
-			clues.add(temp);
+		for (JLabel temp3 : allClues) {
+			clues.add(temp3);
 		}
 	}
 
@@ -468,6 +475,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								solutions.add(temp.getText());
 								counter++;
 								temp.setFont(font4);
+								sorted.remove(temp.getText());
 								struckThrough.add(temp.getText());
 							}
 							String[] images = setImageDirections(a.direction);
@@ -524,6 +532,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							tempStrikethrough.clear();
 						}
 					}
+					setUpClues();
 				}
 			}
 			if (counter == entries.size() && !congratulations) {
@@ -992,19 +1001,19 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if (msg.equals("ALPHABETICAL")) {
 				orderClues.setVisible(false);
 				sortMethod = "alphabetical";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("BIGGEST")) {
 				orderClues.setVisible(false);
 				sortMethod = "biggest";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("SMALLEST")) {
 				orderClues.setVisible(false);
 				sortMethod = "smallest";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("RANDOM")) {
 				orderClues.setVisible(false);
 				sortMethod = "random";
-				setUpClues(normalisedScale);
+				setUpClues();
 			}
 		}
 	}
