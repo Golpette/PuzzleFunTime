@@ -1,6 +1,6 @@
 package sudoku;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class SudokuMethods {
 	/**
@@ -13,11 +13,11 @@ public class SudokuMethods {
 	
 	
 	
-	public static int[][] makeUnknownDiff(int[][] fullGrid){   // NEW METHOD. DO IDEA HOW HARD
+	public static int[][] makeMedium(int[][] fullGrid){   // Maybe medium? Maybe hard?
 		/**
-		 *  Method now just solves the full grid every time a number is removed.
-		 *  To dot his, it lists all possible numbers at each site. If there is only 1, we add
-		 *  it to grid (for all if multiple), update the lists then repeat until no more can be added.
+		 *  Method just solves the full grid every time a number is removed.
+		 *  To do this, it lists all possible numbers that can go at each site. If there is only 1, we add
+		 *  it to grid (for all if multiple single choices), update the lists then repeat until no more can be added.
 		 */
 		
 		int[][] startGrid = new int[9][9];
@@ -28,9 +28,8 @@ public class SudokuMethods {
 		}	
 	
 		
-		// Do this a set number of times / until no more can be removed / specific number of entries are left??
-		
-		for( int tries=0; tries<2000; tries++ ){
+		// Remove numbers. Do this a set number of times / until no more can be removed 
+		for( int tries=0; tries<1000; tries++ ){ //1000 is probably enough
 		
 			// pick random space and remove      
 			int xp=(int)(Math.random()*gridSize);  
@@ -53,7 +52,6 @@ public class SudokuMethods {
 				// put number back and try again
 				startGrid[xp][yp] = value_removed;
 			}
-		
 		
 		}
 
@@ -140,16 +138,6 @@ public class SudokuMethods {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	// BELOW ARE METHODS AND SOLVERS
-	
-	
-	
 	public static boolean isSolved( int[][] grid ){
 		/**
 		 * Check if grid is full (i.e. solved)
@@ -176,8 +164,8 @@ public class SudokuMethods {
 	public static int[][] solver_basic( int[][] strtGrid ){
 		/**
 		 * Method to solve (??) sudokus by writing out every possible number for each
-		 * grid space and checking if there is exactly 1 possibility for any one.
-		 * If so, add it, update grid lists, look again. 
+		 * grid space and checking if there is exactly 1 possibility for any of them.
+		 * If so, add them, update grid lists, look again. 
 		 */
 		int[][] solvegrid = new int[9][9];
 		for( int i=0; i<9; i++ ){
@@ -205,11 +193,8 @@ public class SudokuMethods {
 			// Update all_lists
 			for( int i=0; i<9; i++){
 				for( int j=0; j<9; j++ ){
-					if(solvegrid[i][j] == 0 ){   // MAKE SURE NOT TO GET POSSIBILITIES FOR OCCUPIED SITES!
+					if(solvegrid[i][j] == 0 ){   // Do not get possibilities from occupied sites
 						all_lists[i][j] = getGridPossibilities( solvegrid, i, j );
-					}
-					else{
-						//all_lists[i][j].clear();  //reset in case this was previously empty
 					}
 				}
 			}
@@ -224,7 +209,7 @@ public class SudokuMethods {
 				}
 			}
 			// Stop if we can't add any more
-			if( !anything_to_add ){ solving = false; }
+			if( !anything_to_add ){ solving = false; }   
 			
 			
 			// Add any definite numbers
@@ -233,6 +218,7 @@ public class SudokuMethods {
 					if(  all_lists[i][j].size() == 1  ){
 						int n = all_lists[i][j].get(0);
 						solvegrid[i][j] = n;
+						// clear the corresponding list
 						all_lists[i][j].clear();
 					}
 				}

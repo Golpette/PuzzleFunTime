@@ -189,7 +189,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		int[][] initial_config = new int[9][9];
 		
 //		initial_config = SudokuMethods.makeEasy( grid );		
-		initial_config = SudokuMethods.makeUnknownDiff( grid );  // NEW METHOD
+		initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
 		
 		
 		
