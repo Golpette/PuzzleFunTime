@@ -414,7 +414,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
-		//flow.setAlignmentX(SwingConstants.NORTH_EAST);
+		flow.setAlignmentX(SwingConstants.LEADING);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
 //		flow.add(clue );
 //		flow.add(clue2 );		
@@ -476,6 +476,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		   public void run() { 
 		       area.getVerticalScrollBar().setValue(0);
+		       area.getHorizontalScrollBar().setValue(0);
 		   }
 		});
 		
