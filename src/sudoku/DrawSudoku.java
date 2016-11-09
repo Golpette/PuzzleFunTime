@@ -209,8 +209,17 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 
 		
+		// Count number of starting entries (just to gauge difference between methods)
+		int cnt_nums=0;
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
+					cnt_nums++;
+				}
+			}
+		}
 		
-		
+		System.out.println("Number of initial entries = " + cnt_nums);		
 		
 		
 		
