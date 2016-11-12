@@ -15,7 +15,8 @@ public class SudokuGenerator{
 	Random rand;
 	JLabel [][] numbers;
 
-	public SudokuGenerator(int size)throws IOException{
+	public SudokuGenerator(int difficulty)throws IOException{
+		
 		row = new ArrayList<Integer>();
 		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
@@ -26,10 +27,12 @@ public class SudokuGenerator{
 		puzzleGrid = new ArrayList<ArrayList<Integer>>();
 		
 		
-		this.size = size;
+		this.size = 9;
 		gridSize = size + 2;
 		x = gridSize;     
 		y = gridSize;
+		
+		
 		grid = new int[x][y];		
 		for(int i = 0; i < y; i++){
 			for( int j = 0; j < x; j++){
