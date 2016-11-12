@@ -27,7 +27,7 @@ import javax.swing.border.Border;
  */
 public class DrawSudokuSolution extends JComponent{
 	private static final long serialVersionUID = 1L;
-	private int squareSize = 60;	
+	private int squareSize = 50;	
 	int x, y;
 	JFrame frame;
 	JPanel panel, largeGrid, transparentLayer;

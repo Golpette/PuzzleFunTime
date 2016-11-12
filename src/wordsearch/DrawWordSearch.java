@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 //import java.util.logging.Handler;
 //import java.util.logging.Logger;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -58,7 +59,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JPanel panel, main, clues;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
-	JButton reveal;
+	JButton solution, hint , clue;
 	JScrollPane area;
 	GridBagConstraints c;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
@@ -172,12 +173,24 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.fill = GridBagConstraints.BOTH;
 		buttonPushed = false;
 
-		reveal = new JButton("Show Solution");
-		reveal.setFont(font2);
-		reveal.setEnabled(true);
-		reveal.addActionListener(this);
-		reveal.addMouseWheelListener(this);
+		solution = new JButton("Solution");
+		solution.setFont(font2);
+		solution.setEnabled(true);
+		solution.addActionListener(this);
+		solution.addMouseWheelListener(this);
 
+		hint = new JButton("Hint");
+		hint.setFont(font2);
+		hint.setEnabled(true);
+		hint.addActionListener(this);
+		hint.addMouseWheelListener(this);
+		
+		clue = new JButton("Clue");
+		clue.setFont(font2);
+		clue.setEnabled(true);
+		clue.addActionListener(this);
+		clue.addMouseWheelListener(this);
+		
 		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
 			setUpIcons(temporaryIcons);
 			setUpIcons(temporaryIcons2);
@@ -260,14 +273,30 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 3;
 		panel.add(area, c);
 
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		panel.add(reveal, c);
+		c.gridwidth = 1;
+		panel.add(hint, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(clue, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(solution, c);
 
 		if (squareSize * (x + 6) > width && squareSize * (y + 2) > height - 30) {
 			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
@@ -283,7 +312,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame.setBackground(clear);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.getRootPane().setDefaultButton(reveal);
+		frame.getRootPane().setDefaultButton(solution);
 	}
 
 	private void setUpLetters(ArrayList<JLabel[][]> allLetters) {
@@ -488,6 +517,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								ArrayList<Coord> letterCoords = a.getLetterCoords();
 								//set up snake head image
 								int x = letterCoords.get(0).xcoord;
+								System.out.println("xcoord in snake: "+ x);
 								int y = letterCoords.get(0).ycoord;
 								int nextX = letterCoords.get(1).xcoord;
 								int nextY = letterCoords.get(1).ycoord;
@@ -929,11 +959,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == reveal) {
+		if (e.getSource() == solution) {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 			if (buttonPushed) {
-				reveal.setText("Hide Solution");
+				solution.setText("Hide Solution");
 				System.out.print("\nEntries: ");
 //				for (int i = 0; i < x; i++) {
 //					for (int j = 0; j < y; j++) {
@@ -960,7 +990,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				}
 				System.out.println("Entries: " + entries.size());
 			} else {
-				reveal.setText("Show Solution");
+				solution.setText("Show Solution");
 				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						for (JLabel[][] lab : allLetters) {
@@ -1016,6 +1046,63 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				setUpClues();
 			}
 		}
+		if(e.getSource()==hint){
+			System.out.println("hint");
+			showHint();
+		}
+		if(e.getSource()==clue){
+			System.out.println("clue");
+		}
+	}
+
+	private void showHint() {
+		// TODO Auto-generated method stub
+		final int hintClue = rand.nextInt(sorted.size());
+		
+		//do for 3 seconds
+		//need this on another worker thread
+		
+		
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			   @Override
+			   protected Void doInBackground() throws Exception {
+			    // Simulate doing something useful.
+					
+					System.out.println("hintClue = "+hintClue);
+					allClues.get(hintClue).setForeground(Color.GREEN);
+			   		long current = System.currentTimeMillis();
+					long counter = 0;
+					long next;
+					while(counter<3000){
+						for(Entry ent: entries){	
+							ArrayList<Coord> letterCoords = ent.getLetterCoords();
+							System.out.println("asd "+ent.getWord());
+							System.out.println("allClues.get(hintClue) "+allClues.get(hintClue).getText() );
+							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText())){
+								System.out.println("got inside" );
+								int letterInWord = rand.nextInt(ent.getWordLength());
+								System.out.println("letterInWord: "+letterInWord);
+								System.out.println("ent coord "+ent.getLetterCoords());
+								int x = letterCoords.get(0).xcoord;
+								System.out.println("x: "+x);
+								int currentLetterX = letterCoords.get(letterInWord).xcoord;
+								int currentLetterY = letterCoords.get(letterInWord).ycoord;
+								System.out.println("letterinWord"+ letterInWord +" x "+currentLetterX+" y "+currentLetterY);
+						//every 0.1 seconds shake random letter in the word
+						//if(counter%100 == 0){
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+							}
+						//	}
+						}
+						next = System.currentTimeMillis();
+						counter = next - current;
+					}
+					allClues.get(hintClue).setForeground(Color.BLACK);
+			    return null;
+			   }
+			  };
+			
+			  worker.execute();	
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
