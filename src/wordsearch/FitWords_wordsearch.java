@@ -30,28 +30,22 @@ public class FitWords_wordsearch {
 	    
     	ArrayList<Coord> visited = new ArrayList<Coord>(); //needed to track snakes
 
-    	visited.clear();
-		
+			
 
 		//Make sure space on LHS is empty, otherwise do nothing
 		String toWorkWith = "";
 		if ( dir.equals("across") ) {
-			
 			// Max length of word due to grid size 
 			int maxPossLength = (xLength - 1) - init_x;
 			// Get the configuration of grid sites 'across' from the random initial site
 			// Will end looking like:  "_____" or "_B__A___" etc...
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x + i][init_y];		
-				Coord cur = new Coord(init_x+i, init_y);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x + i][init_y];			
 			}
 		} else if( dir.equals("down") ) { 
 			int maxPossLength = (yLength - 1) - init_y;
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x][init_y + i];		
-				Coord cur = new Coord(init_x, init_y+i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x][init_y + i];					
 			}
 		} else if( dir.equals("diagonal") ){
 			int maxX = (xLength - 1) - init_x;
@@ -60,23 +54,17 @@ public class FitWords_wordsearch {
 			if( maxX < maxY ){ maxPossLength = maxX; }
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x + i][init_y + i];		
-				Coord cur = new Coord(init_x+i, init_y+i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x + i][init_y + i];					
 			}
 		} else if( dir.equals("backwards") ){
 			int maxPossLength = init_x - 1 ;
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x - i][init_y];	
-				Coord cur = new Coord(init_x-i, init_y);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x - i][init_y];					
 			}
 		} else if( dir.equals("up") ){
 			int maxPossLength = init_y - 1 ;
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x ][init_y - i ];	
-				Coord cur = new Coord(init_x, init_y-i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x ][init_y - i ];					
 			}
 		}else if( dir.equals("backwardsdiagonal") ){
 			int maxX = init_x - 1;
@@ -85,9 +73,7 @@ public class FitWords_wordsearch {
 			if( maxX < maxY ){ maxPossLength = maxX; }
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x - i][init_y - i];	
-				Coord cur = new Coord(init_x-i, init_y-i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x - i][init_y - i];					
 			}
 		}else if( dir.equals("backwardsBLTRdiagonal") ){
 			int maxX = init_x - 1;
@@ -96,9 +82,7 @@ public class FitWords_wordsearch {
 			if( maxX < maxY ){ maxPossLength = maxX; }
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x - i][init_y + i];		
-				Coord cur = new Coord(init_x-i, init_y+i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x - i][init_y + i];					
 			}
 		}else if( dir.equals("BLTRdiagonal") ){
 			int maxX= (xLength - 1) - init_x;
@@ -107,9 +91,7 @@ public class FitWords_wordsearch {
 			if( maxX < maxY ){ maxPossLength = maxX; }
 			else{ maxPossLength = maxY; }
 			for (int i = 0; i < maxPossLength; i++) {
-				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];		
-				Coord cur = new Coord(init_x+i, init_y-i);
-				visited.add(cur);
+				toWorkWith = toWorkWith + grid[init_x + i][init_y - i];					
 			}
 		}
 		//}/////////////////////////////////Attempt at snaking words
@@ -118,7 +100,7 @@ public class FitWords_wordsearch {
 	    	int curx=init_x;  int cury=init_y;
 	    	Coord current_coord = new Coord(curx, cury);
 	    	
-	    	//visited.clear();
+	    	visited.clear();
 	    	visited.add(current_coord);
 	    	toWorkWith = toWorkWith + grid[curx][cury];
 	    	

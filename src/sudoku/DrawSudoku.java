@@ -29,7 +29,7 @@ import crossword.JTextFieldLimit;
  */
 public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 50;	
+	private static int squareSize =60;	
 	int x, y;
 	public int getX() {
 		return x;
@@ -56,7 +56,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	int[][] grid;
 	String[][] grid2;
 	GridBagConstraints c;
-	JButton solution, hint, clue;
+	JButton reveal;
 	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
 	ArrayList<Integer> row, square, tempColumn, checks;
@@ -64,7 +64,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<ArrayList<Integer>> boxes;
 	Font font, font2;
 	Random rand;
-	boolean solutionPushed, hintPushed, cluePushed;
+	boolean buttonPushed;
 	
 	//@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
@@ -108,22 +108,13 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		Border border = BorderFactory.createLineBorder(Color.GRAY);	  // this is border for single grids
 		Border border2 = BorderFactory.createLineBorder(Color.BLACK);     //  border for 3x3 squares
 		//Border border3 = BorderFactory.createLineBorder(Color.BLACK, 4, true);
-		solutionPushed = false;
+		buttonPushed = false;
 		
-		solution = new JButton("Solution");
-		solution.setFont(font2);
-		//solution.setEnabled(true);
-		solution.addActionListener(this);
-		
-		hint = new JButton("Hint");
-		hint.setFont(font2);
-		hint.addActionListener(this);
-		
-		
-		clue = new JButton("Clue");
-		clue.setFont(font2);
-		clue.addActionListener(this);
-		
+		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
+		reveal.setEnabled(true);
+		reveal.addActionListener(this);
+
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
 		//transparentLayer.setOpaque(true);
@@ -168,7 +159,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.gridwidth = 3;
 		panel.add(layer, c);
 
 		c.weightx = 1.0;
@@ -176,22 +166,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(hint, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 1;
-		c.ipady = 10;
-		panel.add(clue, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		panel.add(solution, c);
+		panel.add(reveal, c);
 		
 		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
@@ -202,7 +177,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.getRootPane().setDefaultButton(solution);
+		frame.getRootPane().setDefaultButton(reveal);
 		//generateSudoku();
 		
 		
@@ -227,12 +202,16 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					//nums[i][j].setForeground(new Color( 163 , 194,  163));
 					nums[i][j].setForeground(Color.BLACK);
 					nums[i][j].setHighlighter(null);
-					nums[i][j].setBackground(Color.WHITE);
+					nums[i][j].setBackground(Color.WHITE);;
 				}
 			}
 		}
 		
 
+		
+		
+		
+		
 		
 		
 		// CARE. HERE INITIAL_CONFIG HAS LOTS OF -1 ENTRIES
@@ -265,13 +244,91 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 	}
+
+	
+	
+	
+//	//Generates random grid of numbers to build a sudoku puzzle#
+//		public void generateSudoku(){
+//			boxes.clear();
+//			cols.clear();
+//			row.clear();
+//			checks.clear();
+//			for (int i = 0; i < x-2; i++){
+//				int bound = 9;
+//				
+//				ArrayList<Integer> tempRow = new ArrayList<Integer>();
+//				ArrayList<Integer> tempBox = new ArrayList<Integer>();
+//				for (int j = 0; j < y-2; j++){
+//					if(j == 0){
+//						for(int k = 1; k < 10; k++){
+//							row.add(k);
+//							if(i == 0){
+//								ArrayList<Integer> box = new ArrayList<Integer>();
+//								boxes.add(box);
+//								ArrayList<Integer> temps = new ArrayList<Integer>();
+//								cols.add(temps);
+//							}
+//						}
+//					}
+//					tempRow.clear();
+//					tempBox.clear();
+//					for(Integer a : cols.get(j)){
+//						if(row.contains(a) && bound > 0){
+//							tempRow.add(a);
+//							row.remove(a);
+//							bound--;
+//						}
+//					}
+//					for(Integer b : boxes.get((i/3)*3+(j/3))){
+//						if(row.contains(b) && bound > 0){
+//							tempBox.add(b);
+//							row.remove(b);
+//							bound--;
+//						}
+//					}
+//					if(row.isEmpty()){
+//						if(i != 8 || j != 8){
+//							System.out.println("got here first");
+//							//generateSudoku();
+//						}else{
+//							System.out.println("got here");
+//							bound = 100;
+//							//break;
+//						}
+//						System.out.println("Got here");
+//						//break;
+//					}
+//					int temp = (rand.nextInt(bound));
+//					int insertion = row.get(temp);
+//					numbers[i][j].setText(""+insertion);
+//					checks.add(row.get(temp));
+//					cols.get(j).add(row.get(temp));
+//					boxes.get(((i/3)*3)+(j/3)).add(row.get(temp));
+//					row.remove(row.get(temp));
+//					bound--;
+//					for(Integer a: tempRow){
+//						if(!row.contains(a)){
+//							row.add(a);
+//						bound++;
+//						}
+//					}
+//					for(Integer b: tempBox){
+//						if(!row.contains(b)){
+//							row.add(b);
+//							bound++;
+//						}
+//					}
+//				}
+//			}		
+//		}
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==solution){
+		if(e.getSource()==reveal){
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
-				solution.setText("Hide Solution");
+				reveal.setText("Hide Solution");
 				
 				//sol.setVisible(true);
 				//sol.frame.setVisible(true);
@@ -290,7 +347,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 				
 			else{
-				solution.setText("Show Solution");
+				reveal.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						nums[i][j].setForeground(new Color(0,0,0));
@@ -298,6 +355,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				}
 			}
 		}
+<<<<<<< HEAD
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			int a = rand.nextInt(9);
@@ -320,5 +378,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //				nums[a][b].setText(""+c);
 //			}
 		}
+=======
+>>>>>>> parent of ee2ea05... Added in extra buttons
 	}
 }

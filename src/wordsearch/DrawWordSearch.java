@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Random;
 //import java.util.logging.Handler;
 //import java.util.logging.Logger;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -59,7 +58,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JPanel panel, main, clues;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
-	JButton solution, hint , clue;
+	JButton reveal;
 	JScrollPane area;
 	GridBagConstraints c;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
@@ -173,24 +172,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.fill = GridBagConstraints.BOTH;
 		buttonPushed = false;
 
-		solution = new JButton("Solution");
-		solution.setFont(font2);
-		solution.setEnabled(true);
-		solution.addActionListener(this);
-		solution.addMouseWheelListener(this);
+		reveal = new JButton("Show Solution");
+		reveal.setFont(font2);
+		reveal.setEnabled(true);
+		reveal.addActionListener(this);
+		reveal.addMouseWheelListener(this);
 
-		hint = new JButton("Hint");
-		hint.setFont(font2);
-		hint.setEnabled(true);
-		hint.addActionListener(this);
-		hint.addMouseWheelListener(this);
-		
-		clue = new JButton("Clue");
-		clue.setFont(font2);
-		clue.setEnabled(true);
-		clue.addActionListener(this);
-		clue.addMouseWheelListener(this);
-		
 		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
 			setUpIcons(temporaryIcons);
 			setUpIcons(temporaryIcons2);
@@ -273,30 +260,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.gridwidth = 3;
 		panel.add(area, c);
 
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		c.gridwidth = 1;
-		panel.add(hint, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 1;
-		c.gridy = 1;
-		c.ipady = 10;
-		panel.add(clue, c);
-		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		panel.add(solution, c);
+		panel.add(reveal, c);
 
 		if (squareSize * (x + 6) > width && squareSize * (y + 2) > height - 30) {
 			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
@@ -312,7 +283,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame.setBackground(clear);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.getRootPane().setDefaultButton(solution);
+		frame.getRootPane().setDefaultButton(reveal);
 	}
 
 	private void setUpLetters(ArrayList<JLabel[][]> allLetters) {
@@ -517,7 +488,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								ArrayList<Coord> letterCoords = a.getLetterCoords();
 								//set up snake head image
 								int x = letterCoords.get(0).xcoord;
-								System.out.println("xcoord in snake: "+ x);
 								int y = letterCoords.get(0).ycoord;
 								int nextX = letterCoords.get(1).xcoord;
 								int nextY = letterCoords.get(1).ycoord;
@@ -959,11 +929,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == solution) {
+		if (e.getSource() == reveal) {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 			if (buttonPushed) {
-				solution.setText("Hide Solution");
+				reveal.setText("Hide Solution");
 				System.out.print("\nEntries: ");
 //				for (int i = 0; i < x; i++) {
 //					for (int j = 0; j < y; j++) {
@@ -990,7 +960,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				}
 				System.out.println("Entries: " + entries.size());
 			} else {
-				solution.setText("Show Solution");
+				reveal.setText("Show Solution");
 				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						for (JLabel[][] lab : allLetters) {
@@ -1046,6 +1016,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				setUpClues();
 			}
 		}
+<<<<<<< HEAD
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			//showHint();
@@ -1118,6 +1089,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			  worker.execute();	
 			 // allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 			  allClues.get(hintClue).setForeground(Color.BLACK);
+=======
+>>>>>>> parent of ee2ea05... Added in extra buttons
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
