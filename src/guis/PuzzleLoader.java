@@ -354,10 +354,16 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		frame.setResizable(false);
 	}
 
-	private int getDifficulty(int index) {
+	
+	
+	
+	private int getDifficulty(int index) {   // WHAT IS THIS!?
 		return (int) Math.pow(index, 2);
 	}
 
+	
+	
+	
 	void mouseActionlabel(JLabel flagX) {
 		flagX.addMouseListener(new MouseListener() {
 
@@ -506,8 +512,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		}
 		if(e.getSource() == sud){
 			try {
-				sudDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
-				sudo = new SudokuGenerator(getDifficulty((Integer)spinner3.getValue()));
+				//sudDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
+				//sudo = new SudokuGenerator((Integer)spinner3.getValue());
+				sudo = new SudokuGenerator(  sudDiff   );
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

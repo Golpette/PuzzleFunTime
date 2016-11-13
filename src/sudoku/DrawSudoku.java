@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -67,7 +68,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	boolean buttonPushed;
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
+	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
 		
 		this.x = x;
 		this.y = y;
@@ -80,9 +81,38 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		sol.setVisible(false);
 		
 		
-		// WE NOW HAVE GRID[][], THE BASE OF OUR SUDOKU. MODIFY THIS TO STARTING CONFIGURATION.
+		// We now have a full grid[][] for sudoku base. Modify grid[][] to starting configuration
+		int[][] initial_config = new int[9][9];
 		
+		if( difficulty == 2 ){
+			initial_config = SudokuMethods.makeEasy( grid );
+		}
+		else if( difficulty == 4 ){
+			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+		}
+		else{
+			System.out.println("ONLY EASY AND MEDIUM HAVE BEEN IMPLEMENTED");
+			initial_config = SudokuMethods.makeMedium( grid );
+		}		
 		//System.out.println( grid[0][0] + " " + grid[1][1] + " "+ grid[0][1]);   // CAREFUL: ANDY HAS FLIPPED [X][Y] TO GRID[Y][X]
+		
+		
+		
+		for( int ii=0; ii<9; ii++){
+			for( int jj=0; jj<9; jj++){
+				//if( initial_config[ii][jj] != 0 ){
+					ArrayList<Integer> poss = SudokuMethods.getGridPossibilities(initial_config, ii, jj);
+					System.out.print( poss + "  ##  ");
+				//}
+				//else{
+				//	System.out.print( "[]  xx  ");
+				//}
+			}
+			System.out.println();
+		}
+		
+		
+		
 		
 		
 		
@@ -128,8 +158,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
-
-				
 				nums[i][j] = new JTextField();
 				nums[i][j].setFont(font);
 				nums[i][j].setForeground(Color.BLACK);
@@ -182,14 +210,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 		
-		
-		
-		
-		// Modify grid[][] to starting configuration
-		int[][] initial_config = new int[9][9];
-		
-//		initial_config = SudokuMethods.makeEasy( grid );		
-		initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+	
 		
 		
 		
@@ -257,80 +278,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	
-//	//Generates random grid of numbers to build a sudoku puzzle#
-//		public void generateSudoku(){
-//			boxes.clear();
-//			cols.clear();
-//			row.clear();
-//			checks.clear();
-//			for (int i = 0; i < x-2; i++){
-//				int bound = 9;
-//				
-//				ArrayList<Integer> tempRow = new ArrayList<Integer>();
-//				ArrayList<Integer> tempBox = new ArrayList<Integer>();
-//				for (int j = 0; j < y-2; j++){
-//					if(j == 0){
-//						for(int k = 1; k < 10; k++){
-//							row.add(k);
-//							if(i == 0){
-//								ArrayList<Integer> box = new ArrayList<Integer>();
-//								boxes.add(box);
-//								ArrayList<Integer> temps = new ArrayList<Integer>();
-//								cols.add(temps);
-//							}
-//						}
-//					}
-//					tempRow.clear();
-//					tempBox.clear();
-//					for(Integer a : cols.get(j)){
-//						if(row.contains(a) && bound > 0){
-//							tempRow.add(a);
-//							row.remove(a);
-//							bound--;
-//						}
-//					}
-//					for(Integer b : boxes.get((i/3)*3+(j/3))){
-//						if(row.contains(b) && bound > 0){
-//							tempBox.add(b);
-//							row.remove(b);
-//							bound--;
-//						}
-//					}
-//					if(row.isEmpty()){
-//						if(i != 8 || j != 8){
-//							System.out.println("got here first");
-//							//generateSudoku();
-//						}else{
-//							System.out.println("got here");
-//							bound = 100;
-//							//break;
-//						}
-//						System.out.println("Got here");
-//						//break;
-//					}
-//					int temp = (rand.nextInt(bound));
-//					int insertion = row.get(temp);
-//					numbers[i][j].setText(""+insertion);
-//					checks.add(row.get(temp));
-//					cols.get(j).add(row.get(temp));
-//					boxes.get(((i/3)*3)+(j/3)).add(row.get(temp));
-//					row.remove(row.get(temp));
-//					bound--;
-//					for(Integer a: tempRow){
-//						if(!row.contains(a)){
-//							row.add(a);
-//						bound++;
-//						}
-//					}
-//					for(Integer b: tempBox){
-//						if(!row.contains(b)){
-//							row.add(b);
-//							bound++;
-//						}
-//					}
-//				}
-//			}		
-//		}
+
+	
+	
 	
 	
 	public void actionPerformed(ActionEvent e) {
@@ -339,20 +289,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			if(sol.frame.isVisible()){
 				reveal.setText("Hide Solution");
 				
-				//sol.setVisible(true);
-				//sol.frame.setVisible(true);
-//				for (int i = 0; i < x-2; i++){
-//					for (int j = 0; j < y-2; j++){
-//						if(numbers[i][j].getText().equals("")){
-//							numbers[i][j].setForeground(new Color(0,0,0,255));
-//						}
-//						else if(numbers[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
-//							numbers[i][j].setForeground(new Color(0,255,0,255));
-//						}else{
-//							numbers[i][j].setForeground(new Color(255,0,0,255));
-//						}
-					//}
-			//	}
 			}
 				
 			else{
@@ -365,4 +301,16 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

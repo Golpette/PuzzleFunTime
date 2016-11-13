@@ -11,7 +11,6 @@ public class SudokuMethods {
 	
 	//TODO: - tidy code
 	//      - add arrow keys functionality for selecting grids
-	//      - map difficulty levels to initial GUI
 	//      - change colour of fixed entries? dark grey?
 	//      - add check method to highlight correct/wrong numbers in green/red
 	//      - general style: rounded corners, different colours, ...
@@ -268,6 +267,9 @@ public class SudokuMethods {
 				ents.add(i);
 			}
 		}		
+		
+		//if( strt_grid[xxx][yyy]==0 ){  ents.clear(); }
+		
 		return ents;
 	}
 	
