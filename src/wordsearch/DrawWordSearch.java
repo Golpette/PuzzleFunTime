@@ -1073,30 +1073,41 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			   		long current = System.currentTimeMillis();
 					long counter = 0;
 					long next;
+					boolean started = false;
 					while(counter<3000){
 						for(Entry ent: entries){	
 							ArrayList<Coord> letterCoords = ent.getLetterCoords();
-							System.out.println("asd "+ent.getWord());
-							System.out.println("allClues.get(hintClue) "+allClues.get(hintClue).getText() );
-							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText())){
-								System.out.println("got inside" );
+							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText()) && !started){
 								int letterInWord = rand.nextInt(ent.getWordLength());
-								System.out.println("letterInWord: "+letterInWord);
-								System.out.println("ent coord "+ent.getLetterCoords());
-								int x = letterCoords.get(0).xcoord;
-								System.out.println("x: "+x);
-								int currentLetterX = letterCoords.get(letterInWord).xcoord;
-								int currentLetterY = letterCoords.get(letterInWord).ycoord;
-								System.out.println("letterinWord"+ letterInWord +" x "+currentLetterX+" y "+currentLetterY);
+								int currentLetterX = letterCoords.get(letterInWord).getX();
+								int currentLetterY = letterCoords.get(letterInWord).getY();
+								started = true;
 						//every 0.1 seconds shake random letter in the word
-						//if(counter%100 == 0){
+						System.out.println("Counter: "+counter);
+						if(counter <= 1000){
+							System.out.println("Got here");
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
+//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
+//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
 							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 							}
-						//	}
+						if(counter <= 2000){
+							System.out.println("and here");
+							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
+							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
+							}
+						if(counter <= 3000){
+							System.out.println("also here");
+							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
+							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
+							}
+							}
 						}
 						next = System.currentTimeMillis();
 						counter = next - current;
+						System.out.println("counter New: "+counter);
 					}
+					//allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 					allClues.get(hintClue).setForeground(Color.BLACK);
 			    return null;
 			   }
