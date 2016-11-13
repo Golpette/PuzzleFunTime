@@ -246,8 +246,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//c.insets = new Insets(0, 0, 0, 0);
 		main.add(layer, c);
 
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = 0.1;
+		c.weighty = 0.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		c.ipady = 10;
