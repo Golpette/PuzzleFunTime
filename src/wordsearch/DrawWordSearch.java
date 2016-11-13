@@ -904,9 +904,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	 * @return
 	 */
 	public String[] setImageDirections(String direction) {
-		String middle = "";
-		String start = "";
-		String end = "";
+		String middle = "Horizontal";
+		String start = "Horizontal";
+		String end = "Horizontal";
 		String corner1 = "Horizontal";
 		String corner2 = "Vertical";
 		String snakeTR ="TopRightJoin";
@@ -954,7 +954,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			corner1 = "TopLeftCorner";
 			corner2 = "BottomRightCorner";
 		}
+		
 		String[] images = {start, middle, end, corner1, corner2, snakeTR, snakeBR, snakeTL, snakeBL};
+		for(int i = 0; i < images.length; i++){
+		System.out.println("images array: " + images[i].toString());
+		}
 		return images;
 	}
 
