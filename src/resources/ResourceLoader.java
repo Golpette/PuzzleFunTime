@@ -17,13 +17,8 @@ public class ResourceLoader {
 	}
 	
 	public static BufferedReader getBufferedReader(String filename){
-		System.out.println("filename: "+filename);
-		System.out.println("toolkit stuff: "+ Toolkit.getDefaultToolkit().toString());
-		//InputStream in = Toolkit.getDefaultToolkit().getClass().getResourceAsStream(filename);
 		InputStream in = ResourceLoader.class.getResourceAsStream(filename);
-		System.out.println("in: "+in.toString());
 		BufferedReader input = new BufferedReader(new InputStreamReader(in));
-		
 		return input;
 	}
 
