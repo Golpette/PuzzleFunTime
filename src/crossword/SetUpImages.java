@@ -38,9 +38,11 @@ public class SetUpImages {
 		 */
 		operatingSystem = System.getProperty("os.name").toLowerCase();
 		if(operatingSystem.equals("linux")){
-			imagePath = "src/resources/";
+			//imagePath = "src/resources/";
+			imagePath = "";
 		}
 		else if(operatingSystem.contains("windows")){
+			//imagePath = "src\\resources\\";
 			imagePath = "";
 		}		
 		//imageName = setPath(imageName);
