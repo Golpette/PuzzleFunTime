@@ -1,10 +1,13 @@
 package crossword;
 
 import java.awt.Image;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
+import resources.ResourceLoader;
 
 public class SetUpImages {
 	String operatingSystem;
@@ -18,6 +21,9 @@ public class SetUpImages {
 	Icon icon;
 	Icon [] icons;
 	URL url; 
+	URL [] urls;
+	InputStream input;
+	InputStream [] inputs;
 	
 	public SetUpImages(String imageName, int imageY, int imageX, Icon icon, int version){
 		this.imageName = imageName;
@@ -35,11 +41,19 @@ public class SetUpImages {
 			imagePath = "src/resources/";
 		}
 		else if(operatingSystem.contains("windows")){
-			imagePath = "src\\resources\\";
+			imagePath = "";
 		}		
+		//imageName = setPath(imageName);
+//		input = SetUpImages.class.getResourceAsStream(imageName);
+//		if(input == null){
+//			input = SetUpImages.class.getResourceAsStream("\\"+imageName);
+//		}
+		
+		
+		//URL url = SetUpImages.class.getResource(imageName);
 		
 		icon = setImage(setPath(imageName), imageX, imageY);
-		System.out.println("path: "+setPath(imageName));
+		System.out.println("path: "+imageName);
 	}
 	
 	public SetUpImages(String [] imageNames, int imageY, int imageX, Icon [] icons, int version){
@@ -58,9 +72,18 @@ public class SetUpImages {
 			imagePath = "src/resources/";
 		}
 		else if(operatingSystem.contains("windows")){
-			imagePath = "src\\resources\\";
+			imagePath = "";
 		}		
+		
 		for(int i = 0; i < imageNames.length; i++){
+			//imageNames[i] = setPath(imageNames[i]);
+//			inputs[i] = SetUpImages.class.getResourceAsStream(imageNames[i]);
+//			if(inputs[i] == null){
+//				inputs[i] = SetUpImages.class.getResourceAsStream("\\"+imageNames[i]);
+//			}
+			
+		//	URL url = SetUpImages.class.getResource(imageNames[i]);
+			
 			icons[i] = setImage(setPath(imageNames[i]), imageX, imageY);
 		}
 	}
@@ -80,7 +103,9 @@ public class SetUpImages {
 	 */
 	public Icon setImage(String path, int scaleX, int scaleY){
 		ImageIcon icon = new ImageIcon(path);
-		Image img = icon.getImage();
+		//System.out.println("path: "+path);
+		//Image img = icon.getImage();
+		Image img = ResourceLoader.getImage(path);
 		Image newimg = img.getScaledInstance(scaleX, scaleY, java.awt.Image.SCALE_SMOOTH ) ; 
 		icon = new ImageIcon(newimg);
 		return icon;	

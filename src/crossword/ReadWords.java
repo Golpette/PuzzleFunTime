@@ -1,5 +1,8 @@
 package crossword;
 import java.util.*;
+
+import resources.ResourceLoader;
+
 import java.io.*;
 
 /**
@@ -10,7 +13,10 @@ public class ReadWords {
 	public static ArrayList<Word> getWordsandDefs(String filename)throws IOException{
 		ArrayList<Word> words = new ArrayList<Word>();
 		ArrayList<String> definitions = new ArrayList<String>();
-		BufferedReader in = new BufferedReader(new FileReader(filename));
+		//BufferedReader in = new BufferedReader(new FileReader(filename));
+		BufferedReader in = ResourceLoader.getBufferedReader(filename);
+		//enter new resourceloader thing here
+		
 		String s = "";
 		Scanner scan = new Scanner(s);
 		while(true){
