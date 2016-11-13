@@ -965,26 +965,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if (buttonPushed) {
 				solution.setText("Hide Solution");
 				System.out.print("\nEntries: ");
-//				for (int i = 0; i < x; i++) {
-//					for (int j = 0; j < y; j++) {
-							//if (!grid[i][j].equals("_")) {
 								for(Entry a: entries){
 							loopAroundWord2(a);
-						
-//							allLetters.get(0)[j-1][i-1].setOpaque(true);
-//							allLetters.get(0)[j-1][i-1].setBackground(clear);
-						//	allLetters.get(0)[j-1][i-1].setBackground(Color.GREEN);
-//							}
-								
-								
 						}
-//						if (!grid[i][j].equals("_")) {
-//							allLetters.get(0)[j - 1][i - 1].setIcon(null);
-//							allLetters.get(0)[j - 1][i - 1].setOpaque(true);
-//							allLetters.get(0)[j - 1][i - 1].setBackground(Color.GREEN);
-//						}
-//					}
-//				}
 				for(Entry a: entries){
 					System.out.print(a.getWord().toString() + ", ");
 				}
@@ -1048,76 +1031,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			//showHint();
 		}
 		if(e.getSource()==clue){
 			System.out.println("clue");
 		}
-	}
-
-	private void showHint() {
-		// TODO Auto-generated method stub
-		final int hintClue = rand.nextInt(sorted.size());
-		
-		//do for 3 seconds
-		//need this on another worker thread
-		
-		
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			   @Override
-			   protected Void doInBackground() throws Exception {
-			    // Simulate doing something useful.
-					
-//					System.out.println("hintClue = "+hintClue);
-					allClues.get(hintClue).setForeground(Color.GREEN);
-			   		long current = System.currentTimeMillis();
-					long counter = 0;
-					long next;
-					int temp = 0;
-					boolean started = false;
-					while(counter<3000){
-//						System.out.println("Here: "+ temp++);
-						for(Entry ent: entries){	
-							ArrayList<Coord> letterCoords = ent.getLetterCoords();
-							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText()) && !started){
-								int letterInWord = rand.nextInt(ent.getWordLength());
-								int currentLetterX = letterCoords.get(letterInWord).getX();
-								int currentLetterY = letterCoords.get(letterInWord).getY();
-								started = true;
-						//every 0.1 seconds shake random letter in the word
-//						System.out.println("Counter: "+counter);
-						if(counter <= 1000){
-//							System.out.println("Got here");
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
-//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
-//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
-							}
-//						if(counter <= 2000){
-//							System.out.println("and here");
-//							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
-//							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
-//							}
-//						if(counter <= 3000){
-//							System.out.println("also here");
-//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
-//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
-//							}
-							}
-						}
-						next = System.currentTimeMillis();
-						counter = next - current;
-//						System.out.println("counter New: "+counter);
-					}
-					
-					allClues.get(hintClue).setForeground(Color.BLACK);
-			    return null;
-			   }
-			  };
-			
-			  worker.execute();	
-			 // allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
-			  allClues.get(hintClue).setForeground(Color.BLACK);
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {

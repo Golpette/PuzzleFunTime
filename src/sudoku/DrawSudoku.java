@@ -300,25 +300,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			int a = rand.nextInt(9);
-			int b = rand.nextInt(9);
 			hintPushed = !hintPushed;
-//			if(hintPushed){
-//				nums[a][b].setBackground(Color.CYAN);
-//			}
-//			else{
-//				nums[a][b].setBackground(Color.YELLOW);
-//			}
 		}
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			cluePushed = !cluePushed;
-//			if(cluePushed){
-//				int a = rand.nextInt(9);
-//				int b = rand.nextInt(9);
-//				int c = rand.nextInt(9);
-//				nums[a][b].setText(""+c);
-//			}
 		}
 	}
 }
