@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 //import java.util.logging.Handler;
 //import java.util.logging.Logger;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -44,7 +45,7 @@ import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 import crossword.Entry;
-import resources.SetUpImages;
+import crossword.SetUpImages;
 import wordsearch.Coord;
 
 /**
@@ -58,7 +59,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JPanel panel, main, clues;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
-	JButton reveal;
+	JButton solution, hint , clue;
 	JScrollPane area;
 	GridBagConstraints c;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
@@ -172,12 +173,24 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.fill = GridBagConstraints.BOTH;
 		buttonPushed = false;
 
-		reveal = new JButton("Show Solution");
-		reveal.setFont(font2);
-		reveal.setEnabled(true);
-		reveal.addActionListener(this);
-		reveal.addMouseWheelListener(this);
+		solution = new JButton("Solution");
+		solution.setFont(font2);
+		solution.setEnabled(true);
+		solution.addActionListener(this);
+		solution.addMouseWheelListener(this);
 
+		hint = new JButton("Hint");
+		hint.setFont(font2);
+		hint.setEnabled(true);
+		hint.addActionListener(this);
+		hint.addMouseWheelListener(this);
+		
+		clue = new JButton("Clue");
+		clue.setFont(font2);
+		clue.setEnabled(true);
+		clue.addActionListener(this);
+		clue.addMouseWheelListener(this);
+		
 		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
 			setUpIcons(temporaryIcons);
 			setUpIcons(temporaryIcons2);
@@ -195,7 +208,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		clues.setVisible(true);
 		clues.setOpaque(true);
 
-		setUpClues(normalisedScale);
+		setUpClues();
 
 		extra.setBackground(clear);
 		extra.setVisible(true);
@@ -233,8 +246,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//c.insets = new Insets(0, 0, 0, 0);
 		main.add(layer, c);
 
-		c.weightx = 0.1;
-		c.weighty = 0.0;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		c.ipady = 10;
@@ -260,14 +273,30 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 3;
 		panel.add(area, c);
 
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		panel.add(reveal, c);
+		c.gridwidth = 1;
+		panel.add(hint, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(clue, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(solution, c);
 
 		if (squareSize * (x + 6) > width && squareSize * (y + 2) > height - 30) {
 			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
@@ -283,7 +312,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame.setBackground(clear);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.getRootPane().setDefaultButton(reveal);
+		frame.getRootPane().setDefaultButton(solution);
 	}
 
 	private void setUpLetters(ArrayList<JLabel[][]> allLetters) {
@@ -298,7 +327,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temporaryIcons2.add(icon2);
 	}
 
-	private void setUpClues(double noralisedScale) {
+	private void setUpClues() {
 		clues.removeAll();
 		clueText.clear();
 		sorted.clear();
@@ -306,20 +335,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		for (Entry entry : entries) {
 			clueText.add(entry.getWord().toUpperCase());
 		}
-		sorted = sortedStrings(clueText, sortMethod);
+		clueText = sortedStrings(clueText, sortMethod);
+		for(String a: clueText){
+			if(!struckThrough.contains(a)){
+				sorted.add(a);
+			}
+		}
+		struckThrough = sortedStrings(struckThrough, sortMethod);
 		for (String a : sorted) {
 			JLabel temp = new JLabel(a);
 			mouseActionlabel(temp);
-			if (struckThrough.contains(a)) {
-				temp.setFont(font4);
-			} else {
-				temp.setFont(font3);
-			}
-
+			temp.setFont(font3);
 			allClues.add(temp);
+			}
+		for(String b: struckThrough){
+			JLabel temp2 = new JLabel(b);
+			mouseActionlabel(temp2);
+			temp2.setFont(font4);
+			allClues.add(temp2);
 		}
-		for (JLabel temp : allClues) {
-			clues.add(temp);
+		for (JLabel temp3 : allClues) {
+			clues.add(temp3);
 		}
 	}
 
@@ -468,6 +504,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								solutions.add(temp.getText());
 								counter++;
 								temp.setFont(font4);
+								sorted.remove(temp.getText());
 								struckThrough.add(temp.getText());
 							}
 							String[] images = setImageDirections(a.direction);
@@ -480,6 +517,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								ArrayList<Coord> letterCoords = a.getLetterCoords();
 								//set up snake head image
 								int x = letterCoords.get(0).xcoord;
+								System.out.println("xcoord in snake: "+ x);
 								int y = letterCoords.get(0).ycoord;
 								int nextX = letterCoords.get(1).xcoord;
 								int nextY = letterCoords.get(1).ycoord;
@@ -524,6 +562,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							tempStrikethrough.clear();
 						}
 					}
+					setUpClues();
 				}
 			}
 			if (counter == entries.size() && !congratulations) {
@@ -920,11 +959,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == reveal) {
+		if (e.getSource() == solution) {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
 			if (buttonPushed) {
-				reveal.setText("Hide Solution");
+				solution.setText("Hide Solution");
 				System.out.print("\nEntries: ");
 //				for (int i = 0; i < x; i++) {
 //					for (int j = 0; j < y; j++) {
@@ -951,7 +990,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				}
 				System.out.println("Entries: " + entries.size());
 			} else {
-				reveal.setText("Show Solution");
+				solution.setText("Show Solution");
 				for (int i = 0; i < x - 2; i++) {
 					for (int j = 0; j < y - 2; j++) {
 						for (JLabel[][] lab : allLetters) {
@@ -992,21 +1031,93 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if (msg.equals("ALPHABETICAL")) {
 				orderClues.setVisible(false);
 				sortMethod = "alphabetical";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("BIGGEST")) {
 				orderClues.setVisible(false);
 				sortMethod = "biggest";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("SMALLEST")) {
 				orderClues.setVisible(false);
 				sortMethod = "smallest";
-				setUpClues(normalisedScale);
+				setUpClues();
 			} else if (msg.equals("RANDOM")) {
 				orderClues.setVisible(false);
 				sortMethod = "random";
-				setUpClues(normalisedScale);
+				setUpClues();
 			}
 		}
+		if(e.getSource()==hint){
+			System.out.println("hint");
+			//showHint();
+		}
+		if(e.getSource()==clue){
+			System.out.println("clue");
+		}
+	}
+
+	private void showHint() {
+		// TODO Auto-generated method stub
+		final int hintClue = rand.nextInt(sorted.size());
+		
+		//do for 3 seconds
+		//need this on another worker thread
+		
+		
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			   @Override
+			   protected Void doInBackground() throws Exception {
+			    // Simulate doing something useful.
+					
+//					System.out.println("hintClue = "+hintClue);
+					allClues.get(hintClue).setForeground(Color.GREEN);
+			   		long current = System.currentTimeMillis();
+					long counter = 0;
+					long next;
+					int temp = 0;
+					boolean started = false;
+					while(counter<3000){
+//						System.out.println("Here: "+ temp++);
+						for(Entry ent: entries){	
+							ArrayList<Coord> letterCoords = ent.getLetterCoords();
+							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText()) && !started){
+								int letterInWord = rand.nextInt(ent.getWordLength());
+								int currentLetterX = letterCoords.get(letterInWord).getX();
+								int currentLetterY = letterCoords.get(letterInWord).getY();
+								started = true;
+						//every 0.1 seconds shake random letter in the word
+//						System.out.println("Counter: "+counter);
+						if(counter <= 1000){
+//							System.out.println("Got here");
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
+//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
+//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+							}
+//						if(counter <= 2000){
+//							System.out.println("and here");
+//							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
+//							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
+//							}
+//						if(counter <= 3000){
+//							System.out.println("also here");
+//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
+//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
+//							}
+							}
+						}
+						next = System.currentTimeMillis();
+						counter = next - current;
+//						System.out.println("counter New: "+counter);
+					}
+					
+					allClues.get(hintClue).setForeground(Color.BLACK);
+			    return null;
+			   }
+			  };
+			
+			  worker.execute();	
+			 // allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+			  allClues.get(hintClue).setForeground(Color.BLACK);
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
