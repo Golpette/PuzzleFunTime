@@ -45,7 +45,7 @@ import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 import crossword.Entry;
-import resources.SetUpImages;
+import crossword.SetUpImages;
 import wordsearch.Coord;
 
 /**
@@ -1068,13 +1068,15 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			   protected Void doInBackground() throws Exception {
 			    // Simulate doing something useful.
 					
-					System.out.println("hintClue = "+hintClue);
+//					System.out.println("hintClue = "+hintClue);
 					allClues.get(hintClue).setForeground(Color.GREEN);
 			   		long current = System.currentTimeMillis();
 					long counter = 0;
 					long next;
+					int temp = 0;
 					boolean started = false;
 					while(counter<3000){
+//						System.out.println("Here: "+ temp++);
 						for(Entry ent: entries){	
 							ArrayList<Coord> letterCoords = ent.getLetterCoords();
 							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText()) && !started){
@@ -1083,37 +1085,39 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								int currentLetterY = letterCoords.get(letterInWord).getY();
 								started = true;
 						//every 0.1 seconds shake random letter in the word
-						System.out.println("Counter: "+counter);
+//						System.out.println("Counter: "+counter);
 						if(counter <= 1000){
-							System.out.println("Got here");
+//							System.out.println("Got here");
 							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
 //							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
 //							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
 							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 							}
-						if(counter <= 2000){
-							System.out.println("and here");
-							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
-							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
-							}
-						if(counter <= 3000){
-							System.out.println("also here");
-							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
-							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
-							}
+//						if(counter <= 2000){
+//							System.out.println("and here");
+//							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
+//							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
+//							}
+//						if(counter <= 3000){
+//							System.out.println("also here");
+//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
+//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
+//							}
 							}
 						}
 						next = System.currentTimeMillis();
 						counter = next - current;
-						System.out.println("counter New: "+counter);
+//						System.out.println("counter New: "+counter);
 					}
-					//allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+					
 					allClues.get(hintClue).setForeground(Color.BLACK);
 			    return null;
 			   }
 			  };
 			
 			  worker.execute();	
+			 // allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+			  allClues.get(hintClue).setForeground(Color.BLACK);
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {

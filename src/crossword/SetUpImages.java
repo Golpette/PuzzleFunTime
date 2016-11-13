@@ -1,6 +1,8 @@
-package resources;
+package crossword;
 
 import java.awt.Image;
+import java.net.URL;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -15,6 +17,7 @@ public class SetUpImages {
 	int version;
 	Icon icon;
 	Icon [] icons;
+	URL url; 
 	
 	public SetUpImages(String imageName, int imageY, int imageX, Icon icon, int version){
 		this.imageName = imageName;
