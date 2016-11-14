@@ -1,4 +1,4 @@
-package resources;
+package crossword;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
