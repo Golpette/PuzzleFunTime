@@ -1052,10 +1052,53 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			//showHint();
+			showHint();
 		}
 		if(e.getSource()==clue){
 			System.out.println("clue");
+			showClue();
+		}
+	}
+
+	private void showClue() {
+		// TODO Auto-generated method stub
+		final int hintClue = rand.nextInt(sorted.size());
+		for(final Entry ent: entries){	
+			if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText())){
+				
+				
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					   @Override
+					   
+					   protected Void doInBackground() throws Exception {
+						   allClues.get(hintClue).setForeground(Color.BLUE);
+						   long current = System.currentTimeMillis();
+						   long counter = 0;
+						   long next;
+						   loopAroundWord2(ent);
+						   clue.setEnabled(false);
+						   while(counter<3000){
+							   next = System.currentTimeMillis();
+							   counter = next - current;
+						   }
+							for (int i = 0; i < x - 2; i++) {
+								for (int j = 0; j < y - 2; j++) {
+									for (JLabel[][] lab : allLetters) {
+										temporaryIcons2.get(allLetters.indexOf(lab))[i][j] = null;
+										//if(temporaryIcons.get(allLetters.indexOf(lab))[i][j].equals(null)){
+										lab[i][j].setIcon(null);
+										//}
+									}
+								}
+							}
+							clue.setEnabled(true);
+						   allClues.get(hintClue).setForeground(Color.BLACK);
+					    return null;
+					   }
+					  };
+					  worker.execute();
+				
+			}
 		}
 	}
 
@@ -1078,6 +1121,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					long counter = 0;
 					long next;
 					int temp = 0;
+					hint.setEnabled(false);
 					boolean started = false;
 					while(counter<3000){
 //						System.out.println("Here: "+ temp++);
@@ -1115,6 +1159,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					}
 					
 					allClues.get(hintClue).setForeground(Color.BLACK);
+					hint.setEnabled(true);
 			    return null;
 			   }
 			  };

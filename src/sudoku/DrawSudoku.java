@@ -65,16 +65,17 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	Font font, font2;
 	Random rand;
 	boolean solutionPushed, hintPushed, cluePushed;
+	int difficulty;
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudoku(int[][] grid, int x, int y) throws IOException{
+	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
 		
 		this.x = x;
 		this.y = y;
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		
-		
+		this.difficulty = difficulty;
 		sol = new DrawSudokuSolution( x, y);  // Create the whole object that will be revealed on "show solution"
 		sol.generateSudoku(grid);             // Andy's algorithm to generate sudoku solution.
 		sol.setVisible(false);
@@ -213,9 +214,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		// Modify grid[][] to starting configuration
 		int[][] initial_config = new int[9][9];
 		
-//		initial_config = SudokuMethods.makeEasy( grid );		
-		initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
-		
+		if(difficulty == 0){
+			initial_config = SudokuMethods.makeEasy( grid );	
+		}
+		else if(difficulty == 1){	
+			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+		}	
 		
 		
 		// Put starting config into nums[][] JTextFields

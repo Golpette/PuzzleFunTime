@@ -506,8 +506,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		}
 		if(e.getSource() == sud){
 			try {
-				sudDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
-				sudo = new SudokuGenerator(getDifficulty((Integer)spinner3.getValue()));
+				sudDiff = sudDifficulty.getSelectedIndex();
+				System.out.println("diff: " +sudDiff);
+				sudo = new SudokuGenerator(9, sudDiff);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
