@@ -24,7 +24,7 @@ public class SudokuMethods {
 	
 	
 	
-	public static int[][] makeMedium(int[][] fullGrid){   // Maybe medium? Maybe hard?
+	public static int[][] makeMedium(int[][] fullGrid){   // As hard as possible without guessing
 		/**
 		 *  Method just solves the full grid every time a number is removed.
 		 *  To do this, it lists all possible numbers that can go at each site. If there is only 1, we add
@@ -40,8 +40,8 @@ public class SudokuMethods {
 	
 		
 		// Remove numbers. Do this a set number of times / until no more can be removed 
-		for( int tries=0; tries<1000; tries++ ){ //1000 is probably enough
-		
+		for( int tries=0; tries<200; tries++ ){ // REDUCED TO 200 SINCE THIS METHOD IS NOW VERY SLOW
+			
 			// pick random space and remove      
 			int xp=(int)(Math.random()*gridSize);  
 			int yp=(int)(Math.random()*gridSize); 
@@ -51,7 +51,7 @@ public class SudokuMethods {
 
 			// Try to solve
 			int[][] solved_config = new int[9][9];
-			solved_config = SudokuMethods.solver_basic(  startGrid  );
+			solved_config = SudokuMethods.solver_noGuessing(  startGrid  );
 			
 			// Check if solved
 			boolean is_solved = isSolved( solved_config );
@@ -139,19 +139,51 @@ public class SudokuMethods {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static boolean isSolved( int[][] grid ){   // TODO: THIS ONLY CHECKS GRID IS FULL... NOT ACTUALLY SOLVED CORRECTLY
+	public static boolean isSolved( int[][] grid ){  
 		/**
-		 * Check if grid is full (i.e. solved)
+		 * Check if grid is solved
+		 */
+		boolean solved = true;
+		
+		int desired_tot = 1+2+3+4+5+6+7+8+9;
+		
+		for( int i=0; i<9; i++ ){
+			
+			int tot=0;
+			// check each row
+			for( int j=0; j<9; j++){
+				tot = tot + grid[i][j];
+			}
+			if( tot != desired_tot ){
+				solved = false;
+			}
+			
+			tot=0;
+			// check each col
+			for( int j=0; j<9; j++){
+				tot = tot + grid[j][i];
+			}
+			if( tot != desired_tot ){
+				solved = false;
+			}
+			
+			// no need to check 3x3 grids...
+		}
+
+		
+		return solved;
+	}
+	
+	
+	
+	
+	
+	
+
+	
+	public static boolean isFull( int[][] grid ){  
+		/**
+		 * Check if grid is full
 		 */
 		boolean solved = true;
 		
@@ -176,7 +208,7 @@ public class SudokuMethods {
 
 	
 	
-	public static int[][] solver_improved( int[][] strtGrid ){
+	public static int[][] solver_noGuessing( int[][] strtGrid ){
 		/**
 		 * Improved method now looks at all possibilities in rows, columns and 3x3s
 		 * and checks if any appear in only 1 grid. i.e. there may be 2 or more options in
@@ -187,34 +219,12 @@ public class SudokuMethods {
 			for( int j=0; j<9; j++){
 				solvegrid[i][j] = strtGrid[i][j];
 			}
-		}	
-//		// Lists of all possible numbers for each grid point
-//		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
-//		for( int i=0; i<9; i++){
-//			for( int j=0; j<9; j++ ){
-//				all_lists[i][j] = new ArrayList<Integer>();
-//			}
-//		}
-		
-		
+		}		
 		
 		boolean solving = true;
-		
-		int terminate = 0;
-		
+				
 		while(solving){
 			
-			terminate++;
-			
-			
-//			// Update all grid possibilities
-//			for( int i=0; i<9; i++){
-//				for( int j=0; j<9; j++ ){
-//					if(solvegrid[i][j] == 0 ){   // Do not get possibilities from occupied sites
-//						all_lists[i][j] = getGridPossibilities( solvegrid, i, j );
-//					}
-//				}
-//			}
 			
 			// HOLD CURRENT GRID TO CHECK FOR DIFFERENCES
 			int[][] prev_grid = new int[9][9];
@@ -223,7 +233,6 @@ public class SudokuMethods {
 					prev_grid[i][j] = solvegrid[i][j];
 				}
 			}	
-			
 
 			
 			// add from checking rows
@@ -232,12 +241,10 @@ public class SudokuMethods {
 			// checking cols
 		    add_definites_COLS( solvegrid );
 						
-			// TODO: check 3x3s
+			// check 3x3s
 			add_definites_3x3s( solvegrid );
 			
-			
-			
-			
+						
 			// check we made at least 1 change
 			boolean anything_added = false;
 			for( int iii=0; iii<9; iii++){
@@ -251,7 +258,6 @@ public class SudokuMethods {
 				solving=false;
 			}
 			
-			//if( terminate>0 ){ solving=false;}
 			
 		}//end while
 		
@@ -279,7 +285,14 @@ public class SudokuMethods {
 		 * Use all grid possibilities for all grids for each ROW
 		 * Make a "row_required" list; check if any grids only have 1 of these
 		 */
-	
+		// Lists of all possible numbers for each grid point
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				all_lists[iii][jjj] = new ArrayList<Integer>();
+			}
+		}	
 
 		
 		
@@ -287,14 +300,7 @@ public class SudokuMethods {
 		for( int i=0; i<9; i++){
 			
 			
-			// Lists of all possible numbers for each grid point
-			@SuppressWarnings("unchecked")
-			ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
-			for( int iii=0; iii<9; iii++){
-				for( int jjj=0; jjj<9; jjj++ ){
-					all_lists[iii][jjj] = new ArrayList<Integer>();
-				}
-			}	
+
 			// Update all grid possibilities
 			for( int iii=0; iii<9; iii++){
 				for( int jjj=0; jjj<9; jjj++ ){
@@ -308,19 +314,13 @@ public class SudokuMethods {
 			// make list of numbers this row needs
 			ArrayList<Integer> required = new ArrayList<Integer>(); /// TODO: WE CNA MAKE THIS REQUIRED LIST MUCH EASIER!
 			for( int j=0; j<9; j++ ){
-				//ArrayList<Integer> grid_poss =  new ArrayList<Integer>( all_lists[i][j] );		
-				
-				//System.out.println( all_lists[i][j] );
-				
+	
 				for( Integer poss: all_lists[i][j] ){
 					if( !required.contains(poss) ){
 						required.add( poss );
 					}
 				}
 			}
-			
-			//System.out.println( "required = "+required );
-			//System.exit(0);
 			
 			
 			// now check how many squares each possibility appears in
@@ -336,12 +336,7 @@ public class SudokuMethods {
 						if( all_lists[i][j].contains( r ) ){  
 							// add in the definite entry!
 							
-							grid[i][j] = r;   //STEVE CHANGE BACK
-							//grid[j][i] = r;
-							
-							//System.out.println("put "+r +" in ("+ i + "," +j+")");
-
-							//System.exit(0);
+							grid[i][j] = r; 
 
 						}
 					}
@@ -350,30 +345,7 @@ public class SudokuMethods {
 				
 			}
 			
-			
-		
-//			// Before choosing next row, makes sense to update possibilities
-//			// but maybe this is unnecessary computational effort. MAYBE JUST REMOVE THIS.
-//			for( int iii=0; iii<9; iii++){
-//				for( int jjj=0; jjj<9; jjj++ ){
-//					if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
-//						all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
-//					}
-//				}
-//			}
-			
-			// Update all grid possibilities
-			for( int iii=0; iii<9; iii++){
-				for( int jjj=0; jjj<9; jjj++ ){
-					all_lists[iii][jjj].clear();
-				}
-			}	
-			
-			
-			//System.exit(0);
-
-			
-			
+					
 		}//end row
 		
 
@@ -393,27 +365,27 @@ public class SudokuMethods {
 		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
 		for( int i=0; i<9; i++){
 			for( int j=0; j<9; j++ ){
-				all_lists[i][j] = new ArrayList<Integer>();
+				all_lists[i][j] = new ArrayList<Integer>(); // just initialize empty arraylist
 			}
 		}		
-		// Update all grid possibilities
-		for( int iii=0; iii<9; iii++){
-			for( int jjj=0; jjj<9; jjj++ ){
-				if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
-					all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
-				}
-			}
-		}
 		
 		
 		//for each COLUMN
 		for( int j=0; j<9; j++){
 			
+			// Update all grid possibilities
+			for( int iii=0; iii<9; iii++){
+				for( int jjj=0; jjj<9; jjj++ ){
+					if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
+						all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
+					}
+				}
+			}			
+			
+			
 			// make list of number this row needs
 			ArrayList<Integer> required = new ArrayList<Integer>();
 			for( int i=0; i<9; i++ ){
-				//ArrayList<Integer> grid_poss = all_lists[i][j];			
-				//for( Integer poss: grid_poss ){
 				for( Integer poss: all_lists[i][j] ){
 					if( !required.contains(poss) ){
 						required.add( poss );
@@ -441,17 +413,8 @@ public class SudokuMethods {
 				}
 				
 			}
-			
 		
-			// Before choosing next row, makes sense to update possibilities
-			// but maybe this is unnecessary computational effort. MAYBE JUST REMOVE THIS.
-			for( int iii=0; iii<9; iii++){
-				for( int jjj=0; jjj<9; jjj++ ){
-					if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
-						all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
-					}
-				}
-			}
+
 			
 		}
 		
@@ -478,24 +441,29 @@ public class SudokuMethods {
 		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
 		for( int i=0; i<9; i++){
 			for( int j=0; j<9; j++ ){
+				// initialize empty
 				all_lists[i][j] = new ArrayList<Integer>();
 			}
 		}		
-		// Update all grid possibilities
-		for( int iii=0; iii<9; iii++){
-			for( int jjj=0; jjj<9; jjj++ ){
-				if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
-					all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
-				}
-			}
-		}
+
 		
 		
 		//for each 3x3 grid!  Layout is: top left 3x3 is called 0, top middle, 1 and so on.
 		for( int sq=0; sq<9; sq++){
 			
+			// Update all grid possibilities
+			for( int iii=0; iii<9; iii++){
+				for( int jjj=0; jjj<9; jjj++ ){
+					if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
+						all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
+					}
+				}
+			}			
+			
+			
 			int x_strt = (sq%3)*3;
 			int y_strt = (sq/3)*3;
+			
 			
 						
 			// make list of number this 3x3 grid needs
@@ -503,8 +471,6 @@ public class SudokuMethods {
 			for( int i=x_strt; i<3; i++ ){
 				for( int j=y_strt; j<3; j++){
 				
-					//ArrayList<Integer> grid_poss = all_lists[i][j];			
-//					for( Integer poss: grid_poss ){
 					for( Integer poss : all_lists[i][j] ){
 						if( !required.contains(poss) ){
 							required.add( poss );
@@ -539,18 +505,7 @@ public class SudokuMethods {
 				}
 				
 			}
-			
-		
-			// Before choosing next row, makes sense to update possibilities
-			// but maybe this is unnecessary computational effort. MAYBE JUST REMOVE THIS.
-			for( int iii=0; iii<9; iii++){
-				for( int jjj=0; jjj<9; jjj++ ){
-					if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
-						all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
-					}
-				}
-			}
-			
+
 			
 		}
 			
@@ -577,76 +532,76 @@ public class SudokuMethods {
 	
 	
 	
-	@SuppressWarnings("unchecked") // WTF IS THIS!?
-	public static int[][] solver_basic( int[][] strtGrid ){
-		/**
-		 * Method to solve (??) sudokus by writing out every possible number for each
-		 * grid space and checking if there is exactly 1 possibility for any of them.
-		 * If so, add them, update grid lists, look again. 
-		 */
-		int[][] solvegrid = new int[9][9];
-		for( int i=0; i<9; i++ ){
-			for( int j=0; j<9; j++){
-				solvegrid[i][j] = strtGrid[i][j];
-			}
-		}	
-		
-		
-
-		// Lists of all possible numbers for each grid point
-		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
-		for( int i=0; i<9; i++){
-			for( int j=0; j<9; j++ ){
-				all_lists[i][j] = new ArrayList<Integer>();
-			}
-		}
-		
-		
-		
-		
-		boolean solving = true;
-		while( solving ){
-		
-			// Update all_lists
-			for( int i=0; i<9; i++){
-				for( int j=0; j<9; j++ ){
-					if(solvegrid[i][j] == 0 ){   // Do not get possibilities from occupied sites
-						all_lists[i][j] = getGridPossibilities( solvegrid, i, j );
-					}
-				}
-			}
-			
-			// Check we can actually add something
-			boolean anything_to_add = false;
-			for( int i=0; i<9; i++){
-				for( int j=0; j<9; j++ ){
-					if(  all_lists[i][j].size() == 1  ){
-						anything_to_add = true;
-					}					
-				}
-			}
-			// Stop if we can't add any more
-			if( !anything_to_add ){ solving = false; }   
-			
-			
-			// Add any definite numbers
-			for( int i=0; i<9; i++){
-				for( int j=0; j<9; j++ ){
-					if(  all_lists[i][j].size() == 1  ){
-						int n = all_lists[i][j].get(0);
-						solvegrid[i][j] = n;
-						// clear the corresponding list
-						all_lists[i][j].clear();
-					}
-				}
-			}
-
-		}
-        
-		
-		return solvegrid;
-	}
-	
+//	@SuppressWarnings("unchecked") // WTF IS THIS!? Need it for our array[][] of ArrayLists... possible bugs!? //TODO
+//	public static int[][] solver_basic( int[][] strtGrid ){
+//		/**
+//		 * Method to solve (??) sudokus by writing out every possible number for each
+//		 * grid space and checking if there is exactly 1 possibility for any of them.
+//		 * If so, add them, update grid lists, look again. 
+//		 */
+//		int[][] solvegrid = new int[9][9];
+//		for( int i=0; i<9; i++ ){
+//			for( int j=0; j<9; j++){
+//				solvegrid[i][j] = strtGrid[i][j];
+//			}
+//		}	
+//		
+//		
+//
+//		// Lists of all possible numbers for each grid point
+//		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
+//		for( int i=0; i<9; i++){
+//			for( int j=0; j<9; j++ ){
+//				all_lists[i][j] = new ArrayList<Integer>();
+//			}
+//		}
+//		
+//		
+//		
+//		
+//		boolean solving = true;
+//		while( solving ){
+//		
+//			// Update all_lists
+//			for( int i=0; i<9; i++){
+//				for( int j=0; j<9; j++ ){
+//					if(solvegrid[i][j] == 0 ){   // Do not get possibilities from occupied sites
+//						all_lists[i][j] = getGridPossibilities( solvegrid, i, j );
+//					}
+//				}
+//			}
+//			
+//			// Check we can actually add something
+//			boolean anything_to_add = false;
+//			for( int i=0; i<9; i++){
+//				for( int j=0; j<9; j++ ){
+//					if(  all_lists[i][j].size() == 1  ){
+//						anything_to_add = true;
+//					}					
+//				}
+//			}
+//			// Stop if we can't add any more
+//			if( !anything_to_add ){ solving = false; }   
+//			
+//			
+//			// Add any definite numbers
+//			for( int i=0; i<9; i++){
+//				for( int j=0; j<9; j++ ){
+//					if(  all_lists[i][j].size() == 1  ){
+//						int n = all_lists[i][j].get(0);
+//						solvegrid[i][j] = n;
+//						// clear the corresponding list
+//						all_lists[i][j].clear();
+//					}
+//				}
+//			}
+//
+//		}
+//        
+//		
+//		return solvegrid;
+//	}
+//	
 	
 	
 	
@@ -674,10 +629,7 @@ public class SudokuMethods {
 
 				ents.add(i);
 			}
-		}		
-		
-		//if( strt_grid[xxx][yyy]==0 ){  ents.clear(); }
-		
+		}				
 		
 		
 		return ents;

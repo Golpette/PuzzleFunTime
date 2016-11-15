@@ -92,56 +92,33 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		// TEST SUDOKU READER METHOD.
 		//initial_config = SudokuReader.readSudoku("sudoku_finland.dat");
-		initial_config = SudokuReader.readSudoku("sudoku_medium2.dat");
-
-		
+		//initial_config = SudokuReader.readSudoku("sudoku_medium2.dat");
 		// Attempt to solve
-		int[][] solved_grid = new int[9][9];
-//		solved_grid = SudokuMethods.solver_basic( initial_config );
-		solved_grid = SudokuMethods.solver_improved( initial_config );
-
-		
-		System.out.println("Is solved? -- "+ SudokuMethods.isSolved(solved_grid)  );
+		//int[][] solved_grid = new int[9][9];
+		//solved_grid = SudokuMethods.solver_noGuessing( initial_config );
+        //
+		//System.out.println("Is solved? -- "+ SudokuMethods.isSolved(solved_grid)  );
 		
 
 		
 		
 		
 		
+			
+		if( difficulty == 2 ){
+			initial_config = SudokuMethods.makeEasy( grid );
+		}
+		else if( difficulty == 4 ){
+			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+		}
+		else{
+			System.out.println("ONLY EASY AND MEDIUM HAVE BEEN IMPLEMENTED");
+			initial_config = SudokuMethods.makeMedium( grid );
+		}		
+		//System.out.println( grid[0][0] + " " + grid[1][1] + " "+ grid[0][1]);   // CAREFUL: ANDY HAS FLIPPED [X][Y] TO GRID[Y][X]
 		
 		
-//		
-//		if( difficulty == 2 ){
-//			initial_config = SudokuMethods.makeEasy( grid );
-//		}
-//		else if( difficulty == 4 ){
-//			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
-//		}
-//		else{
-//			System.out.println("ONLY EASY AND MEDIUM HAVE BEEN IMPLEMENTED");
-//			initial_config = SudokuMethods.makeMedium( grid );
-//		}		
-//		//System.out.println( grid[0][0] + " " + grid[1][1] + " "+ grid[0][1]);   // CAREFUL: ANDY HAS FLIPPED [X][Y] TO GRID[Y][X]
-//		
-//		
-		
-//		for( int ii=0; ii<9; ii++){
-//			for( int jj=0; jj<9; jj++){
-//				//if( initial_config[ii][jj] != 0 ){
-//					ArrayList<Integer> poss = SudokuMethods.getGridPossibilities(initial_config, ii, jj);
-//					System.out.print( poss + "  ##  ");
-//				//}
-//				//else{
-//				//	System.out.print( "[]  xx  ");
-//				//}
-//			}
-//			System.out.println();
-//		}
-//		
-		
-		
-		
-		
+	
 		
 		
 		
@@ -243,25 +220,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 		
-		// Put starting config into nums[][] JTextFields
-		for (int i = 0; i < x-2; i++){
-			for (int j = 0; j < y-2; j++){
-				if( solved_grid[i][j] != 0 ){                      // CHANGE X AND Y COORDS FFS
-					nums[i][j].setText( Integer.toString( solved_grid[i][j])  );
-					nums[i][j].setEditable(false);
-					//nums[i][j].setForeground(new Color( 163 , 194,  163));
-					nums[i][j].setForeground(Color.BLACK);
-					nums[i][j].setHighlighter(null);
-					nums[i][j].setBackground(Color.WHITE);;
-				}
-			}
-		}		
-		
 //		// Put starting config into nums[][] JTextFields
 //		for (int i = 0; i < x-2; i++){
 //			for (int j = 0; j < y-2; j++){
-//				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
-//					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
+//				if( solved_grid[i][j] != 0 ){                      // CHANGE X AND Y COORDS FFS
+//					nums[i][j].setText( Integer.toString( solved_grid[i][j])  );
 //					nums[i][j].setEditable(false);
 //					//nums[i][j].setForeground(new Color( 163 , 194,  163));
 //					nums[i][j].setForeground(Color.BLACK);
@@ -269,7 +232,24 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //					nums[i][j].setBackground(Color.WHITE);;
 //				}
 //			}
-//		}
+//		}	
+		
+		
+		
+		
+		// Put starting config into nums[][] JTextFields
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
+					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
+					nums[i][j].setEditable(false);
+					//nums[i][j].setForeground(new Color( 163 , 194,  163));
+					nums[i][j].setForeground(Color.BLACK);
+					nums[i][j].setHighlighter(null);
+					nums[i][j].setBackground(Color.WHITE);;
+				}
+			}
+		}
 		
 
 		
