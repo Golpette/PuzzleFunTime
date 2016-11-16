@@ -1715,7 +1715,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 		
-		//highlightWord( tempHighlighted[0], tempHighlighted[1]);
+		highlightWord( tempHighlighted[0], tempHighlighted[1]);
 	
 		layer.removeAll();
 		// STEVE: SWITCHED THESE
