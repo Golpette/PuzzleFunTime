@@ -83,6 +83,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	double height;
 	JPanel flow;
 	int [] tempHighlighted;
+	String tempDirection;
 	
 	
 	// Define Color highlighting current word & clue
@@ -114,7 +115,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		buttonPushed = false;
-		tempHighlighted = new int [2];
+		tempHighlighted = new int [2];//just for zoom
+		tempDirection="across";       //just for zoom
 		squareSize = 38;
 		MIN_SCALE = 7.0;
 		MAX_SCALE = 18.0;
@@ -655,8 +657,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					firstAutoMove = true;
 					makeAllWhite();
 					highlightWord_fromClick(lastClick_x,lastClick_y);
-					tempHighlighted[0] = lastClick_x;
-					tempHighlighted[1] = lastClick_y;
+//					tempHighlighted[0] = lastClick_x;
+//					tempHighlighted[1] = lastClick_y;
 					firsteverclick=false;
 				}
 						
@@ -682,8 +684,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[ (newstart-i) ][col].isEnabled()) {
 										boxes[ (newstart-i) ][col].requestFocus();
 										// highlight any words that *start* from this square
-										tempHighlighted[0] = newstart-i;
-										tempHighlighted[1] = col;
+//										tempHighlighted[0] = newstart-i;
+//										tempHighlighted[1] = col;
 										highlightWord( newstart-i, col);
 										break;
 									}
@@ -699,8 +701,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[newstart+i][col].isEnabled()) {
 										boxes[newstart+i][col].requestFocus();
 										highlightWord(newstart+i,col);
-										tempHighlighted[0] = newstart+i;
-										tempHighlighted[1] = col;
+//										tempHighlighted[0] = newstart+i;
+//										tempHighlighted[1] = col;
 										break;
 									}						
 								}	
@@ -715,8 +717,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[row][newstart + i].isEnabled()) {
 										boxes[row][newstart + i].requestFocus();
 										highlightWord(row, newstart+i);
-										tempHighlighted[0] = row;
-										tempHighlighted[1] = newstart+i;
+//										tempHighlighted[0] = row;
+//										tempHighlighted[1] = newstart+i;
 										break;
 									}
 								}	
@@ -730,8 +732,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									}
 									if (boxes[row][newstart - i].isEnabled()) {
 										boxes[row][newstart - i].requestFocus();
-										tempHighlighted[0] = row;
-										tempHighlighted[1] = newstart-i;
+//										tempHighlighted[0] = row;
+//										tempHighlighted[1] = newstart-i;
 										highlightWord(row,newstart-i);
 										break;
 									}
@@ -787,8 +789,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 												currentDirection = 1;  //i.e. going down
 												//also make new highlight
 												makeAllWhite();
-												tempHighlighted[0] = row;
-												tempHighlighted[1] = col;
+//												tempHighlighted[0] = row;
+//												tempHighlighted[1] = col;
 												highlightWord( row, col);												
 											}
 										}
@@ -808,8 +810,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 												currentDirection = 0;  //i.e. going across
 												//also make new highlight
 												makeAllWhite();
-												tempHighlighted[0] = row;
-												tempHighlighted[1] = col;
+//												tempHighlighted[0] = row;
+//												tempHighlighted[1] = col;
 												highlightWord( row, col);	
 											}
 										}
@@ -889,8 +891,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 						if (e.getSource().equals(boxes[i][j]) && boxes[i][j].isEnabled()  ){
 							makeAllWhite();
 							highlightWord_fromClick(i,j);
-							tempHighlighted[0] = i;
-							tempHighlighted[1] = j;
+//							tempHighlighted[0] = i;
+//							tempHighlighted[1] = j;
 						}
 						//for (JLabel lb : hints) {
 						//	lb.setText(" ");
@@ -1123,6 +1125,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public void highlightWord( int xstart, int ystart ){
 		/** Highlight word from any letter **/
 		
+//		tempHighlighted[0] = xstart;
+//		tempHighlighted[1] = ystart;
+		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			// i.e., if start of word
 			
@@ -1186,6 +1191,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void colourWord(int xstart, int ystart, String direc){
 		/** Colour word given one grid point in it  **/
+		
+		tempHighlighted[0] = xstart; //these store highlight&direc for zooming
+		tempHighlighted[1] = ystart;
+		tempDirection=direc;
+		
 		
 		int xx1=xstart;  int yy1=ystart;
 		
@@ -1299,9 +1309,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 					if( highlightAcross  ) {	
 						colourWord(xstart, ystart, "across");
+//						tempHighlighted[0] = xstart;
+//						tempHighlighted[1] = ystart;
 					} 
 					else {														
 						colourWord(xstart, ystart, "down");
+//						tempHighlighted[0] = xstart;
+//						tempHighlighted[1] = ystart;
 					}
 				}
 			}
@@ -1311,8 +1325,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		// else use highlightWord() method if clicking anywhere else in word other than first letter
 		else{
 			highlightWord(xstart,ystart);
-			tempHighlighted[0] = xstart;
-			tempHighlighted[1] = ystart;
+//			tempHighlighted[0] = xstart;
+//			tempHighlighted[1] = ystart;
 			countClicks=0;
 		}
 	
@@ -1715,7 +1729,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 		
-		highlightWord( tempHighlighted[0], tempHighlighted[1]);
+//		highlightWord( tempHighlighted[0], tempHighlighted[1]);
+		colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
 	
 		layer.removeAll();
 		// STEVE: SWITCHED THESE
