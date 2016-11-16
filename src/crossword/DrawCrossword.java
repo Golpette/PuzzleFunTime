@@ -269,12 +269,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 */	
 		// ( Two JPanels for holding across and down clues. Will hold these as JTextAreas with GridBagLayout c3 )
 		//clue = new JPanel(new GridLayout(maxClues+1,1));
-		clue = new JPanel(new GridBagLayout());		
+		clue = new JPanel(new GridBagLayout());	
 //		clue_dt = new JPanel(new FlowLayout());
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
-		clue.setAlignmentY(0);
+	//	clue.setAlignmentY(0);
 //		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
@@ -284,7 +284,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
 		clue2.setBackground(clear);
-		clue2.setAlignmentY(0);
+		//clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
 		
 
@@ -392,8 +392,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		}
 		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		c3 = new GridBagConstraints();
-		c3.fill = GridBagConstraints.NONE;
-		c3.weightx = 1.0;
+		c3.fill = GridBagConstraints.NORTHWEST;
+		//c3.weightx = 1.0;
 		c3.weighty = 0;
 		c3.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c3.gridx = 0;
@@ -403,15 +403,18 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			clue.add(j, c3);
 			//clue.add(j);
-//			JTextArea blankline = new JTextArea("");
-//			blankline.setEditable(false);
-//			clue.add(blankline, c3);//spacing between clues
+			JTextArea blankline = new JTextArea("");
+			blankline.setEditable(false);
+			clue.add(blankline, c3);//spacing between clues
 
 		}
+		c3.weighty=1;
+		//c3.gridy++;
+		clue.add(new JLabel(" "), c3);
 		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		
 		c4 = new GridBagConstraints();
-		c4.fill = GridBagConstraints.NONE;
+		c4.fill = GridBagConstraints.NORTHWEST;
 		c4.weightx = 1.0;
 		c4.weighty = 0;
 		c4.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
@@ -422,10 +425,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			clue2.add(k, c4);
 			//clue2.add(k);
-//			JTextArea blankline = new JTextArea("");
-//			blankline.setEditable(false);
-//			clue2.add(blankline,c4);
+			JTextArea blankline = new JTextArea("");
+			blankline.setEditable(false);
+			clue2.add(blankline,c4);
 		}
+		c4.weighty=1;
+		//c4.gridy++;
+		clue2.add(new JLabel(" "), c4);
 
 //		clue_dt.add(clue, c3);
 //		clue2_dt.add(clue2, c3);
@@ -448,8 +454,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
 		flow = new JPanel(new GridLayout(1,2));
 		//flow.setBounds(100, 0, 100, 100);
-		flow.setAlignmentY(0);
-		//flow.setAlignmentX(SwingConstants.NORTH);
+		//flow.setAlignmentY(0);
+		flow.setAlignmentX(SwingConstants.NORTH);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
 		flow.add(clue );
 		flow.add(clue2 );		
