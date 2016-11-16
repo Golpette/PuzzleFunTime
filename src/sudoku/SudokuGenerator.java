@@ -52,10 +52,6 @@ public class SudokuGenerator{
 		//removeNumbers(fullGrid);
 		//System.out.println(fullGrid.toString());
 		new DrawSudoku(grid, x, y, difficulty);
-
-		
-		// Solution and start grid made in here.
-		new DrawSudoku(grid, x, y, difficulty);
 		
 		
 	}
