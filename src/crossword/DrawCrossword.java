@@ -299,7 +299,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		JTextArea blnk = new JTextArea("");
 		blnk.setEditable(false);
 		//cluesAcr.add(blnk);
-		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTAREA FOR WRAPPING
+		JTextArea first = new JTextArea("\nAcross");   // STEVE JTEXTAREA FOR WRAPPING
 		first.setEditable(false);
 		first.setHighlighter(null);
 		first.setFont(font2);		
@@ -340,7 +340,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		//add space at top and "Down" title
 		//cluesDwn.add( blnk );
-		JTextArea second = new JTextArea("Down\n");
+		JTextArea second = new JTextArea("\nDown");
 		second.setEditable(false);
 		second.setHighlighter(null);
 		second.setFont(font2);
