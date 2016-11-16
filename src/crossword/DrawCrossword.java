@@ -2,13 +2,10 @@ package crossword;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-//import java.awt.MigLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -28,7 +25,6 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-// Steve: need these to remove automatic arrow key scrolling in JScrollPane
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -43,7 +39,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultEditorKit;
 
 
@@ -166,9 +161,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
 		
-		
-		
-		
 		tempBoxes = new JTextField[x-2][y-2];
 		
 		for(int i = 0; i < x-2; i++){
@@ -177,11 +169,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 		
-		
 		drawGrid(normalisedScale);
-		
 
-		
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
@@ -210,12 +199,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
-		
-		
-		
-		
-		
-	
+
 		/**
 		 * This is the JLayeredPane layer which holds the actual crossword. It
 		 * is composed of two layers crosswordGrid and clueNums which are both
@@ -226,7 +210,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer = new JLayeredPane();
 		layer.setBackground(new Color(255, 255, 255, 255));
 		
-		// STEVE: SWITCHED THESE
 		layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
 		
@@ -235,77 +218,32 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); /// CHANGING THESE DIMENSKONS AFFECTS NOTHING
+		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
 
-
-		
-// UNCOMMENT THIS LINE TO REMOVE THE SCROLL WHEN MOUSE IS OVER GRID. I THINK IT SOMEHOW OVERRIDES
-// THE SCROLL FROM "area" COMPONENT
-//		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-//		layer.getActionMap().put(SOME_ACTION, someAction);
-//		layer.addMouseWheelListener(this);
-//	
-//
-//		
-		
-		//inline ifs!
-		int acr = cluesAcross.size();
-		int dow = cluesDown.size();
-		
-		int maxClues = (acr > dow) ? acr: dow ;
-		
-		
-//		for (int i = 0; i < ((acr > dow) ? maxClues - dow: maxClues - acr) ; i++){
-//			String jt = "\\.FILLER!!!";
-//			if(acr > dow){
-//				cluesAcross.add(jt);
-//			}else{
-//				cluesDown.add(jt);
-//			}
-//		}
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */	
-		// ( Two JPanels for holding across and down clues. Will hold these as JTextAreas with GridBagLayout c3 )
-		//clue = new JPanel(new GridLayout(maxClues+1,1));
+		
 		clue = new JPanel(new GridBagLayout());	
-//		clue_dt = new JPanel(new FlowLayout());
-//		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
-	//	clue.setAlignmentY(0);
-//		clue.setAlignmentX(0);
-		//clue.setBounds(200, 200, 200, 200);
 		
-		//clue2 = new JPanel(new GridLayout(maxClues+1,1));
-//		clue2_dt = new JPanel(new FlowLayout());
 		clue2 = new JPanel(new GridBagLayout()     );
-//		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
 		clue2.setBackground(clear);
-		//clue2.setAlignmentY(0);
-		//clue2.setBounds(200, 200, 200, 200);
-		
-
-		
-		
-		
 		
 		hints = new ArrayList<JTextArea>();
 
-		
 		//add space at top and "Across" title
 		JTextArea blnk = new JTextArea("");
 		blnk.setEditable(false);
 		//cluesAcr.add(blnk);
-		JTextArea first = new JTextArea("\nAcross");   // STEVE JTEXTAREA FOR WRAPPING
+		JTextArea first = new JTextArea("\nAcross"); 
 		first.setEditable(false);
 		first.setHighlighter(null);
 		first.setFont(font2);		
 		cluesAcr.add(first);
-		
-		
 		
 		int len = 0;
 		for (String s : cluesAcross) {
@@ -330,22 +268,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			hintA.setForeground(Color.BLUE);
 			hints.add(hintA);
 			mouseActionlabel(hintA);
-			
-
+		
 			cluesAcr.add(across);
-			//cluesAcr.add(hintA);  //STEVE REMOVE
 		}
 
-
-
 		//add space at top and "Down" title
-		//cluesDwn.add( blnk );
 		JTextArea second = new JTextArea("\nDown");
 		second.setEditable(false);
 		second.setHighlighter(null);
 		second.setFont(font2);
 		cluesDwn.add(second);
-		
 		
 		for (String s : cluesDown) {
 			for(Entry e: entries){
@@ -370,7 +302,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			mouseActionlabel(hintD);
 					
 			cluesDwn.add(down);
-			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 		
 		JTextArea temp = new JTextArea("FILLER");
@@ -381,37 +312,21 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		temp.setWrapStyleWord(true);
 	    temp.setColumns(25); 
 	    
-//		if(acr > dow){
-//			for(int i = dow; i < acr; i++){
-//				cluesDwn.add(temp);
-//			}
-//		}else{
-//			for(int i = acr; i < dow; i++){
-//				cluesAcr.add(temp);
-//			}
-//		}
 		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		c3 = new GridBagConstraints();
 		c3.fill = GridBagConstraints.NORTHWEST;
-		//c3.weightx = 1.0;
 		c3.weighty = 0;
 		c3.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c3.gridx = 0;
-		//c3.gridy = 0;
 
 		for (JTextArea j : cluesAcr) {
-
 			clue.add(j, c3);
-			//clue.add(j);
 			JTextArea blankline = new JTextArea("");
 			blankline.setEditable(false);
 			clue.add(blankline, c3);//spacing between clues
-
 		}
 		c3.weighty=1;
-		//c3.gridy++;
 		clue.add(new JLabel(" "), c3);
-		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		
 		c4 = new GridBagConstraints();
 		c4.fill = GridBagConstraints.NORTHWEST;
@@ -419,29 +334,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c4.weighty = 0;
 		c4.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c4.gridx = 1;
-		//c4.gridy = 0;
-//		
+		
 		for (JTextArea k : cluesDwn) {
-
 			clue2.add(k, c4);
-			//clue2.add(k);
 			JTextArea blankline = new JTextArea("");
 			blankline.setEditable(false);
 			clue2.add(blankline,c4);
 		}
 		c4.weighty=1;
-		//c4.gridy++;
 		clue2.add(new JLabel(" "), c4);
-
-//		clue_dt.add(clue, c3);
-//		clue2_dt.add(clue2, c3);
-		
-
-		
-//		clue.setAlignmentY(0);
-//		clue2.setAlignmentY(0);
-//		clue.setAlignmentX(0);
-//		clue2.setAlignmentX(0);
 		
 	    GridBagConstraints zzz = new GridBagConstraints();
 		zzz.fill = GridBagConstraints.VERTICAL;
@@ -451,30 +352,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		zzz.weighty=0.0;
 		
 		
-		//flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
 		flow = new JPanel(new GridLayout(1,2));
-		//flow.setBounds(100, 0, 100, 100);
-		//flow.setAlignmentY(0);
 		flow.setAlignmentX(SwingConstants.NORTH);
-		////flow = new JPanel(new GridLayout(2,4,1,1));
 		flow.add(clue );
 		flow.add(clue2 );		
-		// Add the 2 clue JPanels to flow JPanel
-//		flow.add(clue, zzz );
-//		zzz.gridx=1;
-//		flow.add(clue2, zzz );
-//		flow.setBackground(clear);
-//		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
-		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
-		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
-		
-
-	
-//		clue.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-//		clue.getActionMap().put(SOME_ACTION, someAction);
-//		clue.addMouseWheelListener(this);
-
-		
 		
 		/**
 		 * This is the layout of the GridBagLayout panel main which holds all
@@ -494,20 +375,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		gbc_main.fill = GridBagConstraints.BOTH;
 		
 		main.add(layer, gbc_main);
-		//main.add(new JScrollPane(layer), gbc_main);
-
-		
-		
 		gbc_main.gridx = 1; // NEED THIS
 		
-		//flow.setAlignmentY(0);
 		main.add(flow, gbc_main);
-		
-		
-
-		
-		
-	
 		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
@@ -522,9 +392,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		   }
 		});
 		
-		//area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-		//		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-	
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
 		area.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -534,7 +401,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		area.getActionMap().put(SOME_ACTION, someAction);
 		area.addMouseWheelListener(this);
-		//area.getVerticalScrollBar().setValue(0);
 		area.scrollRectToVisible(null);
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
@@ -550,12 +416,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		    public void actionPerformed(ActionEvent e) {
 		    }});
 		
-		
-
-		
-		
-		
-		
 		/**
 		 * This is the button which generates a solution for the given crossword
 		 * bringing up a new GUI instance with the filled in grid on being
@@ -565,18 +425,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		reveal.setFont(font2); 
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
-//		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-//		reveal.getActionMap().put(SOME_ACTION, someAction);
+		
 		/**
 		 * This is the panel for the main area of the program. It holds two
 		 * components: A JScrollPane and a JButton
 		 */
-		
 		hint = new JButton("Hint");
 		hint.setFont(font2);
 		hint.addActionListener(this);
 		hint.addMouseWheelListener(this);
-		
 		
 		showSolution = new JButton("Solution");
 		showSolution.setFont(font2);
@@ -589,9 +446,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c.fill = GridBagConstraints.BOTH;		
 		c.weighty = 1.0;
 		c.gridwidth = 3;
-//		c.ipadx = 0;
-		//c.gridx = 0;
-		//c.gridy = 0;
 		
 		panel.add(area, c);
 
@@ -627,7 +481,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 */
 		
 		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
-			//frame.setPreferredSize(new Dimension((int)width,(int)height));
 			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
 		}
 		else if(squareSize*(x+2)+squareSize/2 > width){
@@ -643,14 +496,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
-		
-
-		
-	
-		
 	}
 
-	
 	 Action someAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
@@ -658,7 +505,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                System.out.println("do some action");
 	            }
 	        };
-	        
 
 	void keyActionTextField(JTextField l) {
 		
@@ -681,8 +527,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					tempHighlighted[1] = lastClick_y;
 					firsteverclick=false;
 				}
-						
-				
 				
 				for (int row = 0; row < x - 2; row++) {
 					for (int col = 0; col < y - 2; col++) {	
