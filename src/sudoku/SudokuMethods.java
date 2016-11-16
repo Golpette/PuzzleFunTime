@@ -10,11 +10,8 @@ public class SudokuMethods {
 
 	
 	//TODO: - tidy code
-	//      - add arrow keys functionality for selecting grids
-	//      - change colour of fixed entries? dark grey?
 	//      - add check method to highlight correct/wrong numbers in green/red
 	//      - general style: rounded corners, different colours, ...
-	//
 	//
 	// - plot # starting entries for different methods. Any stat phys in there?
 	// - (stat phys for crosswords - i.e. english language percolation! / word occurrences on bbc website / ... MAKE WEBSITE)
