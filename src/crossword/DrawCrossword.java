@@ -60,13 +60,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crosswordGrid, clue, clue2, clueNums, main;
+	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, clue_dt, clue2_dt;
 	JLayeredPane layer;
 	JScrollPane area;
 	JButton hint, reveal, showSolution;
 	JLabel[][] clueNumbers;
 	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
-	GridBagConstraints c, c2, c3, gbc_main;
+	GridBagConstraints c, c2, c3, c4, gbc_main;
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
@@ -131,8 +131,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		keys = new ArrayList<KeyEvent>();
 		
-
-		
 		cluesDwn = new ArrayList<JTextArea>();
 		cluesAcr = new ArrayList<JTextArea>();
 		clear = new Color(255, 255, 255, 255);
@@ -150,9 +148,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		width = screenSize.getWidth();
 		height = screenSize.getHeight();
 		
-
-		
-
 
 		font = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale*squareSize / 5 * 3));
 		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 26));
@@ -253,23 +248,38 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //
 //		
 		
+		//inline ifs!
+		int acr = cluesAcross.size();
+		int dow = cluesDown.size();
+		
+		int maxClues = (acr > dow) ? acr: dow ;
 		
 		
-		
+//		for (int i = 0; i < ((acr > dow) ? maxClues - dow: maxClues - acr) ; i++){
+//			String jt = "\\.FILLER!!!";
+//			if(acr > dow){
+//				cluesAcross.add(jt);
+//			}else{
+//				cluesDown.add(jt);
+//			}
+//		}
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
 		 * The numbers and clues in a JTextArea and the hints in a JLabel
 		 */	
 		// ( Two JPanels for holding across and down clues. Will hold these as JTextAreas with GridBagLayout c3 )
-		
+		//clue = new JPanel(new GridLayout(maxClues+1,1));
 		clue = new JPanel(new GridBagLayout());		
+//		clue_dt = new JPanel(new FlowLayout());
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
-//		clue.setAlignmentY(0);
+		clue.setAlignmentY(0);
 //		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
+		//clue2 = new JPanel(new GridLayout(maxClues+1,1));
+//		clue2_dt = new JPanel(new FlowLayout());
 		clue2 = new JPanel(new GridBagLayout()     );
 //		clue2.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
@@ -277,12 +287,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		clue2.setAlignmentY(0);
 		//clue2.setBounds(200, 200, 200, 200);
 		
-		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
-		c3 = new GridBagConstraints();
-		c3.fill = GridBagConstraints.BOTH;
-		c3.weightx = 1.0;
-		c3.weighty = 1.0;
-		c3.gridx = 0;
+
 		
 		
 		
@@ -293,7 +298,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//add space at top and "Across" title
 		JTextArea blnk = new JTextArea("");
 		blnk.setEditable(false);
-		cluesAcr.add(blnk);
+		//cluesAcr.add(blnk);
 		JTextArea first = new JTextArea("Across\n");   // STEVE JTEXTAREA FOR WRAPPING
 		first.setEditable(false);
 		first.setHighlighter(null);
@@ -334,7 +339,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 
 		//add space at top and "Down" title
-		cluesDwn.add( blnk );
+		//cluesDwn.add( blnk );
 		JTextArea second = new JTextArea("Down\n");
 		second.setEditable(false);
 		second.setHighlighter(null);
@@ -368,36 +373,62 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 		
-		if(cluesAcross.size() > cluesDown.size()){
-			for(int i = cluesDown.size(); i < cluesAcross.size(); i++){
-				cluesDown.add(" ");
-			}
-		}else{
-			for(int i = cluesAcross.size(); i < cluesDown.size(); i++){
-				cluesAcross.add(" ");
-			}
-		}
-
+		JTextArea temp = new JTextArea("FILLER");
+		temp.setFont(font3);
+		temp.setEditable(false);
+		temp.setHighlighter(null); 
+		temp.setLineWrap(true);
+		temp.setWrapStyleWord(true);
+	    temp.setColumns(25); 
+	    
+//		if(acr > dow){
+//			for(int i = dow; i < acr; i++){
+//				cluesDwn.add(temp);
+//			}
+//		}else{
+//			for(int i = acr; i < dow; i++){
+//				cluesAcr.add(temp);
+//			}
+//		}
+		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
+		c3 = new GridBagConstraints();
+		c3.fill = GridBagConstraints.NONE;
+		c3.weightx = 1.0;
+		c3.weighty = 0;
+		c3.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		c3.gridx = 0;
+		//c3.gridy = 0;
 
 		for (JTextArea j : cluesAcr) {
 
 			clue.add(j, c3);
-
-			JTextArea blankline = new JTextArea("");
-			blankline.setEditable(false);
-			clue.add(blankline, c3);//spacing between clues
+			//clue.add(j);
+//			JTextArea blankline = new JTextArea("");
+//			blankline.setEditable(false);
+//			clue.add(blankline, c3);//spacing between clues
 
 		}
-
+		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
+		
+		c4 = new GridBagConstraints();
+		c4.fill = GridBagConstraints.NONE;
+		c4.weightx = 1.0;
+		c4.weighty = 0;
+		c4.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		c4.gridx = 1;
+		//c4.gridy = 0;
+//		
 		for (JTextArea k : cluesDwn) {
 
-			clue2.add(k, c3);
-			JTextArea blankline = new JTextArea("");
-			blankline.setEditable(false);
-			clue2.add(blankline,c3);
+			clue2.add(k, c4);
+			//clue2.add(k);
+//			JTextArea blankline = new JTextArea("");
+//			blankline.setEditable(false);
+//			clue2.add(blankline,c4);
 		}
 
-
+//		clue_dt.add(clue, c3);
+//		clue2_dt.add(clue2, c3);
 		
 
 		
@@ -414,19 +445,20 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		zzz.weighty=0.0;
 		
 		
-		flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
-		//flow = new JPanel(new GridLayout(1,2));
+		//flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
+		flow = new JPanel(new GridLayout(1,2));
 		//flow.setBounds(100, 0, 100, 100);
-		flow.setAlignmentX(SwingConstants.LEADING);
+		flow.setAlignmentY(0);
+		//flow.setAlignmentX(SwingConstants.NORTH);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
-//		flow.add(clue );
-//		flow.add(clue2 );		
+		flow.add(clue );
+		flow.add(clue2 );		
 		// Add the 2 clue JPanels to flow JPanel
-		flow.add(clue, zzz );
-		zzz.gridx=1;
-		flow.add(clue2, zzz );
-		flow.setBackground(clear);
-		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
+//		flow.add(clue, zzz );
+//		zzz.gridx=1;
+//		flow.add(clue2, zzz );
+//		flow.setBackground(clear);
+//		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
 		// THE FLOWLAYOUT I HAVE USED PUTS HAS X AND Y SPACINGS DEFINED. THIS ALSO INCLUDES A SPACE BEFORE THE FIRST COMPONENT
 		// WHICH IS NOT WHAT WE WANT, SO THIS IS TO REMOVE THAT. THE -VE NUMBER HAS TO MATCH THAT ABOVE IN FLOWLAYOUT
 		
