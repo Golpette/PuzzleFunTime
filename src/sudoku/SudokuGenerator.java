@@ -19,8 +19,7 @@ public class SudokuGenerator{
 
 	public SudokuGenerator(int difficulty)throws IOException{
 		
-		
-		
+
 		row = new ArrayList<Integer>();
 		cols = new ArrayList<ArrayList<Integer>>();
 		boxes = new ArrayList<ArrayList<Integer>>();
@@ -32,10 +31,13 @@ public class SudokuGenerator{
 		
 		
 		
-		gridSize=9+2;
+		gridSize=9;
 		
+
 		x = gridSize;     
 		y = gridSize;
+		
+		
 		grid = new int[x][y];		
 		for(int i = 0; i < y; i++){
 			for( int j = 0; j < x; j++){

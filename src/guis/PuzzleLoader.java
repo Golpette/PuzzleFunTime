@@ -26,9 +26,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import crossword.CrosswordGenerator;
+import crossword.SetUpImages;
 import sudoku.SudokuGenerator;
 import wordsearch.WordSearchGenerator;
-import resources.SetUpImages;
 
 public class PuzzleLoader extends JComponent implements ActionListener{
 	private static final long serialVersionUID = 1L;

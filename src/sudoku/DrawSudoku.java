@@ -39,7 +39,7 @@ import java.awt.event.AWTEventListener; //??
  */
 public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize =60;	
+	private static int squareSize = 50;	
 	int x, y;
 	public int getX() {
 		return x;
@@ -66,7 +66,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	int[][] grid;
 	String[][] grid2;
 	GridBagConstraints c;
-	JButton reveal;
+	JButton solution, hint, clue;
 	DrawSudokuSolution sol;
 	ArrayList<String> fullGrid;
 	ArrayList<Integer> row, square, tempColumn, checks;
@@ -74,7 +74,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<ArrayList<Integer>> boxes;
 	Font font, font2;
 	Random rand;
-	boolean buttonPushed;
+	boolean solutionPushed, hintPushed, cluePushed;
 	
 	ArrayList<KeyEvent> keys;
 	Action action;
@@ -164,13 +164,22 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		Border border = BorderFactory.createLineBorder(Color.GRAY);	  // this is border for single grids
 		Border border2 = BorderFactory.createLineBorder(Color.BLACK);     //  border for 3x3 squares
 		//Border border3 = BorderFactory.createLineBorder(Color.BLACK, 4, true);
-		buttonPushed = false;
+		solutionPushed = false;
 		
-		reveal = new JButton("Show Solution");
-		reveal.setFont(font2);
-		reveal.setEnabled(true);
-		reveal.addActionListener(this);
-
+		solution = new JButton("Solution");
+		solution.setFont(font2);
+		//solution.setEnabled(true);
+		solution.addActionListener(this);
+		
+		hint = new JButton("Hint");
+		hint.setFont(font2);
+		hint.addActionListener(this);
+		
+		
+		clue = new JButton("Clue");
+		clue.setFont(font2);
+		clue.addActionListener(this);
+		
 		transparentLayer = new JPanel(new GridLayout(x-2, y-2));
 		transparentLayer.setBounds(squareSize-1,squareSize-1,squareSize*(x-2),squareSize*(y-2));
 		//transparentLayer.setOpaque(true);
@@ -215,6 +224,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 3;
 		panel.add(layer, c);
 
 		c.weightx = 1.0;
@@ -222,7 +232,22 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
-		panel.add(reveal, c);
+		c.gridwidth = 1;
+		panel.add(hint, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(clue, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.ipady = 10;
+		panel.add(solution, c);
 		
 		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
@@ -233,7 +258,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.getRootPane().setDefaultButton(reveal);
+		frame.getRootPane().setDefaultButton(solution);
 		//generateSudoku();
 		
 		
@@ -269,8 +294,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					nums[i][j].setEnabled(false);      //skip it when moving with keys
 					nums[i][j].setDisabledTextColor(Color.BLACK);
 					nums[i][j].setDisabledTextColor( new Color(90,90,90) );
-					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
-					
+					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
+
 				}
 			}
 		}
@@ -290,7 +315,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		System.out.println("Number of initial entries = " + cnt_nums);		
 		
 		
-		
+
 		// CARE. HERE INITIAL_CONFIG HAS LOTS OF -1 ENTRIES
 		
 		
@@ -324,28 +349,30 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 	
 	
-	
-
-	
-	
-	
-	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==reveal){
+		if(e.getSource()==solution){
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
-				reveal.setText("Hide Solution");
+				solution.setText("Hide Solution");
 				
 			}
 				
 			else{
-				reveal.setText("Show Solution");
+				solution.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						nums[i][j].setForeground(new Color(0,0,0));
 					}
 				}
 			}
+		}
+		if(e.getSource()==hint){
+			System.out.println("hint");
+			hintPushed = !hintPushed;
+		}
+		if(e.getSource()==clue){
+			System.out.println("clue");
+			cluePushed = !cluePushed;
 		}
 	}
 	

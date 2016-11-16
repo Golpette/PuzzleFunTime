@@ -1,6 +1,4 @@
 package crossword;
-import java.awt.BorderLayout;
-
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -26,8 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+// Steve: need these to remove automatic arrow key scrolling in JScrollPane
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -35,16 +37,14 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultEditorKit;
-// Steve: need these to remove automatic arrow key scrolling in JScrollPane
-import javax.swing.InputMap;
-import javax.swing.UIManager;
-import javax.swing.AbstractAction;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultEditorKit;
 
 
 /**
@@ -55,7 +55,7 @@ import javax.swing.SwingConstants;
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
-
+	private boolean buttonPushed;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
@@ -63,7 +63,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	JPanel panel, crosswordGrid, clue, clue2, clueNums, main;
 	JLayeredPane layer;
 	JScrollPane area;
-	JButton reveal;
+	JButton hint, reveal, showSolution;
 	JLabel[][] clueNumbers;
 	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
 	GridBagConstraints c, c2, c3, gbc_main;
@@ -112,6 +112,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
+		buttonPushed = false;
 		tempHighlighted = new int [2];
 		squareSize = 38;
 		MIN_SCALE = 7.0;
@@ -265,8 +266,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		clue.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 		clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
-		clue.setAlignmentY(0);
-		clue.setAlignmentX(0);
+//		clue.setAlignmentY(0);
+//		clue.setAlignmentX(0);
 		//clue.setBounds(200, 200, 200, 200);
 		
 		clue2 = new JPanel(new GridBagLayout()     );
@@ -280,7 +281,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c3 = new GridBagConstraints();
 		c3.fill = GridBagConstraints.BOTH;
 		c3.weightx = 1.0;
-		c3.weighty = 1;
+		c3.weighty = 1.0;
 		c3.gridx = 0;
 		
 		
@@ -367,7 +368,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			//cluesDwn.add(hintD);  // STEVE REMOVE
 		}
 		
-		
+		if(cluesAcross.size() > cluesDown.size()){
+			for(int i = cluesDown.size(); i < cluesAcross.size(); i++){
+				cluesDown.add(" ");
+			}
+		}else{
+			for(int i = cluesAcross.size(); i < cluesDown.size(); i++){
+				cluesAcross.add(" ");
+			}
+		}
 
 
 		for (JTextArea j : cluesAcr) {
@@ -383,7 +392,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		for (JTextArea k : cluesDwn) {
 
 			clue2.add(k, c3);
-			
 			JTextArea blankline = new JTextArea("");
 			blankline.setEditable(false);
 			clue2.add(blankline,c3);
@@ -392,26 +400,30 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		
 
-
-		clue.setAlignmentY(0);
-		clue2.setAlignmentY(0);
-		clue.setAlignmentX(0);
-		clue2.setAlignmentX(0);
+		
+//		clue.setAlignmentY(0);
+//		clue2.setAlignmentY(0);
+//		clue.setAlignmentX(0);
+//		clue2.setAlignmentX(0);
 		
 	    GridBagConstraints zzz = new GridBagConstraints();
-		zzz.fill = GridBagConstraints.HORIZONTAL;
+		zzz.fill = GridBagConstraints.VERTICAL;
 		zzz.gridx=0;
 		zzz.gridy=0;
+		zzz.weightx=0.0;
+		zzz.weighty=0.0;
 		
 		
-		
-		flow = new JPanel(new FlowLayout(FlowLayout.LEFT , 100, 0));
-		flow.setAlignmentX(SwingConstants.NORTH_EAST);
+		flow = new JPanel(new FlowLayout(FlowLayout.LEADING , 100, 0));
+		//flow = new JPanel(new GridLayout(1,2));
+		//flow.setBounds(100, 0, 100, 100);
+		flow.setAlignmentX(SwingConstants.LEADING);
 		////flow = new JPanel(new GridLayout(2,4,1,1));
 //		flow.add(clue );
 //		flow.add(clue2 );		
 		// Add the 2 clue JPanels to flow JPanel
 		flow.add(clue, zzz );
+		zzz.gridx=1;
 		flow.add(clue2, zzz );
 		flow.setBackground(clear);
 		flow.setBorder( BorderFactory.createEmptyBorder(0, -100, 0, 0) ); 
@@ -457,15 +469,23 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		
 		
-		
+	
 		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
 		 * clues pane and makes them scrollable.
 		 */
 		
-		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+		area = new JScrollPane(main);
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		   public void run() { 
+		       area.getVerticalScrollBar().setValue(0);
+		       area.getHorizontalScrollBar().setValue(0);
+		   }
+		});
+		
+		//area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		//		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
 	
 		area.getVerticalScrollBar().setUnitIncrement(10);
 		area.getHorizontalScrollBar().setUnitIncrement(10);
@@ -476,6 +496,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		area.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 		area.getActionMap().put(SOME_ACTION, someAction);
 		area.addMouseWheelListener(this);
+		//area.getVerticalScrollBar().setValue(0);
+		area.scrollRectToVisible(null);
 		
 		// Code to remove automatic arrow key scrolling in JScrollPane. Copy and pasted from: 
 		// http://stackoverflow.com/questions/11533162/how-to-prevent-jscrollpane-from-scrolling-when-arrow-keys-are-pressed
@@ -501,8 +523,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * bringing up a new GUI instance with the filled in grid on being
 		 * pressed.
 		 */
-		reveal = new JButton("Show Solution");
-		reveal.setFont(font2);
+		reveal = new JButton("Clue");
+		reveal.setFont(font2); 
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
 //		reveal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
@@ -512,12 +534,23 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * components: A JScrollPane and a JButton
 		 */
 		
+		hint = new JButton("Hint");
+		hint.setFont(font2);
+		hint.addActionListener(this);
+		hint.addMouseWheelListener(this);
+		
+		
+		showSolution = new JButton("Solution");
+		showSolution.setFont(font2);
+		showSolution.addActionListener(this);
+		showSolution.addMouseWheelListener(this);
 		
 		panel = new JPanel(new GridBagLayout());
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;		
 		c.weighty = 1.0;
+		c.gridwidth = 3;
 //		c.ipadx = 0;
 		//c.gridx = 0;
 		//c.gridy = 0;
@@ -529,10 +562,25 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c.gridx = 0;
 		c.gridy = 1;
 		c.ipady = 10;
+		c.ipadx = 400;
+		c.gridwidth = 1;
+		panel.add(hint, c);
+
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.ipady = 10;
 		
 		panel.add(reveal, c);
-
 		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
+		c.gridy = 1;
+		c.ipady = 10;
+		
+		panel.add(showSolution, c);
 		
 		
 		/**
@@ -1394,7 +1442,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	 * This does something or other
 	 */
 	public void revealSolution(){
-		reveal.setText("Hide Solution");
+		showSolution.setText("Hide Solution");
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				if (boxes[i][j].getText().equals("")) {
@@ -1409,7 +1457,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	}
 
 	public void hideSolution(){
-		reveal.setText("Show Solution");
+		showSolution.setText("Solution");
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				boxes[i][j].setForeground(new Color(0, 0, 0, 255));
@@ -1417,17 +1465,70 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		}
 	}
 	
+	public void revealWord(){
+		System.out.println("Word Revealed!");
+		reveal.setText("Hide Clue");
+	}
+	
+	public void hideWord(){
+		System.out.println("Word Hidden!");
+		reveal.setText("Clue");
+	}
+	
+	public void showHint(){
+		System.out.println("Hint revealed!");
+		hint.setText("Hide Hint");
+	}
+	
+	public void hideHint(){
+		System.out.println("Hint gone!");
+		hint.setText("Hint");
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		
 		
+		if (e.getSource() == hint) {
+			
+			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
+//			if (sol.frame.isVisible()) {
+			buttonPushed = !buttonPushed;
+			if(buttonPushed){
+				showHint();
+				//revealSolution();
+				//show anagram for random/currently highlighted word
+			} else {
+				//hideSolution();
+				hideHint();
+			}
+		}
+		
 		if (e.getSource() == reveal) {
-			sol.frame.setVisible(!sol.frame.isVisible());
-			if (sol.frame.isVisible()) {
+			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
+//			if (sol.frame.isVisible()) {
+			buttonPushed = !buttonPushed;
+			if(buttonPushed){
+				revealWord();
+				//reveal currently highlighted/random word
+				//revealSolution();
+			} else {
+				hideWord();
+				//hideSolution();
+			}
+		}
+		
+		if (e.getSource() == showSolution) {
+			sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
+//			if (sol.frame.isVisible()) {
+			buttonPushed = !buttonPushed;
+			if(buttonPushed){
 				revealSolution();
 			} else {
 				hideSolution();
 			}
 		}
+		
+		
 	}
 	
 	 public void mouseWheelMoved(MouseWheelEvent e) {
