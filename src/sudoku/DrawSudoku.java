@@ -8,10 +8,15 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,6 +28,11 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import crossword.JTextFieldLimit;
+
+import java.awt.event.AWTEventListener; //??
+
+
+
 
 /**
  * Class to draw a word search
@@ -67,8 +77,20 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	boolean solutionPushed, hintPushed, cluePushed;
 	int difficulty;
 	
+	ArrayList<KeyEvent> keys;
+	Action action;
+	
+	
+	
+	static int gridsize=9;
+
+	
+	
+	
+	
 	//@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
+
 		
 		this.x = x;
 		this.y = y;
@@ -81,11 +103,44 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		sol.setVisible(false);
 		
 		
-		// WE NOW HAVE GRID[][], THE BASE OF OUR SUDOKU. MODIFY THIS TO STARTING CONFIGURATION.
+		// We now have a full grid[][] for sudoku base. Modify grid[][] to starting configuration
+		int[][] initial_config = new int[9][9];
 		
+		
+		
+		
+		
+		
+		
+		// TEST SUDOKU READER METHOD.
+		//initial_config = SudokuReader.readSudoku("sudoku_finland.dat");
+		//initial_config = SudokuReader.readSudoku("sudoku_medium2.dat");
+		// Attempt to solve
+		//int[][] solved_grid = new int[9][9];
+		//solved_grid = SudokuMethods.solver_noGuessing( initial_config );
+        //
+		//System.out.println("Is solved? -- "+ SudokuMethods.isSolved(solved_grid)  );
+		
+
+		
+		
+		
+		
+			
+		if( difficulty == 2 ){
+			initial_config = SudokuMethods.makeEasy( grid );
+		}
+		else if( difficulty == 4 ){
+			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+		}
+		else{
+			System.out.println("ONLY EASY AND MEDIUM HAVE BEEN IMPLEMENTED");
+			initial_config = SudokuMethods.makeMedium( grid );
+		}		
 		//System.out.println( grid[0][0] + " " + grid[1][1] + " "+ grid[0][1]);   // CAREFUL: ANDY HAS FLIPPED [X][Y] TO GRID[Y][X]
 		
 		
+	
 		
 		
 		
@@ -138,14 +193,14 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
-
-				
 				nums[i][j] = new JTextField();
 				nums[i][j].setFont(font);
 				nums[i][j].setForeground(Color.BLACK);
 				nums[i][j].setBorder(border);
 				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
-				nums[i][j].setDocument(new JTextFieldLimit(1, false));
+				nums[i][j].setDocument(new JTextFieldLimit(1, false));				
+				keyActionTextField(nums[i][j]);
+
 				transparentLayer.add(nums[i][j]);
 			}
 		}
@@ -208,37 +263,66 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 		
+	
 		
 		
 		
-		// Modify grid[][] to starting configuration
-		int[][] initial_config = new int[9][9];
+		// Print solution (or as far as solver got)
 		
+//		// Put starting config into nums[][] JTextFields
+//		for (int i = 0; i < x-2; i++){
+//			for (int j = 0; j < y-2; j++){
+//				if( solved_grid[i][j] != 0 ){                      // CHANGE X AND Y COORDS FFS
+//					nums[i][j].setText( Integer.toString( solved_grid[i][j])  );
+//					nums[i][j].setEditable(false);
+//					//nums[i][j].setForeground(new Color( 163 , 194,  163));
+//					nums[i][j].setForeground(Color.BLACK);
+//					nums[i][j].setHighlighter(null);
+//					nums[i][j].setBackground(Color.WHITE);;
+//				}
+//			}
+//		}	
+		
+
 		if(difficulty == 0){
 			initial_config = SudokuMethods.makeEasy( grid );	
 		}
 		else if(difficulty == 1){	
 			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
 		}	
+
 		
 		
 		// Put starting config into nums[][] JTextFields
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
-					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
-					nums[i][j].setEditable(false);
-					//nums[i][j].setForeground(new Color( 163 , 194,  163));
-					nums[i][j].setForeground(Color.BLACK);
-					nums[i][j].setHighlighter(null);
-					nums[i][j].setBackground(Color.WHITE);
+
+					nums[i][j].setEnabled(false);      //skip it when moving with keys
+					nums[i][j].setDisabledTextColor(Color.BLACK);
+					nums[i][j].setDisabledTextColor( new Color(90,90,90) );
+					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
+
 				}
 			}
 		}
 		
 
 		
+		// Count number of starting entries (just to gauge difference between methods)
+		int cnt_nums=0;
+		for (int i = 0; i < x-2; i++){
+			for (int j = 0; j < y-2; j++){
+				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
+					cnt_nums++;
+				}
+			}
+		}
 		
+		System.out.println("Number of initial entries = " + cnt_nums);		
+		
+		
+
 		// CARE. HERE INITIAL_CONFIG HAS LOTS OF -1 ENTRIES
 		
 		
@@ -269,6 +353,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 	}
+
 	
 	
 	public void actionPerformed(ActionEvent e) {
@@ -277,20 +362,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			if(sol.frame.isVisible()){
 				solution.setText("Hide Solution");
 				
-				//sol.setVisible(true);
-				//sol.frame.setVisible(true);
-//				for (int i = 0; i < x-2; i++){
-//					for (int j = 0; j < y-2; j++){
-//						if(numbers[i][j].getText().equals("")){
-//							numbers[i][j].setForeground(new Color(0,0,0,255));
-//						}
-//						else if(numbers[i][j].getText().toLowerCase().equals(grid[j+1][i+1])){
-//							numbers[i][j].setForeground(new Color(0,255,0,255));
-//						}else{
-//							numbers[i][j].setForeground(new Color(255,0,0,255));
-//						}
-					//}
-			//	}
 			}
 				
 			else{
@@ -304,25 +375,137 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			int a = rand.nextInt(9);
-			int b = rand.nextInt(9);
 			hintPushed = !hintPushed;
-//			if(hintPushed){
-//				nums[a][b].setBackground(Color.CYAN);
-//			}
-//			else{
-//				nums[a][b].setBackground(Color.YELLOW);
-//			}
 		}
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			cluePushed = !cluePushed;
-//			if(cluePushed){
-//				int a = rand.nextInt(9);
-//				int b = rand.nextInt(9);
-//				int c = rand.nextInt(9);
-//				nums[a][b].setText(""+c);
-//			}
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+
+
+	// KEY ACTIONS FOR MOVING WITH ARROW KEYS -----------------------	
+
+	Action someAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("do some action");
+		}
+	};
+
+
+	void keyActionTextField(JTextField l) {
+
+		l.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+
+
+
+
+				for (int row = 0; row < gridsize ; row++) {
+					for (int col = 0; col < gridsize ; col++) {	
+
+
+						if (e.getSource() == nums[row][col]) {
+
+							if (e.getKeyCode() == KeyEvent.VK_UP) {			
+
+								// STEVE: jump fixed squares and implement PBCs			   
+								int newstart=row;
+								for( int i=1; i<gridsize*2; i++){										
+									//Periodic BCs
+									if( newstart-i < 0 ){
+										i=0;  newstart=gridsize-1;
+									}
+									// Jump fixed entries next editable one 
+									if (nums[ (newstart-i) ][col].isEnabled()) {
+										nums[ (newstart-i) ][col].requestFocus();
+										break;
+									}
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
+								int newstart=row;
+								for( int i=1; i<gridsize+1; i++ ){	
+									if( newstart+i > gridsize-1 ){
+										i=0;  newstart=0;
+									}
+									if (nums[newstart+i][col].isEnabled()) {
+										nums[newstart+i][col].requestFocus();
+										break;
+									}						
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+								int newstart=col;
+								for( int i=1; i<gridsize+1; i++){
+									if( newstart+i>gridsize-1 ){
+										i=0;  newstart=0;
+									}									
+									if (nums[row][newstart + i].isEnabled()) {
+										nums[row][newstart + i].requestFocus();
+										break;
+									}
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+								int newstart=col;
+								for(int i=1; i<gridsize; i++){
+									if( newstart-i<0 ){
+										i=0;  newstart=gridsize-1;
+									}
+									if (nums[row][newstart - i].isEnabled()) {
+										nums[row][newstart - i].requestFocus();
+										break;
+									}
+								}	
+							}
+
+
+
+							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+								nums[row][col].setText("");					
+							}
+
+						}
+
+					}
+				}
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+
+		});
+	}
+
+	
+	
+	
+	
+	
+	
 }

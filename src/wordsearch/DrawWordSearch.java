@@ -969,26 +969,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if (buttonPushed) {
 				solution.setText("Hide Solution");
 				System.out.print("\nEntries: ");
-//				for (int i = 0; i < x; i++) {
-//					for (int j = 0; j < y; j++) {
-							//if (!grid[i][j].equals("_")) {
 								for(Entry a: entries){
 							loopAroundWord2(a);
-						
-//							allLetters.get(0)[j-1][i-1].setOpaque(true);
-//							allLetters.get(0)[j-1][i-1].setBackground(clear);
-						//	allLetters.get(0)[j-1][i-1].setBackground(Color.GREEN);
-//							}
-								
-								
 						}
-//						if (!grid[i][j].equals("_")) {
-//							allLetters.get(0)[j - 1][i - 1].setIcon(null);
-//							allLetters.get(0)[j - 1][i - 1].setOpaque(true);
-//							allLetters.get(0)[j - 1][i - 1].setBackground(Color.GREEN);
-//						}
-//					}
-//				}
 				for(Entry a: entries){
 					System.out.print(a.getWord().toString() + ", ");
 				}
@@ -1053,6 +1036,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			showHint();
+
 		}
 		if(e.getSource()==clue){
 			System.out.println("clue");
