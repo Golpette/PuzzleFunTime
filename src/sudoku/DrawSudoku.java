@@ -39,7 +39,7 @@ import java.awt.event.AWTEventListener; //??
  */
 public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 50;	
+	private static int squareSize = 60;	
 	int x, y;
 	public int getX() {
 		return x;

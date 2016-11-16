@@ -1,6 +1,7 @@
 package crossword;
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 //import java.awt.MigLayout;
@@ -82,6 +83,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	double height;
 	JPanel flow;
 	int [] tempHighlighted;
+	String tempDirection;
 	
 	
 	// Define Color highlighting current word & clue
@@ -113,7 +115,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		buttonPushed = false;
-		tempHighlighted = new int [2];
+		tempHighlighted = new int [2];//just for zoom
+		tempDirection="across";       //just for zoom
 		squareSize = 38;
 		MIN_SCALE = 7.0;
 		MAX_SCALE = 18.0;
@@ -178,6 +181,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		}
 		
 		
+		
+		
 		drawGrid(normalisedScale);
 		
 
@@ -239,21 +244,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 
 		
-// UNCOMMENT THIS LINE TO REMOVE THE SCROLL WHEN MOUSE IS OVER GRID. I THINK IT SOMEHOW OVERRIDES
-// THE SCROLL FROM "area" COMPONENT
-//		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
-//		layer.getActionMap().put(SOME_ACTION, someAction);
-//		layer.addMouseWheelListener(this);
-//	
-//
-//		
 		
 		//inline ifs!
 		int acr = cluesAcross.size();
 		int dow = cluesDown.size();
 		
 		int maxClues = (acr > dow) ? acr: dow ;
-		
+
 		
 //		for (int i = 0; i < ((acr > dow) ? maxClues - dow: maxClues - acr) ; i++){
 //			String jt = "\\.FILLER!!!";
@@ -317,6 +314,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			
 			String clue = s + " (" + len + ")";
 			JTextArea across = new JTextArea(clue);
+			
+			across.setCursor(new Cursor(Cursor.HAND_CURSOR));   // MAKE HAND CURSOR
+	
 			across.setEditable(false);
 			across.setHighlighter(null);  // WHY DOES THIS OD NOTHING?			
 			across.setFont(font3);
@@ -355,6 +355,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 			String clue = s + " (" + len + ")";
 			JTextArea down = new JTextArea(clue);
+			down.setCursor(new Cursor(Cursor.HAND_CURSOR));   // MAKE HAND CURSOR
 			down.setFont(font3);
 			down.setEditable(false);
 			down.setHighlighter(null); 
@@ -677,8 +678,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					firstAutoMove = true;
 					makeAllWhite();
 					highlightWord_fromClick(lastClick_x,lastClick_y);
-					tempHighlighted[0] = lastClick_x;
-					tempHighlighted[1] = lastClick_y;
 					firsteverclick=false;
 				}
 						
@@ -704,8 +703,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[ (newstart-i) ][col].isEnabled()) {
 										boxes[ (newstart-i) ][col].requestFocus();
 										// highlight any words that *start* from this square
-										tempHighlighted[0] = newstart-i;
-										tempHighlighted[1] = col;
 										highlightWord( newstart-i, col);
 										break;
 									}
@@ -721,8 +718,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[newstart+i][col].isEnabled()) {
 										boxes[newstart+i][col].requestFocus();
 										highlightWord(newstart+i,col);
-										tempHighlighted[0] = newstart+i;
-										tempHighlighted[1] = col;
 										break;
 									}						
 								}	
@@ -737,8 +732,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									if (boxes[row][newstart + i].isEnabled()) {
 										boxes[row][newstart + i].requestFocus();
 										highlightWord(row, newstart+i);
-										tempHighlighted[0] = row;
-										tempHighlighted[1] = newstart+i;
 										break;
 									}
 								}	
@@ -752,8 +745,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 									}
 									if (boxes[row][newstart - i].isEnabled()) {
 										boxes[row][newstart - i].requestFocus();
-										tempHighlighted[0] = row;
-										tempHighlighted[1] = newstart-i;
 										highlightWord(row,newstart-i);
 										break;
 									}
@@ -809,8 +800,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 												currentDirection = 1;  //i.e. going down
 												//also make new highlight
 												makeAllWhite();
-												tempHighlighted[0] = row;
-												tempHighlighted[1] = col;
 												highlightWord( row, col);												
 											}
 										}
@@ -830,8 +819,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 												currentDirection = 0;  //i.e. going across
 												//also make new highlight
 												makeAllWhite();
-												tempHighlighted[0] = row;
-												tempHighlighted[1] = col;
 												highlightWord( row, col);	
 											}
 										}
@@ -908,11 +895,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
-						if (e.getSource().equals(boxes[i][j])){
+						if (e.getSource().equals(boxes[i][j]) && boxes[i][j].isEnabled()  ){
 							makeAllWhite();
 							highlightWord_fromClick(i,j);
-							tempHighlighted[0] = i;
-							tempHighlighted[1] = j;
+//							tempHighlighted[0] = i;
+//							tempHighlighted[1] = j;
 						}
 						//for (JLabel lb : hints) {
 						//	lb.setText(" ");
@@ -964,14 +951,17 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 				for( JTextArea cl : cluesAcr ){
 					if( e.getSource()==cl ){
-						//makeAllWhite();
+						makeAllWhite();
+						makeAllCluesWhite();
+						cl.setBackground(HIGHLIGHT_COLOUR);
+						cl.setOpaque(true);	
 						String c_n_string = ""+cl.getText().split("\\.")[0];
 						int c_n = Integer.parseInt( c_n_string   );
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
 								// then highlight this word
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								//colourWord( ent.getY()-1, ent.getX()-1, "across");
+								colourWord( ent.getY()-1, ent.getX()-1, "across");
 							}
 						}
 						
@@ -980,14 +970,17 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				}
 				for( JTextArea cl : cluesDwn ){
 					if( e.getSource()==cl ){
-						//makeAllWhite();
+						makeAllWhite();
+						makeAllCluesWhite();
+						cl.setBackground(HIGHLIGHT_COLOUR);
+						cl.setOpaque(true);	
 						String c_n_string = ""+cl.getText().split("\\.")[0];
 						int c_n = Integer.parseInt( c_n_string   );
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
 								// then highlight this word
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								//colourWord( ent.getY()-1, ent.getX()-1, "down");
+								colourWord( ent.getY()-1, ent.getX()-1, "down");
 							}
 						}
 						
@@ -1028,66 +1021,65 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			
 			public void mouseEntered(MouseEvent e) {
-//				for (JLabel i : hints) {
-//					if (e.getSource() == i) {
-//						if(i.getText().equals(" ")){
-//							i.setText("      HINT");
+////				for (JLabel i : hints) {
+////					if (e.getSource() == i) {
+////						if(i.getText().equals(" ")){
+////							i.setText("      HINT");
+////						}
+////					}
+////				}    STEVE:  REMOVED FOR NOE, WASNT COMPATIBLE WITH HIGHLITING CLUES. DONT KNOW WHY			
+//				
+				
+	// BELOW NEEDED FOR MOUSE HOVERING OVER CLUES
+//				firsteverclick = false;
+//				
+//				makeAllCluesWhite();
+//				
+//				for( JTextArea cl : cluesAcr ){
+//					if( e.getSource()==cl ){
+//						cl.setBackground(HIGHLIGHT_COLOUR);
+//						cl.setOpaque(true);	
+//						
+//						makeAllWhite();
+//
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "across");   // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
+//							}
 //						}
+//						
+//						
 //					}
-//				}    STEVE:  REMOVED FOR NOE, WASNT COMPATIBLE WITH HIGHLITING CLUES. DONT KNOW WHY			
-				
-				firsteverclick = false;
-				
-				makeAllCluesWhite();
-				
-				for( JTextArea cl : cluesAcr ){
-					if( e.getSource()==cl ){
-						cl.setBackground(HIGHLIGHT_COLOUR);
-						cl.setOpaque(true);	
-						
-						makeAllWhite();
-
-						String c_n_string = ""+cl.getText().split("\\.")[0];
-						int c_n = Integer.parseInt( c_n_string   );
-						for( Entry ent : entries ){
-							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
-								// then highlight this word
-								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								colourWord( ent.getY()-1, ent.getX()-1, "across");   // X AND Y COORDS ARE FUCKED UP. FIX THIS. BUG. TODO!!
-							}
-						}
-						
-						
-					}
-			
-				}
-				for( JTextArea cl : cluesDwn ){
-					if( e.getSource()==cl ){
-						cl.setBackground(HIGHLIGHT_COLOUR);
-						cl.setOpaque(true);	
-						
-						makeAllWhite();
-						String c_n_string = ""+cl.getText().split("\\.")[0];
-						int c_n = Integer.parseInt( c_n_string   );
-						for( Entry ent : entries ){
-							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
-								// then highlight this word
-								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
-								colourWord( ent.getY()-1, ent.getX()-1, "down");
-							}
-						}
-						
-						
-						
-					}					
-				}
-				
-				
-				
-
-				
-				
+//			
+//				}
+//				for( JTextArea cl : cluesDwn ){
+//					if( e.getSource()==cl ){
+//						cl.setBackground(HIGHLIGHT_COLOUR);
+//						cl.setOpaque(true);	
+//						
+//						makeAllWhite();
+//						String c_n_string = ""+cl.getText().split("\\.")[0];
+//						int c_n = Integer.parseInt( c_n_string   );
+//						for( Entry ent : entries ){
+//							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+//								// then highlight this word
+//								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
+//								colourWord( ent.getY()-1, ent.getX()-1, "down");
+//							}
+//						}
+//						
+//						
+//						
+//					}					
+//				}
+		
 			}
+			
+			
 
 			public void mouseExited(MouseEvent e) {
 
@@ -1101,18 +1093,20 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //					}
 //				}   // STEVE REMOVE
 
-				for( JTextArea cl : cluesAcr ){
-					if( e.getSource()==cl ){
-						cl.setBackground(Color.WHITE);
-						cl.setOpaque(true);						
-					}
-			
-				}
-				for( JTextArea cl : cluesDwn ){
-					cl.setBackground(Color.WHITE);
-					cl.setOpaque(true);							
-				}
 				
+//				
+//				for( JTextArea cl : cluesAcr ){   // only need for hovering
+//					if( e.getSource()==cl ){
+//						cl.setBackground(Color.WHITE);
+//						cl.setOpaque(true);						
+//					}
+//			
+//				}
+//				for( JTextArea cl : cluesDwn ){
+//					cl.setBackground(Color.WHITE);
+//					cl.setOpaque(true);							
+//				}
+//				
 				
 			}
 			
@@ -1137,6 +1131,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void highlightWord( int xstart, int ystart ){
 		/** Highlight word from any letter **/
+
 		
 		if( !clueNumbers[xstart][ystart].getText().equals("") ){
 			// i.e., if start of word
@@ -1201,6 +1196,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void colourWord(int xstart, int ystart, String direc){
 		/** Colour word given one grid point in it  **/
+		
+		tempHighlighted[0] = xstart; //these store highlight&direc for zooming
+		tempHighlighted[1] = ystart;
+		tempDirection=direc;
+		
 		
 		int xx1=xstart;  int yy1=ystart;
 		
@@ -1326,8 +1326,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		// else use highlightWord() method if clicking anywhere else in word other than first letter
 		else{
 			highlightWord(xstart,ystart);
-			tempHighlighted[0] = xstart;
-			tempHighlighted[1] = ystart;
 			countClicks=0;
 		}
 	
@@ -1343,7 +1341,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public void colorAppropriateClue(){
 		/** Highlight clue of any word that is highlighted in grid */
 		
-		//makeAllCluesWhite();
 		
 		// FIND ANY COLOURED SQUARE
 		int coloredX=0;  int coloredY=0;
@@ -1379,9 +1376,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					// conditional statements find first clue in word (since any word can contain multiple clue numbers)
 					
 					cn_h = Integer.parseInt( clueNumbers[coloredY][coloredX-gg].getText()  );
-										
-					//makeAllCluesWhite();
-					
+															
 					// highlight appropriate clue
 					for( JTextArea cl : cluesAcr ){		
 						
@@ -1407,9 +1402,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					( !clueNumbers[coloredY-gg][coloredX].getText().equals("")  &&  !boxes[coloredY-gg-1][coloredX].isEnabled()   )    ){
 					
 					cn_h = Integer.parseInt( clueNumbers[coloredY-gg][coloredX].getText()  );
-										
-					//makeAllCluesWhite();
-					
+															
 					// highlight appropriate clue
 					for( JTextArea cl : cluesDwn ){		
 						
@@ -1601,8 +1594,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    		    drawGrid( normalisedScale);
 	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
-	                //System.out.println("scrolled down");
-	                if(scale > MIN_SCALE){
+
+	            	if(scale > MIN_SCALE){
 	                	scale--;
 	                }
 	                for(int i = 0; i < x-2; i++){
@@ -1610,27 +1603,24 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
+	                
 	                normalisedScale = scale/20;
 	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
 	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
 	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
 	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
 	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
+	    			
 	    		    main.revalidate();
+	    		    
 	    		    drawGrid(normalisedScale);
-	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
-	                //System.out.println("mouseX: " + mouseX + " mouseY: "+ mouseY);
+
 	            }
 	        }
 	        else if(!e.isControlDown()){
-	        	//System.out.println("Scrolled HERE!!!!");
-	        	//area.setAutoscrolls(true);
-	        	// area.scrollRectToVisible(getVisibleRect());
+
 	        	area.setWheelScrollingEnabled(true);
-//	     	   if(e.getWheelRotation() < 0){
-//	  		  	area.scrollRectToVisible(area.getBounds());
-//		        //else scroll like normal
-//	 	       }
+
 	        }
 	    }
 
@@ -1664,13 +1654,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			for (int j = 0; j < y - 2; j++) {
 				
 				boxes[i][j] = new JTextField(); // need new layout to resize letters in boxes
-				
-	            mouseActionlabel(boxes[i][j]);
+	            mouseActionlabel(boxes[i][j]);				
 				
 				//trying to stop 'dinging' sound when moving cursor between boxes
 				action = boxes[i][j].getActionMap().get(DefaultEditorKit.beepAction);
 				action.setEnabled(false);
-				//boxes[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
+
 				boxes[i][j].setBorder(border);
 				boxes[i][j].setDocument(new JTextFieldLimit(1, true));
 				if (grid[j+1][i+1] == "_") {
@@ -1690,12 +1679,20 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 
-		for(int i = 0; i < x-2; i++){
+		
+		
+		for(int i = 0; i < x-2; i++){             
         	for (int j = 0; j < y-2; j++){
         		String str = tempBoxes[i][j].getText();
         		boxes[i][j].setText(str);
         	}
         }
+		
+		
+		
+		
+		
+		
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
@@ -1722,12 +1719,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				clueNums.add(clueNumbers[i][j]);
 			}
 		}
-		
-		highlightWord( tempHighlighted[0], tempHighlighted[1]);
+
+		// RECOLOR WORD AFTER ZOOMING
+		colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
 	
 		layer.removeAll();
-		// STEVE: SWITCHED THESE
-		layer.add(clueNums, new Integer(1));
+        layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
 		
 		layer.setVisible(true);
