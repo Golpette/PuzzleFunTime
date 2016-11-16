@@ -31,9 +31,8 @@ public class SudokuGenerator{
 		
 		
 		
-		gridSize=9;
+		gridSize=9+2;
 		
-
 		x = gridSize;     
 		y = gridSize;
 		
