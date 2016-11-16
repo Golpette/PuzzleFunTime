@@ -8,11 +8,15 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,6 +28,11 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import crossword.JTextFieldLimit;
+
+import java.awt.event.AWTEventListener; //??
+
+
+
 
 /**
  * Class to draw a word search
@@ -67,8 +76,21 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	Random rand;
 	boolean buttonPushed;
 	
+	ArrayList<KeyEvent> keys;
+	Action action;
+	
+	
+	
+	static int gridsize=9;
+
+	
+	
+	
+	
 	//@SuppressWarnings("unchecked")
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
+		
+		
 		
 		this.x = x;
 		this.y = y;
@@ -167,7 +189,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				nums[i][j].setForeground(Color.BLACK);
 				nums[i][j].setBorder(border);
 				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
-				nums[i][j].setDocument(new JTextFieldLimit(1, false));
+				nums[i][j].setDocument(new JTextFieldLimit(1, false));				
+				keyActionTextField(nums[i][j]);
+
 				transparentLayer.add(nums[i][j]);
 			}
 		}
@@ -218,7 +242,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 		
-		
+		// Print solution (or as far as solver got)
 		
 //		// Put starting config into nums[][] JTextFields
 //		for (int i = 0; i < x-2; i++){
@@ -241,12 +265,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		for (int i = 0; i < x-2; i++){
 			for (int j = 0; j < y-2; j++){
 				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
+
+					nums[i][j].setEnabled(false);      //skip it when moving with keys
+					nums[i][j].setDisabledTextColor(Color.BLACK);
+					nums[i][j].setDisabledTextColor( new Color(90,90,90) );
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );
-					nums[i][j].setEditable(false);
-					//nums[i][j].setForeground(new Color( 163 , 194,  163));
-					nums[i][j].setForeground(Color.BLACK);
-					nums[i][j].setHighlighter(null);
-					nums[i][j].setBackground(Color.WHITE);;
+					
 				}
 			}
 		}
@@ -330,6 +354,120 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	
+	
+
+	
+	
+
+
+	// KEY ACTIONS FOR MOVING WITH ARROW KEYS -----------------------	
+
+	Action someAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("do some action");
+		}
+	};
+
+
+	void keyActionTextField(JTextField l) {
+
+		l.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+
+
+
+
+				for (int row = 0; row < gridsize ; row++) {
+					for (int col = 0; col < gridsize ; col++) {	
+
+
+						if (e.getSource() == nums[row][col]) {
+
+							if (e.getKeyCode() == KeyEvent.VK_UP) {			
+
+								// STEVE: jump fixed squares and implement PBCs			   
+								int newstart=row;
+								for( int i=1; i<gridsize*2; i++){										
+									//Periodic BCs
+									if( newstart-i < 0 ){
+										i=0;  newstart=gridsize-1;
+									}
+									// Jump fixed entries next editable one 
+									if (nums[ (newstart-i) ][col].isEnabled()) {
+										nums[ (newstart-i) ][col].requestFocus();
+										break;
+									}
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
+								int newstart=row;
+								for( int i=1; i<gridsize+1; i++ ){	
+									if( newstart+i > gridsize-1 ){
+										i=0;  newstart=0;
+									}
+									if (nums[newstart+i][col].isEnabled()) {
+										nums[newstart+i][col].requestFocus();
+										break;
+									}						
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+								int newstart=col;
+								for( int i=1; i<gridsize+1; i++){
+									if( newstart+i>gridsize-1 ){
+										i=0;  newstart=0;
+									}									
+									if (nums[row][newstart + i].isEnabled()) {
+										nums[row][newstart + i].requestFocus();
+										break;
+									}
+								}	
+							}
+							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+								int newstart=col;
+								for(int i=1; i<gridsize; i++){
+									if( newstart-i<0 ){
+										i=0;  newstart=gridsize-1;
+									}
+									if (nums[row][newstart - i].isEnabled()) {
+										nums[row][newstart - i].requestFocus();
+										break;
+									}
+								}	
+							}
+
+
+
+							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+								nums[row][col].setText("");					
+							}
+
+						}
+
+					}
+				}
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+
+		});
+	}
+
 	
 	
 	
