@@ -302,9 +302,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			for (int j = 0; j < y-2; j++){
 				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
 
-					nums[i][j].setEnabled(false);      //skip it when moving with keys
-					nums[i][j].setDisabledTextColor(Color.BLACK);
-					nums[i][j].setDisabledTextColor( new Color(90,90,90) );
+					//nums[i][j].setEnabled(false);      //skip it when moving with keys
+					//nums[i][j].setDisabledTextColor(Color.BLACK);
+					//nums[i][j].setDisabledTextColor( new Color(90,90,90) );
+					nums[i][j].setEnabled(true);
+					nums[i][j].setEditable(false);
+					nums[i][j].setBackground(Color.WHITE);
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
 
 				}
@@ -445,60 +448,46 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 						if (e.getSource() == nums[row][col]) {
 
-							if (e.getKeyCode() == KeyEvent.VK_UP) {			
-
-								// STEVE: jump fixed squares and implement PBCs			   
+							if (e.getKeyCode() == KeyEvent.VK_UP) {
+								
 								int newstart=row;
-								for( int i=1; i<gridsize*2; i++){										
-									//Periodic BCs
-									if( newstart-i < 0 ){
-										i=0;  newstart=gridsize-1;
-									}
-									// Jump fixed entries next editable one 
-									if (nums[ (newstart-i) ][col].isEnabled()) {
-										nums[ (newstart-i) ][col].requestFocus();
-										break;
-									}
-								}	
+								if( newstart-1 < 0 ){
+									newstart=gridsize;
+								}
+								nums[ (newstart-1) ][col].requestFocus();
+								nums[ newstart-1 ][col].getCaret().setVisible(true);
+								
 							}
-							if (e.getKeyCode() == KeyEvent.VK_DOWN) {						
+							if (e.getKeyCode() == KeyEvent.VK_DOWN) {		
+								
 								int newstart=row;
-								for( int i=1; i<gridsize+1; i++ ){	
-									if( newstart+i > gridsize-1 ){
-										i=0;  newstart=0;
-									}
-									if (nums[newstart+i][col].isEnabled()) {
-										nums[newstart+i][col].requestFocus();
-										break;
-									}						
-								}	
+								if( newstart+1 > gridsize-1 ){
+									newstart=-1;
+								}
+								nums[ (newstart+1) ][col].requestFocus();
+								nums[ newstart+1 ][col].getCaret().setVisible(true);
+									
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+								
 								int newstart=col;
-								for( int i=1; i<gridsize+1; i++){
-									if( newstart+i>gridsize-1 ){
-										i=0;  newstart=0;
-									}									
-									if (nums[row][newstart + i].isEnabled()) {
-										nums[row][newstart + i].requestFocus();
-										break;
-									}
-								}	
+								if( newstart+1 > gridsize-1 ){
+									newstart=-1;
+								}
+								nums[ row ][ newstart+1 ].requestFocus();
+								nums[ row ][ newstart+1 ].getCaret().setVisible(true);
+
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+								
 								int newstart=col;
-								for(int i=1; i<gridsize; i++){
-									if( newstart-i<0 ){
-										i=0;  newstart=gridsize-1;
-									}
-									if (nums[row][newstart - i].isEnabled()) {
-										nums[row][newstart - i].requestFocus();
-										break;
-									}
-								}	
+								if( newstart-1 < 0 ){
+									newstart=gridsize;
+								}
+								nums[ row ][ newstart-1 ].requestFocus();
+								nums[ row ][ newstart-1 ].getCaret().setVisible(true);
+								
 							}
-
-
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 								nums[row][col].setText("");					
