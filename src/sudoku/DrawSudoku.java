@@ -350,11 +350,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==solution){
+		if(e.getSource()==solution){		
+			
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
-				solution.setText("Hide Solution");
-				
+				solution.setText("Hide Solution");				
 			}
 				
 			else{
@@ -364,7 +364,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 						nums[i][j].setForeground(new Color(0,0,0));
 					}
 				}
-			}
+			}	
+			
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
