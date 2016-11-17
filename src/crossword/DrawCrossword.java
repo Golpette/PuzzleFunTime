@@ -49,6 +49,8 @@ import javax.swing.text.DefaultEditorKit;
  * solution button, hints etc
  */
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
+
+	
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
 	private boolean buttonPushed;
@@ -105,13 +107,19 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private double mouseY;
 	String[][] gridInit;
 	
+	boolean initialized; 
+	
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		buttonPushed = false;
-		tempHighlighted = new int [2];//just for zoom
+		
+		tempHighlighted = new int[2];//just for zoom
+		tempHighlighted[0]=0; tempHighlighted[1]=0; // dont initialize these as zero
+		initialized=false; //dont color word on first draw
 		tempDirection="across";       //just for zoom
+		
 		squareSize = 38;
 		MIN_SCALE = 7.0;
 		MAX_SCALE = 18.0;
@@ -1586,8 +1594,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 
-		// RECOLOR WORD AFTER ZOOMING
-		colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
+
 	
 		layer.removeAll();
         layer.add(clueNums, new Integer(1));
@@ -1601,6 +1608,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 //		layer.getActionMap().put(SOME_ACTION, someAction);
 		
+		// RECOLOR WORD AFTER ZOOMING
+		if( !initialized ){
+			initialized=true;
+		}else{
+			colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
+		}
 	}
 
 
