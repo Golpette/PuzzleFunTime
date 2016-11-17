@@ -291,12 +291,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.ipady = 10;
 		panel.add(clue, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		panel.add(solution, c);
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 2;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		panel.add(solution, c);
 
 		if (squareSize * (x + 6) > width && squareSize * (y + 2) > height - 30) {
 			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
@@ -963,6 +963,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		
+		
+		//***************TECHNICAL NOTE******************************
+		//change the next line below to "== hint" to add in solutions
+		//***********************************************************
 		if (e.getSource() == solution) {
 			diagonal = false;
 			buttonPushed = !buttonPushed;
