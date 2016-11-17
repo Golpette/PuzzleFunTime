@@ -79,8 +79,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<KeyEvent> keys;
 	Action action;
 	
-	Color wrong = new Color(220,60,60);
-	Color correct = new Color( 110 , 194,  110);
+	// Define colors
+	Color wrong = new Color(250,60,60);
+//	Color correct = new Color( 50 , 180,  50);
+	Color correct = new Color( 70 , 120,  70);
+	Color fixed = new Color(90,90,90);
 	
 	static int gridsize=9;
 
@@ -220,8 +223,6 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			for(int j = 0; j < 3; j++){
 				threeByThreeGrid[i][j] = new JLabel();
 				threeByThreeGrid[i][j].setBorder(BorderFactory.createStrokeBorder(new BasicStroke(2.0f)));
-				//threeByThreeGrid[i][j].setBorder(border2);
-				//threeByThreeGrid[i][j].setBorder(border3);
 				largeGrid.add(threeByThreeGrid[i][j]);
 			}
 		}
@@ -302,12 +303,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			for (int j = 0; j < y-2; j++){
 				if( initial_config[i][j] != 0 ){                      // TODO: CHANGE THIS 0 THING
 
-					//nums[i][j].setEnabled(false);      //skip it when moving with keys
-					//nums[i][j].setDisabledTextColor(Color.BLACK);
-					//nums[i][j].setDisabledTextColor( new Color(90,90,90) );
 					nums[i][j].setEnabled(true);
 					nums[i][j].setEditable(false);
 					nums[i][j].setBackground(Color.WHITE);
+					nums[i][j].setForeground( fixed );
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
 
 				}
@@ -332,53 +331,25 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		System.out.println("Number of initial entries = " + cnt_nums);		
 		
 		
-
-		// CARE. HERE INITIAL_CONFIG HAS LOTS OF -1 ENTRIES
-		
-		
-//		for (int i = 0; i < x-2; i++){
-//			for (int j = 0; j < y-2; j++){
-//				System.out.print( initial_config[i][j] + " ");
-//			}
-//		}
-		
-		
-		
-//		int[][] solved_config = new int[9][9];
-//		solved_config = SudokuMethods.solver_easy(  initial_config );
-//				
-//		
-//		
-//		// UPDATE AFTER SOLVING
-//		for (int i = 0; i < x-2; i++){
-//			for (int j = 0; j < y-2; j++){
-//				if( solved_config[i][j] != 0 ){       
-//					nums[i][j].setText( Integer.toString( solved_config[i][j])  );
-//				}
-//			}
-//		}
-		
-		
-		
-		
 		
 	}
 
+	
+	
+	
+	
 	
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==solution){
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
-				solution.setText("Hide Solution");
-				System.out.println("buttonpush");
 				
+				solution.setText("Hide Solution");
 				// Highlight incorrect numbers
-				//grid initial_config
 				for( int i=0; i<9; i++){
 					for( int j=0; j<9; j++ ){
-							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){
-								
+							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){						
 								if( Integer.parseInt(nums[i][j].getText())==grid[i][j] ){
 									nums[i][j].setForeground( correct );
 								}
@@ -387,16 +358,19 @@ public class DrawSudoku extends JComponent implements ActionListener {
 								}
 							}
 					}					
-				}
-				
-				
+				}		
 			}
 				
 			else{
 				solution.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
-						nums[i][j].setForeground(new Color(0,0,0));
+						if( nums[i][j].isEditable() ){
+							nums[i][j].setForeground(new Color(0,0,0));
+						}
+						else{
+							nums[i][j].setForeground( fixed );
+						}
 					}
 				}
 			}
