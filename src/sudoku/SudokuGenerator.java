@@ -31,22 +31,11 @@ public class SudokuGenerator{
 		
 		
 		
-		gridSize=9+2;
-		
-		x = gridSize;     
-		y = gridSize;
-		
-		
-		grid = new int[x][y];		
-		for(int i = 0; i < y; i++){
-			for( int j = 0; j < x; j++){
-				grid[i][j] = 0;
-			}
-		}
+
 		
 		
 		// Solution and start grid made in here.
-		new DrawSudoku(grid, x, y, difficulty);
+		new DrawSudoku(difficulty);
 		
 		
 	}

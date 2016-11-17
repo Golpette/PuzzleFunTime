@@ -79,7 +79,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<KeyEvent> keys;
 	Action action;
 	
-	
+	Color wrong = new Color(220,60,60);
+	Color correct = new Color( 110 , 194,  110);
 	
 	static int gridsize=9;
 
@@ -88,14 +89,24 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	//@SuppressWarnings("unchecked")
-	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
+	public DrawSudoku(int difficulty) throws IOException{
 		
 		
-		
-		this.x = x;
-		this.y = y;
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		
+		int gridSize=9+2;
+		this.x = gridSize;     
+		this.y = gridSize;
+		
+		
+		grid = new int[9][9];		
+		for(int i = 0; i < 9; i++){
+			for( int j = 0; j < 9; j++){
+				grid[i][j] = 0;
+			}
+		}
+		
 		
 		
 		sol = new DrawSudokuSolution( x, y);  // Create the whole object that will be revealed on "show solution"
@@ -297,6 +308,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
 
 				}
+				else{
+					nums[i][j].setText("");
+				}
 			}
 		}
 		
@@ -354,6 +368,24 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
 				solution.setText("Hide Solution");
+				System.out.println("buttonpush");
+				
+				// Highlight incorrect numbers
+				//grid initial_config
+				for( int i=0; i<9; i++){
+					for( int j=0; j<9; j++ ){
+							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){
+								
+								if( Integer.parseInt(nums[i][j].getText())==grid[i][j] ){
+									nums[i][j].setForeground( correct );
+								}
+								else{
+									nums[i][j].setForeground( wrong );
+								}
+							}
+					}					
+				}
+				
 				
 			}
 				
