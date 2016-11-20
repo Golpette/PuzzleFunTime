@@ -58,7 +58,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, clue_dt, clue2_dt;
+	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, hintArea;
 	JLayeredPane layer;
 	JScrollPane area;
 	JButton hint, reveal, showSolution;
@@ -68,7 +68,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
-	Font font, font2, font3, font4;
+	Font font, font2, font3, font4, fontLarge;
 	Random rand;
 	Border border;
 	Color clear, red, green, blue, black;
@@ -80,8 +80,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	double height;
 	JPanel flow;
 	int [] tempHighlighted;
-	String tempDirection;
-	
+	String tempDirection, currentClue;
+	JLabel hintScrambled;
 	
 	// Define Color highlighting current word & clue
 	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);  //( = faded forest green )
@@ -129,6 +129,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
+		currentClue = "";
+		
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(550, 400));
@@ -159,6 +161,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 26));
 		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 16));
 		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 12));  //clue numbers in grid
+		fontLarge= new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 50));
+
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
@@ -181,6 +185,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		}
 		drawGrid(normalisedScale);
 
+		hintScrambled = new JLabel("Scrambled");
+		hintScrambled.setFont(fontLarge);
+		hintScrambled.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
+		
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
@@ -215,6 +225,18 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * is composed of two layers crosswordGrid and clueNums which are both
 		 * GridLayout JPanels which are layered one on top of the other.
 		 */
+
+		hintArea = new JPanel(new GridLayout(1,1));
+		hintArea.add(hintScrambled);
+		
+		//Muck around with this to get the grid positioned based on mouse position
+		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
+		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setOpaque(true);
+		hintArea.setVisible(false);
+		
+		
 		
 		
 		layer = new JLayeredPane();
@@ -222,6 +244,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
+		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
@@ -334,6 +357,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 			cluesDwn.add(down);
 		}
+				
 		
 		JTextArea temp = new JTextArea("FILLER");
 		temp.setFont(font3);
@@ -497,13 +521,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		panel.add(reveal, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		
-		panel.add(showSolution, c);
+//		c.weightx = 1.0;
+//		c.weighty = 0.0;
+//		c.gridx = 2;
+//		c.gridy = 1;
+//		c.ipady = 10;
+//		
+//		panel.add(showSolution, c);
 		
 		
 		/**
@@ -997,12 +1021,21 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	}
 	
 	
-	
+	public void showHintArea(){
+		
+				for (Entry ent : entries ) {
+					System.out.println("currentClue: "+currentClue);
+					//*******NEED CONDITION HERE FOR IF WORD IS HIGHLIGHTED
+						if (ent.getWord().equals(currentClue)) {
+							System.out.println("here!!!1");
+							hintScrambled.setText(ent.getShuffledWord().toUpperCase());
+					}
+				}
+		hintArea.setVisible(true);
+	}
 
 
-	
-	
-	
+
 	public void highlightWord( int xstart, int ystart ){
 		/** Highlight word from any letter **/
 
@@ -1075,7 +1108,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		tempHighlighted[1] = ystart;
 		tempDirection=direc;
 		
-		
 		int xx1=xstart;  int yy1=ystart;
 		
 		if(direc.equals("across")){		
@@ -1087,8 +1119,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-						
+						currentClue = ent.getWord();
 							if( ent.isAcross()  ) {
+								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
 									boxes[xx1][yy1+dbl].setBackground( HIGHLIGHT_COLOUR );
@@ -1110,8 +1143,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-							
+							currentClue = ent.getWord();
 							if( !ent.isAcross()  ) {
+								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
 									boxes[xx1+dbl][yy1].setBackground( HIGHLIGHT_COLOUR );
@@ -1382,6 +1416,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void showHint(){
 		System.out.println("Hint revealed!");
+		showHintArea();
 		hint.setText("Hide Hint");
 	}
 	
@@ -1400,10 +1435,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			buttonPushed = !buttonPushed;
 			if(buttonPushed){
 				showHint();
+			
+				hintArea.setVisible(true);
 				//revealSolution();
 				//show anagram for random/currently highlighted word
 			} else {
 				//hideSolution();
+				hintArea.setVisible(false);
 				hideHint();
 			}
 		}
@@ -1421,7 +1459,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				//hideSolution();
 			}
 		}
-		
+		//********************TECHNICAL NOTE**************************************
+		//Change the line below to:  "    == hint)     " to enable full solution as well as hint
+		//************************************************************************
 		if (e.getSource() == showSolution) {
 			sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
 //			if (sol.frame.isVisible()) {
