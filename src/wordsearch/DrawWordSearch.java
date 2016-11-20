@@ -61,6 +61,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JComboBox orderClues;
 	JButton solution, hint , clue;
 	JScrollPane area;
+	ArrayList<Coord> letters;
 	GridBagConstraints c;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
 			randomLetters;
@@ -487,7 +488,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	
 	
-	
+	/**
+	 * Method for looping around clues when you click on them (first and then last letter)
+	 * @param i
+	 * @param j
+	 * @param a
+	 */
 	public void loopAroundWord(int i, int j, Entry a){
 			x_pos = a.end_x;
 			y_pos = a.end_y;
@@ -603,7 +609,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	
 	
-	
+	/**
+	 * Method for looping around individual words
+	 * @param a
+	 */
 	public void loopAroundWord2(Entry a){
 		x_pos = a.end_x;
 		y_pos = a.end_y;
@@ -1070,18 +1079,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							   next = System.currentTimeMillis();
 							   counter = next - current;
 						   }
+						   letters = ent.getLetterCoords();
 							for (int i = 0; i < x - 2; i++) {
 								for (int j = 0; j < y - 2; j++) {
 									for (JLabel[][] lab : allLetters) {
-										temporaryIcons2.get(allLetters.indexOf(lab))[i][j] = null;
+										for(Coord co: letters){
+											if(co.xcoord == i && co.ycoord == j){
+												System.out.println("IDK: " + i+ " "+j);
+												temporaryIcons2.get(allLetters.indexOf(lab))[j-1][i-1] = null;
+											}
+										}
+										
 										//if(temporaryIcons.get(allLetters.indexOf(lab))[i][j].equals(null)){
-										lab[i][j].setIcon(null);
+										//lab[i][j].setIcon(null);
 										//}
 									}
 								}
 							}
-							clue.setEnabled(true);
 						   allClues.get(hintClue).setForeground(Color.BLACK);
+							clue.setEnabled(true); 
+							resetSizes();
+						 //  allClues.get(hintClue).setIcon(null);
 					    return null;
 					   }
 					  };
