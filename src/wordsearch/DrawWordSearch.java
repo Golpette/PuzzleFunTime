@@ -125,7 +125,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		layerX = 40;
 		layerY = 40;
 		tempWord = "";
-		sortMethod = "random";
+		sortMethod = "smallest";
 		randomFill = "AAAAAAAAABBCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
 		temporaryIcons = new ArrayList<Icon[][]>();
 		temporaryIcons2 = new ArrayList<Icon[][]>();
@@ -1060,6 +1060,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 	private void showClue() {
 		// TODO Auto-generated method stub
+		if(!sorted.isEmpty()){
 		final int hintClue = rand.nextInt(sorted.size());
 		for(final Entry ent: entries){	
 			if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText())){
@@ -1080,8 +1081,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							   counter = next - current;
 						   }
 						   letters = ent.getLetterCoords();
-							for (int i = 0; i < x - 2; i++) {
-								for (int j = 0; j < y - 2; j++) {
+							for (int i = 1; i < x - 1; i++) {
+								for (int j = 1; j < y - 1; j++) {
 									for (JLabel[][] lab : allLetters) {
 										for(Coord co: letters){
 											if(co.xcoord == i && co.ycoord == j){
@@ -1107,6 +1108,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				
 			}
 		}
+	}
 	}
 
 	private void showHint() {
