@@ -53,12 +53,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
-	private boolean buttonPushed;
+	private boolean buttonPushed, button2Pushed;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
 	int x, y, frameSizeX, frameSizeY;
-	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, clue_dt, clue2_dt;
+	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, hintArea;
 	JLayeredPane layer;
 	JScrollPane area;
 	JButton hint, reveal, showSolution;
@@ -68,7 +68,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
-	Font font, font2, font3, font4;
+	Font font, font2, font3, font4, fontLarge;
 	Random rand;
 	Border border;
 	Color clear, red, green, blue, black;
@@ -80,8 +80,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	double height;
 	JPanel flow;
 	int [] tempHighlighted;
-	String tempDirection;
-	
+	String tempDirection, currentClue;
+	JLabel hintScrambled;
 	
 	// Define Color highlighting current word & clue
 	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);  //( = faded forest green )
@@ -114,6 +114,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		buttonPushed = false;
+		button2Pushed = false;
 		
 		tempHighlighted = new int[2];//just for zoom
 		tempHighlighted[0]=0; tempHighlighted[1]=0; // dont initialize these as zero
@@ -129,6 +130,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frameSizeX = 2 * (x + 1) * squareSize;
 		frameSizeY = (y + 4) * squareSize;
 
+		currentClue = "";
+		
 		JFrame frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(550, 400));
@@ -159,6 +162,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 26));
 		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 16));
 		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 12));  //clue numbers in grid
+		fontLarge= new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 50));
+
 		sol = new DrawSolution(grid, x, y, squareSize, "Crossword", this);
 		rand = new Random();
 		
@@ -181,6 +186,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		}
 		drawGrid(normalisedScale);
 
+		hintScrambled = new JLabel("Clue");
+		hintScrambled.setFont(fontLarge);
+		hintScrambled.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		
+		
 		/**
 		 * This is where the transparentLayer to hold all the clue numbers is
 		 * created. It sets all the cells with question numbers with the correct
@@ -215,6 +226,19 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * is composed of two layers crosswordGrid and clueNums which are both
 		 * GridLayout JPanels which are layered one on top of the other.
 		 */
+
+		hintArea = new JPanel(new GridLayout(1,1));
+		hintArea.add(hintScrambled);
+		
+		//Muck around with this to get the grid positioned based on mouse position
+		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
+		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		//hintArea.setBounds((int)(squareSize*normalisedScale), (int)(squareSize*normalisedScale), (int)(squareSize * (x - 2)*normalisedScale), (int)(squareSize * (y - 2)*normalisedScale));
+		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setOpaque(true);
+		hintArea.setVisible(false);
+		
+		
 		
 		
 		layer = new JLayeredPane();
@@ -222,6 +246,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
+		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
@@ -229,23 +254,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
 		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
-
-	
-		//inline ifs!
-		int acr = cluesAcross.size();
-		int dow = cluesDown.size();
-		
-		int maxClues = (acr > dow) ? acr: dow ;
-
-		
-//		for (int i = 0; i < ((acr > dow) ? maxClues - dow: maxClues - acr) ; i++){
-//			String jt = "\\.FILLER!!!";
-//			if(acr > dow){
-//				cluesAcross.add(jt);
-//			}else{
-//				cluesDown.add(jt);
-//			}
-//		}
 
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
@@ -334,6 +342,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 			cluesDwn.add(down);
 		}
+				
 		
 		JTextArea temp = new JTextArea("FILLER");
 		temp.setFont(font3);
@@ -452,7 +461,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * bringing up a new GUI instance with the filled in grid on being
 		 * pressed.
 		 */
-		reveal = new JButton("Clue");
+		reveal = new JButton("Reveal");
 		reveal.setFont(font2); 
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
@@ -497,15 +506,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		panel.add(reveal, c);
 		
-		c.weightx = 1.0;
-		c.weighty = 0.0;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.ipady = 10;
-		
-		panel.add(showSolution, c);
-		
-		
 		/**
 		 * Overall JFrame to hold all components This has the main panel
 		 * assigned to it
@@ -542,6 +542,48 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		l.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
+				
+				   if (e.isControlDown()) {
+					   //THESE ONLY WORK ONCE BUT NOT CONTINUOUSLY
+					   if(e.getKeyCode()==KeyEvent.VK_UP){
+						   if(scale < MAX_SCALE){
+			                	scale++;
+			                }
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    drawGrid( normalisedScale);
+					   }
+					   if(e.getKeyCode()==KeyEvent.VK_DOWN){
+						   if(scale > MIN_SCALE){
+			                	scale--;
+			                }
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    drawGrid(normalisedScale);
+					   }
+					   //This doesn't work
+					   if(e.getKeyCode()==KeyEvent.VK_N){
+						   
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    scale = 10;
+							normalisedScale = 0.5;
+			    		    drawGrid( normalisedScale);
+					   }
+				   }
+				
 				
 				if( e.getKeyCode()==KeyEvent.VK_UP  || e.getKeyCode()==KeyEvent.VK_DOWN ||
 						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
@@ -770,6 +812,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j]) && boxes[i][j].isEnabled()  ){
+							button2Pushed = false;
 							makeAllWhite();
 							highlightWord_fromClick(i,j);
 //							tempHighlighted[0] = i;
@@ -818,7 +861,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 				firsteverclick = false;
 				countClicks=0;
-				
+				button2Pushed = false;
 //				// GET FOCUS IF CLICKING ON CLUE   ///////////////////////////////////////////
 //				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
 				// BETTER LEAVE IT IN: since trying to click on clues will defocus grid otherwise
@@ -834,6 +877,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
 								// then highlight this word
+								currentClue = ent.getWord();
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
 								colourWord( ent.getY()-1, ent.getX()-1, "across");
 							}
@@ -852,6 +896,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 						int c_n = Integer.parseInt( c_n_string   );
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+								currentClue = ent.getWord();
 								// then highlight this word
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
 								colourWord( ent.getY()-1, ent.getX()-1, "down");
@@ -862,47 +907,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 				}    //////////////////////////////////////////////////////////////////////////
 				
-				
-				
-				
-				
-//				for (JLabel k : hints) {
-//					k.setText(" ");				//can remove this line if we want to keep showing all hints
-//					if (e.getSource() == k) {
-//						for (Entry ent : entries ) {
-//							if (ent.isAcross()) {
-//								if (ent.getEntryAcross() == hints.indexOf(k)   ) {
-//									k.setText("      " + ent.getShuffledWord().toUpperCase());
-//									//String str = shuffleString(ent.word).toUpperCase();
-//									//k.setText("      " + shuffleString(ent.word).toUpperCase());
-//								}
-//							} else{
-//								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)  ) {
-//									k.setText("      " + ent.getShuffledWord().toUpperCase());
-//								}
-//							}
-//						}
-//					}
-//				}
-				
-
-				
-				
-				
-				
 			}
 
 
 			
-			public void mouseEntered(MouseEvent e) {
-////				for (JLabel i : hints) {
-////					if (e.getSource() == i) {
-////						if(i.getText().equals(" ")){
-////							i.setText("      HINT");
-////						}
-////					}
-////				}    STEVE:  REMOVED FOR NOE, WASNT COMPATIBLE WITH HIGHLITING CLUES. DONT KNOW WHY			
-//				
+			public void mouseEntered(MouseEvent e) {			
 				
 	// BELOW NEEDED FOR MOUSE HOVERING OVER CLUES
 //				firsteverclick = false;
@@ -957,34 +966,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			public void mouseExited(MouseEvent e) {
 
-//				for (JLabel i : hints) {
-//					if (e.getSource() == i) {
-//						if(i.getText().equals("      HINT")){
-//							i.setText(" ");
-//						}
-//						
-//						//boxes[3][3].setBackground(Color.WHITE);
-//					}
-//				}   // STEVE REMOVE
-
-				
-//				
-//				for( JTextArea cl : cluesAcr ){   // only need for hovering
-//					if( e.getSource()==cl ){
-//						cl.setBackground(Color.WHITE);
-//						cl.setOpaque(true);						
-//					}
-//			
-//				}
-//				for( JTextArea cl : cluesDwn ){
-//					cl.setBackground(Color.WHITE);
-//					cl.setOpaque(true);							
-//				}
-//				
-				
 			}
-			
-			
 			
 			public void mousePressed(MouseEvent arg0) {
 
@@ -997,12 +979,21 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	}
 	
 	
-	
+	public void showHintArea(){
+		
+				for (Entry ent : entries ) {
+					System.out.println("currentClue: "+currentClue);
+					//*******NEED CONDITION HERE FOR IF WORD IS HIGHLIGHTED
+						if (ent.getWord().equals(currentClue)) {
+							System.out.println("here!!!1");
+							hintScrambled.setText(ent.getShuffledWord().toUpperCase());
+					}
+				}
+		hintArea.setVisible(true);
+	}
 
 
-	
-	
-	
+
 	public void highlightWord( int xstart, int ystart ){
 		/** Highlight word from any letter **/
 
@@ -1075,7 +1066,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		tempHighlighted[1] = ystart;
 		tempDirection=direc;
 		
-		
 		int xx1=xstart;  int yy1=ystart;
 		
 		if(direc.equals("across")){		
@@ -1087,8 +1077,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-						
 							if( ent.isAcross()  ) {
+								currentClue = ent.getWord();
+								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
 									boxes[xx1][yy1+dbl].setBackground( HIGHLIGHT_COLOUR );
@@ -1110,8 +1101,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-							
 							if( !ent.isAcross()  ) {
+								currentClue = ent.getWord();
+								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
 									boxes[xx1+dbl][yy1].setBackground( HIGHLIGHT_COLOUR );
@@ -1372,16 +1364,31 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void revealWord(){
 		System.out.println("Word Revealed!");
-		reveal.setText("Hide Clue");
+		//reveal.setText("");
+		for (Entry ent: entries){
+			if(ent.getWord().equals(currentClue)){
+				int acr = 0, down = 0;
+				char [] chars = currentClue.toCharArray();
+				if(ent.isAcross()){
+					down = 1;
+				}else{
+					acr = 1;
+				}
+				for(int i = 0; i < ent.wordLength; i ++){
+					boxes[ent.start_y+(i*acr)-1][ent.start_x+(i*down)-1].setText(Character.toString(chars[i]));
+				}
+			}
+		}
 	}
 	
 	public void hideWord(){
 		System.out.println("Word Hidden!");
-		reveal.setText("Clue");
+		reveal.setText("Reveal");
 	}
 	
 	public void showHint(){
 		System.out.println("Hint revealed!");
+		showHintArea();
 		hint.setText("Hide Hint");
 	}
 	
@@ -1400,10 +1407,13 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			buttonPushed = !buttonPushed;
 			if(buttonPushed){
 				showHint();
+			
+				hintArea.setVisible(true);
 				//revealSolution();
 				//show anagram for random/currently highlighted word
 			} else {
 				//hideSolution();
+				hintArea.setVisible(false);
 				hideHint();
 			}
 		}
@@ -1411,8 +1421,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		if (e.getSource() == reveal) {
 			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
 //			if (sol.frame.isVisible()) {
-			buttonPushed = !buttonPushed;
-			if(buttonPushed){
+			button2Pushed = !button2Pushed;
+			if(button2Pushed){
 				revealWord();
 				//reveal currently highlighted/random word
 				//revealSolution();
@@ -1421,7 +1431,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				//hideSolution();
 			}
 		}
-		
+		//********************TECHNICAL NOTE**************************************
+		//Change the line below to:  "    == hint)     " to enable full solution as well as hint
+		//************************************************************************
 		if (e.getSource() == showSolution) {
 			sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
 //			if (sol.frame.isVisible()) {
@@ -1456,17 +1468,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	                normalisedScale = scale/20;
-	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
-	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-	    			
 	    		    main.revalidate();
-	    		    //System.out.println("Got here \\n\n\n");
 	    		    drawGrid( normalisedScale);
-	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
 
 	            	if(scale > MIN_SCALE){
@@ -1477,38 +1480,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	                
-	                normalisedScale = scale/20;
-	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
-	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-	    			
 	    		    main.revalidate();
-	    		    
 	    		    drawGrid(normalisedScale);
-
 	            }
 	        }
 	        else if(!e.isControlDown()){
-
 	        	area.setWheelScrollingEnabled(true);
-
 	        }
 	    }
 
 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 
 
 	private void drawGrid(double normalisedScale) {	
@@ -1516,6 +1497,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
+	    normalisedScale = scale/20;
+	 	squareSize = (int) (normalisedScale*initialSquareSize);
+		font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
+		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
+		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
+		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
+		fontLarge= new Font("Century Gothic", Font.PLAIN, (int) (1.5* squareSize));
+		
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		//Muck around with this to get the grid positioned based on mouse position
 		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
@@ -1594,11 +1583,20 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 
-
-	
+		hintScrambled = new JLabel("Clue");
+		hintScrambled.setFont(fontLarge);
+		hintScrambled.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		hintArea = new JPanel(new GridLayout(1,1));
+		hintArea.add(hintScrambled);		
+		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setOpaque(true);
+		hintArea.setVisible(buttonPushed);
+		
 		layer.removeAll();
         layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
+		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
