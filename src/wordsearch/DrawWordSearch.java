@@ -186,7 +186,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		hint.addActionListener(this);
 		hint.addMouseWheelListener(this);
 		
-		clue = new JButton("Clue");
+		clue = new JButton("Reveal");
 		clue.setFont(font2);
 		clue.setEnabled(true);
 		clue.addActionListener(this);
