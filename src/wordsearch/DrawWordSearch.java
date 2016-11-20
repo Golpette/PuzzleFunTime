@@ -222,11 +222,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		orderClues.setOpaque(false);
 		orderClues.setVisible(false);
 
-		c.weightx = 0.0;
-		c.weighty = 0.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		extra.add(orderClues, c);
+//		c.weightx = 0.0;
+//		c.weighty = 0.0;
+//		c.gridx = 0;
+//		c.gridy = 0;
+//		extra.add(orderClues, c);
 
 		c.weightx = 0.0;
 		c.weighty = 0.0;
