@@ -34,7 +34,7 @@ public class SudokuGenerator{
 		puzzleGrid = new ArrayList<ArrayList<Integer>>();
 		this.difficulty = difficulty;
 		
-		
+
 		gridSize=9+2;
 		
 		x = gridSize;     
@@ -52,6 +52,11 @@ public class SudokuGenerator{
 		//removeNumbers(fullGrid);
 		//System.out.println(fullGrid.toString());
 		new DrawSudoku(grid, x, y, difficulty);
+
+		
+		
+		// Solution and start grid made in here.
+		//new DrawSudoku(difficulty);
 		
 		
 	}
