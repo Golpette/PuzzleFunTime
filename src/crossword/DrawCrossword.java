@@ -543,6 +543,48 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			public void keyPressed(KeyEvent e) {
 				
+				   if (e.isControlDown()) {
+					   //THESE ONLY WORK ONCE BUT NOT CONTINUOUSLY
+					   if(e.getKeyCode()==KeyEvent.VK_UP){
+						   if(scale < MAX_SCALE){
+			                	scale++;
+			                }
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    drawGrid( normalisedScale);
+					   }
+					   if(e.getKeyCode()==KeyEvent.VK_DOWN){
+						   if(scale > MIN_SCALE){
+			                	scale--;
+			                }
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    drawGrid(normalisedScale);
+					   }
+					   //This doesn't work
+					   if(e.getKeyCode()==KeyEvent.VK_N){
+						   
+			                for(int i = 0; i < x-2; i++){
+			                	for (int j = 0; j < y-2; j++){
+			                		tempBoxes[i][j].setText(boxes[i][j].getText());
+			                	}
+			                }
+			    		    main.revalidate();
+			    		    scale = 10;
+							normalisedScale = 0.5;
+			    		    drawGrid( normalisedScale);
+					   }
+				   }
+				
+				
 				if( e.getKeyCode()==KeyEvent.VK_UP  || e.getKeyCode()==KeyEvent.VK_DOWN ||
 						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
 						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
