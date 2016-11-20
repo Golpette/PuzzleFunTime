@@ -119,7 +119,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		tempHighlighted = new int[2];//just for zoom
 		tempHighlighted[0]=0; tempHighlighted[1]=0; // dont initialize these as zero
 		initialized=false; //dont color word on first draw
-		tempDirection="across";       //just for zoom
+		//tempDirection="across";       //just for zoom
 		
 		squareSize = 38;
 		MIN_SCALE = 7.0;
@@ -595,7 +595,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
 					firstAutoMove = true;
 					makeAllWhite();
-					highlightWord_fromClick(lastClick_x,lastClick_y);
+					////highlightWord_fromClick(lastClick_x,lastClick_y); leave grid white to begin
 					firsteverclick=false;
 				}
 				
@@ -1606,10 +1606,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 //		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 //		layer.getActionMap().put(SOME_ACTION, someAction);
 		
-		// RECOLOR WORD AFTER ZOOMING
-		if( !initialized ){
-			initialized=true;
-		}else{
+		// RECOLOR WORD AFTER ZOOMING IF ONE IS ALREADY COLOURED
+		if( tempDirection != null ){   // i.e. first word has been colored
 			colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
 		}
 	}
