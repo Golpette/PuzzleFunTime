@@ -186,7 +186,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		}
 		drawGrid(normalisedScale);
 
-		hintScrambled = new JLabel("Scrambled");
+		hintScrambled = new JLabel("Clue");
 		hintScrambled.setFont(fontLarge);
 		hintScrambled.setHorizontalAlignment(SwingConstants.CENTER);
 		
@@ -233,6 +233,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//Muck around with this to get the grid positioned based on mouse position
 		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
 		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		//hintArea.setBounds((int)(squareSize*normalisedScale), (int)(squareSize*normalisedScale), (int)(squareSize * (x - 2)*normalisedScale), (int)(squareSize * (y - 2)*normalisedScale));
 		hintArea.setBackground(Color.LIGHT_GRAY);
 		hintArea.setOpaque(true);
 		hintArea.setVisible(false);
@@ -834,6 +835,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && ent.isAcross()   ){
 								// then highlight this word
+								currentClue = ent.getWord();
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
 								colourWord( ent.getY()-1, ent.getX()-1, "across");
 							}
@@ -852,6 +854,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 						int c_n = Integer.parseInt( c_n_string   );
 						for( Entry ent : entries ){
 							if( ent.getClueNumber() == c_n && !ent.isAcross()   ){
+								currentClue = ent.getWord();
 								// then highlight this word
 								boxes[ent.getY()-1][ent.getX()-1].requestFocus();
 								colourWord( ent.getY()-1, ent.getX()-1, "down");
@@ -1032,8 +1035,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-						currentClue = ent.getWord();
 							if( ent.isAcross()  ) {
+								currentClue = ent.getWord();
 								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
@@ -1056,8 +1059,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					for( Entry ent : entries ){
 						String nomnom = Integer.toString( ent.getClueNumber()  );
 						if( clueNumbers[xx1][yy1].getText().equals( nomnom ) ){
-							currentClue = ent.getWord();
 							if( !ent.isAcross()  ) {
+								currentClue = ent.getWord();
 								hintScrambled.setText(ent.getShuffledWord().toUpperCase());
 								int length = ent.getWord().length();
 								for( int dbl=0; dbl<length; dbl++ ){
@@ -1423,17 +1426,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	                normalisedScale = scale/20;
-	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
-	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-	    			
 	    		    main.revalidate();
-	    		    //System.out.println("Got here \\n\n\n");
 	    		    drawGrid( normalisedScale);
-	                //System.out.println("Scale: "+scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);	                    action.actionPerformed( null );
 	            } else {
 
 	            	if(scale > MIN_SCALE){
@@ -1444,38 +1438,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	                
-	                normalisedScale = scale/20;
-	    		 	squareSize = (int) (normalisedScale*initialSquareSize);
-	    			font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
-	    			font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-	    			font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-	    			font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-	    			
 	    		    main.revalidate();
-	    		    
 	    		    drawGrid(normalisedScale);
-
 	            }
 	        }
 	        else if(!e.isControlDown()){
-
 	        	area.setWheelScrollingEnabled(true);
-
 	        }
 	    }
 
 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 
 
 	private void drawGrid(double normalisedScale) {	
@@ -1483,6 +1455,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
+	    normalisedScale = scale/20;
+	 	squareSize = (int) (normalisedScale*initialSquareSize);
+		font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
+		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
+		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
+		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
+		fontLarge= new Font("Century Gothic", Font.PLAIN, (int) (1.5* squareSize));
+		
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		//Muck around with this to get the grid positioned based on mouse position
 		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
@@ -1561,11 +1541,20 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			}
 		}
 
-
-	
+		hintScrambled = new JLabel("Clue");
+		hintScrambled.setFont(fontLarge);
+		hintScrambled.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		hintArea = new JPanel(new GridLayout(1,1));
+		hintArea.add(hintScrambled);		
+		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setOpaque(true);
+		hintArea.setVisible(buttonPushed);
+		
 		layer.removeAll();
         layer.add(clueNums, new Integer(1));
 		layer.add(crosswordGrid, new Integer(0));
+		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
 		layer.setOpaque(true);
