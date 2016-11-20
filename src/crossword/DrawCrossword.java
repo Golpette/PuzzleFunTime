@@ -53,7 +53,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
-	private boolean buttonPushed;
+	private boolean buttonPushed, button2Pushed;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
@@ -114,6 +114,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
                 
 		buttonPushed = false;
+		button2Pushed = false;
 		
 		tempHighlighted = new int[2];//just for zoom
 		tempHighlighted[0]=0; tempHighlighted[1]=0; // dont initialize these as zero
@@ -252,23 +253,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
 		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
-
-	
-		//inline ifs!
-		int acr = cluesAcross.size();
-		int dow = cluesDown.size();
-		
-		int maxClues = (acr > dow) ? acr: dow ;
-
-		
-//		for (int i = 0; i < ((acr > dow) ? maxClues - dow: maxClues - acr) ; i++){
-//			String jt = "\\.FILLER!!!";
-//			if(acr > dow){
-//				cluesAcross.add(jt);
-//			}else{
-//				cluesDown.add(jt);
-//			}
-//		}
 
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
@@ -476,7 +460,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * bringing up a new GUI instance with the filled in grid on being
 		 * pressed.
 		 */
-		reveal = new JButton("Clue");
+		reveal = new JButton("Reveal");
 		reveal.setFont(font2); 
 		reveal.addActionListener(this);
 		reveal.addMouseWheelListener(this);
@@ -520,15 +504,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c.ipady = 10;
 		
 		panel.add(reveal, c);
-		
-//		c.weightx = 1.0;
-//		c.weighty = 0.0;
-//		c.gridx = 2;
-//		c.gridy = 1;
-//		c.ipady = 10;
-//		
-//		panel.add(showSolution, c);
-		
 		
 		/**
 		 * Overall JFrame to hold all components This has the main panel
@@ -794,6 +769,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if (e.getSource().equals(boxes[i][j]) && boxes[i][j].isEnabled()  ){
+							button2Pushed = false;
 							makeAllWhite();
 							highlightWord_fromClick(i,j);
 //							tempHighlighted[0] = i;
@@ -842,7 +818,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 				firsteverclick = false;
 				countClicks=0;
-				
+				button2Pushed = false;
 //				// GET FOCUS IF CLICKING ON CLUE   ///////////////////////////////////////////
 //				//(no longer necessary - but reinstate for mobile phones)  -- STEVE
 				// BETTER LEAVE IT IN: since trying to click on clues will defocus grid otherwise
@@ -886,47 +862,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 					
 				}    //////////////////////////////////////////////////////////////////////////
 				
-				
-				
-				
-				
-//				for (JLabel k : hints) {
-//					k.setText(" ");				//can remove this line if we want to keep showing all hints
-//					if (e.getSource() == k) {
-//						for (Entry ent : entries ) {
-//							if (ent.isAcross()) {
-//								if (ent.getEntryAcross() == hints.indexOf(k)   ) {
-//									k.setText("      " + ent.getShuffledWord().toUpperCase());
-//									//String str = shuffleString(ent.word).toUpperCase();
-//									//k.setText("      " + shuffleString(ent.word).toUpperCase());
-//								}
-//							} else{
-//								if (ent.getEntryDown() == hints.indexOf(k) - (cluesAcr.size() / 2)  ) {
-//									k.setText("      " + ent.getShuffledWord().toUpperCase());
-//								}
-//							}
-//						}
-//					}
-//				}
-				
-
-				
-				
-				
-				
 			}
 
 
 			
-			public void mouseEntered(MouseEvent e) {
-////				for (JLabel i : hints) {
-////					if (e.getSource() == i) {
-////						if(i.getText().equals(" ")){
-////							i.setText("      HINT");
-////						}
-////					}
-////				}    STEVE:  REMOVED FOR NOE, WASNT COMPATIBLE WITH HIGHLITING CLUES. DONT KNOW WHY			
-//				
+			public void mouseEntered(MouseEvent e) {			
 				
 	// BELOW NEEDED FOR MOUSE HOVERING OVER CLUES
 //				firsteverclick = false;
@@ -981,34 +921,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 			public void mouseExited(MouseEvent e) {
 
-//				for (JLabel i : hints) {
-//					if (e.getSource() == i) {
-//						if(i.getText().equals("      HINT")){
-//							i.setText(" ");
-//						}
-//						
-//						//boxes[3][3].setBackground(Color.WHITE);
-//					}
-//				}   // STEVE REMOVE
-
-				
-//				
-//				for( JTextArea cl : cluesAcr ){   // only need for hovering
-//					if( e.getSource()==cl ){
-//						cl.setBackground(Color.WHITE);
-//						cl.setOpaque(true);						
-//					}
-//			
-//				}
-//				for( JTextArea cl : cluesDwn ){
-//					cl.setBackground(Color.WHITE);
-//					cl.setOpaque(true);							
-//				}
-//				
-				
 			}
-			
-			
 			
 			public void mousePressed(MouseEvent arg0) {
 
@@ -1406,12 +1319,26 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void revealWord(){
 		System.out.println("Word Revealed!");
-		reveal.setText("Hide Clue");
+		//reveal.setText("");
+		for (Entry ent: entries){
+			if(ent.getWord().equals(currentClue)){
+				int acr = 0, down = 0;
+				char [] chars = currentClue.toCharArray();
+				if(ent.isAcross()){
+					down = 1;
+				}else{
+					acr = 1;
+				}
+				for(int i = 0; i < ent.wordLength; i ++){
+					boxes[ent.start_y+(i*acr)-1][ent.start_x+(i*down)-1].setText(Character.toString(chars[i]));
+				}
+			}
+		}
 	}
 	
 	public void hideWord(){
 		System.out.println("Word Hidden!");
-		reveal.setText("Clue");
+		reveal.setText("Reveal");
 	}
 	
 	public void showHint(){
@@ -1449,8 +1376,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		if (e.getSource() == reveal) {
 			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
 //			if (sol.frame.isVisible()) {
-			buttonPushed = !buttonPushed;
-			if(buttonPushed){
+			button2Pushed = !button2Pushed;
+			if(button2Pushed){
 				revealWord();
 				//reveal currently highlighted/random word
 				//revealSolution();
