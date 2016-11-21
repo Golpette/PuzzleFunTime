@@ -1087,6 +1087,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 										for(Coord co: letters){
 											if(co.xcoord == i && co.ycoord == j){
 												System.out.println("IDK: " + i+ " "+j);
+												//Need to remove all of the images from diagonals too (ie corners)
 												temporaryIcons2.get(allLetters.indexOf(lab))[j-1][i-1] = null;
 											}
 										}
