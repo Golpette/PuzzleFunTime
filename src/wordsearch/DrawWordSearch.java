@@ -1049,7 +1049,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			//showHint();
+			showHint();
 
 		}
 		if(e.getSource()==clue){
@@ -1151,16 +1151,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
 							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 							}
-//						if(counter <= 2000){
-//							System.out.println("and here");
-//							allLetters.get(0)[currentLetterY][currentLetterX].setHorizontalAlignment(JLabel.CENTER);
-//							allLetters.get(0)[currentLetterY][currentLetterX].setForeground(Color.GREEN);
-//							}
-//						if(counter <= 3000){
-//							System.out.println("also here");
-//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setHorizontalAlignment(JLabel.RIGHT);
-//							allLetters.get(0)[currentLetterY+1][currentLetterX+1].setForeground(Color.BLUE);
-//							}
+						if(counter <= 2000){
+							System.out.println("and here");
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.CENTER);
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.GREEN);
+							}
+						if(counter <= 3000){
+							System.out.println("also here");
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.RIGHT);
+							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.BLUE);
+							}
 							}
 						}
 						next = System.currentTimeMillis();

@@ -325,7 +325,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.insets = new Insets(60,10,50,20);
+		c.insets = new Insets(65,10,50,100);
 		panel.add(cwdDifficulty, c);
 		
 		c.weightx = 0.0;
@@ -333,7 +333,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 1;
 		c.gridwidth = 1;
-		c.insets = new Insets(50,10,50,20);
+		c.insets = new Insets(55,10,50,100);
 		panel.add(wdsDifficulty, c);
 		
 		c.weightx = 1.0;
@@ -341,7 +341,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 1;
-		c.insets = new Insets(35,10,10,20);
+		c.insets = new Insets(38,10,10,100);
 		panel.add(sudDifficulty, c);
 		
 		
