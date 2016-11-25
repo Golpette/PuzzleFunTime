@@ -193,7 +193,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		hint.addActionListener(this);
 		
 		
-		clue = new JButton("Clue");
+		clue = new JButton("Reveal");
 		clue.setFont(font2);
 		clue.addActionListener(this);
 		
@@ -262,7 +262,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.gridx = 2;
 		c.gridy = 1;
 		c.ipady = 10;
-		panel.add(solution, c);
+		//panel.add(solution, c);
 		
 		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
@@ -351,7 +351,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==solution){		
+		//change line below to " ==hint" to implement full answers in sudoku
+		if(e.getSource()==hint){		
 			
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
