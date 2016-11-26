@@ -77,7 +77,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			frame = new JFrame("Welcome to PuzzleLoader "+ user);
 		}
 
-		frame.setMinimumSize(new Dimension(400,250));
+		frame.setMinimumSize(new Dimension(400,100));
 		
 		font = new Font("Century Gothic", Font.BOLD, 40);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
@@ -159,13 +159,13 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		language2.setFont(font4);
 	//	language2.setVisible(false);
 		
-		model1 = new SpinnerNumberModel(12, 4, 30, 1);
+		model1 = new SpinnerNumberModel(15, 4, 30, 1);
 		spinner1 = new JSpinner(model1);
 		spinner1.setForeground(Color.WHITE);
 		spinner1.setEditor(new JSpinner.DefaultEditor(spinner1));
 		spinner1.setFont(font2);
 		
-		model2 = new SpinnerNumberModel(8, 4, 50, 1);
+		model2 = new SpinnerNumberModel(15, 4, 50, 1);
 		spinner2 = new JSpinner(model2);
 		spinner2.setForeground(Color.WHITE);
 		spinner2.setEditor(new JSpinner.DefaultEditor(spinner2));
@@ -222,8 +222,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		flag2.setIcon(flags2[0]);
 		arrow.setIcon(arr1[0]);
 		
-		frame.setPreferredSize(new Dimension(440,250));
-		frame.setSize(440, 250);
+		frame.setPreferredSize(new Dimension(440,228));
+		frame.setSize(440, 200);
 				
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -291,19 +291,21 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(wds);
 		grid.add(sud);
 		
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 3;
-		//c.insets = new Insets(0,0,0,0);
-		panel.add(intro, c);
-		
-		
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 1;
+		c.gridwidth = 3;
+		c.insets = new Insets(0,0,0,0);
+		panel.add(intro, c);
+		
+		
+		
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 2;
 		panel.add(grid, c);
 		
 		c.fill = GridBagConstraints.BOTH;	
@@ -361,8 +363,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		layer = new JLayeredPane();
 		layer.setAlignmentX(frame.getWidth());
 		layer.add(panel, new Integer(0));
-		layer.add(country, new Integer(0));
-		layer.add(country2, new Integer(0));
+//		layer.add(country, new Integer(0));
+//		layer.add(country2, new Integer(0));
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		

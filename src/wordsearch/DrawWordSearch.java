@@ -1049,7 +1049,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			showHint();
+			//showHint();
 
 		}
 		if(e.getSource()==clue){
