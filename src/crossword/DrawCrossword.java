@@ -97,7 +97,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	boolean firstAutoMove = true;
 	
 	boolean firsteverclick = true; //stupid hack to fix a bug I couldn't find
-	final static int initialSquareSize = 60;
+	final static int initialSquareSize = 80;
 	private double normalisedScale;
 	private double scale;
 	final double MAX_SCALE;
@@ -122,8 +122,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//tempDirection="across";       //just for zoom
 		
 		squareSize = 38;
-		MIN_SCALE = 7.0;
-		MAX_SCALE = 18.0;
+		MIN_SCALE = 6.0;
+		MAX_SCALE = 16.0;
 		scale = 10.0;
 		normalisedScale = scale/20;
 		this.gridInit = gridInit;
