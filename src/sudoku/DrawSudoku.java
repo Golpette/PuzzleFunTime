@@ -39,7 +39,7 @@ import java.awt.event.AWTEventListener; //??
  */
 public class DrawSudoku extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 55;	
+	private static int squareSize = 50;	
 	int x, y;
 	public int getX() {
 		return x;
@@ -352,7 +352,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		//change line below to " ==hint" to implement full answers in sudoku
-		if(e.getSource()==hint){		
+		if(e.getSource()==solution){		
 			
 			sol.frame.setVisible(!sol.frame.isVisible());
 			if(sol.frame.isVisible()){
