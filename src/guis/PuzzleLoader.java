@@ -129,7 +129,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro.setOpaque(true);
 		//intro.setBounds(0, 0,frame.getWidth(),300);
 		//intro.setBackground(new Color(240,240,240,255));
-		intro.setBackground(Color.DARK_GRAY);
+		intro.setBackground(Color.BLACK);
+		//intro.setBackground(new Color(100,100,100,255));
 		intro.setForeground(Color.WHITE);
 		//intro.setBorder(null);
 		
@@ -140,7 +141,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro2.setOpaque(true);
 		//intro.setBounds(0, 0,frame.getWidth(),300);
 		//intro2.setBackground(new Color(240,240,240,255));
-		intro2.setBackground(Color.DARK_GRAY);
+		intro2.setBackground(Color.BLACK);
+		//intro2.setBackground(new Color(100,100,100,255));
 		intro2.setForeground(Color.WHITE);
 		//intro.setBorder(null);
 		
@@ -224,7 +226,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		icon = new JLabel();
 		icon.setHorizontalAlignment(SwingConstants.CENTER);
 		icon.setVerticalAlignment(SwingConstants.CENTER);
-		icon.setBackground(Color.DARK_GRAY);
+		icon.setBackground(Color.BLACK);
+		//icon.setBackground(new Color(100,100,100,255));
 		
 		pic = new JLabel("");
 		pic.setOpaque(false);
@@ -327,7 +330,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(wds);
 		grid.add(sud);
 		
-		grid2.setBackground(Color.DARK_GRAY);
+		grid2.setBackground(Color.BLACK);
+		//grid2.setBackground(new Color(100,100,100,255));
 		
 		c.weightx = 0.0;
 		c.weighty = 1.0;
