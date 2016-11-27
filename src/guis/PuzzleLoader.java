@@ -62,12 +62,13 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	int sudDiff=2;
 	String user;
 	Icon [] icons;
-	String [] images = {"crossword", "wordsearch", "sudoku", "Logo2"};
+	String [] images = {"crossword", "wordsearch", "sudoku", "Logo5"};
 	String [] countries = {"english",  "french",  "german", "italian","spanish"};
 	String [] arrows = {"arrow"};
 	String [] countries2, countries3;
 	Icon [] flags, flags2, arr1;
-	Icon arr, logo;
+	Icon arr;
+	Icon[] logo;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PuzzleLoader(String user) throws IOException {
@@ -84,7 +85,10 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 20);
 		font3 = new Font("Century Gothic", Font.PLAIN, 16);
-		font5 = new Font("Century Gothic", Font.PLAIN, 45);
+		font5 = new Font("Agency FB", Font.BOLD, 67);
+		//font5 = new Font("Terminal", Font.BOLD, 65);
+		//font5 = new Font("Century Gothic", Font.BOLD, 65);
+		
 		
 		clueLanguage = new JLabel("CLUES");
 		clueLanguage.setFont(font3);
@@ -121,17 +125,23 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		intro = new JLabel("SUD");
 		intro.setFont(font5);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
+		intro.setVerticalAlignment(SwingConstants.TOP);
 		intro.setOpaque(true);
 		//intro.setBounds(0, 0,frame.getWidth(),300);
-		intro.setBackground(new Color(240,240,240,255));
+		//intro.setBackground(new Color(240,240,240,255));
+		intro.setBackground(Color.DARK_GRAY);
+		intro.setForeground(Color.WHITE);
 		//intro.setBorder(null);
 		
-		intro2 = new JLabel("WORDS");
+		intro2 = new JLabel(" WORDS");
 		intro2.setFont(font5);
 		intro2.setHorizontalAlignment(SwingConstants.CENTER);
+		intro2.setVerticalAlignment(SwingConstants.TOP);
 		intro2.setOpaque(true);
 		//intro.setBounds(0, 0,frame.getWidth(),300);
-		intro2.setBackground(new Color(240,240,240,255));
+		//intro2.setBackground(new Color(240,240,240,255));
+		intro2.setBackground(Color.DARK_GRAY);
+		intro2.setForeground(Color.WHITE);
 		//intro.setBorder(null);
 		
 		country = new JPanel(new GridBagLayout());
@@ -213,6 +223,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		sud.addActionListener(this);
 		icon = new JLabel();
 		icon.setHorizontalAlignment(SwingConstants.CENTER);
+		icon.setVerticalAlignment(SwingConstants.CENTER);
+		icon.setBackground(Color.DARK_GRAY);
 		
 		pic = new JLabel("");
 		pic.setOpaque(false);
@@ -221,8 +233,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		pic.setBorder(null);
 		
 		icons = new Icon[4];
+		logo = new Icon[4];
 		imageSetUp = new SetUpImages(images, 100, 100, icons, 0);
-		imageSetUp5 = new SetUpImages(images[3], 20, 20, logo, 0);
+		imageSetUp5 = new SetUpImages(images, 55, 35, logo, 0);
 		
 		flags = new Icon [5];
 		flags2 = new Icon [5];
@@ -234,7 +247,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		cwd.setIcon(icons[0]);
 		wds.setIcon(icons[1]);
 		sud.setIcon(icons[2]);
-		icon.setIcon(logo);
+		icon.setIcon(logo[3]);
+		icon.setVisible(true);
+		icon.setOpaque(true);
+		icon.setAlignmentX(BOTTOM_ALIGNMENT);
+		//icon.setPreferredSize(new Dimension(50,50));
+		//icon.setText("Helo");
 	
 		flag.setIcon(flags[0]);
 		flag2.setIcon(flags2[0]);
@@ -309,25 +327,27 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(wds);
 		grid.add(sud);
 		
-		c.weightx = 1.0;
+		grid2.setBackground(Color.DARK_GRAY);
+		
+		c.weightx = 0.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		//c.gridwidth = 1;
-		//grid2.add(intro, c);
+		c.gridwidth = 1;
+		grid2.add(intro, c);
 		
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 1.0;
 		c.gridx = 1;
 		c.gridy = 0;
 		grid2.add(icon, c);
 		
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.weighty = 1.0;
 		c.gridx = 2;
 		c.gridy = 0;
 		//c.gridwidth = 1;
-		//grid2.add(intro2, c);		
+		grid2.add(intro2, c);		
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
