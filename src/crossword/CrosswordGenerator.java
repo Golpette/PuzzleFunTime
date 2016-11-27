@@ -20,7 +20,7 @@ public class CrosswordGenerator{
 	
     int count_fails=0;
 	
-	public CrosswordGenerator(int crosswordSize) throws IOException{
+	public CrosswordGenerator(int crosswordSize, int difficulty) throws IOException{
 		this.crosswordSize = crosswordSize;
 		gridSize = crosswordSize + 2;
 		x = gridSize;     
@@ -96,7 +96,7 @@ public class CrosswordGenerator{
 		}
 		
 		//System.out.println( count_fails );
-		crossword = new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries);
+		crossword = new DrawCrossword(gridInit, grid, x, y, acrossClues, downClues, entries, difficulty);
 		
 	}
 }

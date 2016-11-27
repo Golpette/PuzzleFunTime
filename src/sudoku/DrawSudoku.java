@@ -18,16 +18,26 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import crossword.JTextFieldLimit;
+import crossword.SetUpImages;
 
 import java.awt.event.AWTEventListener; //??
 
@@ -56,8 +66,14 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-
+	
+	SudokuGenerator sudo;
+	SetUpImages imageSetUp; 
+	JCheckBoxMenuItem clickSound;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
+	tips, colour, french, english, german, italian, spanish;
+	JMenuBar menuBar;
+	JMenu file, diff, options, languages;
 	JFrame frame;
 	JPanel panel, transparentLayer, largeGrid;
 	JLayeredPane layer;
@@ -72,7 +88,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<Integer> row, square, tempColumn, checks;
 	ArrayList<ArrayList<Integer>> cols;
 	ArrayList<ArrayList<Integer>> boxes;
-	Font font, font2;
+	Font font, font2, font3;
 	Random rand;
 	boolean solutionPushed, hintPushed, cluePushed;
 	int difficulty;
@@ -85,7 +101,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //	Color correct = new Color( 50 , 180,  50);
 	Color correct = new Color( 70 , 120,  70);
 	Color fixed = new Color(90,90,90);
-	
+	Icon [] flags;
 	static int gridsize=9;
 
 	
@@ -94,12 +110,107 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
+		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 
-	//public DrawSudoku(int difficulty) throws IOException{
-		
-		
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		
+		flags = new Icon [5];
+		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
+		UIManager.put("Menu.font", font3);
+		UIManager.put("MenuItem.font", font3);
+		UIManager.put("CheckBoxMenuItem.font", font3);
+		UIManager.put("RadioButtonMenuItem.font", font3);
+		
+		menuBar = new JMenuBar();
+		file = new JMenu("File");
+		options = new JMenu("Options");
+		diff = new JMenu("Difficulty");
+		
+		file.setMnemonic(KeyEvent.VK_F);
+		options.setMnemonic(KeyEvent.VK_O);
+		diff.setMnemonic(KeyEvent.VK_D);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		newGame = new JMenuItem("New");
+		newGame.addActionListener(this);
+		exit = new JMenuItem("Exit");
+		exit.addActionListener(this);
+		
+		chooseFont = new JMenuItem("Font");
+		chooseFont.addActionListener(this);
+		colour = new JMenuItem("Colour");
+		colour.addActionListener(this);
+		languages = new JMenu("Language");
+		
+		english = new JMenuItem("English",  flags[0]);
+		french = new JMenuItem("French",  flags[1]);
+		german = new JMenuItem("German", flags[2]);
+		italian = new JMenuItem("Italian", flags[3]);
+		spanish = new JMenuItem("Spanish", flags[4]);
+		
+		languages.add(english);
+		languages.add(french);
+		languages.add(german);
+		languages.add(italian);
+		languages.add(spanish);
+		
+		
+		file.add(save);
+		file.add(newGame);
+		file.add(exit);
+		
+		options.add(chooseFont);
+		options.add(colour);
+		options.add(languages);
+		options.addSeparator();
+		clickSound = new JCheckBoxMenuItem("Click Sound");
+		clickSound.setMnemonic(KeyEvent.VK_C);
+		options.add(clickSound);
+		
+		ButtonGroup group = new ButtonGroup();
+		thick = new JRadioButtonMenuItem("Easy");
+		if(difficulty == 1){
+			thick.setSelected(true);
+		}
+		thick.addActionListener(this);
+		thick.setMnemonic(KeyEvent.VK_1);
+		group.add(thick);
+		normal = new JRadioButtonMenuItem("Normal");
+		normal.setMnemonic(KeyEvent.VK_2);
+		if(difficulty == 2){
+			normal.setSelected(true);
+		}
+		normal.addActionListener(this);
+		group.add(normal);
+		smart = new JRadioButtonMenuItem("Difficult");
+		smart.setMnemonic(KeyEvent.VK_3);
+		if(difficulty == 3){
+			smart.setSelected(true);
+		}
+		smart.addActionListener(this);
+		group.add(smart);
+		genius = new JRadioButtonMenuItem("Expert");
+		genius.setMnemonic(KeyEvent.VK_4);
+		if(difficulty == 4){
+			genius.setSelected(true);
+		}
+		genius.addActionListener(this);
+		group.add(genius);
+		
+		diff.add(thick);
+		diff.add(normal);
+		diff.add(smart);
+		diff.add(genius);
+		
+		menuBar.add(file);
+		menuBar.add(diff);
+		menuBar.add(options);
+		
+		
+	
 		
 		this.difficulty = difficulty;
 		int gridSize=9+2;
@@ -144,10 +255,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 			
-		if( difficulty == 2 ){
+		if( difficulty == 1){
 			initial_config = SudokuMethods.makeEasy( grid );
 		}
-		else if( difficulty == 4 ){
+		else if( difficulty == 2 ){
 			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
 		}
 		else{
@@ -276,7 +387,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.getRootPane().setDefaultButton(solution);
 		//generateSudoku();
 		
-		
+		frame.setJMenuBar(menuBar);
 		
 	
 		
@@ -388,6 +499,14 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}	
 			
 		}
+		if(e.getSource()==clickSound){
+			System.out.println("ClickSound on");
+			//choose clicksound on/ off
+		}
+		if(e.getSource()==chooseFont){
+			System.out.println("Choose Font");
+			//choose font submenu
+		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			hintPushed = !hintPushed;
@@ -396,6 +515,76 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			System.out.println("clue");
 			cluePushed = !cluePushed;
 		}
+		
+		if(e.getSource()==save){
+			System.out.println("Puzzle Saved.");
+			//Save puzzle state
+		}
+		
+		if(e.getSource()==newGame){
+			System.out.println("New Game.");
+			//load new game
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, difficulty);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+		if(e.getSource()==thick){
+			System.out.println("Thick mode enabled");
+			int sudDiff = 1;
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, sudDiff);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		if(e.getSource()==normal){
+			System.out.println("Normal mode enabled");
+			int sudDiff = 2;
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, sudDiff);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		if(e.getSource()==smart){
+			System.out.println("Smart mode enabled");
+			int sudDiff = 3;
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, sudDiff);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		if(e.getSource()==genius){
+			System.out.println("Genius mode enabled");
+			int sudDiff = 4;
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, sudDiff);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		if(e.getSource()==exit){
+			System.exit(0);
+		}
+		
 	}
 	
 	

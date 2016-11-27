@@ -577,17 +577,17 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		
 		if(e.getSource() == cwd){
 			try {
-				cwdDiff = getDifficulty(cwdDifficulty.getSelectedIndex());
-				crossword = new CrosswordGenerator((Integer)spinner1.getValue());
+				//frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner2.getValue(), 2);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			//frame.dispose();
+			
 		}
 		if(e.getSource() == wds){
 			try {
 				//System.out.println("wdsDiff: " + wdsDiff);
-				wordsearch = new WordSearchGenerator((Integer)spinner2.getValue(), wdsDiff);
+				wordsearch = new WordSearchGenerator(15, 2);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -597,7 +597,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			try {
 				sudDiff = sudDifficulty.getSelectedIndex();
 				System.out.println("diff: " +sudDiff);
-				sudo = new SudokuGenerator(9, sudDiff);
+				sudo = new SudokuGenerator(9, 2);
 
 			} catch (IOException e1) {
 				e1.printStackTrace();

@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -28,30 +29,52 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import crossword.Entry;
 import crossword.SetUpImages;
+import sudoku.SudokuGenerator;
 import wordsearch.Coord;
 
 /**
  * Class to draw a word search
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
+	
+	SpinnerNumberModel model;
+	WordSearchGenerator wordsearch;
+	JCheckBoxMenuItem clickSound;
+	JSpinner spinner;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
+	tips, colour, french, english, german, italian, spanish;
+	JMenuBar menuBar;
+	JMenu file, diff, options, languages, size;
+	Icon [] flags;
+	SetUpImages imageSetUp; 
+	
 	SetUpImages setImages, tempImage, tempHead;
 	//Logger logger;
 	JFrame frame;
@@ -81,13 +104,124 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	private static final long serialVersionUID = 1L;
 	double width, height, mouseX, mouseY, scale, normalisedScale, tempLayerWidth, tempLayerHeight, tempScale;
 	final double MAX_SCALE, MIN_SCALE;
-	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize, tempLayerX, tempLayerY, layerX, layerY;
+	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize, tempLayerX, tempLayerY, layerX, layerY, difficulty;
 	final static int INITIAL_SQUARE_SIZE = 80, NUMBER_OF_LAYERS = 8;
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,
-			ArrayList<Entry> entries) throws IOException {
+			ArrayList<Entry> entries, int difficulty) throws IOException {
+		
+		this.difficulty = difficulty;
+		String [] countries = {"english",  "french",  "german", "italian","spanish"};
+		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		
+		flags = new Icon [5];
+		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
+		UIManager.put("Menu.font", font3);
+		UIManager.put("MenuItem.font", font3);
+		UIManager.put("CheckBoxMenuItem.font", font3);
+		UIManager.put("RadioButtonMenuItem.font", font3);
+		
+		
+		model = new SpinnerNumberModel(x-2, 6, 30, 1);
+		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font3);
+		
+		menuBar = new JMenuBar();
+		file = new JMenu("File");
+		options = new JMenu("Options");
+		diff = new JMenu("Difficulty");
+		size = new JMenu("Size");
+		
+		file.setMnemonic(KeyEvent.VK_F);
+		options.setMnemonic(KeyEvent.VK_O);
+		diff.setMnemonic(KeyEvent.VK_D);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		newGame = new JMenuItem("New");
+		newGame.addActionListener(this);
+		exit = new JMenuItem("Exit");
+		exit.addActionListener(this);
+		
+		chooseFont = new JMenuItem("Font");
+		chooseFont.addActionListener(this);
+		colour = new JMenuItem("Colour");
+		colour.addActionListener(this);
+		languages = new JMenu("Language");
+		
+		english = new JMenuItem("English",  flags[0]);
+		french = new JMenuItem("French",  flags[1]);
+		german = new JMenuItem("German", flags[2]);
+		italian = new JMenuItem("Italian", flags[3]);
+		spanish = new JMenuItem("Spanish", flags[4]);
+		
+		languages.add(english);
+		languages.add(french);
+		languages.add(german);
+		languages.add(italian);
+		languages.add(spanish);
+		
+		
+		file.add(save);
+		file.add(newGame);
+		file.add(exit);
+		
+		options.add(chooseFont);
+		options.add(colour);
+		options.add(languages);
+		options.addSeparator();
+		clickSound = new JCheckBoxMenuItem("Click Sound");
+		clickSound.setMnemonic(KeyEvent.VK_C);
+		options.add(clickSound);
+		
+		ButtonGroup group = new ButtonGroup();
+		thick = new JRadioButtonMenuItem("Easy");
+		if(difficulty == 1){
+			thick.setSelected(true);
+		}
+		thick.addActionListener(this);
+		thick.setMnemonic(KeyEvent.VK_1);
+		group.add(thick);
+		normal = new JRadioButtonMenuItem("Normal");
+		normal.setMnemonic(KeyEvent.VK_2);
+		if(difficulty == 2){
+			normal.setSelected(true);
+		}
+		normal.addActionListener(this);
+		group.add(normal);
+		smart = new JRadioButtonMenuItem("Difficult");
+		smart.setMnemonic(KeyEvent.VK_3);
+		if(difficulty == 3){
+			smart.setSelected(true);
+		}
+		smart.addActionListener(this);
+		group.add(smart);
+		genius = new JRadioButtonMenuItem("Expert");
+		genius.setMnemonic(KeyEvent.VK_4);
+		if(difficulty == 4){
+			genius.setSelected(true);
+		}
+		genius.addActionListener(this);
+		group.add(genius);
+		
+		diff.add(thick);
+		diff.add(normal);
+		diff.add(smart);
+		diff.add(genius);
+		
+		size.add(spinner);
+		
+		menuBar.add(file);
+		menuBar.add(diff);
+		menuBar.add(options);
+		menuBar.add(size);
+		
+		
+		
 		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
@@ -314,6 +448,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(solution);
+		frame.setJMenuBar(menuBar);
 	}
 
 	private void setUpLetters(ArrayList<JLabel[][]> allLetters) {
@@ -1055,6 +1190,67 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			showClue();
+		}
+		
+		if(e.getSource()==exit){
+			System.exit(0);
+		}
+		
+		
+		if(e.getSource()==newGame){
+			System.out.println("New Game");
+			try {
+				frame.dispose();
+				System.out.println("spinner value: "+(Integer)spinner.getValue());
+				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		if(e.getSource()==thick){
+			System.out.println("Thick mode enabled");
+			difficulty = 1;
+//			try {
+//				frame.dispose();
+//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==normal){
+			System.out.println("Normal mode enabled");
+			difficulty = 2;
+//			try {
+//				frame.dispose();
+//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==smart){
+			System.out.println("Smart mode enabled");
+			difficulty = 3;
+//			try {
+//				frame.dispose();
+//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==genius){
+			System.out.println("Genius mode enabled");
+			difficulty = 4;
+//			try {
+//				frame.dispose();
+//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			
 		}
 	}
 

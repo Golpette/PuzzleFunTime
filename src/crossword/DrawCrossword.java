@@ -26,21 +26,32 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
+
+import sudoku.SudokuGenerator;
 
 
 /**
@@ -50,7 +61,17 @@ import javax.swing.text.DefaultEditorKit;
  */
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 
-	
+	CrosswordGenerator crossword;
+	SpinnerNumberModel model;
+	JSpinner spinner;
+	JCheckBoxMenuItem clickSound;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
+	tips, colour, french, english, german, italian, spanish;
+	JMenuBar menuBar;
+	JMenu file, diff, options, languages;
+	Icon [] flags;
+	SetUpImages imageSetUp; 
+	JFrame frame;
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
 	private boolean buttonPushed, button2Pushed;
@@ -85,7 +106,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	// Define Color highlighting current word & clue
 	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);  //( = faded forest green )
-	
+	int difficulty;
 	
 	//tracking clicks
 	int lastClick_x = 0;
@@ -111,8 +132,110 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
-			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
-                
+			ArrayList<String> cluesDown, ArrayList<Entry> entries, int difficulty) throws IOException {
+		String [] countries = {"english",  "french",  "german", "italian","spanish"};
+		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		this.difficulty = difficulty;
+		flags = new Icon [5];
+		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
+		UIManager.put("Menu.font", font3);
+		UIManager.put("MenuItem.font", font3);
+		UIManager.put("CheckBoxMenuItem.font", font3);
+		UIManager.put("RadioButtonMenuItem.font", font3);
+		
+		model = new SpinnerNumberModel(15, 6, 30, 1);
+		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font3);
+		
+		menuBar = new JMenuBar();
+		file = new JMenu("File");
+		options = new JMenu("Options");
+		diff = new JMenu("Difficulty");
+		
+		file.setMnemonic(KeyEvent.VK_F);
+		options.setMnemonic(KeyEvent.VK_O);
+		diff.setMnemonic(KeyEvent.VK_D);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		newGame = new JMenuItem("New");
+		newGame.addActionListener(this);
+		exit = new JMenuItem("Exit");
+		exit.addActionListener(this);
+		
+		chooseFont = new JMenuItem("Font");
+		chooseFont.addActionListener(this);
+		colour = new JMenuItem("Colour");
+		colour.addActionListener(this);
+		languages = new JMenu("Language");
+		
+		english = new JMenuItem("English",  flags[0]);
+		french = new JMenuItem("French",  flags[1]);
+		german = new JMenuItem("German", flags[2]);
+		italian = new JMenuItem("Italian", flags[3]);
+		spanish = new JMenuItem("Spanish", flags[4]);
+		
+		languages.add(english);
+		languages.add(french);
+		languages.add(german);
+		languages.add(italian);
+		languages.add(spanish);
+		
+		
+		file.add(save);
+		file.add(newGame);
+		file.add(exit);
+		
+		options.add(chooseFont);
+		options.add(colour);
+		options.add(languages);
+		options.addSeparator();
+		clickSound = new JCheckBoxMenuItem("Click Sound");
+		clickSound.setMnemonic(KeyEvent.VK_C);
+		options.add(clickSound);
+		
+		ButtonGroup group = new ButtonGroup();
+		thick = new JRadioButtonMenuItem("Easy");
+		if(difficulty == 1){
+			thick.setSelected(true);
+		}
+		thick.addActionListener(this);
+		thick.setMnemonic(KeyEvent.VK_1);
+		group.add(thick);
+		normal = new JRadioButtonMenuItem("Normal");
+		normal.setMnemonic(KeyEvent.VK_2);
+		if(difficulty == 2){
+			normal.setSelected(true);
+		}
+		normal.addActionListener(this);
+		group.add(normal);
+		smart = new JRadioButtonMenuItem("Difficult");
+		smart.setMnemonic(KeyEvent.VK_3);
+		if(difficulty == 3){
+			smart.setSelected(true);
+		}
+		smart.addActionListener(this);
+		group.add(smart);
+		genius = new JRadioButtonMenuItem("Expert");
+		genius.setMnemonic(KeyEvent.VK_4);
+		if(difficulty == 4){
+			genius.setSelected(true);
+		}
+		genius.addActionListener(this);
+		group.add(genius);
+		
+		diff.add(thick);
+		diff.add(normal);
+		diff.add(smart);
+		diff.add(genius);
+		
+		menuBar.add(file);
+		menuBar.add(diff);
+		menuBar.add(options);
+		
+		
 		buttonPushed = false;
 		button2Pushed = false;
 		
@@ -132,7 +255,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		currentClue = "";
 		
-		JFrame frame = new JFrame("Auto Crossword");
+		frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(550, 400));
 		frame.setMinimumSize(new Dimension(550,400));
@@ -527,6 +650,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
+		frame.setJMenuBar(menuBar);
 	}
 
 	 Action someAction = new AbstractAction() {
@@ -1399,7 +1523,60 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource()==exit){
+			System.exit(0);
+		}
 		
+		if(e.getSource()==newGame){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), difficulty);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		
+		if(e.getSource()==thick){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 1);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		if(e.getSource()==normal){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 2);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		if(e.getSource()==smart){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 3);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		if(e.getSource()==genius){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 4);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
 		if (e.getSource() == hint) {
 			
 			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
