@@ -39,7 +39,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	public wordsearch.WordSearchGenerator wordsearch;
 	public sudoku.SudokuGenerator sudoku;
 	public sudoku.SudokuGenerator sudo;
-	public SetUpImages imageSetUp, imageSetUp2, imageSetUp3, imageSetUp4;
+	public SetUpImages imageSetUp, imageSetUp2, imageSetUp3, imageSetUp4, imageSetUp5;
 	public SignUp signUp;
 	public LogIn logIn;
 	JLayeredPane layer2;
@@ -50,9 +50,10 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	SpinnerNumberModel model1, model2, model3;
 	JFrame frame;
 	JLayeredPane layer;
-	JPanel panel, grid, country, country2;
+	JPanel panel, panel2, grid, grid2, country, country2;
 	JButton cwd, wds, sud, signup, login;
-	JLabel intro, pic, flag, flag2, arrow, clueLanguage, solutionLanguage;
+	JLabel icon;
+	JLabel intro, intro2, pic, flag, flag2, arrow, clueLanguage, solutionLanguage;
 	Font font, font2, font3, font4, font5;
 	/// STEVE: these weren't initialised when automatic scroller difficulty was used
 	///     2 implies defualt is "EASY" -- need to change this if we change defualt scroller value
@@ -61,12 +62,12 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 	int sudDiff=2;
 	String user;
 	Icon [] icons;
-	String [] images = {"crossword", "wordsearch", "sudoku"};
+	String [] images = {"crossword", "wordsearch", "sudoku", "Logo2"};
 	String [] countries = {"english",  "french",  "german", "italian","spanish"};
 	String [] arrows = {"arrow"};
 	String [] countries2, countries3;
 	Icon [] flags, flags2, arr1;
-	Icon arr;
+	Icon arr, logo;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PuzzleLoader(String user) throws IOException {
@@ -117,12 +118,20 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 			countries3[i] = countries[i].toUpperCase();
 		}
 		
-		intro = new JLabel("Puzzle Generator");
+		intro = new JLabel("SUD");
 		intro.setFont(font5);
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setOpaque(true);
 		//intro.setBounds(0, 0,frame.getWidth(),300);
 		intro.setBackground(new Color(240,240,240,255));
+		//intro.setBorder(null);
+		
+		intro2 = new JLabel("WORDS");
+		intro2.setFont(font5);
+		intro2.setHorizontalAlignment(SwingConstants.CENTER);
+		intro2.setOpaque(true);
+		//intro.setBounds(0, 0,frame.getWidth(),300);
+		intro2.setBackground(new Color(240,240,240,255));
 		//intro.setBorder(null);
 		
 		country = new JPanel(new GridBagLayout());
@@ -183,8 +192,13 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		panel.setBounds(0,0,440,200);
 		panel.setOpaque(false); 
 		
+		panel2 = new JPanel(new GridBagLayout());
+		panel2.setBackground(new Color(220,220,250,255));
+		panel2.setBounds(0,0,440,200);
+		panel2.setOpaque(false);
 		
 		grid = new JPanel(new GridLayout(1, 3));
+		grid2 = new JPanel(new GridBagLayout());
 		cwd = new JButton();
 		cwd.setFont(font2);
 		cwd.setHorizontalAlignment(SwingConstants.CENTER);
@@ -197,6 +211,8 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		sud.setFont(font2);
 		sud.setHorizontalAlignment(SwingConstants.CENTER);
 		sud.addActionListener(this);
+		icon = new JLabel();
+		icon.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		pic = new JLabel("");
 		pic.setOpaque(false);
@@ -204,8 +220,9 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		pic.setBackground(new Color(255,255,255,255));
 		pic.setBorder(null);
 		
-		icons = new Icon[3];
+		icons = new Icon[4];
 		imageSetUp = new SetUpImages(images, 100, 100, icons, 0);
+		imageSetUp5 = new SetUpImages(images[3], 20, 20, logo, 0);
 		
 		flags = new Icon [5];
 		flags2 = new Icon [5];
@@ -217,6 +234,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		cwd.setIcon(icons[0]);
 		wds.setIcon(icons[1]);
 		sud.setIcon(icons[2]);
+		icon.setIcon(logo);
 	
 		flag.setIcon(flags[0]);
 		flag2.setIcon(flags2[0]);
@@ -291,21 +309,38 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		grid.add(wds);
 		grid.add(sud);
 		
-		c.weightx = 0.0;
+		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 3;
-		c.insets = new Insets(0,0,0,0);
-		panel.add(intro, c);
+		c.gridy = 0;
+		//c.gridwidth = 1;
+		//grid2.add(intro, c);
 		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 1;
+		c.gridy = 0;
+		grid2.add(icon, c);
 		
-		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 2;
+		c.gridy = 0;
+		//c.gridwidth = 1;
+		//grid2.add(intro2, c);		
 		
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 0;
+		//c.gridwidth = 1;
+		panel.add(grid2, c);	
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 1;
+		//c.gridwidth = 3;
 		panel.add(grid, c);
 		
 		c.fill = GridBagConstraints.BOTH;	
