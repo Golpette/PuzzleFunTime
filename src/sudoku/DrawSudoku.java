@@ -522,7 +522,21 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			hintPushed = !hintPushed;
+			if(hintPushed){
+				//add method to change background of next available number.
+				//do this by storing array of last removed number in order when creating puzzle.
+//				nextNumberGenerated
+//				if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
+//							
+//				}		
+			}
+			else{
+						//if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
+						
+				//}
+			}
 		}
+		
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			cluePushed = !cluePushed;
