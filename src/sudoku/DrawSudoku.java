@@ -67,6 +67,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		this.y = y;
 	}
 	
+	int[][] initial_config;
+	boolean buttonPushed;
 	SudokuGenerator sudo;
 	SetUpImages imageSetUp; 
 	JCheckBoxMenuItem clickSound;
@@ -79,8 +81,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	JLayeredPane layer;
 	JLabel [][] numbers, threeByThreeGrid;
 	JTextField [][] nums;
-	int[][] grid;
-	String[][] grid2;
+	public int[][] grid, grid2;
+	//String[][] grid2;
 	GridBagConstraints c;
 	JButton solution, hint, clue;
 	DrawSudokuSolution sol;
@@ -88,7 +90,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<Integer> row, square, tempColumn, checks;
 	ArrayList<ArrayList<Integer>> cols;
 	ArrayList<ArrayList<Integer>> boxes;
-	Font font, font2, font3;
+	Font font, font2, font3, font4;
 	Random rand;
 	boolean solutionPushed, hintPushed, cluePushed;
 	int difficulty;
@@ -97,10 +99,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	Action action;
 	
 	// Define colors
-	Color wrong = new Color(250,60,60);
+	Color wrong = new Color(255,20,20);
 //	Color correct = new Color( 50 , 180,  50);
-	Color correct = new Color( 70 , 120,  70);
-	Color fixed = new Color(90,90,90);
+	Color correct = new Color( 20 , 255,  20);
+	//Color fixed = new Color(90,90,90);
+	Color fixed = new Color(40,40,40);
 	Icon [] flags;
 	static int gridsize=9;
 
@@ -111,11 +114,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
-
+		this.grid = grid;
 		this.difficulty = difficulty;
 		
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font4 = new Font("Century Gothic", Font.BOLD, 32);
 		font3 = new Font("Century Gothic", Font.PLAIN, 14);
 		
 		flags = new Icon [5];
@@ -232,9 +236,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		sol.generateSudoku(grid);             // Andy's algorithm to generate sudoku solution.
 		sol.setVisible(false);
 		
-		
+		grid2 = grid.clone();
 		// We now have a full grid[][] for sudoku base. Modify grid[][] to starting configuration
-		int[][] initial_config = new int[9][9];
+		initial_config = new int[9][9];
 		
 		
 		
@@ -306,7 +310,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		hint.addActionListener(this);
 		
 		
-		clue = new JButton("Reveal");
+		clue = new JButton("Check");
 		clue.setFont(font2);
 		clue.addActionListener(this);
 		
@@ -412,12 +416,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //		}	
 		
 
-		if(difficulty == 1){
-			initial_config = SudokuMethods.makeEasy( grid );	
-		}
-		else if(difficulty == 2){	
-			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
-		}	
+//		if(difficulty == 1){
+//			initial_config = SudokuMethods.makeEasy( grid );	
+//		}
+//		else if(difficulty == 2){	
+//			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+//		}	
 
 		
 		
@@ -430,6 +434,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					nums[i][j].setEditable(false);
 					nums[i][j].setBackground(Color.WHITE);
 					nums[i][j].setForeground( fixed );
+					nums[i][j].setFont(font4);
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
 
 				}
@@ -465,20 +470,25 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		//change line below to " ==hint" to implement full answers in sudoku
-		if(e.getSource()==solution){		
-			
-			sol.frame.setVisible(!sol.frame.isVisible());
-			if(sol.frame.isVisible()){
+		if(e.getSource()==clue){		
+			buttonPushed = !buttonPushed;
+			//sol.frame.setVisible(!sol.frame.isVisible());
+			if(buttonPushed){
 
-				solution.setText("Hide Solution");
+				//solution.setText("Hide Solution");
 				// Highlight incorrect numbers
 				for( int i=0; i<9; i++){
 					for( int j=0; j<9; j++ ){
-							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){						
-								if( Integer.parseInt(nums[i][j].getText())==grid[i][j] ){
+							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){		
+								//System.out.println(grid[i][j]);
+								System.out.println("nums: " + Integer.parseInt(nums[i][j].getText()));
+								System.out.println("init: "+grid2[i][j]);
+								if( Integer.parseInt(nums[i][j].getText())== grid2[i][j] && nums[i][j].isEditable()){
 									nums[i][j].setForeground( correct );
 								}
-								else{
+								else if( Integer.parseInt(nums[i][j].getText())!= grid2[i][j] && nums[i][j].isEditable()){
+//									System.out.println("nums: " + Integer.parseInt(nums[i][j].getText()));
+//									System.out.println("init: "+initial_config[i][j]);
 									nums[i][j].setForeground( wrong );
 								}
 							}
@@ -487,7 +497,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 				
 			else{
-				solution.setText("Show Solution");
+				//solution.setText("Show Solution");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if( nums[i][j].isEditable() ){
@@ -516,6 +526,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			cluePushed = !cluePushed;
+			//show green for correct numbers, red for incorrect
+			
 		}
 		
 		if(e.getSource()==save){
