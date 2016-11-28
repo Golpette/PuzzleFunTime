@@ -69,9 +69,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JCheckBoxMenuItem clickSound;
 	JSpinner spinner;
 	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
-	tips, colour, french, english, german, italian, spanish;
+	tips, colour, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
 	JMenuBar menuBar;
-	JMenu file, diff, options, languages, size;
+	JMenu file, diff, options, languages, languages2, size;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
 	
@@ -151,7 +151,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		chooseFont.addActionListener(this);
 		colour = new JMenuItem("Colour");
 		colour.addActionListener(this);
-		languages = new JMenu("Language");
+		languages = new JMenu("Clue Language");
+		languages2 = new JMenu("Grid Language");
 		
 		english = new JMenuItem("English",  flags[0]);
 		french = new JMenuItem("French",  flags[1]);
@@ -159,12 +160,23 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		italian = new JMenuItem("Italian", flags[3]);
 		spanish = new JMenuItem("Spanish", flags[4]);
 		
+		english2 = new JMenuItem("English",  flags[0]);
+		french2 = new JMenuItem("French",  flags[1]);
+		german2 = new JMenuItem("German", flags[2]);
+		italian2 = new JMenuItem("Italian", flags[3]);
+		spanish2 = new JMenuItem("Spanish", flags[4]);
+		
 		languages.add(english);
 		languages.add(french);
 		languages.add(german);
 		languages.add(italian);
 		languages.add(spanish);
 		
+		languages2.add(english2);
+		languages2.add(french2);
+		languages2.add(german2);
+		languages2.add(italian2);
+		languages2.add(spanish2);
 		
 		file.add(save);
 		file.add(newGame);
@@ -173,6 +185,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		options.add(chooseFont);
 		options.add(colour);
 		options.add(languages);
+		options.add(languages2);
 		options.addSeparator();
 		clickSound = new JCheckBoxMenuItem("Click Sound");
 		clickSound.setMnemonic(KeyEvent.VK_C);
@@ -180,7 +193,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		ButtonGroup group = new ButtonGroup();
 		thick = new JRadioButtonMenuItem("Easy");
-		if(difficulty == 1){
+		if(difficulty == 2){
 			thick.setSelected(true);
 		}
 		thick.addActionListener(this);
@@ -188,21 +201,21 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		group.add(thick);
 		normal = new JRadioButtonMenuItem("Normal");
 		normal.setMnemonic(KeyEvent.VK_2);
-		if(difficulty == 2){
+		if(difficulty == 4){
 			normal.setSelected(true);
 		}
 		normal.addActionListener(this);
 		group.add(normal);
-		smart = new JRadioButtonMenuItem("Difficult");
+		smart = new JRadioButtonMenuItem("Hard");
 		smart.setMnemonic(KeyEvent.VK_3);
-		if(difficulty == 3){
+		if(difficulty == 8){
 			smart.setSelected(true);
 		}
 		smart.addActionListener(this);
 		group.add(smart);
 		genius = new JRadioButtonMenuItem("Expert");
 		genius.setMnemonic(KeyEvent.VK_4);
-		if(difficulty == 4){
+		if(difficulty == 16){
 			genius.setSelected(true);
 		}
 		genius.addActionListener(this);
@@ -217,9 +230,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		menuBar.add(file);
 		menuBar.add(diff);
-		menuBar.add(options);
 		menuBar.add(size);
-		
+		menuBar.add(options);
 		
 		
 		System.out.println("Started again");
@@ -1193,7 +1205,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		
 		if(e.getSource()==exit){
-			System.exit(0);
+			//System.exit(0);
+			frame.dispose();
 		}
 		
 		
@@ -1210,7 +1223,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==thick){
 			System.out.println("Thick mode enabled");
-			difficulty = 1;
+			difficulty = 2;
 //			try {
 //				frame.dispose();
 //				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
@@ -1221,7 +1234,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==normal){
 			System.out.println("Normal mode enabled");
-			difficulty = 2;
+			difficulty = 4;
 //			try {
 //				frame.dispose();
 //				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
@@ -1232,7 +1245,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==smart){
 			System.out.println("Smart mode enabled");
-			difficulty = 3;
+			difficulty = 8;
 //			try {
 //				frame.dispose();
 //				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
@@ -1243,7 +1256,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==genius){
 			System.out.println("Genius mode enabled");
-			difficulty = 4;
+			difficulty = 16;
 //			try {
 //				frame.dispose();
 //				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);

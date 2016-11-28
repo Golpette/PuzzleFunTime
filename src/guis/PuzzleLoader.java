@@ -578,7 +578,7 @@ public class PuzzleLoader extends JComponent implements ActionListener{
 		if(e.getSource() == cwd){
 			try {
 				//frame.dispose();
-				crossword = new CrosswordGenerator((Integer)spinner2.getValue(), 2);
+				crossword = new CrosswordGenerator(15, 2);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

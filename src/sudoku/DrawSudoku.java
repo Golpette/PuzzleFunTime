@@ -112,6 +112,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 
+		this.difficulty = difficulty;
+		
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
 		font3 = new Font("Century Gothic", Font.PLAIN, 14);
@@ -185,7 +187,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		}
 		normal.addActionListener(this);
 		group.add(normal);
-		smart = new JRadioButtonMenuItem("Difficult");
+		smart = new JRadioButtonMenuItem("Hard");
 		smart.setMnemonic(KeyEvent.VK_3);
 		if(difficulty == 3){
 			smart.setSelected(true);
@@ -212,7 +214,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 	
 		
-		this.difficulty = difficulty;
+		
 		int gridSize=9+2;
 		this.x = gridSize;     
 		this.y = gridSize;
@@ -410,10 +412,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //		}	
 		
 
-		if(difficulty == 0){
+		if(difficulty == 1){
 			initial_config = SudokuMethods.makeEasy( grid );	
 		}
-		else if(difficulty == 1){	
+		else if(difficulty == 2){	
 			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
 		}	
 
@@ -535,54 +537,55 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 		if(e.getSource()==thick){
 			System.out.println("Thick mode enabled");
-			int sudDiff = 1;
-			try {
-				frame.dispose();
-				sudo = new SudokuGenerator(9, sudDiff);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			difficulty = 1;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 		
 		if(e.getSource()==normal){
 			System.out.println("Normal mode enabled");
-			int sudDiff = 2;
-			try {
-				frame.dispose();
-				sudo = new SudokuGenerator(9, sudDiff);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			difficulty = 2;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 		
 		if(e.getSource()==smart){
 			System.out.println("Smart mode enabled");
-			int sudDiff = 3;
-			try {
-				frame.dispose();
-				sudo = new SudokuGenerator(9, sudDiff);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			difficulty = 3;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 		
 		if(e.getSource()==genius){
 			System.out.println("Genius mode enabled");
-			int sudDiff = 4;
-			try {
-				frame.dispose();
-				sudo = new SudokuGenerator(9, sudDiff);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			difficulty = 4;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 		
 		if(e.getSource()==exit){
-			System.exit(0);
+			//System.exit(0);
+			frame.dispose();
 		}
 		
 	}
