@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +49,7 @@ import java.awt.event.AWTEventListener; //??
 /**
  * Class to draw a word search
  */
-public class DrawSudoku extends JComponent implements ActionListener {
+public class DrawSudoku extends JComponent implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	private static int squareSize = 50;	
 	int x, y;
@@ -66,7 +68,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
+	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);
 	int[][] initial_config;
 	boolean buttonPushed;
 	SudokuGenerator sudo;
@@ -334,6 +336,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
 				nums[i][j].setDocument(new JTextFieldLimit(1, false));				
 				keyActionTextField(nums[i][j]);
+				nums[i][j].addMouseListener(this);
 
 				transparentLayer.add(nums[i][j]);
 			}
@@ -479,6 +482,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				// Highlight incorrect numbers
 				for( int i=0; i<9; i++){
 					for( int j=0; j<9; j++ ){
+						 nums[i][j].setBackground(Color.WHITE);
 							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){		
 								//System.out.println(grid[i][j]);
 								System.out.println("nums: " + Integer.parseInt(nums[i][j].getText()));
@@ -653,6 +657,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 						if (e.getSource() == nums[row][col]) {
 
+							 //nums[row][col].setBackground(HIGHLIGHT_COLOUR);
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
 								
 								int newstart=row;
@@ -719,6 +724,45 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 
 		});
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		for (int row = 0; row < gridsize ; row++) {
+			for (int col = 0; col < gridsize ; col++) {	
+				 nums[row][col].setBackground(Color.WHITE);
+
+				if (e.getSource() == nums[row][col]) {
+
+					 nums[row][col].setBackground(HIGHLIGHT_COLOUR);
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
