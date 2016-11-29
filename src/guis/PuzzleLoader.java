@@ -36,7 +36,7 @@ public class PuzzleLoader implements ActionListener{
 	public PuzzleLoader(String user) throws IOException {
 		
 		frame = new JFrame("Auto Puzzle Generator");
-		frame.setMinimumSize(new Dimension(450,300));
+		frame.setMinimumSize(new Dimension(500,300));
 		font = new Font("Agency FB", Font.BOLD, 90);
 		
 		intro = new JLabel("SUD");
@@ -110,6 +110,7 @@ public class PuzzleLoader implements ActionListener{
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);		
+		//frame.setResizable(false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
