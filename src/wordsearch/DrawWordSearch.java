@@ -595,7 +595,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			public void mouseEntered(MouseEvent e) {
 				for (JLabel lab : allClues) {
 					if (e.getSource() == lab && notIn && reset) {
-						clues.setBackground(new Color(250, 250, 250, 255));
+						//clues.setBackground(new Color(250, 250, 250, 255));
 						orderClues.setVisible(true);
 						notIn = false;
 					}

@@ -652,17 +652,18 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * assigned to it
 		 */
 		
-		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
-		}
-		else if(squareSize*(x+2)+squareSize/2 > width){
-			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+4)));
-		}else if(squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2, (int)height-30));
-		}else{
-			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2,squareSize*(y+4)));
-		}
 
+		if (squareSize * (x + 18) > width && squareSize * (y + 5) > height - 30) {
+			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
+		} else if (squareSize * (x + 18) > width) {
+			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 5)));
+		} else if (squareSize * (y + 5) > height - 30) {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 18), (int) height - 30));
+		} else {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 18), squareSize * (y + 5)));
+		}
+		
+		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
