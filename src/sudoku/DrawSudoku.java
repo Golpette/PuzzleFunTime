@@ -654,11 +654,9 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
 
-						nums[row][col].setBackground(Color.WHITE);
 
 						if (e.getSource() == nums[row][col]) {
-
-							 //nums[row][col].setBackground(HIGHLIGHT_COLOUR);
+							 nums[row][col].setBackground(Color.WHITE);
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
 								
 								int newstart=row;
@@ -675,11 +673,10 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 								if( newstart+1 > gridsize-1 ){
 									newstart=-1;
 								}
-								//No idea why the following line doesn't work!  AR
-								nums[ (newstart+1)][col].setBackground(HIGHLIGHT_COLOUR);
+								
 								nums[ (newstart+1) ][col].requestFocus();
 								nums[ newstart+1 ][col].getCaret().setVisible(true);
-								
+								nums[ newstart+1][col].setBackground(HIGHLIGHT_COLOUR);
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 								
@@ -689,7 +686,6 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 								}
 								nums[ row ][ newstart+1 ].requestFocus();
 								nums[ row ][ newstart+1 ].getCaret().setVisible(true);
-								//No idea why the following line doesn't work!  AR
 								nums[row][ newstart+1].setBackground(HIGHLIGHT_COLOUR);
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
