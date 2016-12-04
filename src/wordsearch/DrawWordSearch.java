@@ -387,7 +387,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		layer.setVisible(true);
 		layer.setOpaque(true);
 
-		drawGrid(normalisedScale);
+		drawGrid();
 		
 		clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size(), 1));
 		clues.setBounds(0, 40, 18 * x, font3.getSize()*(cluesAcross.size()+cluesDown.size()));
@@ -565,6 +565,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public JPanel setUpLayers(JLabel[][] labels, JPanel layer, int level) {
 		layer = new JPanel(new GridLayout(x - 2, y - 2));
 		layer.setBounds(layerX, layerY, squareSize * (x - 2), squareSize * (y - 2));
+		border = BorderFactory.createLineBorder(currentColour);
 		layer.setBorder(border);
 		layer.setBackground(clear);
 		layer.setOpaque(false);
@@ -575,6 +576,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				labels[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
 				labels[i][j].setOpaque(false);
 				labels[i][j].setFont(font);
+				labels[i][j].setForeground(currentColour);
 				if (temporaryIcons.get(level)[i][j] != null) {
 					temp = (ImageIcon) temporaryIcons.get(level)[i][j];
 					Image img = temp.getImage();
@@ -991,8 +993,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 	}
 
-	public void drawGrid(double normalised) {
+	public void drawGrid() {
 		layer.removeAll();
+		layer.setBackground(clear);
 //		if(tempScale != normalisedScale){
 //			layerX = (int)(tempLayerX + ((mouseX - frame.getX())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale))));
 //			layerY = (int)(tempLayerY + ((mouseY - frame.getY())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale))));
@@ -1001,7 +1004,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //			layer.setBounds(40,40, squareSize * (x - 2), squareSize * (y - 2));
 //			System.out.println("Setting to edge");
 //		}else{
-			layer.setBounds(layerX, layerY, squareSize * (x - 2), squareSize * (y - 2));
+			layer.setBounds(0, 0, squareSize * (x), squareSize * (y));
 		//}
 		tempLayerX = layerX;
 		tempLayerY = layerY;
@@ -1336,6 +1339,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if(e.getSource() == colourList[i]){
 				currentColour = colours[i];
 				setColours();
+				resetSizes();
+				drawGrid();
 				System.out.println("Did something: "+colours[i]);
 			}
 		}
@@ -1400,7 +1405,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					   }
 					  };
 					  worker.execute();
-				
+					  resetSizes();
 			}
 		}
 	}
@@ -1514,7 +1519,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
 		font2 = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
-		drawGrid(normalisedScale);
+		drawGrid();
 		System.out.println("Scale: " + scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 		System.out.println("tempLayerX: "+tempLayerX + " tempLayerY: " +tempLayerY +" tempLayerWidth: "+tempLayerWidth
