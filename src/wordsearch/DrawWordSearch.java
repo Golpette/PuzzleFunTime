@@ -56,7 +56,6 @@ import javax.swing.border.Border;
 
 import crossword.Entry;
 import crossword.SetUpImages;
-import sudoku.SudokuGenerator;
 import wordsearch.Coord;
 
 /**
@@ -1194,6 +1193,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				setUpClues();
 			}
 		}
+		
+		if(e.getSource() == colour){
+			
+		}
+		if(e.getSource() == font){
+			
+		}
+		
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			//showHint();
