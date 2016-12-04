@@ -170,10 +170,10 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		file.add(newGame);
 		file.add(exit);
 		
-		options.add(chooseFont);
-		options.add(colour);
-		options.add(languages);
-		options.addSeparator();
+		//options.add(chooseFont);
+		//options.add(colour);
+		//options.add(languages);
+		//options.addSeparator();
 		clickSound = new JCheckBoxMenuItem("Click Sound");
 		clickSound.setMnemonic(KeyEvent.VK_C);
 		options.add(clickSound);
