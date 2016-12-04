@@ -515,6 +515,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temporaryIcons2.add(icon2);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setUpClues() {
 		clues.removeAll();
 		clueText.clear();
@@ -534,13 +535,19 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			JLabel temp = new JLabel(a);
 			temp.setForeground(currentColour);
 			mouseActionlabel(temp);
-			temp.setFont(font3);
+			temp.setFont(new Font(currentFont, Font.PLAIN, 18));
+			//temp.setFont(font3);
 			allClues.add(temp);
 			}
 		for(String b: struckThrough){
 			JLabel temp2 = new JLabel(b);
 			temp2.setForeground(currentColour);
 			mouseActionlabel(temp2);
+			Font tempFnt = new Font(currentFont, Font.PLAIN, 18);
+			@SuppressWarnings("rawtypes")
+			Map fontAttr = tempFnt.getAttributes();
+			fontAttr.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+			font4 = new Font(fontAttr);
 			temp2.setFont(font4);
 			allClues.add(temp2);
 		}
@@ -1320,6 +1327,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			if(e.getSource() == fontList[i]){
 				currentFont = fontNames[i];
 				resetSizes();
+				setUpClues();
 				System.out.println("Did something");
 			}
 		}
