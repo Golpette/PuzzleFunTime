@@ -63,14 +63,16 @@ import wordsearch.Coord;
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	
+	public String currentFont = "Century Gothic";
 	SpinnerNumberModel model;
 	WordSearchGenerator wordsearch;
 	JCheckBoxMenuItem clickSound;
 	JSpinner spinner;
-	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
-	tips, colour, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, 
+	tips, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
 	JMenuBar menuBar;
-	JMenu file, diff, options, languages, languages2, size;
+	JMenu file, diff, options, languages, languages2, size, chooseFont, colour;
+	JMenuItem [] fontList, colourList;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
 	
@@ -106,14 +108,37 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize, tempLayerX, tempLayerY, layerX, layerY, difficulty;
 	final static int INITIAL_SQUARE_SIZE = 80, NUMBER_OF_LAYERS = 8;
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
-
+	String [] fontNames;
+	ArrayList<Font> fonts;
+	Color [] colours;
+	Color currentColour;
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,
 			ArrayList<Entry> entries, int difficulty) throws IOException {
 		
+		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
+				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
+		this.fontNames = fontNames;
+		
+		Color [] colours = {Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN,
+				Color.MAGENTA, Color.PINK,  Color.ORANGE, Color.RED, Color.YELLOW, Color.WHITE};
+		String [] colourNames = {"Black", "Blue", "Cyan", "Gray", "Green", 
+				"Magenta", "Pink", "Orange", "Red", "Yellow", "White"};
+		this.colours = colours;
+		currentColour = Color.BLACK;
+		
 		this.difficulty = difficulty;
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		fontList = new JMenuItem[fontNames.length];
+		colourList = new JMenuItem[colours.length];
+		fonts = new ArrayList<Font>();
+		for(int i = 0; i < fontNames.length; i++){			
+			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+//			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+//			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+		}
 		
 		flags = new Icon [5];
 		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
@@ -146,13 +171,28 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
 		
-		chooseFont = new JMenuItem("Font");
+		chooseFont = new JMenu("Font");
 		chooseFont.addActionListener(this);
-		colour = new JMenuItem("Colour");
+		colour = new JMenu("Colour");
 		colour.addActionListener(this);
 		languages = new JMenu("Clue Language");
 		languages2 = new JMenu("Grid Language");
 		
+		for(int i = 0; i < fontNames.length; i++){
+			UIManager.put("MenuItem.font", fonts.get(i));	
+			fontList[i] = new JMenuItem(fontNames[i]);
+			fontList[i].addActionListener(this);
+			chooseFont.add(fontList[i]);
+		}
+		UIManager.put("MenuItem.font", new Font("Century Gothic", Font.BOLD, 14));	
+		
+		for(int j = 0; j < colours.length; j++){
+			UIManager.put("MenuItem.foreground", colours[j]);
+			colourList[j] = new JMenuItem(colourNames[j]);
+			colour.add(colourList[j]);
+		}
+		UIManager.put("MenuItem.font", new Font("Century Gothic", Font.PLAIN, 14));	
+		UIManager.put("MenuItem.foreground", Color.BLACK);
 		english = new JMenuItem("English",  flags[0]);
 		french = new JMenuItem("French",  flags[1]);
 		german = new JMenuItem("German", flags[2]);
@@ -1272,6 +1312,22 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //			}
 			
 		}
+		
+		for(int i = 0; i < fontList.length; i++){
+			if(e.getSource() == fontList[i]){
+				currentFont = fontNames[i];
+				resetSizes();
+				System.out.println("Did something");
+			}
+		}
+		
+		for(int i = 0; i < colourList.length; i++){
+			if(e.getSource() == colourList[i]){
+				currentColour = colours[i];
+				resetSizes();
+				System.out.println("Did something");
+			}
+		}
 	}
 
 	private void showClue() {
@@ -1429,13 +1485,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		tempLayerY = layer.getY();
 		tempLayerWidth = layer.getWidth();
 		tempLayerHeight = layer.getHeight();
-		font = new Font("Century Gothic", Font.PLAIN, squareSize / 5 * 3);
+		font = new Font(currentFont, Font.PLAIN, squareSize / 5 * 3);
 		normalisedScale = scale / 20;
 		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE);
 		main.revalidate();
 		//font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
-		font2 = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
-		font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
+		font2 = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
+		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		drawGrid(normalisedScale);
 		System.out.println("Scale: " + scale + " Normalised: " + normalisedScale + " squareSize: " + squareSize);
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);

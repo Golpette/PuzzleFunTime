@@ -138,7 +138,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			ArrayList<String> cluesDown, ArrayList<Entry> entries, int difficulty) throws IOException {
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
-								"Courier New", "Copperplate Gothic Bold", "Fixedsys", "French Script MT", "Segoe Script","Terminal","Times New Roman"};
+								"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script", "Times New Roman"};
 		font3 = new Font("Century Gothic", Font.PLAIN, 14);
 		this.fontNames = fontNames;
 		this.difficulty = difficulty;
@@ -190,8 +190,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			UIManager.put("MenuItem.font", fonts.get(i));	
 			fontList[i] = new JMenuItem(fontNames[i]);
 			fontList[i].addActionListener(this);
-		}
-		for(int i = 0; i < fontNames.length; i++){
 			chooseFont.add(fontList[i]);
 		}
 		
