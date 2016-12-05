@@ -52,7 +52,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import crossword.Entry;
@@ -63,8 +62,7 @@ import wordsearch.Coord;
  * Class to draw a word search
  */
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
-	public String toCountry = "English";
-	public String fromCountry = "English";
+	
 	public String currentFont = "Century Gothic";
 	SpinnerNumberModel model;
 	WordSearchGenerator wordsearch;
@@ -74,7 +72,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	tips, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
 	JMenuBar menuBar;
 	JMenu file, diff, options, languages, languages2, size, chooseFont, colour;
-	JMenuItem [] fontList, colourList, country1, country2;;
+	JMenuItem [] fontList, colourList;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
 	
@@ -99,7 +97,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	Random rand;
 	Color grey, clear;
 	Dimension screenSize;
-	Border border, border2;
+	Border border;
 	String[][] grid;
 	String[] ordering = { "RANDOM", "ALPHABETICAL", "BIGGEST", "SMALLEST" },
 			loopDirections = {"TopLeft", "Left", "BottomLeft", "Top", "Bottom", "TopRight", "Right", "BottomRight"};
@@ -110,7 +108,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize, tempLayerX, tempLayerY, layerX, layerY, difficulty;
 	final static int INITIAL_SQUARE_SIZE = 80, NUMBER_OF_LAYERS = 8;
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
-	String [] fontNames, countries;
+	String [] fontNames;
 	ArrayList<Font> fonts;
 	Color [] colours;
 	Color currentColour;
@@ -131,13 +129,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		currentColour = Color.BLACK;
 		
 		this.difficulty = difficulty;
-		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
-		this.countries = countries;
+		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 		font3 = new Font(currentFont, Font.PLAIN, 14);
 		fontList = new JMenuItem[fontNames.length];
 		colourList = new JMenuItem[colours.length];
-		country1 = new JMenuItem[countries.length];
-		country2 = new JMenuItem[countries.length];
 		fonts = new ArrayList<Font>();
 		for(int i = 0; i < fontNames.length; i++){			
 			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
@@ -199,31 +194,36 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		UIManager.put("MenuItem.font", new Font("Century Gothic", Font.PLAIN, 14));	
 		UIManager.put("MenuItem.foreground", Color.BLACK);
-		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
+		english = new JMenuItem("English",  flags[0]);
+		french = new JMenuItem("French",  flags[1]);
+		german = new JMenuItem("German", flags[2]);
+		italian = new JMenuItem("Italian", flags[3]);
+		spanish = new JMenuItem("Spanish", flags[4]);
 		
-		for(int i = 0; i < countries.length; i++){
-			country1[i] = new JMenuItem(countries[i], flags[i]);
-			country2[i] = new JMenuItem(countries[i], flags[i]);
-			country1[i].addActionListener(this);
-			country2[i].addActionListener(this);
-			if(countries[i].equals(fromCountry)){
-				//country1[i].setBackground(new Color(20, 240, 20));
-				country1[i].setBorder(border2);
-			}
-			if(countries[i].equals(toCountry)){
-				//country2[i].setBackground(new Color(20, 240, 20));
-				country2[i].setBorder(border2);
-			}
-			languages.add(country1[i]);
-			languages2.add(country2[i]);
-		}
+		english2 = new JMenuItem("English",  flags[0]);
+		french2 = new JMenuItem("French",  flags[1]);
+		german2 = new JMenuItem("German", flags[2]);
+		italian2 = new JMenuItem("Italian", flags[3]);
+		spanish2 = new JMenuItem("Spanish", flags[4]);
+		
+		languages.add(english);
+		languages.add(french);
+		languages.add(german);
+		languages.add(italian);
+		languages.add(spanish);
+		
+		languages2.add(english2);
+		languages2.add(french2);
+		languages2.add(german2);
+		languages2.add(italian2);
+		languages2.add(spanish2);
 		
 		file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		
-		//options.add(chooseFont);
-		//options.add(colour);
+		options.add(chooseFont);
+		options.add(colour);
 		options.add(languages);
 		options.add(languages2);
 		options.addSeparator();
@@ -385,7 +385,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		
 		layer.setVisible(true);
-		//layer.setOpaque(true);
+		layer.setOpaque(true);
 
 		drawGrid();
 		
@@ -393,13 +393,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		clues.setBounds(0, 40, 18 * x, font3.getSize()*(cluesAcross.size()+cluesDown.size()));
 		clues.setBackground(clear);
 		clues.setVisible(true);
-		clues.setOpaque(false);
+		clues.setOpaque(true);
 
 		setUpClues();
 
 		extra.setBackground(clear);
 		extra.setVisible(true);
-		extra.setOpaque(false);
+		extra.setOpaque(true);
 		//extra.setBounds(0, 0, 0, 0);
 
 		orderClues.setBounds(0, 0, 18 * x, 30);
@@ -422,11 +422,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		extra.add(clues, c);
 
 		main = new JPanel(new GridBagLayout());
-		TestPanel main2 = new TestPanel();
-		
 		main.setBackground(clear);
 		main.setVisible(true);
-		main.setOpaque(true);
+		main.setOpaque(false);
 
 		c.weightx = 0.0;
 		c.weighty = 1.0;
@@ -997,9 +995,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 	public void drawGrid() {
 		layer.removeAll();
-		//layer.setBackground(clear);
-		layer.setOpaque(false);
-		layer.setBackground(Color.RED);
+		layer.setBackground(clear);
 //		if(tempScale != normalisedScale){
 //			layerX = (int)(tempLayerX + ((mouseX - frame.getX())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale))));
 //			layerY = (int)(tempLayerY + ((mouseY - frame.getY())/((x-2)*INITIAL_SQUARE_SIZE*(tempScale - normalisedScale))));
@@ -1348,31 +1344,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				System.out.println("Did something: "+colours[i]);
 			}
 		}
-		
-		
-		for(int i = 0 ; i < countries.length; i++){
-			if(e.getSource() == country1[i]){
-				for(int j = 0; j < country1.length; j++){
-					country1[j].setBorder(null);
-				}
-				fromCountry = countries[i];
-				System.out.println("from: "+ fromCountry);
-				//country1[i].setBackground(new Color(20, 240, 20));
-				country1[i].setBorder(border2);
-			}
-	}
-	
-	for(int i = 0 ; i < countries.length; i++){
-		if(e.getSource() == country2[i]){
-			for(int j = 0; j < country2.length; j++){
-				country2[j].setBorder(null);
-			}
-			toCountry = countries[i];
-			System.out.println("to: "+ toCountry);
-			//country2[i].setBackground(new Color(20, 240, 20));
-			country2[i].setBorder(border2);
-		}
-	}
 	}
 
 	public void setColours(){
