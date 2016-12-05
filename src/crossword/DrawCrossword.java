@@ -1,5 +1,6 @@
 package crossword;
 import java.awt.AWTEvent;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -48,6 +49,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
 
@@ -62,13 +64,15 @@ import sudoku.SudokuGenerator;
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 
 	public String currentFont = "Century Gothic";
+	public String toCountry = "English";
+	public String fromCountry = "English";
 	CrosswordGenerator crossword;
 	SpinnerNumberModel model;
 	JSpinner spinner;
 	JCheckBoxMenuItem clickSound;
 	JMenuItem exit, thick, normal, smart, genius, save, newGame, 
-	tips, colour, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
-	JMenuItem [] fontList;
+	tips, colour;
+	JMenuItem [] fontList, country1, country2;
 	JMenuBar menuBar;
 	JMenu file, diff, options, languages, languages2, size, chooseFont;
 	Icon [] flags;
@@ -94,7 +98,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	DrawSolution sol;
 	Font font, font2, font3, font4, fontLarge;
 	Random rand;
-	Border border;
+	Border border, border2;
 	Color clear, red, green, blue, black;
 	JTextArea hintD, hintA;
 	ArrayList<KeyEvent> keys;
@@ -130,18 +134,22 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private double mouseX;
 	private double mouseY;
 	String[][] gridInit;
-	
 	boolean initialized; 
-	String [] fontNames;
+	String [] fontNames, countries;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
 			ArrayList<String> cluesDown, ArrayList<Entry> entries, int difficulty) throws IOException {
-		String [] countries = {"english",  "french",  "german", "italian","spanish"};
+		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
+		String toCountry = this.toCountry;
+		String fromCountry = this.fromCountry;
+		//fromCountry = countries[0];
+		this.countries = countries;
 		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
 								"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script", "Times New Roman"};
 		font3 = new Font("Century Gothic", Font.PLAIN, 14);
 		this.fontNames = fontNames;
 		this.difficulty = difficulty;
+		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		flags = new Icon [5];
 		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
 		UIManager.put("Menu.font", font3);
@@ -150,6 +158,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		UIManager.put("RadioButtonMenuItem.font", font3);
 		
 		fontList = new JMenuItem[fontNames.length];
+		country1 = new JMenuItem[countries.length];
+		country2 = new JMenuItem[countries.length];
+		
 		fonts = new ArrayList<Font>();
 		for(int i = 0; i < fontNames.length; i++){			
 			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
@@ -187,43 +198,35 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		languages2 = new JMenu("Grid Language");
 		
 		for(int i = 0; i < fontNames.length; i++){
-			UIManager.put("MenuItem.font", fonts.get(i));	
+		//	UIManager.put("MenuItem.font", fonts.get(i));	
 			fontList[i] = new JMenuItem(fontNames[i]);
 			fontList[i].addActionListener(this);
 			chooseFont.add(fontList[i]);
 		}
-		
-		english = new JMenuItem("English",  flags[0]);
-		french = new JMenuItem("French",  flags[1]);
-		german = new JMenuItem("German", flags[2]);
-		italian = new JMenuItem("Italian", flags[3]);
-		spanish = new JMenuItem("Spanish", flags[4]);
-		
-		english2 = new JMenuItem("English",  flags[0]);
-		french2 = new JMenuItem("French",  flags[1]);
-		german2 = new JMenuItem("German", flags[2]);
-		italian2 = new JMenuItem("Italian", flags[3]);
-		spanish2 = new JMenuItem("Spanish", flags[4]);
-		
-		languages.add(english);
-		languages.add(french);
-		languages.add(german);
-		languages.add(italian);
-		languages.add(spanish);
-		
-		
-		languages2.add(english2);
-		languages2.add(french2);
-		languages2.add(german2);
-		languages2.add(italian2);
-		languages2.add(spanish2);
-		
+		System.out.println("countries: "+ countries.toString());
+		for(int i = 0; i < countries.length; i++){
+			country1[i] = new JMenuItem(countries[i], flags[i]);
+			country2[i] = new JMenuItem(countries[i], flags[i]);
+			country1[i].addActionListener(this);
+			country2[i].addActionListener(this);
+			if(countries[i].equals(fromCountry)){
+				//country1[i].setBackground(new Color(20, 240, 20));
+				country1[i].setBorder(border2);
+			}
+			if(countries[i].equals(toCountry)){
+				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setBorder(border2);
+			}
+			languages.add(country1[i]);
+			languages2.add(country2[i]);
+		}
+
 		file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		
-		options.add(chooseFont);
-		options.add(colour);
+		//options.add(chooseFont);
+		//options.add(colour);
 		options.add(languages);
 		options.add(languages2);
 		options.addSeparator();
@@ -1665,6 +1668,30 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				currentFont = fontNames[i];
 				drawGrid();
 				System.out.println("Did something");
+			}
+		}
+		
+		for(int i = 0 ; i < countries.length; i++){
+				if(e.getSource() == country1[i]){
+					for(int j = 0; j < country1.length; j++){
+						country1[j].setBorder(null);
+					}
+					fromCountry = countries[i];
+					System.out.println("from: "+ fromCountry);
+					//country1[i].setBackground(new Color(20, 240, 20));
+					country1[i].setBorder(border2);
+				}
+		}
+		
+		for(int i = 0 ; i < countries.length; i++){
+			if(e.getSource() == country2[i]){
+				for(int j = 0; j < country2.length; j++){
+					country2[j].setBorder(null);
+				}
+				toCountry = countries[i];
+				System.out.println("to: "+ toCountry);
+				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setBorder(border2);
 			}
 		}
 		
