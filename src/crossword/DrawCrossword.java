@@ -210,11 +210,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			country1[i].addActionListener(this);
 			country2[i].addActionListener(this);
 			if(countries[i].equals(fromCountry)){
-				//country1[i].setBackground(new Color(20, 240, 20));
+				country1[i].setBackground(new Color(20, 240, 20));
 				country1[i].setBorder(border2);
 			}
 			if(countries[i].equals(toCountry)){
-				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setBackground(new Color(20, 240, 20));
 				country2[i].setBorder(border2);
 			}
 			languages.add(country1[i]);
@@ -1675,10 +1675,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				if(e.getSource() == country1[i]){
 					for(int j = 0; j < country1.length; j++){
 						country1[j].setBorder(null);
+						country1[j].setOpaque(false);
 					}
 					fromCountry = countries[i];
 					System.out.println("from: "+ fromCountry);
-					//country1[i].setBackground(new Color(20, 240, 20));
+					country1[i].setBackground(new Color(20, 240, 20));
+					country1[i].setOpaque(true);
 					country1[i].setBorder(border2);
 				}
 		}
@@ -1687,10 +1689,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			if(e.getSource() == country2[i]){
 				for(int j = 0; j < country2.length; j++){
 					country2[j].setBorder(null);
+					country2[j].setOpaque(false);
 				}
 				toCountry = countries[i];
 				System.out.println("to: "+ toCountry);
-				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setOpaque(true);
 				country2[i].setBorder(border2);
 			}
 		}
