@@ -644,6 +644,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						}
 					}
 				}
+				for(int i = 0; i < allClues.size(); i++){
+					if(e.getSource().equals(allClues.get(i))){
+						allClues.get(i).setOpaque(true);
+						allClues.get(i).setBackground(Color.GREEN);
+						//set this word to this for showing reveal
+					}
+				}
+				
 			}
 
 			public void mouseEntered(MouseEvent e) {
