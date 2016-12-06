@@ -95,7 +95,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	ArrayList<JLabel> allClues, completed;
 	ArrayList<JLabel[][]> allLetters;
 	ArrayList<Icon[][]> temporaryIcons, temporaryIcons2;
-	Font font, font2, font3, font4, font5;
+	Font font, font2, font3, font4, font5, font6;
 	Random rand;
 	Color grey, clear;
 	Dimension screenSize;
@@ -318,6 +318,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		int test = (int) (3 * INITIAL_SQUARE_SIZE * normalisedScale / 5);
 		System.out.println("Test: " + test);
 		font3 = new Font(currentFont, Font.PLAIN, 18);
+		font6 = new Font(currentFont, Font.BOLD, 18);
 		font2 = new Font(currentFont, Font.PLAIN, 24);
 		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		Map fontAttr = font3.getAttributes();
@@ -353,7 +354,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		width = screenSize.getWidth();
 		height = screenSize.getHeight();
 
-		border = BorderFactory.createLineBorder(currentColour);
+		border = BorderFactory.createLineBorder(Color.GREEN);
 		//layer = new JLayeredPane();
 		layer2 = new JLayeredPane();
 		c = new GridBagConstraints();
@@ -1260,7 +1261,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			//showHint();
+			showHint();
 
 		}
 		if(e.getSource()==clue){
@@ -1408,7 +1409,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						   long next;
 						   loopAroundWord2(ent);
 						   clue.setEnabled(false);
-						   while(counter<3000){
+						   while(counter<2000){
 							   next = System.currentTimeMillis();
 							   counter = next - current;
 						   }
@@ -1459,14 +1460,15 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					
 //					System.out.println("hintClue = "+hintClue);
 					allClues.get(hintClue).setForeground(Color.GREEN);
+					allClues.get(hintClue).setFont(font6);
+					
 			   		long current = System.currentTimeMillis();
 					long counter = 0;
 					long next;
-					int temp = 0;
+					int shake = rand.nextInt(2);
 					hint.setEnabled(false);
 					boolean started = false;
-					while(counter<3000){
-//						System.out.println("Here: "+ temp++);
+					
 						for(Entry ent: entries){	
 							ArrayList<Coord> letterCoords = ent.getLetterCoords();
 							if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText()) && !started){
@@ -1474,32 +1476,56 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								int currentLetterX = letterCoords.get(letterInWord).getX();
 								int currentLetterY = letterCoords.get(letterInWord).getY();
 								started = true;
-						//every 0.1 seconds shake random letter in the word
-//						System.out.println("Counter: "+counter);
-						if(counter <= 1000){
-//							System.out.println("Got here");
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
-//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
-//							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GRAY);
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
+								while(counter<1200){
+						
+							
+							//works
+							if(shake == 0){
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.WHITE);
+								Thread.sleep(100);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(false);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.BLACK);
+								Thread.sleep(100);
 							}
-						if(counter <= 2000){
-							System.out.println("and here");
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.CENTER);
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.GREEN);
+					
+							//also works
+							if(shake == 2){
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.LEFT);
+								Thread.sleep(40);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.CENTER);
+								Thread.sleep(80);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.RIGHT);
+								Thread.sleep(40);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.CENTER);
+								Thread.sleep(80);
 							}
-						if(counter <= 3000){
-							System.out.println("also here");
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setHorizontalAlignment(JLabel.RIGHT);
-							allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.BLUE);
+							
+							if(shake == 1){
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.BOTTOM);
+								Thread.sleep(40);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.CENTER);
+								Thread.sleep(80);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.TOP);
+								Thread.sleep(40);
+								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.CENTER);
+								Thread.sleep(80);
 							}
+							next = System.currentTimeMillis();
+							counter = next - current;
 							}
+						allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(clear);
+						allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(false);
+						allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.BLACK);
 						}
-						next = System.currentTimeMillis();
-						counter = next - current;
+						
+					
 //						System.out.println("counter New: "+counter);
 					}
-					
+					allClues.get(hintClue).setFont(font3);
 					allClues.get(hintClue).setForeground(currentColour);
 					hint.setEnabled(true);
 			    return null;
@@ -1509,6 +1535,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			  worker.execute();	
 			 // allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.RED);
 			  allClues.get(hintClue).setForeground(currentColour);
+			  
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
