@@ -576,16 +576,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 		
 		//clues.add(temp4);
-		int columnSize = (int) (x*1.6);
+		int columnSize = (int) (x*1.55);
 		int cols = allClues.size()/columnSize+1;
-		for(int k = 0; k < cols-1; k++){
+		for(int k = 0; k < cols; k++){
 			for (int j = 0; j < columnSize; j++) {
 			
 			JLabel temp4 = new JLabel(" ");
 			
 			c.weightx = 0.0;
 			c.weighty = 0.0;
-			c.insets = new Insets(0,10,0,10);
+			//c.insets = new Insets(0,10,0,10);
 			c.gridx = k;
 			c.gridy = 0;
 			clues.add(temp4, c);
@@ -594,9 +594,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			c.weighty = 0.0;
 			c.gridx = k;
 			c.gridy = j+1;
-			c.insets = new Insets(0,10,0,10);
-			clues.add(allClues.get(columnSize*k+j), c);	
-			
+			//c.insets = new Insets(0,10,0,10);
+			if(allClues.size() > columnSize*k+j){
+				clues.add(allClues.get(columnSize*k+j), c);	
+			}
+			else{
+				clues.add(temp4, c);	
+			}
 			JLabel temp5 = new JLabel(" ");
 
 			c.weightx = 0.0;
