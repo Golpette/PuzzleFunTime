@@ -667,6 +667,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					}
 				}
 				for(int i = 0; i < allClues.size(); i++){
+					allClues.get(i).setOpaque(false);
+					allClues.get(i).setForeground(currentColour);
 					if(e.getSource().equals(allClues.get(i))){
 						allClues.get(i).setOpaque(true);
 						allClues.get(i).setForeground(Color.BLUE);
@@ -1470,6 +1472,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									}
 								}
 							}
+							allClues.get(thisClue).setOpaque(false);
 						   allClues.get(thisClue).setForeground(currentColour);
 							clue.setEnabled(true); 
 							resetSizes();
