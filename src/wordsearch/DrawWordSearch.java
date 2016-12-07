@@ -74,7 +74,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	tips, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
 	JMenuBar menuBar;
 	JMenu file, diff, options, languages, languages2, size, chooseFont, colour;
-	JMenuItem [] fontList, colourList, country1, country2;;
+	JMenuItem [] fontList, colourList, country1, country2;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
 	
@@ -95,7 +95,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	ArrayList<JLabel> allClues, completed;
 	ArrayList<JLabel[][]> allLetters;
 	ArrayList<Icon[][]> temporaryIcons, temporaryIcons2;
-	Font font, font2, font3, font4, font5, font6;
+	Font font, font2, font3, font4, font5, font6, font7;
 	Random rand;
 	Color grey, clear;
 	Dimension screenSize;
@@ -114,6 +114,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	ArrayList<Font> fonts;
 	Color [] colours;
 	Color currentColour;
+	String thisWord;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,
@@ -122,6 +123,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
 		this.fontNames = fontNames;
+		thisWord = "";
 		
 		Color [] colours = {Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN,
 				Color.MAGENTA, Color.PINK,  Color.ORANGE, Color.RED, Color.YELLOW, Color.WHITE};
@@ -285,7 +287,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.normalisedScale = scale / 20;
 		squareSize = 40;
 		layer = new JLayeredPane();
-		layer.setSize((x-2)*squareSize, (x-2)*squareSize);
+		//layer.setSize((x-2)*squareSize, (x-2)*squareSize);
 		tempLayerX = layer.getWidth();
 		tempLayerY = layer.getHeight();
 		fullGrid = new ArrayList<String>();
@@ -319,6 +321,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("Test: " + test);
 		font3 = new Font(currentFont, Font.PLAIN, 18);
 		font6 = new Font(currentFont, Font.BOLD, 18);
+		font7 = new Font(currentFont, Font.PLAIN, 16);
 		font2 = new Font(currentFont, Font.PLAIN, 24);
 		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
 		Map fontAttr = font3.getAttributes();
@@ -341,7 +344,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255, 255, 255, 255));
 		frame.setMinimumSize(new Dimension(550, 400));
-
+		//frame.setPreferredSize(new Dimension(550, 400));
 		grey = new Color(200, 200, 200, 255);
 		wordLength = 0;
 		dir = 0;
@@ -390,24 +393,35 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 		drawGrid();
 		
-		clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size(), 1));
-		clues.setBounds(0, 40, 18 * x, font3.getSize()*(cluesAcross.size()+cluesDown.size()));
+		
+		//conditions for number of columns in gridlayout
+		if(cluesAcross.size()+cluesDown.size()> 72){
+			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/3+2, 3));
+		}
+		else if(cluesAcross.size()+cluesDown.size()> 36 && cluesAcross.size()+cluesDown.size()<=72){
+			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/2+1, 2));
+		}else{
+			clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size()+2, 1));
+		}
+		int roughClues = (int) (Math.pow(x, 2)/10)+8;
+		clues.setBounds(0, 40, 18 * x, (roughClues+1)*16);
+	//	clues.setPreferredSize(new Dimension(18 * x, roughClues*16));
 		clues.setBackground(clear);
 		clues.setVisible(true);
 		clues.setOpaque(false);
 
 		setUpClues();
+//
+//		extra.setBackground(clear);
+//		extra.setVisible(true);
+//		extra.setOpaque(false);
+//		extra.setBounds(0, 40, 18 * x, roughClues*16);
 
-		extra.setBackground(clear);
-		extra.setVisible(true);
-		extra.setOpaque(false);
-		//extra.setBounds(0, 0, 0, 0);
-
-		orderClues.setBounds(0, 0, 18 * x, 30);
-		orderClues.setBorder(border);
-		orderClues.setBackground(clear);
-		orderClues.setOpaque(false);
-		orderClues.setVisible(false);
+//		orderClues.setBounds(0, 0, 18 * x, 30);
+//		orderClues.setBorder(border);
+//		orderClues.setBackground(clear);
+//		orderClues.setOpaque(false);
+//		orderClues.setVisible(false);
 
 //		c.weightx = 0.0;
 //		c.weighty = 0.0;
@@ -415,12 +429,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		c.gridy = 0;
 //		extra.add(orderClues, c);
 
-		c.weightx = 0.0;
-		c.weighty = 0.0;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(0, 0, 0, 0);
-		extra.add(clues, c);
+//		c.weightx = 0.0;
+//		c.weighty = 0.0;
+//		c.gridx = 0;
+//		c.gridy = 1;
+//		c.insets = new Insets(0, 0, 0, 0);
+//		extra.add(clues, c);
 
 		main = new JPanel(new GridBagLayout());
 		TestPanel main2 = new TestPanel();
@@ -428,6 +442,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		main.setBackground(clear);
 		main.setVisible(true);
 		main.setOpaque(true);
+		//main.setBounds(0, 40, 18 * x, roughClues*16);
 
 		c.weightx = 0.0;
 		c.weighty = 1.0;
@@ -442,7 +457,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.gridy = 0;
 		c.ipady = 10;
 		//c.anchor = GridBagConstraints.NORTHWEST;
-		main.add(extra, c);
+		main.add(clues, c);
 
 		area = new JScrollPane(main, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -452,12 +467,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		area.setBackground(clear);
 		area.setVisible(true);
 		area.setOpaque(true);
+		//area.setBounds(0, 40, 18 * x, roughClues*16);
 		area.addMouseWheelListener(this);
 		area.setWheelScrollingEnabled(true);
 
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		panel.setBackground(clear);
+		//panel.setBounds(0, 40, 18 * x, roughClues*16+1);
 
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -554,9 +571,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			temp2.setFont(font4);
 			allClues.add(temp2);
 		}
+		JLabel temp4 = new JLabel(" ");
+		clues.add(temp4);
+		temp4.setFont(font7);
 		for (JLabel temp3 : allClues) {
 			clues.add(temp3);
 		}
+		JLabel temp5 = new JLabel(" ");
+		clues.add(temp5);
 	}
 
 	/**
@@ -647,8 +669,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				for(int i = 0; i < allClues.size(); i++){
 					if(e.getSource().equals(allClues.get(i))){
 						allClues.get(i).setOpaque(true);
-						allClues.get(i).setBackground(Color.GREEN);
+						allClues.get(i).setForeground(Color.BLUE);
 						//set this word to this for showing reveal
+						thisWord = allClues.get(i).getText();
 					}
 				}
 				
@@ -1397,9 +1420,17 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	private void showClue() {
 		// TODO Auto-generated method stub
 		if(!sorted.isEmpty()){
-		final int hintClue = rand.nextInt(sorted.size());
+			int hintClue = 0;
+		//final int hintClue = rand.nextInt(sorted.size());
+			for(int i = 0; i < allClues.size(); i++){
+				if(allClues.get(i).getText().equals(thisWord)){
+				hintClue = i;
+				}
+				
+			}
+			final int thisClue = hintClue;
 		for(final Entry ent: entries){	
-			if(ent.getWord().toUpperCase().equals(allClues.get(hintClue).getText())){
+			if(ent.getWord().toUpperCase().equals(thisWord)){
 				
 				
 				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -1407,10 +1438,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					   
 					   protected Void doInBackground() throws Exception {
 						   if(currentColour!= Color.BLUE){
-							   allClues.get(hintClue).setForeground(Color.BLUE);
+							   allClues.get(thisClue).setForeground(Color.BLUE);
 						   }
 						   else{
-							   allClues.get(hintClue).setForeground(Color.GREEN);
+							   allClues.get(thisClue).setForeground(Color.GREEN);
 						   }
 						   long current = System.currentTimeMillis();
 						   long counter = 0;
@@ -1439,7 +1470,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									}
 								}
 							}
-						   allClues.get(hintClue).setForeground(currentColour);
+						   allClues.get(thisClue).setForeground(currentColour);
 							clue.setEnabled(true); 
 							resetSizes();
 						 //  allClues.get(hintClue).setIcon(null);
