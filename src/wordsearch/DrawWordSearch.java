@@ -393,16 +393,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 		drawGrid();
 		
-		
+		clues = new JPanel(new GridBagLayout());
 		//conditions for number of columns in gridlayout
-		if(cluesAcross.size()+cluesDown.size()> 72){
-			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/3+2, 3));
-		}
-		else if(cluesAcross.size()+cluesDown.size()> 36 && cluesAcross.size()+cluesDown.size()<=72){
-			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/2+1, 2));
-		}else{
-			clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size()+2, 1));
-		}
+//		if(cluesAcross.size()+cluesDown.size()> 72){
+//			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/3+2, 3));
+//		}
+//		else if(cluesAcross.size()+cluesDown.size()> 36 && cluesAcross.size()+cluesDown.size()<=72){
+//			clues = new JPanel(new GridLayout((cluesAcross.size() + cluesDown.size())/2+1, 2));
+//		}else{
+//			clues = new JPanel(new GridLayout(cluesAcross.size() + cluesDown.size()+2, 1));
+//		}
 		int roughClues = (int) (Math.pow(x, 2)/10)+8;
 		clues.setBounds(0, 40, 18 * x, (roughClues+1)*16);
 	//	clues.setPreferredSize(new Dimension(18 * x, roughClues*16));
@@ -448,7 +448,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
-		//c.insets = new Insets(0, 0, 0, 0);
+		c.insets = new Insets(0, 0, 0, 0);
 		main.add(layer, c);
 
 		c.weightx = 1.0;
@@ -569,16 +569,50 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			fontAttr.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 			font4 = new Font(fontAttr);
 			temp2.setFont(font4);
+			temp2.setHorizontalAlignment(SwingConstants.LEFT);
 			allClues.add(temp2);
 		}
-		JLabel temp4 = new JLabel(" ");
-		clues.add(temp4);
-		temp4.setFont(font7);
-		for (JLabel temp3 : allClues) {
-			clues.add(temp3);
+		
+	
+		
+		//clues.add(temp4);
+		int columnSize = (int) (x*1.6);
+		int cols = allClues.size()/columnSize+1;
+		for(int k = 0; k < cols-1; k++){
+			for (int j = 0; j < columnSize; j++) {
+			
+			JLabel temp4 = new JLabel(" ");
+			
+			c.weightx = 0.0;
+			c.weighty = 0.0;
+			c.insets = new Insets(0,10,0,10);
+			c.gridx = k;
+			c.gridy = 0;
+			clues.add(temp4, c);
+			
+			c.weightx = 0.0;
+			c.weighty = 0.0;
+			c.gridx = k;
+			c.gridy = j+1;
+			c.insets = new Insets(0,10,0,10);
+			clues.add(allClues.get(columnSize*k+j), c);	
+			
+			JLabel temp5 = new JLabel(" ");
+
+			c.weightx = 0.0;
+			c.weighty = 1.0;
+			c.gridx = k;
+			c.gridy = columnSize+1;
+			clues.add(temp5, c);
+			}
 		}
-		JLabel temp5 = new JLabel(" ");
-		clues.add(temp5);
+		JLabel temp6 = new JLabel(" ");
+
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.gridx = cols+1;
+		c.gridy = 0;
+		clues.add(temp6, c);
 	}
 
 	/**
@@ -636,6 +670,28 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		return layer;
 	}
 
+	
+	public void struckOffList(int i, int j){
+		tempStrikethrough.clear();
+		for (Entry b : entries) {
+			if (b.palindromic) {
+				if (b.start_x == j + 1 && b.start_y == i + 1) {
+					tempWord = b.getWord();
+					tempStrikethrough.add(tempWord);
+					start = true;
+				} else if (b.end_x == j + 1 && b.end_y == i + 1) {
+					tempWord = b.getWord();
+					tempStrikethrough.add(tempWord);
+					start = false;
+				}
+			}
+			if (b.start_x == j + 1 && b.start_y == i + 1) {
+				tempWord = b.getWord();
+				tempStrikethrough.add(tempWord);
+			}
+		}
+	}
+	
 	void mouseActionlabel(JLabel l) {
 		l.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -645,24 +701,25 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							for (Entry a : entries) {
 								loopAroundWord(i, j, a);
 							}
-							tempStrikethrough.clear();
-							for (Entry b : entries) {
-								if (b.palindromic) {
-									if (b.start_x == j + 1 && b.start_y == i + 1) {
-										tempWord = b.getWord();
-										tempStrikethrough.add(tempWord);
-										start = true;
-									} else if (b.end_x == j + 1 && b.end_y == i + 1) {
-										tempWord = b.getWord();
-										tempStrikethrough.add(tempWord);
-										start = false;
-									}
-								}
-								if (b.start_x == j + 1 && b.start_y == i + 1) {
-									tempWord = b.getWord();
-									tempStrikethrough.add(tempWord);
-								}
-							}
+							struckOffList(i, j);
+//							tempStrikethrough.clear();
+//							for (Entry b : entries) {
+//								if (b.palindromic) {
+//									if (b.start_x == j + 1 && b.start_y == i + 1) {
+//										tempWord = b.getWord();
+//										tempStrikethrough.add(tempWord);
+//										start = true;
+//									} else if (b.end_x == j + 1 && b.end_y == i + 1) {
+//										tempWord = b.getWord();
+//										tempStrikethrough.add(tempWord);
+//										start = false;
+//									}
+//								}
+//								if (b.start_x == j + 1 && b.start_y == i + 1) {
+//									tempWord = b.getWord();
+//									tempStrikethrough.add(tempWord);
+//								}
+//							}
 						}
 					}
 				}
@@ -1449,6 +1506,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						   long counter = 0;
 						   long next;
 						   loopAroundWord2(ent);
+//						   for (int i = 1; i < x - 1; i++) {
+//								for (int j = 1; j < y - 1; j++) {
+//									struckOffList(i,j);
+//								}
+//						   }
 						   clue.setEnabled(false);
 						   while(counter<2000){
 							   next = System.currentTimeMillis();
@@ -1457,6 +1519,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						   letters = ent.getLetterCoords();
 							for (int i = 1; i < x - 1; i++) {
 								for (int j = 1; j < y - 1; j++) {
+									// loopAroundWord(i, j, ent);
+									 
 									for (JLabel[][] lab : allLetters) {
 										for(Coord co: letters){
 											if(co.xcoord == i && co.ycoord == j){
@@ -1475,13 +1539,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							allClues.get(thisClue).setOpaque(false);
 						   allClues.get(thisClue).setForeground(currentColour);
 							clue.setEnabled(true); 
-							resetSizes();
+							//resetSizes();
 						 //  allClues.get(hintClue).setIcon(null);
 					    return null;
 					   }
 					  };
 					  worker.execute();
-					  resetSizes();
+					  //resetSizes();
+//					  loopAroundWord(i, j, ent);
 			}
 		}
 	}
