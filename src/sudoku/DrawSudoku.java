@@ -32,10 +32,12 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import crossword.JTextFieldLimit;
@@ -108,7 +110,8 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	Color fixed = new Color(40,40,40);
 	Icon [] flags;
 	static int gridsize=9;
-
+	Border border2;
+	boolean gridEmpty;
 	
 	
 	
@@ -118,6 +121,8 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 		this.grid = grid;
 		this.difficulty = difficulty;
+		
+		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
@@ -170,10 +175,10 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		file.add(newGame);
 		file.add(exit);
 		
-		options.add(chooseFont);
-		options.add(colour);
-		options.add(languages);
-		options.addSeparator();
+//		options.add(chooseFont);
+//		options.add(colour);
+		//options.add(languages);
+		//options.addSeparator();
 		clickSound = new JCheckBoxMenuItem("Click Sound");
 		clickSound.setMnemonic(KeyEvent.VK_C);
 		options.add(clickSound);
@@ -439,7 +444,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 					nums[i][j].setForeground( fixed );
 					nums[i][j].setFont(font4);
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
-
+					//nums[i][j].setEnabled(false);
 				}
 				else{
 					nums[i][j].setText("");
@@ -475,9 +480,22 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		//change line below to " ==hint" to implement full answers in sudoku
 		if(e.getSource()==clue){		
 			buttonPushed = !buttonPushed;
+			
+			int count = 0;
+			for( int i=0; i<9; i++){
+				for( int j=0; j<9; j++ ){
+					if (!nums[i][j].getText().equals("") && !nums[i][j].getFont().equals(font4)){
+						count++;
+					}
+				}
+			}
+			if(count == 0){
+				JOptionPane.showMessageDialog(frame, "No Squares Filled!");
+				return;
+			}
 			//sol.frame.setVisible(!sol.frame.isVisible());
 			if(buttonPushed){
-
+				clue.setText("Hide");
 				//solution.setText("Hide Solution");
 				// Highlight incorrect numbers
 				for( int i=0; i<9; i++){
@@ -502,6 +520,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 				
 			else{
 				//solution.setText("Show Solution");
+				clue.setText("Check");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if( nums[i][j].isEditable() ){
@@ -527,6 +546,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			System.out.println("hint");
 			hintPushed = !hintPushed;
 			if(hintPushed){
+				
 				//add method to change background of next available number.
 				//do this by storing array of last removed number in order when creating puzzle.
 //				nextNumberGenerated
@@ -731,6 +751,16 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
+		if(buttonPushed){
+			buttonPushed = !buttonPushed;
+			clue.setText("Check");
+			for (int row = 0; row < gridsize ; row++) {
+				for (int col = 0; col < gridsize ; col++) {	
+					 nums[row][col].setForeground(Color.BLACK);
+				}
+			}
+		}
 		for (int row = 0; row < gridsize ; row++) {
 			for (int col = 0; col < gridsize ; col++) {	
 				 nums[row][col].setBackground(Color.WHITE);

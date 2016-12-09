@@ -596,7 +596,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //				clues.add(temp4, d);
 				
 				JLabel temp7 = new JLabel(" ");
-					
+				d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 				d.weightx = 0.0;
 				d.weighty = 0.0;
 				d.gridx = k;
@@ -626,7 +626,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		d.gridy = 0;
 		clues.add(temp6, d);
 		
-		d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		
 		clues.setAlignmentX(SwingConstants.LEFT);
 	}
 
@@ -1681,11 +1681,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				resetSizes();
 			}
 		}
-		if (e.getWheelRotation() < 0) {
-			area.setWheelScrollingEnabled(true);
-			//System.out.println("Scrolling Up...");
-		} else {
-			//System.out.println("Scrolling Down...");
+		else{
 			area.setWheelScrollingEnabled(true);
 		}
 		// else scroll like normal

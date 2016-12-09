@@ -1731,8 +1731,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	    		    main.revalidate();
 	    		    drawGrid( );
+	    		    main.revalidate();
 	            } else {
 
 	            	if(scale > MIN_SCALE){
@@ -1743,12 +1743,15 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
-	    		    main.revalidate();
+//	    		    
 	    		    drawGrid();
+	    		    main.revalidate();
 	            }
 	        }
-	        else if(!e.isControlDown()){
+	        else{
 	        	area.setWheelScrollingEnabled(true);
+	        	drawGrid();
+	        	main.revalidate();
 	        }
 	    }
 
