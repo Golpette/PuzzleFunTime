@@ -88,7 +88,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JButton solution, hint , clue;
 	JScrollPane area;
 	ArrayList<Coord> letters;
-	GridBagConstraints c;
+	GridBagConstraints c, d;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
 			randomLetters;
 	ArrayList<Entry> entries;
@@ -361,6 +361,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//layer = new JLayeredPane();
 		layer2 = new JLayeredPane();
 		c = new GridBagConstraints();
+		d = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		buttonPushed = false;
 
@@ -556,7 +557,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			temp.setForeground(currentColour);
 			mouseActionlabel(temp);
 			temp.setFont(new Font(currentFont, Font.PLAIN, 18));
-			//temp.setFont(font3);
+			temp.setFont(font3);
+			temp.setHorizontalAlignment(SwingConstants.LEFT);
+			temp.setVerticalAlignment(SwingConstants.TOP);
 			allClues.add(temp);
 			}
 		for(String b: struckThrough){
@@ -570,55 +573,65 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			font4 = new Font(fontAttr);
 			temp2.setFont(font4);
 			temp2.setHorizontalAlignment(SwingConstants.LEFT);
+			temp2.setVerticalAlignment(SwingConstants.TOP);
 			allClues.add(temp2);
 		}
 		
 	
 		
 		//clues.add(temp4);
+		clues.repaint();
 		int columnSize = (int) (x*1.55);
+		System.out.println("allClues: "+allClues.size());
+		System.out.println("Column size: "+ columnSize);
 		int cols = allClues.size()/columnSize+1;
 		for(int k = 0; k < cols; k++){
 			for (int j = 0; j < columnSize; j++) {
+//				JLabel temp4 = new JLabel(" ");
+//				d.weightx = 0.0;
+//				d.weighty = 0.0;
+//				d.insets = new Insets(0,10,0,10);
+//				d.gridx = k;
+//				d.gridy = 0;
+//				clues.add(temp4, d);
+				
+				JLabel temp7 = new JLabel(" ");
+					
+				d.weightx = 0.0;
+				d.weighty = 0.0;
+				d.gridx = k;
+				d.gridy = j+1;
+				d.insets = new Insets(0,10,0,10);
+				if(allClues.size() > columnSize*k+j){
+					clues.add(allClues.get(columnSize*k+j), d);	
+				}
+				else{
+					clues.add(temp7, d);	
+				}
 			
-			JLabel temp4 = new JLabel(" ");
-			
-			c.weightx = 0.0;
-			c.weighty = 0.0;
-			//c.insets = new Insets(0,10,0,10);
-			c.gridx = k;
-			c.gridy = 0;
-			clues.add(temp4, c);
-			
-			c.weightx = 0.0;
-			c.weighty = 0.0;
-			c.gridx = k;
-			c.gridy = j+1;
-			//c.insets = new Insets(0,10,0,10);
-			if(allClues.size() > columnSize*k+j){
-				clues.add(allClues.get(columnSize*k+j), c);	
-			}
-			else{
-				clues.add(temp4, c);	
 			}
 			JLabel temp5 = new JLabel(" ");
-
-			c.weightx = 0.0;
-			c.weighty = 1.0;
-			c.gridx = k;
-			c.gridy = columnSize+1;
-			clues.add(temp5, c);
-			}
+			d.weightx = 0.0;
+			d.weighty = 1.0;
+			d.gridx = k;
+			d.gridy = columnSize+1;
+			d.insets = new Insets(0,10,0,10);
+			clues.add(temp5, d);
 		}
 		JLabel temp6 = new JLabel(" ");
 
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.gridx = cols+1;
-		c.gridy = 0;
-		clues.add(temp6, c);
+		d.weightx = 1.0;
+		d.weighty = 1.0;
+		d.gridx = cols+1;
+		d.gridy = 0;
+		clues.add(temp6, d);
+		
+		d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		clues.setAlignmentX(SwingConstants.LEFT);
 	}
 
+
+	
 	/**
 	 * Class to set grids of labels for each potential layer
 	 * 

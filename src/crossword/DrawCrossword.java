@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -106,7 +107,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	Dimension screenSize;
 	double width;
 	double height;
-	JPanel flow;
+	JPanel cluePanel;
 	int [] tempHighlighted;
 	String tempDirection, currentClue;
 	JLabel hintScrambled;
@@ -412,11 +413,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
-		layer.setOpaque(true);
-		
+		layer.setOpaque(false);
+		//layer.setBackground(Color.GRAY);
 		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
+//		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
 
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
@@ -424,11 +425,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 */	
 		
 		clue = new JPanel(new GridBagLayout());	
-		clue.setMinimumSize(new Dimension( 200, 600)  );
+		//clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
 		
 		clue2 = new JPanel(new GridBagLayout()     );
-		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
+		//clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
 		clue2.setBackground(clear);
 		
 		hints = new ArrayList<JTextArea>();
@@ -517,8 +518,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    
 		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		c3 = new GridBagConstraints();
-		c3.fill = GridBagConstraints.NORTHWEST;
+		//c3.fill = GridBagConstraints.NORTHWEST;
 		c3.weighty = 0;
+		c3.insets = new Insets(0,10,0,10);
 		c3.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c3.gridx = 0;
 
@@ -532,7 +534,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		clue.add(new JLabel(" "), c3);
 		
 		c4 = new GridBagConstraints();
-		c4.fill = GridBagConstraints.NORTHWEST;
+		//c4.fill = GridBagConstraints.NORTHWEST;
 		c4.weightx = 1.0;
 		c4.weighty = 0;
 		c4.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
@@ -545,20 +547,12 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			clue2.add(blankline,c4);
 		}
 		c4.weighty=1;
-		clue2.add(new JLabel(" "), c4);
+		clue2.add(new JLabel(" "), c4);		
 		
-	    GridBagConstraints zzz = new GridBagConstraints();
-		zzz.fill = GridBagConstraints.VERTICAL;
-		zzz.gridx=0;
-		zzz.gridy=0;
-		zzz.weightx=0.0;
-		zzz.weighty=0.0;
-		
-		
-		flow = new JPanel(new GridLayout(1,2));
-		flow.setAlignmentX(SwingConstants.NORTH);
-		flow.add(clue );
-		flow.add(clue2 );		
+		cluePanel = new JPanel(new GridLayout(1,2));
+		//cluePanel.setAlignmentX(SwingConstants.NORTH);
+		cluePanel.add(clue );
+		cluePanel.add(clue2 );		
 		
 		
 		
@@ -575,7 +569,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		gbc_main = new GridBagConstraints();
 		gbc_main.weighty = 1.0;
-		gbc_main.weightx = 1.0;
+		gbc_main.weightx = 0.0;
 		gbc_main.gridx = 0;
 		gbc_main.gridy = 0;
 		
@@ -584,7 +578,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		main.add(layer, gbc_main);
 		gbc_main.gridx = 1; // NEED THIS
 		
-		main.add(flow, gbc_main);
+		gbc_main.weightx = 1.0;
+		main.add(cluePanel, gbc_main);
 		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
@@ -1776,7 +1771,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		//Muck around with this to get the grid positioned based on mouse position
 		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
-		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		crosswordGrid.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));
 
 		crosswordGrid.setOpaque(false);  
 		boxes = new JTextField[x - 2][y - 2];
@@ -1830,7 +1825,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * number in the top left corner of a GridLayout cell.
 		 */
 		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
-		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		clueNums.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));
 		clueNums.setOpaque(false);  //#### originally false
 		clueNumbers = new JLabel[x - 2][y - 2];
 
@@ -1857,7 +1852,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		hintArea = new JPanel(new GridLayout(1,1));
 		hintArea.add(hintScrambled);		
-		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));		
+		hintArea.setBackground(Color.LIGHT_GRAY);
 		hintArea.setOpaque(true);
 		hintArea.setVisible(buttonPushed);
 		
@@ -1869,7 +1865,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 	
 //		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 //		layer.getActionMap().put(SOME_ACTION, someAction);
