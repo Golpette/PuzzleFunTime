@@ -111,7 +111,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	Icon [] flags;
 	static int gridsize=9;
 	Border border2;
-	boolean gridEmpty;
+	boolean gridEmpty, complete;
 	
 	
 	
@@ -121,6 +121,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		String [] countries = {"english",  "french",  "german", "italian","spanish"};
 		this.grid = grid;
 		this.difficulty = difficulty;
+		complete = false;
 		
 		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		
@@ -220,7 +221,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		
 		menuBar.add(file);
 		menuBar.add(diff);
-		menuBar.add(options);
+		//menuBar.add(options);
 		
 		
 	
@@ -669,16 +670,11 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			public void keyPressed(KeyEvent e) {
 
 
-
-
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
-
-
 						if (e.getSource() == nums[row][col]) {
 							 nums[row][col].setBackground(Color.WHITE);
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
-								
 								int newstart=row;
 								if( newstart-1 < 0 ){
 									newstart=gridsize;
@@ -736,7 +732,17 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-
+				complete = true;
+				for (int row = 0; row < gridsize ; row++) {
+					for (int col = 0; col < gridsize ; col++) {	
+						if(!(Integer.parseInt(nums[row][col].getText())== grid2[row][col])){
+							complete = false;
+						}
+					}
+				}
+				if(complete){
+					JOptionPane.showMessageDialog(frame, "Congratulations!");
+				}
 			}
 
 			@Override

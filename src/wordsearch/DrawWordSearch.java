@@ -159,7 +159,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		spinner = new JSpinner(model);
 		//spinner.setForeground(Color.WHITE);
 		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
-		spinner.setFont(font3);
+		spinner.setFont(font3);		
 		
 		menuBar = new JMenuBar();
 		file = new JMenu("File");
@@ -170,6 +170,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		file.setMnemonic(KeyEvent.VK_F);
 		options.setMnemonic(KeyEvent.VK_O);
 		diff.setMnemonic(KeyEvent.VK_D);
+		size.setMnemonic(KeyEvent.VK_S);
 		
 		save = new JMenuItem("Save");
 		save.addActionListener(this);

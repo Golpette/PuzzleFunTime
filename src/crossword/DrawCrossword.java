@@ -182,6 +182,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		file.setMnemonic(KeyEvent.VK_F);
 		options.setMnemonic(KeyEvent.VK_O);
+		size.setMnemonic(KeyEvent.VK_S);
 		diff.setMnemonic(KeyEvent.VK_D);
 		
 		save = new JMenuItem("Save");
