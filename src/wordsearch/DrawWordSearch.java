@@ -229,10 +229,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//options.add(colour);
 		options.add(languages);
 		options.add(languages2);
-		options.addSeparator();
+		//options.addSeparator();
 		clickSound = new JCheckBoxMenuItem("Click Sound");
 		clickSound.setMnemonic(KeyEvent.VK_C);
-		options.add(clickSound);
+		//options.add(clickSound);
 		
 		ButtonGroup group = new ButtonGroup();
 		thick = new JRadioButtonMenuItem("Easy");
