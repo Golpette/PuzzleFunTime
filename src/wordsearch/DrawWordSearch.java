@@ -1,6 +1,7 @@
 package wordsearch;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -561,6 +562,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			temp.setFont(font3);
 			temp.setHorizontalAlignment(SwingConstants.LEFT);
 			temp.setVerticalAlignment(SwingConstants.TOP);
+			temp.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 			allClues.add(temp);
 			}
 		for(String b: struckThrough){
@@ -575,6 +577,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			temp2.setFont(font4);
 			temp2.setHorizontalAlignment(SwingConstants.LEFT);
 			temp2.setVerticalAlignment(SwingConstants.TOP);
+			temp2.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 			allClues.add(temp2);
 		}
 		
@@ -586,23 +589,28 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("allClues: "+allClues.size());
 		System.out.println("Column size: "+ columnSize);
 		int cols = allClues.size()/columnSize+1;
-		for(int k = 0; k < cols; k++){
+		for(int k = 0; k < cols; k++){	
+			
+			d.gridx = k;
 			for (int j = 0; j < columnSize; j++) {
-//				JLabel temp4 = new JLabel(" ");
-//				d.weightx = 0.0;
-//				d.weighty = 0.0;
-//				d.insets = new Insets(0,10,0,10);
-//				d.gridx = k;
-//				d.gridy = 0;
-//				clues.add(temp4, d);
-				
-				JLabel temp7 = new JLabel(" ");
-				d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+				JLabel temp4 = new JLabel(" ");
 				d.weightx = 0.0;
 				d.weighty = 0.0;
+				//d.insets = new Insets(0,10,0,10);
+				d.ipady = 5;
 				d.gridx = k;
-				d.gridy = j+1;
-				d.insets = new Insets(0,10,0,10);
+				d.gridy = 0;
+				clues.add(temp4, d);
+				
+				JLabel temp7 = new JLabel(" ");
+			
+//				d.weightx = 0.0;
+				d.weighty = 0.0;
+				d.ipady = 5;	
+				d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+			
+				d.gridy = j;
+				//d.insets = new Insets(0,10,0,10);
 				if(allClues.size() > columnSize*k+j){
 					clues.add(allClues.get(columnSize*k+j), d);	
 				}
