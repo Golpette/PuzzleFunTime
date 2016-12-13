@@ -1820,6 +1820,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		
 		
+		
 		for(int i = 0; i < x-2; i++){             
         	for (int j = 0; j < y-2; j++){
         		String str = tempBoxes[i][j].getText();
@@ -1827,6 +1828,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
         	}
         }
 		
+		if(button3Pushed){
+			revealSolution();
+		}
 		
 		
 		
