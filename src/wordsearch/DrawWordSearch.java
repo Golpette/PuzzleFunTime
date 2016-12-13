@@ -48,6 +48,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -585,7 +586,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		//clues.add(temp4);
 		clues.repaint();
-		int columnSize = (int) (x*1.55);
+		int columnSize = 0;
+		if(x*INITIAL_SQUARE_SIZE/2 > frame.getHeight() ){
+			//26 for my laptop need variable here (tried frame.getHeight()/
+			columnSize = 26;
+			//columnSize = (int)(frame.getHeight()/16);
+		}else{
+			columnSize = (int) (x*1.55);
+		}
 		System.out.println("allClues: "+allClues.size());
 		System.out.println("Column size: "+ columnSize);
 		int cols = allClues.size()/columnSize+1;
@@ -596,8 +604,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				JLabel temp4 = new JLabel(" ");
 				d.weightx = 0.0;
 				d.weighty = 0.0;
-				//d.insets = new Insets(0,10,0,10);
-				d.ipady = 5;
+				d.insets = new Insets(0,0,0,0);
+				d.ipady = 15;
 				d.gridx = k;
 				d.gridy = 0;
 				clues.add(temp4, d);
@@ -605,12 +613,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				JLabel temp7 = new JLabel(" ");
 			
 //				d.weightx = 0.0;
-				d.weighty = 0.0;
-				d.ipady = 5;	
+				d.weighty = 1.0;
+				d.ipady = 0;	
 				d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 			
-				d.gridy = j;
-				//d.insets = new Insets(0,10,0,10);
+				d.gridy = j+1;
+				d.insets = new Insets(0,10,0,10);
 				if(allClues.size() > columnSize*k+j){
 					clues.add(allClues.get(columnSize*k+j), d);	
 				}
@@ -621,10 +629,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			}
 			JLabel temp5 = new JLabel(" ");
 			d.weightx = 0.0;
-			d.weighty = 1.0;
+			d.weighty = 1000;
 			d.gridx = k;
 			d.gridy = columnSize+1;
-			d.insets = new Insets(0,10,0,10);
+			//d.insets = new Insets(0,10,0,10);
 			clues.add(temp5, d);
 		}
 		JLabel temp6 = new JLabel(" ");
