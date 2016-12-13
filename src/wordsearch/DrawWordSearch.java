@@ -212,11 +212,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			country1[i].addActionListener(this);
 			country2[i].addActionListener(this);
 			if(countries[i].equals(fromCountry)){
-				country1[i].setBackground(new Color(20, 240, 20));
+				//country1[i].setBackground(new Color(20, 240, 20));
 				country1[i].setBorder(border2);
 			}
 			if(countries[i].equals(toCountry)){
-				country2[i].setBackground(new Color(20, 240, 20));
+				//country2[i].setBackground(new Color(20, 240, 20));
 				country2[i].setBorder(border2);
 			}
 			languages.add(country1[i]);
@@ -945,8 +945,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		String[] images = setImageDirections(a.direction);
 		Icon[] icons = new Icon[9];
 		Icon[] icons2 = new Icon[8];
-		setImages = new SetUpImages(images, squareSize, squareSize, icons, 2);
-		tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2, 2);
+		setImages = new SetUpImages(images, squareSize, squareSize, icons, 0);
+		tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2, 0);
 		if(a.direction.equals("snaking")){
 //			System.out.println("Looping snaking style!");
 			ArrayList<Coord> letterCoords = a.getLetterCoords();
@@ -1483,7 +1483,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				}
 				fromCountry = countries[i];
 				System.out.println("from: "+ fromCountry);
-				country1[i].setBackground(new Color(20, 240, 20));
+				//country1[i].setBackground(new Color(20, 240, 20));
 				country1[i].setOpaque(true);
 				country1[i].setBorder(border2);
 			}
@@ -1497,7 +1497,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			}
 			toCountry = countries[i];
 			System.out.println("to: "+ toCountry);
-			country2[i].setBackground(new Color(20, 240, 20));
+		//	country2[i].setBackground(new Color(20, 240, 20));
 			country2[i].setOpaque(true);
 			country2[i].setBorder(border2);
 		}
