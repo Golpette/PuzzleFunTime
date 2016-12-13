@@ -278,7 +278,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		menuBar.add(size);
 		menuBar.add(options);
 		
-		
+		frame = new JFrame("Auto Word Search");
+		frame.setBackground(new Color(255, 255, 255, 255));
+		frame.setMinimumSize(new Dimension(550, 400));
 		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
@@ -286,9 +288,33 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.entries = entries;
 		this.cluesAcross = cluesAcross;
 		this.cluesDown = cluesDown;
-		scale = 10.0;
-		this.normalisedScale = scale / 20;
 		squareSize = 40;
+		scale = 10;
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screenSize.getWidth();
+		height = screenSize.getHeight();
+		
+		if (squareSize * (x + 6) > width && squareSize * (y + 4) > height - 30) {
+			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
+		} else if (squareSize * (x + 6) > width) {
+			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 2)));
+		} else if (squareSize * (y + 4) > height - 30) {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 6), (int) height - 30));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
+		} else {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 6), squareSize * (y + 4)));
+		}
+		
+		
+//		if(squareSize*x > frame.getHeight()){
+//			
+//		}
+		
+		this.normalisedScale = scale / 20;
+		
 		layer = new JLayeredPane();
 		//layer.setSize((x-2)*squareSize, (x-2)*squareSize);
 		tempLayerX = layer.getWidth();
@@ -344,9 +370,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 
 		//logger.addHandler(null);
-		frame = new JFrame("Auto Word Search");
-		frame.setBackground(new Color(255, 255, 255, 255));
-		frame.setMinimumSize(new Dimension(550, 400));
+		
 		//frame.setPreferredSize(new Dimension(550, 400));
 		grey = new Color(200, 200, 200, 255);
 		wordLength = 0;
@@ -356,9 +380,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		area = new JScrollPane();
 		clear = new Color(255, 255, 255, 255);
 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		width = screenSize.getWidth();
-		height = screenSize.getHeight();
+	
 
 		border = BorderFactory.createLineBorder(Color.GREEN);
 		//layer = new JLayeredPane();
@@ -441,7 +463,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		extra.add(clues, c);
 
 		main = new JPanel(new GridBagLayout());
-		TestPanel main2 = new TestPanel();
+		//TestPanel main2 = new TestPanel();
 		
 		main.setBackground(clear);
 		main.setVisible(true);
@@ -509,15 +531,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		c.ipady = 10;
 //		panel.add(solution, c);
 
-		if (squareSize * (x + 6) > width && squareSize * (y + 3) > height - 30) {
-			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
-		} else if (squareSize * (x + 6) > width) {
-			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 2)));
-		} else if (squareSize * (y + 3) > height - 30) {
-			frame.setPreferredSize(new Dimension(squareSize * (x + 6), (int) height - 30));
-		} else {
-			frame.setPreferredSize(new Dimension(squareSize * (x + 6), squareSize * (y + 3)));
-		}
+		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setBackground(clear);
