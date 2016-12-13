@@ -81,7 +81,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	JFrame frame;
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
-	private boolean buttonPushed, button2Pushed;
+	private boolean buttonPushed, button2Pushed, button3Pushed;
 	private String[][] grid;
 	private JTextField[][] boxes;
 	public JTextField[][] tempBoxes;
@@ -89,7 +89,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	JPanel panel, crosswordGrid, clue, clue2, clueNums, main, hintArea;
 	JLayeredPane layer;
 	JScrollPane area;
-	JButton hint, reveal, showSolution;
+	JButton hint, reveal, check;
 	JLabel[][] clueNumbers;
 	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
 	ArrayList<Font> fonts;
@@ -280,6 +280,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		buttonPushed = false;
 		button2Pushed = false;
+		button3Pushed = false;
 		
 		tempHighlighted = new int[2];//just for zoom
 		tempHighlighted[0]=0; tempHighlighted[1]=0; // dont initialize these as zero
@@ -638,10 +639,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		hint.addActionListener(this);
 		hint.addMouseWheelListener(this);
 		
-		showSolution = new JButton("Solution");
-		showSolution.setFont(font2);
-		showSolution.addActionListener(this);
-		showSolution.addMouseWheelListener(this);
+		check = new JButton("Check");
+		check.setFont(font2);
+		check.addActionListener(this);
+		check.addMouseWheelListener(this);
 		
 		panel = new JPanel(new GridBagLayout());
 
@@ -664,6 +665,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		c.weightx = 1.0;
 		c.weighty = 0.0;
 		c.gridx = 1;
+		c.gridy = 1;
+		c.ipady = 10;
+		
+		panel.add(check, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 2;
 		c.gridy = 1;
 		c.ipady = 10;
 		
@@ -1504,7 +1513,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	 * This does something or other
 	 */
 	public void revealSolution(){
-		showSolution.setText("Hide Solution");
+		check.setText("Uncheck");
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				if (boxes[i][j].getText().equals("")) {
@@ -1519,7 +1528,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	}
 
 	public void hideSolution(){
-		showSolution.setText("Solution");
+		check.setText("Check");
 		for (int i = 0; i < x - 2; i++) {
 			for (int j = 0; j < y - 2; j++) {
 				boxes[i][j].setForeground(new Color(0, 0, 0, 255));
@@ -1698,11 +1707,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//********************TECHNICAL NOTE**************************************
 		//Change the line below to:  "    == hint)     " to enable full solution as well as hint
 		//************************************************************************
-		if (e.getSource() == showSolution) {
-			sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
+		if (e.getSource() == check) {
+			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
 //			if (sol.frame.isVisible()) {
-			buttonPushed = !buttonPushed;
-			if(buttonPushed){
+			button3Pushed = !button3Pushed;
+			if(button3Pushed){
 				revealSolution();
 			} else {
 				hideSolution();
