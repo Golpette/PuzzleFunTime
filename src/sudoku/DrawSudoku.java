@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,16 +20,28 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import crossword.JTextFieldLimit;
+import crossword.SetUpImages;
 
 import java.awt.event.AWTEventListener; //??
 
@@ -37,9 +51,9 @@ import java.awt.event.AWTEventListener; //??
 /**
  * Class to draw a word search
  */
-public class DrawSudoku extends JComponent implements ActionListener {
+public class DrawSudoku extends JComponent implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
-	private static int squareSize = 55;	
+	private static int squareSize = 50;	
 	int x, y;
 	public int getX() {
 		return x;
@@ -56,15 +70,23 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-
+	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);
+	int[][] initial_config;
+	boolean buttonPushed;
+	SudokuGenerator sudo;
+	SetUpImages imageSetUp; 
+	JCheckBoxMenuItem clickSound;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, chooseFont, 
+	tips, colour, french, english, german, italian, spanish;
+	JMenuBar menuBar;
+	JMenu file, diff, options, languages;
 	JFrame frame;
 	JPanel panel, transparentLayer, largeGrid;
 	JLayeredPane layer;
 	JLabel [][] numbers, threeByThreeGrid;
 	JTextField [][] nums;
-	int[][] grid;
-	String[][] grid2;
+	public int[][] grid, grid2;
+	//String[][] grid2;
 	GridBagConstraints c;
 	JButton solution, hint, clue;
 	DrawSudokuSolution sol;
@@ -72,31 +94,138 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	ArrayList<Integer> row, square, tempColumn, checks;
 	ArrayList<ArrayList<Integer>> cols;
 	ArrayList<ArrayList<Integer>> boxes;
-	Font font, font2;
+	Font font, font2, font3, font4;
 	Random rand;
 	boolean solutionPushed, hintPushed, cluePushed;
+	int difficulty;
 	
 	ArrayList<KeyEvent> keys;
 	Action action;
 	
 	// Define colors
-	Color wrong = new Color(250,60,60);
+	Color wrong = new Color(255,20,20);
 //	Color correct = new Color( 50 , 180,  50);
-	Color correct = new Color( 70 , 120,  70);
-	Color fixed = new Color(90,90,90);
-	
+	Color correct = new Color( 20 , 255,  20);
+	//Color fixed = new Color(90,90,90);
+	Color fixed = new Color(40,40,40);
+	Icon [] flags;
 	static int gridsize=9;
+	Border border2;
+	boolean gridEmpty, complete;
+	
+	
+	
+	
 
-	
-	
-	
-	
-	//@SuppressWarnings("unchecked")
-	public DrawSudoku(int difficulty) throws IOException{
+	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
+		String [] countries = {"english",  "french",  "german", "italian","spanish"};
+		this.grid = grid;
+		this.difficulty = difficulty;
+		complete = false;
 		
+		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		
 		font = new Font("Century Gothic", Font.PLAIN, 30);
 		font2 = new Font("Century Gothic", Font.PLAIN, 24);
+		font4 = new Font("Century Gothic", Font.BOLD, 32);
+		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		
+		flags = new Icon [5];
+		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
+		UIManager.put("Menu.font", font3);
+		UIManager.put("MenuItem.font", font3);
+		UIManager.put("CheckBoxMenuItem.font", font3);
+		UIManager.put("RadioButtonMenuItem.font", font3);
+		
+		menuBar = new JMenuBar();
+		file = new JMenu("File");
+		options = new JMenu("Options");
+		diff = new JMenu("Difficulty");
+		
+		file.setMnemonic(KeyEvent.VK_F);
+		options.setMnemonic(KeyEvent.VK_O);
+		diff.setMnemonic(KeyEvent.VK_D);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		newGame = new JMenuItem("New");
+		newGame.addActionListener(this);
+		exit = new JMenuItem("Exit");
+		exit.addActionListener(this);
+		
+		chooseFont = new JMenuItem("Font");
+		chooseFont.addActionListener(this);
+		colour = new JMenuItem("Colour");
+		colour.addActionListener(this);
+		languages = new JMenu("Language");
+		
+		english = new JMenuItem("English",  flags[0]);
+		french = new JMenuItem("French",  flags[1]);
+		german = new JMenuItem("German", flags[2]);
+		italian = new JMenuItem("Italian", flags[3]);
+		spanish = new JMenuItem("Spanish", flags[4]);
+		
+		languages.add(english);
+		languages.add(french);
+		languages.add(german);
+		languages.add(italian);
+		languages.add(spanish);
+		
+		
+		file.add(save);
+		file.add(newGame);
+		file.add(exit);
+		
+//		options.add(chooseFont);
+//		options.add(colour);
+		//options.add(languages);
+		//options.addSeparator();
+		clickSound = new JCheckBoxMenuItem("Click Sound");
+		clickSound.setMnemonic(KeyEvent.VK_C);
+		options.add(clickSound);
+		
+		ButtonGroup group = new ButtonGroup();
+		thick = new JRadioButtonMenuItem("Easy");
+		if(difficulty == 1){
+			thick.setSelected(true);
+		}
+		thick.addActionListener(this);
+		thick.setMnemonic(KeyEvent.VK_1);
+		group.add(thick);
+		normal = new JRadioButtonMenuItem("Normal");
+		normal.setMnemonic(KeyEvent.VK_2);
+		if(difficulty == 2){
+			normal.setSelected(true);
+		}
+		normal.addActionListener(this);
+		group.add(normal);
+		smart = new JRadioButtonMenuItem("Hard");
+		smart.setMnemonic(KeyEvent.VK_3);
+		if(difficulty == 3){
+			smart.setSelected(true);
+		}
+		smart.addActionListener(this);
+		group.add(smart);
+		genius = new JRadioButtonMenuItem("Expert");
+		genius.setMnemonic(KeyEvent.VK_4);
+		if(difficulty == 4){
+			genius.setSelected(true);
+		}
+		genius.addActionListener(this);
+		group.add(genius);
+		
+		diff.add(thick);
+		diff.add(normal);
+		diff.add(smart);
+		diff.add(genius);
+		
+		menuBar.add(file);
+		menuBar.add(diff);
+		//menuBar.add(options);
+		
+		
+	
+		
 		
 		int gridSize=9+2;
 		this.x = gridSize;     
@@ -111,14 +240,13 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		}
 		
 		
-		
 		sol = new DrawSudokuSolution( x, y);  // Create the whole object that will be revealed on "show solution"
 		sol.generateSudoku(grid);             // Andy's algorithm to generate sudoku solution.
 		sol.setVisible(false);
 		
-		
+		grid2 = grid.clone();
 		// We now have a full grid[][] for sudoku base. Modify grid[][] to starting configuration
-		int[][] initial_config = new int[9][9];
+		initial_config = new int[9][9];
 		
 		
 		
@@ -141,10 +269,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		
 		
 			
-		if( difficulty == 2 ){
+		if( difficulty == 1){
 			initial_config = SudokuMethods.makeEasy( grid );
 		}
-		else if( difficulty == 4 ){
+		else if( difficulty == 2 ){
 			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
 		}
 		else{
@@ -190,7 +318,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		hint.addActionListener(this);
 		
 		
-		clue = new JButton("Clue");
+		clue = new JButton("Check");
 		clue.setFont(font2);
 		clue.addActionListener(this);
 		
@@ -214,6 +342,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 				nums[i][j].setHorizontalAlignment(JTextField.CENTER);
 				nums[i][j].setDocument(new JTextFieldLimit(1, false));				
 				keyActionTextField(nums[i][j]);
+				nums[i][j].addMouseListener(this);
 
 				transparentLayer.add(nums[i][j]);
 			}
@@ -259,7 +388,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		c.gridx = 2;
 		c.gridy = 1;
 		c.ipady = 10;
-		panel.add(solution, c);
+		//panel.add(solution, c);
 		
 		frame = new JFrame("Auto Sudoku");
 		frame.setPreferredSize(new Dimension(squareSize*(x)+squareSize/2,squareSize*(y+2)+10));
@@ -273,7 +402,7 @@ public class DrawSudoku extends JComponent implements ActionListener {
 		frame.getRootPane().setDefaultButton(solution);
 		//generateSudoku();
 		
-		
+		frame.setJMenuBar(menuBar);
 		
 	
 		
@@ -295,7 +424,14 @@ public class DrawSudoku extends JComponent implements ActionListener {
 //			}
 //		}	
 		
-		
+
+//		if(difficulty == 1){
+//			initial_config = SudokuMethods.makeEasy( grid );	
+//		}
+//		else if(difficulty == 2){	
+//			initial_config = SudokuMethods.makeMedium( grid );  // Might be ridiculously hard...
+//		}	
+
 		
 		
 		// Put starting config into nums[][] JTextFields
@@ -307,8 +443,9 @@ public class DrawSudoku extends JComponent implements ActionListener {
 					nums[i][j].setEditable(false);
 					nums[i][j].setBackground(Color.WHITE);
 					nums[i][j].setForeground( fixed );
+					nums[i][j].setFont(font4);
 					nums[i][j].setText( Integer.toString( initial_config[i][j])  );		
-
+					//nums[i][j].setEnabled(false);
 				}
 				else{
 					nums[i][j].setText("");
@@ -341,20 +478,40 @@ public class DrawSudoku extends JComponent implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==solution){		
+		//change line below to " ==hint" to implement full answers in sudoku
+		if(e.getSource()==clue){		
+			buttonPushed = !buttonPushed;
 			
-			sol.frame.setVisible(!sol.frame.isVisible());
-			if(sol.frame.isVisible()){
-
-				solution.setText("Hide Solution");
+			int count = 0;
+			for( int i=0; i<9; i++){
+				for( int j=0; j<9; j++ ){
+					if (!nums[i][j].getText().equals("") && !nums[i][j].getFont().equals(font4)){
+						count++;
+					}
+				}
+			}
+			if(count == 0){
+				JOptionPane.showMessageDialog(frame, "No Squares Filled!");
+				return;
+			}
+			//sol.frame.setVisible(!sol.frame.isVisible());
+			if(buttonPushed){
+				clue.setText("Hide");
+				//solution.setText("Hide Solution");
 				// Highlight incorrect numbers
 				for( int i=0; i<9; i++){
 					for( int j=0; j<9; j++ ){
-							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){						
-								if( Integer.parseInt(nums[i][j].getText())==grid[i][j] ){
+						 nums[i][j].setBackground(Color.WHITE);
+							if( nums[i][j].isEnabled() && !nums[i][j].getText().equals("")  ){		
+								//System.out.println(grid[i][j]);
+								System.out.println("nums: " + Integer.parseInt(nums[i][j].getText()));
+								System.out.println("init: "+grid2[i][j]);
+								if( Integer.parseInt(nums[i][j].getText())== grid2[i][j] && nums[i][j].isEditable()){
 									nums[i][j].setForeground( correct );
 								}
-								else{
+								else if( Integer.parseInt(nums[i][j].getText())!= grid2[i][j] && nums[i][j].isEditable()){
+//									System.out.println("nums: " + Integer.parseInt(nums[i][j].getText()));
+//									System.out.println("init: "+initial_config[i][j]);
 									nums[i][j].setForeground( wrong );
 								}
 							}
@@ -363,7 +520,8 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}
 				
 			else{
-				solution.setText("Show Solution");
+				//solution.setText("Show Solution");
+				clue.setText("Check");
 				for (int i = 0; i < x-2; i++){
 					for (int j = 0; j < y-2; j++){
 						if( nums[i][j].isEditable() ){
@@ -377,14 +535,110 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			}	
 			
 		}
+		if(e.getSource()==clickSound){
+			System.out.println("ClickSound on");
+			//choose clicksound on/ off
+		}
+		if(e.getSource()==chooseFont){
+			System.out.println("Choose Font");
+			//choose font submenu
+		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
 			hintPushed = !hintPushed;
+			if(hintPushed){
+				
+				//add method to change background of next available number.
+				//do this by storing array of last removed number in order when creating puzzle.
+//				nextNumberGenerated
+//				if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
+//							
+//				}		
+			}
+			else{
+						//if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
+						
+				//}
+			}
 		}
+		
 		if(e.getSource()==clue){
 			System.out.println("clue");
 			cluePushed = !cluePushed;
+			//show green for correct numbers, red for incorrect
+			
 		}
+		
+		if(e.getSource()==save){
+			System.out.println("Puzzle Saved.");
+			//Save puzzle state
+		}
+		
+		if(e.getSource()==newGame){
+			System.out.println("New Game.");
+			//load new game
+			try {
+				frame.dispose();
+				sudo = new SudokuGenerator(9, difficulty);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+		if(e.getSource()==thick){
+			System.out.println("Thick mode enabled");
+			difficulty = 1;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==normal){
+			System.out.println("Normal mode enabled");
+			difficulty = 2;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==smart){
+			System.out.println("Smart mode enabled");
+			difficulty = 3;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==genius){
+			System.out.println("Genius mode enabled");
+			difficulty = 4;
+//			try {
+//				frame.dispose();
+//				sudo = new SudokuGenerator(9, sudDiff);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+		}
+		
+		if(e.getSource()==exit){
+			//System.exit(0);
+			frame.dispose();
+		}
+		
 	}
 	
 	
@@ -416,23 +670,18 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			public void keyPressed(KeyEvent e) {
 
 
-
-
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
-
-
 						if (e.getSource() == nums[row][col]) {
-
+							 nums[row][col].setBackground(Color.WHITE);
 							if (e.getKeyCode() == KeyEvent.VK_UP) {
-								
 								int newstart=row;
 								if( newstart-1 < 0 ){
 									newstart=gridsize;
 								}
 								nums[ (newstart-1) ][col].requestFocus();
 								nums[ newstart-1 ][col].getCaret().setVisible(true);
-								
+								nums[newstart-1][col].setBackground(HIGHLIGHT_COLOUR);
 							}
 							if (e.getKeyCode() == KeyEvent.VK_DOWN) {		
 								
@@ -440,9 +689,10 @@ public class DrawSudoku extends JComponent implements ActionListener {
 								if( newstart+1 > gridsize-1 ){
 									newstart=-1;
 								}
+								
 								nums[ (newstart+1) ][col].requestFocus();
 								nums[ newstart+1 ][col].getCaret().setVisible(true);
-									
+								nums[ newstart+1][col].setBackground(HIGHLIGHT_COLOUR);
 							}
 							if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 								
@@ -452,9 +702,11 @@ public class DrawSudoku extends JComponent implements ActionListener {
 								}
 								nums[ row ][ newstart+1 ].requestFocus();
 								nums[ row ][ newstart+1 ].getCaret().setVisible(true);
-
+								nums[row][ newstart+1].setBackground(HIGHLIGHT_COLOUR);
 							}
 							if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+								
+								 
 								
 								int newstart=col;
 								if( newstart-1 < 0 ){
@@ -462,11 +714,12 @@ public class DrawSudoku extends JComponent implements ActionListener {
 								}
 								nums[ row ][ newstart-1 ].requestFocus();
 								nums[ row ][ newstart-1 ].getCaret().setVisible(true);
-								
+								nums[row][ newstart-1 ].setBackground(HIGHLIGHT_COLOUR);
 							}
 
 							if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-								nums[row][col].setText("");					
+								nums[row][col].setText("");	
+								nums[row][col].setBackground(HIGHLIGHT_COLOUR);
 							}
 
 						}
@@ -479,7 +732,17 @@ public class DrawSudoku extends JComponent implements ActionListener {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-
+				complete = true;
+				for (int row = 0; row < gridsize ; row++) {
+					for (int col = 0; col < gridsize ; col++) {	
+						if(!(Integer.parseInt(nums[row][col].getText())== grid2[row][col])){
+							complete = false;
+						}
+					}
+				}
+				if(complete){
+					JOptionPane.showMessageDialog(frame, "Congratulations!");
+				}
 			}
 
 			@Override
@@ -490,6 +753,55 @@ public class DrawSudoku extends JComponent implements ActionListener {
 
 
 		});
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+		if(buttonPushed){
+			buttonPushed = !buttonPushed;
+			clue.setText("Check");
+			for (int row = 0; row < gridsize ; row++) {
+				for (int col = 0; col < gridsize ; col++) {	
+					 nums[row][col].setForeground(Color.BLACK);
+				}
+			}
+		}
+		for (int row = 0; row < gridsize ; row++) {
+			for (int col = 0; col < gridsize ; col++) {	
+				 nums[row][col].setBackground(Color.WHITE);
+
+				if (e.getSource() == nums[row][col]) {
+
+					 nums[row][col].setBackground(HIGHLIGHT_COLOUR);
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

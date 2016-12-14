@@ -1,5 +1,6 @@
 package crossword;
 import java.awt.AWTEvent;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -7,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -26,21 +28,33 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
+
+import sudoku.SudokuGenerator;
 
 
 /**
@@ -50,7 +64,21 @@ import javax.swing.text.DefaultEditorKit;
  */
 public class DrawCrossword extends JComponent implements ActionListener, AWTEventListener, MouseWheelListener {
 
-	
+	public String currentFont = "Century Gothic";
+	public String toCountry = "English";
+	public String fromCountry = "English";
+	CrosswordGenerator crossword;
+	SpinnerNumberModel model;
+	JSpinner spinner;
+	JCheckBoxMenuItem clickSound;
+	JMenuItem exit, thick, normal, smart, genius, save, newGame, 
+	tips, colour;
+	JMenuItem [] fontList, country1, country2;
+	JMenuBar menuBar;
+	JMenu file, diff, options, languages, languages2, size, chooseFont;
+	Icon [] flags;
+	SetUpImages imageSetUp; 
+	JFrame frame;
 	private static final long serialVersionUID = 1L;
 	private static int squareSize;
 	private boolean buttonPushed, button2Pushed;
@@ -64,13 +92,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	JButton hint, reveal, showSolution;
 	JLabel[][] clueNumbers;
 	ArrayList<JTextArea> cluesDwn, cluesAcr, hints;
+	ArrayList<Font> fonts;
 	GridBagConstraints c, c2, c3, c4, gbc_main;
 	ArrayList<JLabel> nums;
 	ArrayList<Entry> entries;
 	DrawSolution sol;
 	Font font, font2, font3, font4, fontLarge;
 	Random rand;
-	Border border;
+	Border border, border2;
 	Color clear, red, green, blue, black;
 	JTextArea hintD, hintA;
 	ArrayList<KeyEvent> keys;
@@ -78,14 +107,14 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	Dimension screenSize;
 	double width;
 	double height;
-	JPanel flow;
+	JPanel cluePanel;
 	int [] tempHighlighted;
 	String tempDirection, currentClue;
 	JLabel hintScrambled;
 	
 	// Define Color highlighting current word & clue
 	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);  //( = faded forest green )
-	
+	int difficulty;
 	
 	//tracking clicks
 	int lastClick_x = 0;
@@ -97,7 +126,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	boolean firstAutoMove = true;
 	
 	boolean firsteverclick = true; //stupid hack to fix a bug I couldn't find
-	final static int initialSquareSize = 60;
+	final static int initialSquareSize = 80;
 	private double normalisedScale;
 	private double scale;
 	final double MAX_SCALE;
@@ -106,13 +135,149 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	private double mouseX;
 	private double mouseY;
 	String[][] gridInit;
-	
 	boolean initialized; 
-	
+	String [] fontNames, countries;
 	
 	public DrawCrossword(String[][] gridInit, String[][] grid, int x, int y, ArrayList<String> cluesAcross,
-			ArrayList<String> cluesDown, ArrayList<Entry> entries) throws IOException {
-                
+			ArrayList<String> cluesDown, ArrayList<Entry> entries, int difficulty) throws IOException {
+		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
+		String toCountry = this.toCountry;
+		String fromCountry = this.fromCountry;
+		//fromCountry = countries[0];
+		this.countries = countries;
+		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
+								"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script", "Times New Roman"};
+		font3 = new Font("Century Gothic", Font.PLAIN, 14);
+		this.fontNames = fontNames;
+		this.difficulty = difficulty;
+		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
+		flags = new Icon [5];
+		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
+		UIManager.put("Menu.font", font3);
+		UIManager.put("MenuItem.font", font3);
+		UIManager.put("CheckBoxMenuItem.font", font3);
+		UIManager.put("RadioButtonMenuItem.font", font3);
+		
+		fontList = new JMenuItem[fontNames.length];
+		country1 = new JMenuItem[countries.length];
+		country2 = new JMenuItem[countries.length];
+		
+		fonts = new ArrayList<Font>();
+		for(int i = 0; i < fontNames.length; i++){			
+			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+//			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+//			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
+		}
+		model = new SpinnerNumberModel(x-2, 6, 30, 1);
+		spinner = new JSpinner(model);
+		spinner.setForeground(Color.WHITE);
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
+		spinner.setFont(font3);
+		
+		menuBar = new JMenuBar();
+		file = new JMenu("File");
+		options = new JMenu("Options");
+		diff = new JMenu("Difficulty");
+		size = new JMenu("Size");
+		
+		file.setMnemonic(KeyEvent.VK_F);
+		options.setMnemonic(KeyEvent.VK_O);
+		size.setMnemonic(KeyEvent.VK_S);
+		diff.setMnemonic(KeyEvent.VK_D);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		newGame = new JMenuItem("New");
+		newGame.addActionListener(this);
+		exit = new JMenuItem("Exit");
+		exit.addActionListener(this);
+		
+		chooseFont = new JMenu("Font");
+		chooseFont.addActionListener(this);
+		colour = new JMenuItem("Colour");
+		colour.addActionListener(this);
+		languages = new JMenu("Clue Language");
+		languages2 = new JMenu("Grid Language");
+		
+		for(int i = 0; i < fontNames.length; i++){
+		//	UIManager.put("MenuItem.font", fonts.get(i));	
+			fontList[i] = new JMenuItem(fontNames[i]);
+			fontList[i].addActionListener(this);
+			chooseFont.add(fontList[i]);
+		}
+		System.out.println("countries: "+ countries.toString());
+		for(int i = 0; i < countries.length; i++){
+			country1[i] = new JMenuItem(countries[i], flags[i]);
+			country2[i] = new JMenuItem(countries[i], flags[i]);
+			country1[i].addActionListener(this);
+			country2[i].addActionListener(this);
+			if(countries[i].equals(fromCountry)){
+				//country1[i].setBackground(new Color(20, 240, 20));
+				country1[i].setBorder(border2);
+			}
+			if(countries[i].equals(toCountry)){
+				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setBorder(border2);
+			}
+			languages.add(country1[i]);
+			languages2.add(country2[i]);
+		}
+
+		file.add(save);
+		file.add(newGame);
+		file.add(exit);
+		
+		//options.add(chooseFont);
+		//options.add(colour);
+		options.add(languages);
+		options.add(languages2);
+		//options.addSeparator();
+		clickSound = new JCheckBoxMenuItem("Click Sound");
+		clickSound.setMnemonic(KeyEvent.VK_C);
+		//options.add(clickSound);
+		
+		ButtonGroup group = new ButtonGroup();
+		thick = new JRadioButtonMenuItem("Easy");
+		if(difficulty == 1){
+			thick.setSelected(true);
+		}
+		thick.addActionListener(this);
+		thick.setMnemonic(KeyEvent.VK_1);
+		group.add(thick);
+		normal = new JRadioButtonMenuItem("Normal");
+		normal.setMnemonic(KeyEvent.VK_2);
+		if(difficulty == 2){
+			normal.setSelected(true);
+		}
+		normal.addActionListener(this);
+		group.add(normal);
+		smart = new JRadioButtonMenuItem("Hard");
+		smart.setMnemonic(KeyEvent.VK_3);
+		if(difficulty == 3){
+			smart.setSelected(true);
+		}
+		smart.addActionListener(this);
+		group.add(smart);
+		genius = new JRadioButtonMenuItem("Expert");
+		genius.setMnemonic(KeyEvent.VK_4);
+		if(difficulty == 4){
+			genius.setSelected(true);
+		}
+		genius.addActionListener(this);
+		group.add(genius);
+		
+		diff.add(thick);
+		diff.add(normal);
+		diff.add(smart);
+		diff.add(genius);
+		
+		size.add(spinner);
+		
+		menuBar.add(file);
+		menuBar.add(diff);
+		menuBar.add(size);
+		menuBar.add(options);
+		
 		buttonPushed = false;
 		button2Pushed = false;
 		
@@ -122,8 +287,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		//tempDirection="across";       //just for zoom
 		
 		squareSize = 38;
-		MIN_SCALE = 7.0;
-		MAX_SCALE = 18.0;
+		MIN_SCALE = 6.0;
+		MAX_SCALE = 16.0;
 		scale = 10.0;
 		normalisedScale = scale/20;
 		this.gridInit = gridInit;
@@ -132,7 +297,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 
 		currentClue = "";
 		
-		JFrame frame = new JFrame("Auto Crossword");
+		frame = new JFrame("Auto Crossword");
 		frame.setSize(1000, 400);
 		frame.setPreferredSize(new Dimension(550, 400));
 		frame.setMinimumSize(new Dimension(550,400));
@@ -184,7 +349,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				tempBoxes[i][j] = new JTextField(); 
 			}
 		}
-		drawGrid(normalisedScale);
+		drawGrid();
 
 		hintScrambled = new JLabel("Clue");
 		hintScrambled.setFont(fontLarge);
@@ -249,11 +414,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.add(hintArea, new Integer(2));
 		
 		layer.setVisible(true);
-		layer.setOpaque(true);
-		
+		layer.setOpaque(false);
+		//layer.setBackground(Color.GRAY);
 		
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
+//		layer.setMinimumSize(new Dimension(squareSize * x, squareSize * x)  ); 
 
 		/**
 		 * This is the GridBagLayout clue which holds all the clue components:
@@ -261,11 +426,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 */	
 		
 		clue = new JPanel(new GridBagLayout());	
-		clue.setMinimumSize(new Dimension( 200, 600)  );
+		//clue.setMinimumSize(new Dimension( 200, 600)  );
 		clue.setBackground(clear);
 		
 		clue2 = new JPanel(new GridBagLayout()     );
-		clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
+		//clue2.setMinimumSize(new Dimension( 200 ,  600 )  );
 		clue2.setBackground(clear);
 		
 		hints = new ArrayList<JTextArea>();
@@ -354,8 +519,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	    
 		// GridBagLayout for clue JPanels. This is how the clues will be arranged inside the JPanel.
 		c3 = new GridBagConstraints();
-		c3.fill = GridBagConstraints.NORTHWEST;
+		//c3.fill = GridBagConstraints.NORTHWEST;
 		c3.weighty = 0;
+		c3.insets = new Insets(0,10,0,10);
 		c3.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c3.gridx = 0;
 
@@ -369,7 +535,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		clue.add(new JLabel(" "), c3);
 		
 		c4 = new GridBagConstraints();
-		c4.fill = GridBagConstraints.NORTHWEST;
+		//c4.fill = GridBagConstraints.NORTHWEST;
 		c4.weightx = 1.0;
 		c4.weighty = 0;
 		c4.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
@@ -382,20 +548,16 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			clue2.add(blankline,c4);
 		}
 		c4.weighty=1;
-		clue2.add(new JLabel(" "), c4);
+		clue2.add(new JLabel(" "), c4);		
 		
-	    GridBagConstraints zzz = new GridBagConstraints();
-		zzz.fill = GridBagConstraints.VERTICAL;
-		zzz.gridx=0;
-		zzz.gridy=0;
-		zzz.weightx=0.0;
-		zzz.weighty=0.0;
+		cluePanel = new JPanel(new GridLayout(1,2));
+		//cluePanel.setAlignmentX(SwingConstants.NORTH);
+		cluePanel.add(clue );
+		cluePanel.add(clue2 );		
 		
 		
-		flow = new JPanel(new GridLayout(1,2));
-		flow.setAlignmentX(SwingConstants.NORTH);
-		flow.add(clue );
-		flow.add(clue2 );		
+		
+		
 		
 		/**
 		 * This is the layout of the GridBagLayout panel main which holds all
@@ -408,7 +570,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		gbc_main = new GridBagConstraints();
 		gbc_main.weighty = 1.0;
-		gbc_main.weightx = 1.0;
+		gbc_main.weightx = 0.0;
 		gbc_main.gridx = 0;
 		gbc_main.gridy = 0;
 		
@@ -417,7 +579,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		main.add(layer, gbc_main);
 		gbc_main.gridx = 1; // NEED THIS
 		
-		main.add(flow, gbc_main);
+		gbc_main.weightx = 1.0;
+		main.add(cluePanel, gbc_main);
 		
 		/**
 		 * This is the largest area of the GUI which holds the crossword and
@@ -511,22 +674,24 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * assigned to it
 		 */
 		
-		if(squareSize*(x+2)+squareSize/2 > width && squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension((int)width,(int)height-30));
-		}
-		else if(squareSize*(x+2)+squareSize/2 > width){
-			frame.setPreferredSize(new Dimension((int)width,squareSize*(y+4)));
-		}else if(squareSize*(y+2) > height-30){
-			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2, (int)height-30));
-		}else{
-			frame.setPreferredSize(new Dimension(squareSize*(2*x+2)+squareSize/2,squareSize*(y+4)));
-		}
 
+		if (squareSize * (x + 18) > width && squareSize * (y + 5) > height - 30) {
+			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
+		} else if (squareSize * (x + 18) > width) {
+			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 5)));
+		} else if (squareSize * (y + 5) > height - 30) {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 18), (int) height - 30));
+		} else {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 18), squareSize * (y + 5)));
+		}
+		
+		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
+		frame.setJMenuBar(menuBar);
 	}
 
 	 Action someAction = new AbstractAction() {
@@ -555,7 +720,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			                	}
 			                }
 			    		    main.revalidate();
-			    		    drawGrid( normalisedScale);
+			    		    drawGrid( );
 					   }
 					   if(e.getKeyCode()==KeyEvent.VK_DOWN){
 						   if(scale > MIN_SCALE){
@@ -567,7 +732,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			                	}
 			                }
 			    		    main.revalidate();
-			    		    drawGrid(normalisedScale);
+			    		    drawGrid();
 					   }
 					   //This doesn't work
 					   if(e.getKeyCode()==KeyEvent.VK_N){
@@ -580,7 +745,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			    		    main.revalidate();
 			    		    scale = 10;
 							normalisedScale = 0.5;
-			    		    drawGrid( normalisedScale);
+			    		    drawGrid( );
 					   }
 				   }
 				
@@ -982,7 +1147,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	public void showHintArea(){
 		
 				for (Entry ent : entries ) {
-					System.out.println("currentClue: "+currentClue);
+					//System.out.println("currentClue: "+currentClue);
 					//*******NEED CONDITION HERE FOR IF WORD IS HIGHLIGHTED
 						if (ent.getWord().equals(currentClue)) {
 							System.out.println("here!!!1");
@@ -1399,7 +1564,65 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource()==exit){
+			//System.exit(0);
+			frame.dispose();
+		}
 		
+		if(e.getSource()==newGame){
+			try {
+				frame.dispose();
+				crossword = new CrosswordGenerator((Integer)spinner.getValue(), difficulty);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		
+		if(e.getSource()==thick){
+			difficulty = 1;
+//			try {
+//				frame.dispose();
+//				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 1);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			
+		}
+		
+		if(e.getSource()==normal){
+			difficulty = 2;
+//			try {
+//				frame.dispose();
+//				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 2);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			
+		}
+		
+		if(e.getSource()==smart){
+			difficulty = 3;
+//			try {
+//				frame.dispose();
+//				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 3);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			
+		}
+		
+		if(e.getSource()==genius){
+			difficulty = 4;
+//			try {
+//				frame.dispose();
+//				crossword = new CrosswordGenerator((Integer)spinner.getValue(), 4);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			
+		}
 		if (e.getSource() == hint) {
 			
 			//sol.frame.setVisible(!sol.frame.isVisible());	//leave this for testing but remove for final product
@@ -1431,6 +1654,47 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				//hideSolution();
 			}
 		}
+		
+		if(e.getSource() == colour){
+			
+		}
+		
+		for(int i = 0; i < fontList.length; i++){
+			if(e.getSource() == fontList[i]){
+				currentFont = fontNames[i];
+				drawGrid();
+				System.out.println("Did something");
+			}
+		}
+		
+		for(int i = 0 ; i < countries.length; i++){
+				if(e.getSource() == country1[i]){
+					for(int j = 0; j < country1.length; j++){
+						country1[j].setBorder(null);
+						country1[j].setOpaque(false);
+					}
+					fromCountry = countries[i];
+					System.out.println("from: "+ fromCountry);
+					//country1[i].setBackground(new Color(20, 240, 20));
+					country1[i].setOpaque(true);
+					country1[i].setBorder(border2);
+				}
+		}
+		
+		for(int i = 0 ; i < countries.length; i++){
+			if(e.getSource() == country2[i]){
+				for(int j = 0; j < country2.length; j++){
+					country2[j].setBorder(null);
+					country2[j].setOpaque(false);
+				}
+				toCountry = countries[i];
+				System.out.println("to: "+ toCountry);
+				//country2[i].setBackground(new Color(20, 240, 20));
+				country2[i].setOpaque(true);
+				country2[i].setBorder(border2);
+			}
+		}
+		
 		//********************TECHNICAL NOTE**************************************
 		//Change the line below to:  "    == hint)     " to enable full solution as well as hint
 		//************************************************************************
@@ -1468,8 +1732,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
+	    		    drawGrid( );
 	    		    main.revalidate();
-	    		    drawGrid( normalisedScale);
 	            } else {
 
 	            	if(scale > MIN_SCALE){
@@ -1480,35 +1744,38 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	                		tempBoxes[i][j].setText(boxes[i][j].getText());
 	                	}
 	                }
+//	    		    
+	    		    drawGrid();
 	    		    main.revalidate();
-	    		    drawGrid(normalisedScale);
 	            }
 	        }
-	        else if(!e.isControlDown()){
+	        else{
 	        	area.setWheelScrollingEnabled(true);
+	        	drawGrid();
+	        	main.revalidate();
 	        }
 	    }
 
 
 	 
 
-	private void drawGrid(double normalisedScale) {	
+	private void drawGrid() {	
 		/**
 		 * This is where all the crossword boxes are filled black or provide a
 		 * usable JTextfield. This is layered on top of the transparentLayer
 		 */
 	    normalisedScale = scale/20;
 	 	squareSize = (int) (normalisedScale*initialSquareSize);
-		font = new Font("Century Gothic", Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
-		font2 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 24));
-		font3 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 15));
-		font4 = new Font("Century Gothic", Font.PLAIN, (int) (2*normalisedScale* 11));
-		fontLarge= new Font("Century Gothic", Font.PLAIN, (int) (1.5* squareSize));
+		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale*initialSquareSize / 5 * 3));
+		font2 = new Font(currentFont, Font.PLAIN, (int) (2*normalisedScale* 24));
+		font3 = new Font(currentFont, Font.PLAIN, (int) (2*normalisedScale* 15));
+		font4 = new Font(currentFont, Font.PLAIN, (int) (2*normalisedScale* 11));
+		fontLarge= new Font(currentFont, Font.PLAIN, (int) (1.5* squareSize));
 		
 		crosswordGrid = new JPanel(new GridLayout(x - 2, y - 2));
 		//Muck around with this to get the grid positioned based on mouse position
 		//crosswordGrid.setBounds((int)(squareSize - mouseX / 10), (int)(squareSize - mouseY /10), squareSize * (x - 2), squareSize * (y - 2));
-		crosswordGrid.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		crosswordGrid.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));
 
 		crosswordGrid.setOpaque(false);  
 		boxes = new JTextField[x - 2][y - 2];
@@ -1562,7 +1829,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		 * number in the top left corner of a GridLayout cell.
 		 */
 		clueNums = new JPanel(new GridLayout(x - 2, y - 2));
-		clueNums.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
+		clueNums.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));
 		clueNums.setOpaque(false);  //#### originally false
 		clueNumbers = new JLabel[x - 2][y - 2];
 
@@ -1589,7 +1856,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		hintArea = new JPanel(new GridLayout(1,1));
 		hintArea.add(hintScrambled);		
-		hintArea.setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));		hintArea.setBackground(Color.LIGHT_GRAY);
+		hintArea.setBounds(initialSquareSize/2, initialSquareSize/2, squareSize * (x - 2), squareSize * (y - 2));		
+		hintArea.setBackground(Color.LIGHT_GRAY);
 		hintArea.setOpaque(true);
 		hintArea.setVisible(buttonPushed);
 		
@@ -1601,7 +1869,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		layer.setVisible(true);
 		layer.setOpaque(true);
 		layer.setPreferredSize(new Dimension(squareSize * (x), squareSize * (y)));
-		layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
+		//layer.setMinimumSize(new Dimension(squareSize * (x - 1), squareSize * (x - 1)));
 	
 //		layer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(SOME_ACTION), SOME_ACTION);
 //		layer.getActionMap().put(SOME_ACTION, someAction);
