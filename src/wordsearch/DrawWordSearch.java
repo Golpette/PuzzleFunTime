@@ -64,11 +64,12 @@ import wordsearch.Coord;
 /**
  * Class to draw a word search
  */
-public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
+public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener, MouseListener {
 	public String toCountry = "English";
 	public String fromCountry = "English";
 	public String currentFont = "Century Gothic";
 	SpinnerNumberModel model;
+	int startWordX,startWordY;
 	WordSearchGenerator wordsearch;
 	JCheckBoxMenuItem clickSound;
 	JSpinner spinner;
@@ -79,10 +80,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JMenuItem [] fontList, colourList, country1, country2;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
-	
+	boolean mouseHeld;
 	SetUpImages setImages, tempImage, tempHead;
 	//Logger logger;
 	JFrame frame;
+	ArrayList<Character> trail;
 	JLayeredPane layer, layer2, extra;
 	JPanel panel, main, clues;
 	@SuppressWarnings({ "rawtypes" })
@@ -126,14 +128,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
 		this.fontNames = fontNames;
 		thisWord = "";
-		
+		mouseHeld = false;
+		startWordX = 0;
+		startWordY = 0;
 		Color [] colours = {Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN,
 				Color.MAGENTA, Color.PINK,  Color.ORANGE, Color.RED, Color.YELLOW, Color.WHITE};
 		String [] colourNames = {"Black", "Blue", "Cyan", "Gray", "Green", 
 				"Magenta", "Pink", "Orange", "Red", "Yellow", "White"};
 		this.colours = colours;
 		currentColour = Color.BLACK;
-		
+		trail = new ArrayList<>();
 		this.difficulty = difficulty;
 		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
 		this.countries = countries;
@@ -711,7 +715,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				labels[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 				labels[i][j].setHorizontalAlignment(JTextField.CENTER);
 				labels[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(labels[i][j]);
+				//mouseActionlabel(labels[i][j]);
+				labels[i][j].addMouseListener(this);
 				layer.add(labels[i][j]);
 			}
 		}
@@ -1735,5 +1740,88 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 		System.out.println("tempLayerX: "+tempLayerX + " tempLayerY: " +tempLayerY +" tempLayerWidth: "+tempLayerWidth
 				+" tempLayerHeight: " +tempLayerHeight+"\n\n");
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		//mouseHeld = false;
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						trail.add(allLetters.get(0)[i][j].getText().charAt(0));
+					}
+				}
+			}
+		}else{
+			trail.clear();
+		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(!mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						startWordX = i;
+						startWordY = j;
+						trail.clear();	
+						mouseHeld = true;
+						trail.add(allLetters.get(0)[i][j].getText().charAt(0));
+						System.out.println("trail: "+ trail);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if(mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						mouseHeld = false;
+						System.out.println("trail: "+ trail);
+						//check word here
+						StringBuilder str = new StringBuilder();
+						for(Character a: trail){
+							str.append(a);
+						}
+						String temp = str.toString();
+						System.out.println("Tester: "+ temp.toLowerCase());
+						for(Entry ent: entries){
+							System.out.println("ent: "+ent.getWord());
+							if (ent.getWord().equals(temp.toLowerCase())){
+								struckThrough.add(temp);
+								setUpClues();
+								drawGrid();
+								System.out.println("EQUAL");
+							}
+						}
+						
+						
+						
+						trail.clear();
+					}
+				}
+			}
+			trail.clear();
+		}else{
+			trail.clear();
+		}
+		
 	}
 }
