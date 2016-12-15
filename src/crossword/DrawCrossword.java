@@ -768,7 +768,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				}
 				if(firsteverclick){ // Stupid hack to fix the bug I couldn't find
 					firstAutoMove = true;
-					makeAllWhite();
+					//makeAllWhite();
 					////highlightWord_fromClick(lastClick_x,lastClick_y); leave grid white to begin
 					firsteverclick=false;
 				}
