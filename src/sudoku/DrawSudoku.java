@@ -735,7 +735,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 				complete = true;
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
-						if( (Integer.parseInt(nums[row][col].getText()) != grid2[row][col])){
+						if( nums[row][col].getText().isEmpty() ||  (Integer.parseInt(nums[row][col].getText())!=grid2[row][col])     ){
 							complete = false;
 						}
 					}
