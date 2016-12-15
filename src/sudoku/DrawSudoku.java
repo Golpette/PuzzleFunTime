@@ -118,7 +118,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	
 
 	public DrawSudoku(int[][] grid, int x, int y, int difficulty) throws IOException{
-		String [] countries = {"english",  "french",  "german", "italian","spanish"};
+		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
 		this.grid = grid;
 		this.difficulty = difficulty;
 		complete = false;
@@ -735,7 +735,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 				complete = true;
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
-						if(!(Integer.parseInt(nums[row][col].getText())== grid2[row][col])){
+						if( (Integer.parseInt(nums[row][col].getText()) != grid2[row][col])){
 							complete = false;
 						}
 					}
