@@ -1805,10 +1805,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						for(Entry ent: entries){
 							System.out.println("ent: "+ent.getWord());
 							if (ent.getWord().equals(temp.toLowerCase())){
-								struckThrough.add(temp);
-								resetSizes();
-								setUpClues();
-								System.out.println("EQUAL");
+								if(!struckThrough.contains(temp)){
+									struckThrough.add(temp);
+									resetSizes();
+									setUpClues();
+									System.out.println("EQUAL");
+								}
 							}
 						}
 						
