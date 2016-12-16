@@ -701,6 +701,11 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		frame.setVisible(true);
 		frame.getRootPane().setDefaultButton(reveal);
 		frame.setJMenuBar(menuBar);
+		
+		
+		// Remove initial focus from grid
+		hint.requestFocus(true);
+
 	}
 
 	 Action someAction = new AbstractAction() {
