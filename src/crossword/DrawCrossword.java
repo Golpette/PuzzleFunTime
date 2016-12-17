@@ -122,8 +122,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	int countClicks = 0;
 	
 	//tracking last text entry
-	int currentDirection = 0;  // {0,1,2,3} = {right, down, left, up}
-	boolean firstAutoMove = true;
+	//int currentDirection = 0;  // {0,1,2,3} = {right, down, left, up}
+	//boolean firstAutoMove = true;
 	
 	boolean firsteverclick = true; //stupid hack to fix a bug I couldn't find
 	final static int initialSquareSize = 80;
@@ -767,7 +767,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				if( e.getKeyCode()==KeyEvent.VK_UP  || e.getKeyCode()==KeyEvent.VK_DOWN ||
 						e.getKeyCode()==KeyEvent.VK_RIGHT || e.getKeyCode()==KeyEvent.VK_LEFT ||
 						e.getKeyCode() == KeyEvent.VK_BACK_SPACE  ){
-					firstAutoMove = true; //reset for auto-cursor movements
+					//firstAutoMove = true; //reset for auto-cursor movements
 					countClicks=0;
 					firsteverclick=false;
 				}
@@ -859,72 +859,27 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 								
 								boxes[row][col].setForeground(black);
 								boxes[row][col].setText(Character.toString(e.getKeyChar()));
-								
-								
-//								//determine initial direction, favouring across
-//								if( col<x-3 && boxes[row][col+1].isEnabled() && firstAutoMove ){    //NOTE: ANDY HAS FLIPPED X AND Y COORDS IN boxes[][]...
-//									currentDirection = 0;
-//									firstAutoMove=false;
-//								}
-//								else if( row<y-3 && boxes[row+1][col].isEnabled() && firstAutoMove ){
-//									currentDirection = 1;
-//									firstAutoMove=false;
-//								}
-
-								
 					
 								// highlighted squares take priority; i.e. can choose to go down if we want
 								if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1 ){ //CARE: !=-1 OK??
-									//currentDirection = 0;
 									tempDirection="across";
-									//firstAutoMove=false;
 								}
 								else if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1   ){
 									//currentDirection = 1;
 									tempDirection="down";
-									//firstAutoMove=false;									
-								}//////////////////////
+								}
 								
 								
 								
-//								if( currentDirection == 0 ){ //across
 								if( tempDirection.equals("across") ){ //across
 									if( col<x-3 && boxes[row][col+1].isEnabled() && boxes[row][col+1].getBackground().getRGB() != -1   ){
 										boxes[row][col+1].requestFocus();		
 									}
-//									else{
-//										//check this square is start of a down word
-//										boolean isStart = startOfWord(row, col);
-//										if( isStart ){
-//											if( row<y-3 && boxes[row+1][col].isEnabled() ){ // this HAS to be true
-//												boxes[row+1][col].requestFocus();
-//												currentDirection = 1;  //i.e. going down
-//												//also make new highlight
-//												makeAllWhite();
-//												highlightWord( row, col);												
-//											}
-//										}
-//									}
 								}
-//								else if(currentDirection ==1  ){ //going down		
 								else if( tempDirection.equals("down")   ){ //going down		
 									if( row<y-3 && boxes[row+1][col].isEnabled() && boxes[row+1][col].getBackground().getRGB() != -1  ){
-										boxes[row+1][col].requestFocus();
-									
+										boxes[row+1][col].requestFocus();									
 									}
-//									else{
-//										//check this square is start of a down word
-//										boolean isStart = startOfWord(row, col);
-//										if( isStart ){
-//											if( col<x-3 && boxes[row][col+1].isEnabled() ){ // this HAS to be true
-//												boxes[row][col+1].requestFocus();
-//												currentDirection = 0;  //i.e. going across
-//												//also make new highlight
-//												makeAllWhite();
-//												highlightWord( row, col);	
-//											}
-//										}
-//									}									
 								}
 									
 								
@@ -992,7 +947,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			
 			public void mouseClicked(MouseEvent e) {	
 			
-				firstAutoMove = true; //reset for auto-cursor movements
+				//firstAutoMove = true; //reset for auto-cursor movements
 
 				
 				for (int i = 0; i < x-2; i++){
@@ -1312,13 +1267,9 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	
 
 	
-	//
-	// EDITED THIS METHOD TO ALLOW CLICKS FROM ANYWHERE AND ALTER BETWEEN ACROSS/DOWN	
 	public void highlightWord_fromClick( int xstart, int ystart ){		
 		/** Highlight from mouse clicks. Across/down depends on number of clicks **/
-		
-		System.out.println( "tempDirection = "+ tempDirection);
-		
+				
 		if(firsteverclick){
 			firsteverclick=false;
 			countClicks=1; //maybe should be 1
@@ -1338,15 +1289,10 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 				
 				if( (ystart>0 && boxes[xstart][ystart-1].isEnabled()) || (ystart<y-3 &&  boxes[xstart][ystart+1].isEnabled() ) ){//across
 					// then across exists
-					//colourWord(xstart, ystart, "across");
 					acrossExists=true;
-					System.out.println("acrossExists");
 				}
 			   if( (xstart>0 && boxes[xstart-1][ystart].isEnabled())  ||  (xstart<x-3 &&  boxes[xstart+1][ystart].isEnabled() )   ){//down
 					downExists=true;
-					//colourWord(xstart, ystart, "down");
-					System.out.println("downExists");
-
 				}
 				
 		
@@ -1451,105 +1397,6 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		
 	}
-	
-	
-	
-	
-//	public void highlightWord222( int xstart, int ystart ){
-//		/** Highlight word from any letter **/
-//
-//								
-//			if( (ystart>0 && boxes[xstart][ystart-1].isEnabled()   )   ||  
-//					( ystart<y-3 &&  boxes[xstart][ystart+1].isEnabled() )    ){//across		
-//				colourWord(xstart, ystart, "across");		
-//			}
-//			else if( (xstart>0 && boxes[xstart-1][ystart].isEnabled() )   ||  
-//					( xstart<x-3 &&  boxes[xstart+1][ystart].isEnabled()  )    ){//down
-//				colourWord(xstart, ystart, "down");
-//			}
-//			// Across words were not highlighting from final position if cell was isolated. QUICK FIX:
-//			else if( (ystart<y-3 &&  !boxes[xstart][ystart+1].isEnabled()  && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() && 	ystart>0 && boxes[xstart][ystart-1].isEnabled() )
-//					||   ( ystart==y-3 && xstart<x-3 &&  !boxes[xstart+1][ystart].isEnabled() 
-//					||   ( xstart==x-3 && ystart<y-3 &&  ystart>0 && boxes[xstart][ystart-1].isEnabled() )
-//					||   ( ystart==y-3 && xstart==x-3 )    )      
-//					){   
-//					
-//				colourWord(xstart, ystart, "across");		
-//			}
-//	
-//	}
-	
-	
-	
-		
-	
-	
-	
-//	public void highlightWord_fromClick( int xstart, int ystart ){		
-//		/** Highlight from mouse clicks. Across/down depends on number of clicks **/
-//		
-//		// if clicking on start of a word
-//		if( !clueNumbers[xstart][ystart].getText().equals("") ){
-//		
-//			boolean acrossExists = false;
-//			boolean downExists = false;			
-//			
-//			for( Entry ent : entries){
-//				String nomnom = Integer.toString( ent.getClueNumber()  );
-//				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
-//					if( ent.isAcross()  ) {
-//						acrossExists = true;
-//					} 
-//					else {
-//						downExists = true;
-//					}
-//				}
-//			}
-//			
-//			countClicks++;		
-//			boolean highlightAcross = true;
-//			if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2!=0 && acrossExists){
-//				highlightAcross = true;				
-//			}
-//			else if( xstart==lastClick_x && ystart==lastClick_y && countClicks%2==0 && downExists ){
-//				highlightAcross = false;
-//			}
-//			else if( acrossExists  ){
-//				highlightAcross = true;	
-//				countClicks = 1;
-//				lastClick_x = xstart;    lastClick_y = ystart;
-//			}			
-//			else if( !acrossExists && downExists ){
-//				highlightAcross =  false;	
-//				countClicks = 0;
-//				lastClick_x = xstart;    lastClick_y = ystart;
-//			}		
-//			
-//			for( Entry ent : entries ){
-//				String nomnom = Integer.toString( ent.getClueNumber()  );
-//				if( clueNumbers[xstart][ystart].getText().equals( nomnom ) ){
-//					
-//					if( highlightAcross  ) {	
-//						colourWord(xstart, ystart, "across");
-//					} 
-//					else {														
-//						colourWord(xstart, ystart, "down");
-//					}
-//				}
-//			}
-//		}
-//		
-//		
-//		// else use highlightWord() method if clicking anywhere else in word other than first letter
-//		else{
-//			highlightWord(xstart,ystart);
-//			countClicks=0;
-//		}
-//	
-//	}
-	
-	
-	
 	
 	
 	
@@ -2066,11 +1913,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		
 		// RECOLOR WORD AFTER ZOOMING IF ONE IS ALREADY COLOURED
 		if( tempDirection != null ){   // i.e. first word has been colored
-			/////////////////////////
 			////// Try to get focus after zoom. It starts highlighting non-green spaces....
 			//boxes[ tempHighlighted[0] ][ tempHighlighted[1]  ].requestFocus();
-			////firstAutoMove=true;
-			////firsteverclick=true;
 			//////////////////////////////
 			colourWord( tempHighlighted[0], tempHighlighted[1], tempDirection );
 		}
