@@ -274,7 +274,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		size.add(spinner);
 		
 		menuBar.add(file);
-		menuBar.add(diff);
+		//menuBar.add(diff);
 		menuBar.add(size);
 		menuBar.add(options);
 		

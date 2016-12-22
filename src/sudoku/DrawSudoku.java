@@ -216,8 +216,8 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		
 		diff.add(thick);
 		diff.add(normal);
-		diff.add(smart);
-		diff.add(genius);
+		//diff.add(smart);
+		//diff.add(genius);
 		
 		menuBar.add(file);
 		menuBar.add(diff);

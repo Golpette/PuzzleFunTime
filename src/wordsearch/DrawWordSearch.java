@@ -304,14 +304,18 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			scale = squareSize/4;
 		} else if (squareSize * (x + 6) > width) {
 			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 2)));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
 		} else if (squareSize * (y + 4) > height - 30) {
 			frame.setPreferredSize(new Dimension(squareSize * (x + 6), (int) height - 30));
 			squareSize = (int) (height/(x*1.2));
 			scale = squareSize/4;
 		} else {
 			frame.setPreferredSize(new Dimension(squareSize * (x + 6), squareSize * (y + 4)));
+			squareSize = 43;
+//			scale = squareSize/4;
 		}
-		
+		//14,16,18 ... don't work right
 		
 //		if(squareSize*x > frame.getHeight()){
 //			
@@ -1531,78 +1535,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	private void showClue() {
 		// TODO Auto-generated method stub
-		if(!sorted.isEmpty()){
-			int hintClue = 0;
-		//final int hintClue = rand.nextInt(sorted.size());
-			for(int i = 0; i < allClues.size(); i++){
-				if(allClues.get(i).getText().equals(thisWord)){
-				hintClue = i;
+			if(!sorted.isEmpty()){
+				int hintClue = 0;
+			//final int hintClue = rand.nextInt(sorted.size());
+				for(int i = 0; i < allClues.size(); i++){
+					if(allClues.get(i).getText().equals(thisWord)){
+					hintClue = i;
+					}
+					
 				}
-				
-			}
-			final int thisClue = hintClue;
-		for(final Entry ent: entries){	
-			if(ent.getWord().toUpperCase().equals(thisWord)){
-				
-				
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					   @Override
-					   
-					   protected Void doInBackground() throws Exception {
-						   if(currentColour!= Color.BLUE){
-							   allClues.get(thisClue).setForeground(Color.BLUE);
-						   }
-						   else{
-							   allClues.get(thisClue).setForeground(Color.GREEN);
-						   }
-						   long current = System.currentTimeMillis();
-						   long counter = 0;
-						   long next;
-						   loopAroundWord2(ent);
-//						   for (int i = 1; i < x - 1; i++) {
-//								for (int j = 1; j < y - 1; j++) {
-//									struckOffList(i,j);
-//								}
-//						   }
-						   clue.setEnabled(false);
-						   while(counter<2000){
-							   next = System.currentTimeMillis();
-							   counter = next - current;
-						   }
-						   letters = ent.getLetterCoords();
-							for (int i = 1; i < x - 1; i++) {
-								for (int j = 1; j < y - 1; j++) {
-									// loopAroundWord(i, j, ent);
-									 
-									for (JLabel[][] lab : allLetters) {
-										for(Coord co: letters){
-											if(co.xcoord == i && co.ycoord == j){
-												System.out.println("IDK: " + i+ " "+j);
-												//Need to remove all of the images from diagonals too (ie corners)
-												temporaryIcons2.get(allLetters.indexOf(lab))[j-1][i-1] = null;
-											}
-										}
-										
-										//if(temporaryIcons.get(allLetters.indexOf(lab))[i][j].equals(null)){
-										//lab[i][j].setIcon(null);
-										//}
-									}
-								}
-							}
-							allClues.get(thisClue).setOpaque(false);
-						   allClues.get(thisClue).setForeground(currentColour);
-							clue.setEnabled(true); 
-							//resetSizes();
-						 //  allClues.get(hintClue).setIcon(null);
-					    return null;
+				final int thisClue = hintClue;
+				for(final Entry ent: entries){	
+					if(ent.getWord().toUpperCase().equals(thisWord)){
+					   if(!struckThrough.contains(ent.getWord().toUpperCase())){
+						   struckThrough.add(ent.getWord().toUpperCase());
 					   }
-					  };
-					  worker.execute();
-					  //resetSizes();
-//					  loopAroundWord(i, j, ent);
+				   loopAroundWord2(ent);
+				   resetSizes();
+				   setUpClues();
+				}
 			}
 		}
-	}
 	}
 
 	private void showHint() {
@@ -1625,7 +1578,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			   		long current = System.currentTimeMillis();
 					long counter = 0;
 					long next;
-					int shake = rand.nextInt(2);
+					int shake = rand.nextInt(1);
+					shake = 0;
 					hint.setEnabled(false);
 					boolean started = false;
 					
@@ -1636,11 +1590,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								int currentLetterX = letterCoords.get(letterInWord).getX();
 								int currentLetterY = letterCoords.get(letterInWord).getY();
 								started = true;
-								while(counter<1200){
+								while(counter<800){
 						
 							
 							//works
-							if(shake == 0){
+							if(shake == 1){
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.WHITE);
@@ -1662,7 +1616,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								Thread.sleep(80);
 							}
 							
-							if(shake == 1){
+							if(shake == 0){
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.BOTTOM);
@@ -1728,9 +1682,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		tempLayerY = layer.getY();
 		tempLayerWidth = layer.getWidth();
 		tempLayerHeight = layer.getHeight();
-		font = new Font(currentFont, Font.PLAIN, squareSize / 5 * 3);
+		//font = new Font(currentFont, Font.PLAIN, squareSize / 5 * 3);
+		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
+//		squareSize = (int) (height/(x*1.2));
+//		scale = squareSize/4;
 		normalisedScale = scale / 20;
-		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE);
+		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE+3);
 		main.revalidate();
 		//font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
 		font2 = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
@@ -1809,6 +1766,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									struckThrough.add(temp);
 									resetSizes();
 									setUpClues();
+									loopAroundWord2(ent);
 									System.out.println("EQUAL");
 								}
 							}
