@@ -223,7 +223,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 			languages2.add(country2[i]);
 		}
 
-		file.add(save);
+		//file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		
@@ -276,7 +276,7 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 		menuBar.add(file);
 		//menuBar.add(diff);
 		menuBar.add(size);
-		menuBar.add(options);
+		//menuBar.add(options);
 		
 		buttonPushed = false;
 		button2Pushed = false;

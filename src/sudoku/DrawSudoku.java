@@ -172,7 +172,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		languages.add(spanish);
 		
 		
-		file.add(save);
+		//file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		

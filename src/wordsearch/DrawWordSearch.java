@@ -227,7 +227,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			languages2.add(country2[i]);
 		}
 		
-		file.add(save);
+		//file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		
@@ -280,7 +280,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		menuBar.add(file);
 		menuBar.add(diff);
 		menuBar.add(size);
-		menuBar.add(options);
+		//menuBar.add(options);
 		
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255, 255, 255, 255));
