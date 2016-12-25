@@ -479,6 +479,10 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	
 	public void actionPerformed(ActionEvent e) {
 		//change line below to " ==hint" to implement full answers in sudoku
+		
+		hintPushed=false;
+		
+		
 		if(e.getSource()==clue){		
 			buttonPushed = !buttonPushed;
 			
@@ -545,21 +549,38 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		}
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			hintPushed = !hintPushed;
-			if(hintPushed){
-				
-				//add method to change background of next available number.
-				//do this by storing array of last removed number in order when creating puzzle.
-//				nextNumberGenerated
-//				if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
-//							
-//				}		
+			//hintPushed = !hintPushed;
+			
+			int[][] nummys = new int[9][9];
+			for (int plm=0; plm<9; plm++){
+				for(int ijn=0; ijn<9; ijn++){
+					if( nums[plm][ijn].getText().equals("") ){
+						nummys[plm][ijn] = 0;
+					}
+					else{
+						nummys[plm][ijn]= Integer.parseInt(   nums[plm][ijn].getText()  );
+					}
+				}
 			}
-			else{
-						//if(nums[i][j].isEnabled() && nums[i][j].isEditable() && !nums[i][j].getText().equals("")){	
-						
-				//}
-			}
+			for (int plm=0; plm<9; plm++){
+				for(int ijn=0; ijn<9; ijn++){
+					nums[ plm ][ ijn ].setBackground(Color.WHITE);				
+				}
+			}	
+			
+			//if(hintPushed){
+			// Do one step in solving sudoku and pick one that would be entered
+			int[] hint_xy= SudokuMethods.getHint_solver_noGuessing( nummys  );
+			nums[ hint_xy[0] ][ hint_xy[1] ].setBackground( new Color(150,150,220) );				
+			nums[ hint_xy[0] ][ hint_xy[1] ].requestFocus();
+			//}
+//			else{
+//				for (int plm=0; plm<9; plm++){
+//					for(int ijn=0; ijn<9; ijn++){
+//						nums[ plm ][ ijn ].setBackground(Color.WHITE);				
+//					}
+//				}				
+//			}
 		}
 		
 		if(e.getSource()==clue){

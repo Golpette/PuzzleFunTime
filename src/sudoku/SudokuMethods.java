@@ -10,7 +10,6 @@ public class SudokuMethods {
 
 	
 	//TODO: - tidy code
-	//      - add check method to highlight correct/wrong numbers in green/red
 	//      - general style: rounded corners, different colours, ...
 	//
 	// - plot # starting entries for different methods. Any stat phys in there?
@@ -268,6 +267,107 @@ public class SudokuMethods {
 	
 	
 
+	
+	
+	
+	
+	public static int[] getHint_solver_noGuessing( int[][] strtGrid ){
+		/**
+		 * Uses solver_noGuessing to get a number that is definitely fillable as a hint
+		 */
+		
+		int[] hint_xy = new int[2];
+		
+		int[][] solvegrid = new int[9][9];
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				solvegrid[i][j] = strtGrid[i][j];
+			}
+		}							
+
+		// HOLD CURRENT GRID TO CHECK FOR DIFFERENCES
+		int[][] prev_grid = new int[9][9];
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				prev_grid[i][j] = solvegrid[i][j];
+			}
+		}	
+		// add from checking rows
+		add_definites_ROWS( solvegrid );
+		//check for any changes			
+		boolean anything_added = false;
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
+					hint_xy[0]=iii;   hint_xy[1]=jjj;
+					return hint_xy;
+				}
+			}
+		}
+		if( !anything_added){
+			
+			// Same again but for COLS
+			for( int i=0; i<9; i++ ){
+				for( int j=0; j<9; j++){
+					solvegrid[i][j] = strtGrid[i][j];
+				}
+			}		
+			
+			// add from checking rows
+			add_definites_COLS( solvegrid );
+			//check for any changes			
+			anything_added = false;
+			for( int iii=0; iii<9; iii++){
+				for( int jjj=0; jjj<9; jjj++ ){
+					if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
+						hint_xy[0]=iii;   hint_xy[1]=jjj;
+						return hint_xy;
+					}
+				}
+			}
+			if( !anything_added){
+				
+				// Same again but for 3x3 squares
+				for( int i=0; i<9; i++ ){
+					for( int j=0; j<9; j++){
+						solvegrid[i][j] = strtGrid[i][j];
+					}
+				}		
+				
+				// add from checking rows
+				add_definites_3x3s( solvegrid );
+				//check for any changes			
+				anything_added = false;
+				for( int iii=0; iii<9; iii++){
+					for( int jjj=0; jjj<9; jjj++ ){
+						if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
+							hint_xy[0]=iii;   hint_xy[1]=jjj;
+							return hint_xy;
+						}
+					}
+				}
+				if( !anything_added){
+					System.out.println("NO HINT POSSIBLE");
+				}
+				
+				
+			}
+			
+		}
+		
+		// This should never actually be called. WRITE THIS METHOD PROPERLY 
+		return hint_xy;
+			
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
