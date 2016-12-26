@@ -7,7 +7,6 @@ public class SudokuMethods {
 	 * Class to generate sudoku starting configurations from a complete grid
 	 * Different difficulty levels 
 	 */
-
 	
 	//TODO: - tidy code
 	//      - general style: rounded corners, different colours, ...
@@ -17,6 +16,8 @@ public class SudokuMethods {
 	
 	
 	public static int gridSize = 9;
+	
+	static int last_rand_pos=0;
 	
 	
 	
@@ -277,6 +278,9 @@ public class SudokuMethods {
 		 */
 		
 		int[] hint_xy = new int[2];
+		ArrayList<Integer> x_coords = new ArrayList<Integer>();
+		ArrayList<Integer> y_coords = new ArrayList<Integer>();
+
 		
 		int[][] solvegrid = new int[9][9];
 		for( int i=0; i<9; i++ ){
@@ -284,80 +288,80 @@ public class SudokuMethods {
 				solvegrid[i][j] = strtGrid[i][j];
 			}
 		}							
-
-		// HOLD CURRENT GRID TO CHECK FOR DIFFERENCES
-		int[][] prev_grid = new int[9][9];
-		for( int i=0; i<9; i++ ){
-			for( int j=0; j<9; j++){
-				prev_grid[i][j] = solvegrid[i][j];
-			}
-		}	
 		// add from checking rows
 		add_definites_ROWS( solvegrid );
 		//check for any changes			
-		boolean anything_added = false;
 		for( int iii=0; iii<9; iii++){
 			for( int jjj=0; jjj<9; jjj++ ){
-				if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
-					hint_xy[0]=iii;   hint_xy[1]=jjj;
-					return hint_xy;
+				if ( solvegrid[iii][jjj] != 0  &&  strtGrid[iii][jjj] == 0 ){
+					x_coords.add(iii);   y_coords.add(jjj);
 				}
 			}
 		}
-		if( !anything_added){
 			
-			// Same again but for COLS
-			for( int i=0; i<9; i++ ){
-				for( int j=0; j<9; j++){
-					solvegrid[i][j] = strtGrid[i][j];
+		
+		
+		// SAME AGAIN but for COLS
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				solvegrid[i][j] = strtGrid[i][j];
+			}
+		}		
+		// add from checking rows
+		add_definites_COLS( solvegrid );
+		//check for any changes			
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if ( solvegrid[iii][jjj] != 0  &&  strtGrid[iii][jjj] == 0 ){
+					x_coords.add(iii);   y_coords.add(jjj);
 				}
+			}
+		}
+			
+	
+		
+		// SAME AGAIN but for 3x3 squares
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				solvegrid[i][j] = strtGrid[i][j];
+			}
+		}				
+		// add from checking rows
+		add_definites_3x3s( solvegrid );
+		//check for any changes			
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if ( solvegrid[iii][jjj] != 0  &&  strtGrid[iii][jjj] == 0 ){
+					x_coords.add(iii);   y_coords.add(jjj);
+				}
+			}
+		}
+
+		
+		
+		// Choose one of the possible hints randomly but avoid the last one chosen
+		if( x_coords.size() == y_coords.size()  ){
+			boolean new_pos=false;
+			while(!new_pos){
+				int pos = (int)( Math.random()*x_coords.size()  );
+				if( x_coords.size()>1  && pos!=last_rand_pos){
+					hint_xy[0]=x_coords.get(pos);   hint_xy[1]=y_coords.get(pos);
+					last_rand_pos = pos;
+					new_pos=true;
+				}
+				else if( x_coords.size()==1  ){
+					hint_xy[0]=x_coords.get(0);   hint_xy[1]=y_coords.get(0);
+					new_pos=true;
+				}
+				
 			}		
-			
-			// add from checking rows
-			add_definites_COLS( solvegrid );
-			//check for any changes			
-			anything_added = false;
-			for( int iii=0; iii<9; iii++){
-				for( int jjj=0; jjj<9; jjj++ ){
-					if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
-						hint_xy[0]=iii;   hint_xy[1]=jjj;
-						return hint_xy;
-					}
-				}
-			}
-			if( !anything_added){
-				
-				// Same again but for 3x3 squares
-				for( int i=0; i<9; i++ ){
-					for( int j=0; j<9; j++){
-						solvegrid[i][j] = strtGrid[i][j];
-					}
-				}		
-				
-				// add from checking rows
-				add_definites_3x3s( solvegrid );
-				//check for any changes			
-				anything_added = false;
-				for( int iii=0; iii<9; iii++){
-					for( int jjj=0; jjj<9; jjj++ ){
-						if ( solvegrid[iii][jjj] != 0  &&  prev_grid[iii][jjj] == 0 ){
-							hint_xy[0]=iii;   hint_xy[1]=jjj;
-							return hint_xy;
-						}
-					}
-				}
-				if( !anything_added){
-					System.out.println("NO HINT POSSIBLE");
-				}
-				
-				
-			}
-			
+		}
+		else{
+			System.out.println("x_coords != y_coords length");
 		}
 		
-		// This should never actually be called. WRITE THIS METHOD PROPERLY 
-		return hint_xy;
-			
+		
+		return hint_xy;			
 	}
 	
 	

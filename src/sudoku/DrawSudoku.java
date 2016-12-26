@@ -548,8 +548,6 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			//choose font submenu
 		}
 		if(e.getSource()==hint){
-			System.out.println("hint");
-			//hintPushed = !hintPushed;
 			
 			int[][] nummys = new int[9][9];
 			for (int plm=0; plm<9; plm++){
@@ -568,19 +566,11 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 				}
 			}	
 			
-			//if(hintPushed){
 			// Do one step in solving sudoku and pick one that would be entered
 			int[] hint_xy= SudokuMethods.getHint_solver_noGuessing( nummys  );
 			nums[ hint_xy[0] ][ hint_xy[1] ].setBackground( new Color(150,150,220) );				
 			nums[ hint_xy[0] ][ hint_xy[1] ].requestFocus();
-			//}
-//			else{
-//				for (int plm=0; plm<9; plm++){
-//					for(int ijn=0; ijn<9; ijn++){
-//						nums[ plm ][ ijn ].setBackground(Color.WHITE);				
-//					}
-//				}				
-//			}
+
 		}
 		
 		if(e.getSource()==clue){
