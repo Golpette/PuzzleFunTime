@@ -70,7 +70,19 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	// Define colors
 	Color HIGHLIGHT_COLOUR = new Color( 163 , 194,  163);
+//	Color HINT_COLOR = new Color(150,150,220);
+	Color HINT_COLOR = new Color(180,204,255);
+
+	Color wrong = new Color(255,20,20);
+	Color correct = new Color( 50 , 180,  50);
+	//Color correct = new Color( 20 , 255,  20);
+	//Color fixed = new Color(90,90,90);
+	Color fixed = new Color(40,40,40);
+	
+	
 	int[][] initial_config;
 	boolean buttonPushed;
 	SudokuGenerator sudo;
@@ -102,12 +114,6 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 	ArrayList<KeyEvent> keys;
 	Action action;
 	
-	// Define colors
-	Color wrong = new Color(255,20,20);
-//	Color correct = new Color( 50 , 180,  50);
-	Color correct = new Color( 20 , 255,  20);
-	//Color fixed = new Color(90,90,90);
-	Color fixed = new Color(40,40,40);
 	Icon [] flags;
 	static int gridsize=9;
 	Border border2;
@@ -549,6 +555,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 		}
 		if(e.getSource()==hint){
 			
+			//we need an array of ints for the hint finding method
 			int[][] nummys = new int[9][9];
 			for (int plm=0; plm<9; plm++){
 				for(int ijn=0; ijn<9; ijn++){
@@ -560,6 +567,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 					}
 				}
 			}
+			//make all white first
 			for (int plm=0; plm<9; plm++){
 				for(int ijn=0; ijn<9; ijn++){
 					nums[ plm ][ ijn ].setBackground(Color.WHITE);				
@@ -568,7 +576,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			
 			// Do one step in solving sudoku and pick one that would be entered
 			int[] hint_xy= SudokuMethods.getHint_solver_noGuessing( nummys  );
-			nums[ hint_xy[0] ][ hint_xy[1] ].setBackground( new Color(150,150,220) );				
+			nums[ hint_xy[0] ][ hint_xy[1] ].setBackground( HINT_COLOR );				
 			nums[ hint_xy[0] ][ hint_xy[1] ].requestFocus();
 
 		}

@@ -258,16 +258,12 @@ public class SudokuMethods {
 			
 		}//end while
 		
-		
-		
-		
-		
-		
+
 		return solvegrid;
 	}
 	
-	
 
+	
 	
 	
 	
@@ -276,7 +272,7 @@ public class SudokuMethods {
 		/**
 		 * Uses solver_noGuessing to get a number that is definitely fillable as a hint
 		 */
-		
+				
 		int[] hint_xy = new int[2];
 		ArrayList<Integer> x_coords = new ArrayList<Integer>();
 		ArrayList<Integer> y_coords = new ArrayList<Integer>();
@@ -336,8 +332,25 @@ public class SudokuMethods {
 				}
 			}
 		}
-
 		
+		
+		// List will contain multiple entries if row/col/3x3 have produced same possible entry
+		// Remove these
+		if(  x_coords.size()==y_coords.size()   ){
+			for( int g=x_coords.size()-1; g>=0; g-- ){
+				int xx=x_coords.get(g);  int yy=y_coords.get(g);
+				for( int h=0; h<g; h++ ){
+					if( x_coords.get(h)==xx  &&  y_coords.get(h)==yy  ){
+						//remove them
+						x_coords.remove(h);   y_coords.remove(h); 
+						break; // since we need to update array sizes before continuing loop
+					}
+				}
+			}
+		}else{
+			System.out.println("zz x_xcoords != y cords");
+		}
+
 		
 		// Choose one of the possible hints randomly but avoid the last one chosen
 		if( x_coords.size() == y_coords.size()  ){
@@ -353,7 +366,6 @@ public class SudokuMethods {
 					hint_xy[0]=x_coords.get(0);   hint_xy[1]=y_coords.get(0);
 					new_pos=true;
 				}
-				
 			}		
 		}
 		else{
