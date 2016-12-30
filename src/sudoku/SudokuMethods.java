@@ -274,7 +274,8 @@ public class SudokuMethods {
 		 * Uses solver_noGuessing to get a number that is definitely fillable as a hint
 		 * EITHER as a single, or as a hidden single
 		 */
-				
+		
+		
 		int[] hint_xy = new int[2];
 		ArrayList<Integer> x_coords = new ArrayList<Integer>();
 		ArrayList<Integer> y_coords = new ArrayList<Integer>();
@@ -359,7 +360,7 @@ public class SudokuMethods {
 		
 		// List will contain multiple entries if row/col/3x3 have produced same possible entry
 		// Remove these
-		if(  x_coords.size()==y_coords.size()   ){
+		if(  x_coords.size()==y_coords.size()    ){
 			for( int g=x_coords.size()-1; g>=0; g-- ){
 				int xx=x_coords.get(g);  int yy=y_coords.get(g);
 				for( int h=0; h<g; h++ ){
@@ -388,6 +389,10 @@ public class SudokuMethods {
 				else if( x_coords.size()==1  ){
 					hint_xy[0]=x_coords.get(0);   hint_xy[1]=y_coords.get(0);
 					new_pos=true;
+				}
+				else if( x_coords.size()==0  ){
+					//no hint available from this method - could be the case for harder sudoku puzzles
+					System.out.println("No hints availabel for this method. DEAL WITH THIS");  //TODO
 				}
 			}		
 		}
