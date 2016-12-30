@@ -48,7 +48,7 @@ public class SudokuMethods {
 
 			// Try to solve
 			int[][] solved_config = new int[9][9];
-			solved_config = SudokuMethods.solver_noGuessing(  startGrid  );
+			solved_config = SudokuMethods.solver_singles_hiddenSingles(  startGrid  );
 			
 			// Check if solved
 			boolean is_solved = isSolved( solved_config );
@@ -65,6 +65,7 @@ public class SudokuMethods {
 
 		return startGrid;
 	}
+	
 	
 	
 	
@@ -133,69 +134,63 @@ public class SudokuMethods {
 	
 	
 	
-	
-	
-	
-	public static boolean isSolved( int[][] grid ){  
-		/**
-		 * Check if grid is solved
-		 */
-		boolean solved = true;
-		
-		int desired_tot = 1+2+3+4+5+6+7+8+9;
-		
-		for( int i=0; i<9; i++ ){
-			
-			int tot=0;
-			// check each row
-			for( int j=0; j<9; j++){
-				tot = tot + grid[i][j];
-			}
-			if( tot != desired_tot ){
-				solved = false;
-			}
-			
-			tot=0;
-			// check each col
-			for( int j=0; j<9; j++){
-				tot = tot + grid[j][i];
-			}
-			if( tot != desired_tot ){
-				solved = false;
-			}
-			
-			// no need to check 3x3 grids...
-		}
-
-		
-		return solved;
-	}
-	
-	
-	
-	
-	
-	
-
-	
-	public static boolean isFull( int[][] grid ){  
-		/**
-		 * Check if grid is full
-		 */
-		boolean solved = true;
-		
-		for( int i=0; i<9; i++ ){
-			for( int j=0; j<9; j++){
-				if( grid[i][j] == 0 ){  // 0 entries signify no number //TODO
-					solved = false;
-				}
-			}
-		}
-		
-		return solved;
-	}
-	
-	
+//	public static int[][] makeEasy(int[][] fullGrid){   //  MAYBE "VERRRRY" EASY
+//		/**
+//		 * Easy sudoku makes sure that at every step (removal) the grid can still be solved
+//		 * by just looking at the row, column and square and checking if there is exactly
+//		 * one possible entry 
+//		 */
+//		
+//		int[][] startGrid = new int[9][9];
+//		
+//		for( int i=0; i<9; i++ ){
+//			for( int j=0; j<9; j++){
+//				startGrid[i][j] = fullGrid[i][j];
+//			}
+//		}	
+//	
+//		
+//		// Do this a set number of times / until no more can be removed / specific number of entries are left??
+//		
+//		for( int tries=0; tries<100000; tries++ ){
+//		
+//			// pick random space and remove            //TODO: do all similar numbers instead of random??
+//			int xp=(int)(Math.random()*gridSize);  
+//			int yp=(int)(Math.random()*gridSize); 
+//			
+//			int value_removed = startGrid[xp][yp];
+//			startGrid[xp][yp]=0;                    /// TODO: CAREFUL, this is not printed since it is not in set [1,9] 
+//
+//			// Get lists of possibilities according to row, column and 3x3 square		
+//			ArrayList<Integer> poss_row = possibilities_from_row( startGrid, xp, yp );
+//			ArrayList<Integer> poss_col = possibilities_from_col( startGrid, xp, yp );
+//			ArrayList<Integer> poss_sqr = possibilities_from_sqr( startGrid, xp, yp );			
+//			
+//			// Take the 3 lists above and check for common numbers.
+//			//ArrayList<Integer> common_nums = new ArrayList<Integer>();
+//			int count_cns=0;
+//			for( Integer i: poss_row ){
+//				if( poss_col.contains(i) && poss_sqr.contains(i) ){
+//					//common_nums.add(i);
+//					count_cns++;
+//				}
+//			}
+//			
+//			if( count_cns != 1 ){
+//				// cannot solve sudoku with "easy" method so put number back
+//				startGrid[xp][yp] = value_removed;
+//			}
+//			else if( count_cns ==0 ){
+//				System.out.println("SOMETHING ODD - NO SHARED NUMBERS AFTER REMOVAL. SudokuMethods.java ");
+//			}
+//			else{
+//				// We have exactly 1 possibility for this square. Leave it out and pick another!
+//			}
+//		
+//		}
+//
+//		return startGrid;
+//	}
 	
 	
 	
@@ -203,13 +198,20 @@ public class SudokuMethods {
 	
 	
 
+
 	
 	
-	public static int[][] solver_noGuessing( int[][] strtGrid ){
+	
+	
+	
+
+	
+	
+	public static int[][] solver_singles_hiddenSingles( int[][] strtGrid ){
 		/**
-		 * Improved method now looks at all possibilities in rows, columns and 3x3s
-		 * and checks if any appear in only 1 grid. i.e. there may be 2 or more options in
-		 * every grid in a given row, but if only one of them contains a "4" option, this must be the 4.
+		 * Solves sudoku using only "singles" and "hidden singles".  
+		 * (hidden: there may be 2 or more options in every grid in a given row, but 
+		 * if only one of them contains a "4" option, this must be the 4)
 		 */
 		int[][] solvegrid = new int[9][9];
 		for( int i=0; i<9; i++ ){
@@ -230,16 +232,15 @@ public class SudokuMethods {
 					prev_grid[i][j] = solvegrid[i][j];
 				}
 			}	
-
 			
-			// add from checking rows
-			add_definites_ROWS( solvegrid );
-								
-			// checking cols
-		    add_definites_COLS( solvegrid );
-						
-			// check 3x3s
-			add_definites_3x3s( solvegrid );
+			
+			// Add singles
+			add_singles( solvegrid );
+			
+			// Add hidden singles 
+			add_hiddenSingles_ROWS( solvegrid );
+		    add_hiddenSingles_COLS( solvegrid );
+			add_hiddenSingles_3x3s( solvegrid );
 			
 						
 			// check we made at least 1 change
@@ -268,24 +269,46 @@ public class SudokuMethods {
 	
 	
 	
-	public static int[] getHint_solver_noGuessing( int[][] strtGrid ){
+	public static int[] getHint_singles_hiddenSingles( int[][] strtGrid ){
 		/**
 		 * Uses solver_noGuessing to get a number that is definitely fillable as a hint
+		 * EITHER as a single, or as a hidden single
 		 */
 				
 		int[] hint_xy = new int[2];
 		ArrayList<Integer> x_coords = new ArrayList<Integer>();
 		ArrayList<Integer> y_coords = new ArrayList<Integer>();
 
-		
 		int[][] solvegrid = new int[9][9];
 		for( int i=0; i<9; i++ ){
 			for( int j=0; j<9; j++){
 				solvegrid[i][j] = strtGrid[i][j];
 			}
-		}							
+		}	
+		
+		// First, look for SINGLES
 		// add from checking rows
-		add_definites_ROWS( solvegrid );
+		add_singles( solvegrid );
+		//check for any changes			
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if ( solvegrid[iii][jjj] != 0  &&  strtGrid[iii][jjj] == 0 ){
+					x_coords.add(iii);   y_coords.add(jjj);
+				}
+			}
+		}
+		
+		
+			
+		// HIDDEN SINGLES
+		// Reset solvegrid[][] since we only want 1 "move" in the solver
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				solvegrid[i][j] = strtGrid[i][j];
+			}
+		}	
+		// add from checking rows
+		add_hiddenSingles_ROWS( solvegrid );
 		//check for any changes			
 		for( int iii=0; iii<9; iii++){
 			for( int jjj=0; jjj<9; jjj++ ){
@@ -304,7 +327,7 @@ public class SudokuMethods {
 			}
 		}		
 		// add from checking rows
-		add_definites_COLS( solvegrid );
+		add_hiddenSingles_COLS( solvegrid );
 		//check for any changes			
 		for( int iii=0; iii<9; iii++){
 			for( int jjj=0; jjj<9; jjj++ ){
@@ -323,7 +346,7 @@ public class SudokuMethods {
 			}
 		}				
 		// add from checking rows
-		add_definites_3x3s( solvegrid );
+		add_hiddenSingles_3x3s( solvegrid );
 		//check for any changes			
 		for( int iii=0; iii<9; iii++){
 			for( int jjj=0; jjj<9; jjj++ ){
@@ -386,6 +409,48 @@ public class SudokuMethods {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void add_singles(  int[][] grid ){
+		
+		// Lists of all possible numbers for each grid point
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer>[][] all_lists =  (ArrayList<Integer>[][])new ArrayList[9][9];
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				all_lists[iii][jjj] = new ArrayList<Integer>();
+			}
+		}	
+		
+		// Update all grid possibilities
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if( grid[iii][jjj] == 0 ){   // Do not get possibilities from occupied sites
+					all_lists[iii][jjj] = getGridPossibilities( grid, iii, jjj );
+				}
+			}
+		}	
+		
+		// Add any singles
+		for( int iii=0; iii<9; iii++){
+			for( int jjj=0; jjj<9; jjj++ ){
+				if( grid[iii][jjj]==0  &&  all_lists[iii][jjj].size() == 1 ){   // Do not get possibilities from occupied sites					
+					grid[iii][jjj] = all_lists[iii][jjj].get(0);				
+				}
+			}
+		}	
+
+	}
+	
+	
+	
 
 	
 	
@@ -393,7 +458,7 @@ public class SudokuMethods {
 	
 	
 	
-	public static void add_definites_ROWS( int[][] grid ){
+	public static void add_hiddenSingles_ROWS( int[][] grid ){
 		/**
 		 * Use all grid possibilities for all grids for each ROW
 		 * Make a "row_required" list; check if any grids only have 1 of these
@@ -469,7 +534,7 @@ public class SudokuMethods {
 	
 	
 	
-	public static void add_definites_COLS( int[][] grid ){
+	public static void add_hiddenSingles_COLS( int[][] grid ){
 		/**
 		 * Use all grid possibilities for all grids for each COLUMN
 		 * Make a "col_required" list; check if any grids only have 1 of these
@@ -545,7 +610,7 @@ public class SudokuMethods {
 	
 	
 	
-	public static void add_definites_3x3s( int[][] grid ){
+	public static void add_hiddenSingles_3x3s( int[][] grid ){
 		/**
 		 * Use all grid possibilities for all grids for each 3X3 GRID
 		 * Make a "3x3_required" list; check if any grids only have 1 of these
@@ -825,6 +890,98 @@ public class SudokuMethods {
 		
 		return poss;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static boolean isSolved( int[][] grid ){  
+		/**
+		 * Check if grid is solved
+		 */
+		boolean solved = true;
+		
+		int desired_tot = 1+2+3+4+5+6+7+8+9;
+		
+		for( int i=0; i<9; i++ ){
+			
+			int tot=0;
+			// check each row
+			for( int j=0; j<9; j++){
+				tot = tot + grid[i][j];
+			}
+			if( tot != desired_tot ){
+				solved = false;
+			}
+			
+			tot=0;
+			// check each col
+			for( int j=0; j<9; j++){
+				tot = tot + grid[j][i];
+			}
+			if( tot != desired_tot ){
+				solved = false;
+			}
+			
+			// no need to check 3x3 grids...
+		}
+
+		
+		return solved;
+	}
+	
+	
+	
+	
+	
+
+	
+	public static boolean isFull( int[][] grid ){  
+		/**
+		 * Check if grid is full
+		 */
+		boolean solved = true;
+		
+		for( int i=0; i<9; i++ ){
+			for( int j=0; j<9; j++){
+				if( grid[i][j] == 0 ){  // 0 entries signify no number //TODO
+					solved = false;
+				}
+			}
+		}
+		
+		return solved;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

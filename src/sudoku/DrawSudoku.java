@@ -575,7 +575,7 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 			}	
 			
 			// Do one step in solving sudoku and pick one that would be entered
-			int[] hint_xy= SudokuMethods.getHint_solver_noGuessing( nummys  );
+			int[] hint_xy= SudokuMethods.getHint_singles_hiddenSingles( nummys  );
 			nums[ hint_xy[0] ][ hint_xy[1] ].setBackground( HINT_COLOR );				
 			nums[ hint_xy[0] ][ hint_xy[1] ].requestFocus();
 
