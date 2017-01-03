@@ -1784,8 +1784,8 @@ public class DrawCrossword extends JComponent implements ActionListener, AWTEven
 	        }
 	        else{
 	        	area.setWheelScrollingEnabled(true);
-	        	drawGrid();
-	        	main.revalidate();
+	        	//drawGrid();
+	        	//main.revalidate();
 	        }
 	    }
 
