@@ -5,8 +5,11 @@ import sys
 import urllib2
 
 #### TO USE FROM COMMAND LINE:
-####          python translate_1_to_2.py filename language1 language2  
-#### languages in format en, es, fr
+####           python translate_to_all.py filename
+#### 
+#### EXAMPLE:  python translate_to_all.py English_animals.txt
+####     (this will take the animals vocab set in English and translate it to all languages listed below)
+####     languages in google translate format: en, es, fr... see bottom of file.
 
 
 languages = ["en", "fr", "de", "it", "pt", "es"]
@@ -17,7 +20,8 @@ languages = ["en", "fr", "de", "it", "pt", "es"]
 ## Read in file
 filename = sys.argv[1]
 ## Start language
-strt_lan = sys.argv[2]
+#strt_lan = sys.argv[2]
+strt_lan = "en";
 ## Translate to:
 i = languages.index(strt_lan)
 languages.pop( i );
