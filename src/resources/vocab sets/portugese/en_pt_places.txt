@@ -1,0 +1,44 @@
+school	escola
+university	universidade
+work	trabalho
+hospital	hospital
+library	biblioteca
+dentist	dentista
+doctors	médicos
+factory	fábrica
+hair dresser	cabeleireiro
+police station	Delegacia de polícia
+butchers	açougueiros
+bakers	padeiros
+grocers	mercearias
+market	mercado
+supermarket	supermercado
+home	casa
+skyscraper	arranha-céu
+pub	bar
+nightclub	Boate
+park	parque
+swimming pool	piscina
+ice rink	pista de gelo
+gym	Academia
+farm	Fazenda
+cafe	café
+restaurant	restaurante
+church	Igreja
+cathedral	catedral
+mosque	mesquita
+synagogue	sinagoga
+garage	garagem
+motorway	auto-estrada
+village	aldeia
+town	Cidade
+city	cidade
+country	país
+countryside	campo
+shoe shop	Loja de calçados
+bank	banco
+arcade	arcada
+mall	Shopping
+stadium	estádio
+forest	floresta
+beach	praia

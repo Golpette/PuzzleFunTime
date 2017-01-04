@@ -1,0 +1,99 @@
+home	casa
+house	casa
+flat	plano
+cottage	cabaña
+farm	granja
+apartment	apartamento
+stairs	escalera
+hallway	pasillo
+balcony	balcón
+courtyard	patio
+lock	bloquear
+key	llave
+chimney	tubo de lámpara
+roof	techo
+window	ventana
+doorbell	timbre de la puerta
+ceiling	techo
+chandelier	candelabro
+candle	vela
+kitchen	cocina
+microwave	microonda
+oven	horno
+hob	quemador
+toaster	tostadora
+kettle	tetera
+dishwasher	lavavajillas
+sink	lavabo
+tap	grifo
+freezer	congelador
+fridge	refrigerador
+plate	plato
+bowl	cuenco
+cup	vaso
+spoon	cuchara
+knife	cuchillo
+fork	tenedor
+glass	vaso
+teapot	tetera
+table	mesa
+cupboard	alacena
+mop	trapeador
+broom	Escoba
+living room	sala
+cushion	amortiguar
+armchair	Sillón
+lamp	lámpara
+lampshade	pantalla de lámpara
+sofa	sofá
+curtain	cortina
+vacuum cleaner	aspiradora
+television	televisión
+telephone	teléfono
+clock	reloj
+radio	radio
+speaker	altavoz
+bedroom	Cuarto
+blanket	cobija
+carpet	alfombra
+rug	alfombra
+mirror	espejo
+alarm clock	despertador
+pillow	almohada
+duvet	edredón
+mattress	colchón
+sheet	hoja
+plug	enchufe
+attic	ático
+boiler	caldera
+basement	sótano
+study	estudiar
+bookcase	librero
+fireplace	chimenea
+bookcase	librero
+shelve	dejar de lado
+cupboard	alacena
+drawer	cajón
+picture	imagen
+computer	computadora
+bathroom	baño
+shower	ducha
+bath	bañera
+plunger	émbolo
+toilet	baño
+towel	toalla
+soap	jabón
+shampoo	champú
+conditioner	acondicionador
+sponge	esponja
+toothpaste	pasta dental
+toothbrush	cepillo de dientes
+mouthwash	enjuague bucal
+garden	jardín
+barbecue	parilla
+patio	patio
+fence	cerca
+lawnmower	Cortadora de césped
+hose	manguera
+wheelbarrow	carretilla
+garage	garaje
