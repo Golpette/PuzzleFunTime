@@ -1,0 +1,99 @@
+home	domicile
+house	maison
+flat	appartement
+cottage	chalet
+farm	ferme
+apartment	appartement
+stairs	escaliers
+hallway	couloir
+balcony	balcon
+courtyard	Cour
+lock	bloquer
+key	clé
+chimney	la cheminée
+roof	toit
+window	fenêtre
+doorbell	Sonnette
+ceiling	plafond
+chandelier	lustre
+candle	bougie
+kitchen	cuisine
+microwave	micro onde
+oven	four
+hob	plaque
+toaster	Grille-pain
+kettle	bouilloire
+dishwasher	Lave-vaisselle
+sink	évier
+tap	robinet
+freezer	congélateur
+fridge	frigo
+plate	assiette
+bowl	bol
+cup	Coupe
+spoon	cuillère
+knife	couteau
+fork	fourchette
+glass	verre
+teapot	théière
+table	table
+cupboard	placard
+mop	balai
+broom	balai
+living room	salon
+cushion	coussin
+armchair	fauteuil
+lamp	lampe
+lampshade	Abat-jour
+sofa	canapé
+curtain	rideau
+vacuum cleaner	aspirateur
+television	télévision
+telephone	téléphone
+clock	horloge
+radio	radio
+speaker	orateur
+bedroom	chambre
+blanket	couverture
+carpet	tapis
+rug	couverture
+mirror	miroir
+alarm clock	réveil
+pillow	oreiller
+duvet	couette
+mattress	matelas
+sheet	feuille
+plug	prise de courant
+attic	grenier
+boiler	Chaudière
+basement	sous-sol
+study	étude
+bookcase	bibliothèque
+fireplace	cheminée
+bookcase	bibliothèque
+shelve	Étagère
+cupboard	placard
+drawer	tiroir
+picture	image
+computer	ordinateur
+bathroom	salle de bains
+shower	douche
+bath	bain
+plunger	piston
+toilet	toilette
+towel	serviette
+soap	savon
+shampoo	shampooing
+conditioner	Conditionneur
+sponge	éponge
+toothpaste	dentifrice
+toothbrush	brosse à dents
+mouthwash	bain de bouche
+garden	jardin
+barbecue	barbecue
+patio	patio
+fence	clôture
+lawnmower	tondeuse à gazon
+hose	tuyau
+wheelbarrow	brouette
+garage	garage
