@@ -1436,46 +1436,21 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		if(e.getSource()==thick){
 			System.out.println("Thick mode enabled");
 			difficulty = 2;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==normal){
 			System.out.println("Normal mode enabled");
 			difficulty = 4;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==smart){
 			System.out.println("Smart mode enabled");
 			difficulty = 8;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==genius){
 			System.out.println("Genius mode enabled");
 			difficulty = 16;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-			
 		}
 		
 		for(int i = 0; i < fontList.length; i++){
