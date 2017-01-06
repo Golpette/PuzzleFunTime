@@ -26,9 +26,11 @@ public class WordSearchGenerator{
 		acrossClues = new ArrayList<String>();
 		downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
-		//Need this to read from two files for different languages
 		words = crossword.ReadWords.getWordsandDefs("words_cambridge.txt");		
-			grid = new String[x][y];		
+		
+		
+		
+		grid = new String[x][y];		
 			for(int i = 0; i < y; i++){
 				for( int j = 0; j < x; j++){
 					grid[i][j] = "_";
