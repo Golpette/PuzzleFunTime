@@ -1746,16 +1746,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								}
 							}
 							else if( ent.isDiagonal ){
-							//else{
-								
-								//System.out.println( "MUTHA FUKIN DIAGONAL");
 								
 								// STEVE: Diagonal words will not likely contain correct letters since it's impossible to
 								// exactly move diagonally. Here, we need a second method to catch these potential diagonals
 								// This should be enough:
 								//   1. Look at first and last letters
-								//   2. Look at x,y coords of these
-								//   3. Make sure the "temp" string at least contains all the correct letters
+								//   2. Make sure the "temp" string at least contains all the correct letters
+								//   3. Look at x,y coords of these
 								
 								// STEVE: JUST MAKE EVERYTHING LOWER CASE TO BEGIN WITH
 								char first_lett = temp.toLowerCase().charAt(0);
@@ -1763,7 +1760,17 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								String entry2 = ent.getWord().toLowerCase();
 								
 								if( entry2.charAt(0)==first_lett  && entry2.charAt(entry2.length()-1)==last_lett  ){
-									if(!struckThrough.contains( entry2.toUpperCase() )){
+									
+									boolean containsAllLetters=true;
+									//check temp contains all letters in word
+									for( int c=0; c<entry2.length(); c++ ){
+										if( !temp.toLowerCase().contains( ""+entry2.charAt(c) ) ){
+											containsAllLetters=false;
+										}
+									}
+								
+									
+									if(containsAllLetters && !struckThrough.contains( entry2.toUpperCase() )){
 										struckThrough.add( entry2.toUpperCase()   );
 										resetSizes();
 										setUpClues();
