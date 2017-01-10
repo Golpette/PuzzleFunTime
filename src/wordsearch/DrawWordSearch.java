@@ -1732,10 +1732,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						for(Character a: trail){
 							str.append(a);
 						}
-						String temp = str.toString();
-						System.out.println("Tester: "+ temp.toLowerCase());
+						String temp = str.toString(); // SC: this is what we have clicked and dragged
+						System.out.println("temp: "+ temp.toLowerCase());
 						for(Entry ent: entries){
-							System.out.println("ent: "+ent.getWord());
+							//System.out.println("ent: "+ent.getWord());								
 							if (ent.getWord().equals(temp.toLowerCase())){
 								if(!struckThrough.contains(temp)){
 									struckThrough.add(temp);
@@ -1745,6 +1745,35 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									System.out.println("EQUAL");
 								}
 							}
+							else if( ent.isDiagonal ){
+							//else{
+								
+								//System.out.println( "MUTHA FUKIN DIAGONAL");
+								
+								// STEVE: Diagonal words will not likely contain correct letters since it's impossible to
+								// exactly move diagonally. Here, we need a second method to catch these potential diagonals
+								// This should be enough:
+								//   1. Look at first and last letters
+								//   2. Look at x,y coords of these
+								//   3. Make sure the "temp" string at least contains all the correct letters
+								
+								// STEVE: JUST MAKE EVERYTHING LOWER CASE TO BEGIN WITH
+								char first_lett = temp.toLowerCase().charAt(0);
+								char last_lett = temp.toLowerCase().charAt( temp.length()-1  );
+								String entry2 = ent.getWord().toLowerCase();
+								
+								if( entry2.charAt(0)==first_lett  && entry2.charAt(entry2.length()-1)==last_lett  ){
+									if(!struckThrough.contains( entry2.toUpperCase() )){
+										struckThrough.add( entry2.toUpperCase()   );
+										resetSizes();
+										setUpClues();
+										loopAroundWord2(ent);
+									}
+								}
+								
+							}
+							
+							
 						}
 						
 						
