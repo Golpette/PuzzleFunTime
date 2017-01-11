@@ -75,8 +75,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JMenuItem exit, thick, normal, smart, genius, save, newGame, 
 	tips, french, english, german, italian, spanish, french2, english2, german2, italian2, spanish2;
 	JMenuBar menuBar;
-	JMenu file, diff, options, languages, languages2, size, chooseFont, colour;
-	JMenuItem [] fontList, colourList, country1, country2;
+	JMenu file, diff, options, languages, languages2, size, chooseFont, colour, topics;
+	JMenuItem [] fontList, colourList, country1, country2, topicItem;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
 	
@@ -112,7 +112,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	int x, y, x_pos, y_pos, counter, wordLength, dir, startx, starty, squareSize, tempLayerX, tempLayerY, layerX, layerY, difficulty;
 	final static int INITIAL_SQUARE_SIZE = 80, NUMBER_OF_LAYERS = 8;
 	boolean buttonPushed, clicked, start, congratulations, reset, diagonal, notIn;
-	String [] fontNames, countries;
+	String [] fontNames, countries, wordTopics;
 	ArrayList<Font> fonts;
 	Color [] colours;
 	Color currentColour;
@@ -136,12 +136,15 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		this.difficulty = difficulty;
 		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
+		String [] wordTopics = {"Animals", "Household", "Nature", "Workplaces", "Time", "Verbs"};
 		this.countries = countries;
+		this.wordTopics = wordTopics;
 		font3 = new Font(currentFont, Font.PLAIN, 14);
 		fontList = new JMenuItem[fontNames.length];
 		colourList = new JMenuItem[colours.length];
 		country1 = new JMenuItem[countries.length];
 		country2 = new JMenuItem[countries.length];
+		topicItem = new JMenuItem[wordTopics.length];
 		fonts = new ArrayList<Font>();
 		for(int i = 0; i < fontNames.length; i++){			
 			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
@@ -187,6 +190,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		colour.addActionListener(this);
 		languages = new JMenu("Clue Language");
 		languages2 = new JMenu("Grid Language");
+		topics = new JMenu("Topics");
 		
 		for(int i = 0; i < fontNames.length; i++){
 			UIManager.put("MenuItem.font", fonts.get(i));	
@@ -223,6 +227,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			languages2.add(country2[i]);
 		}
 		
+		for(int j = 0; j < wordTopics.length; j++){
+			topicItem[j] = new JMenuItem(wordTopics[j]);
+			topics.add(topicItem[j]);
+		}
+		
 		file.add(save);
 		file.add(newGame);
 		file.add(exit);
@@ -231,6 +240,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		//options.add(colour);
 		options.add(languages);
 		options.add(languages2);
+		options.add(topics);
 		//options.addSeparator();
 		clickSound = new JCheckBoxMenuItem("Click Sound");
 		clickSound.setMnemonic(KeyEvent.VK_C);
