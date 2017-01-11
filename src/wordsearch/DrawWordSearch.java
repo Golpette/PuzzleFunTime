@@ -1752,7 +1752,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								// This should be enough:
 								//   1. Look at first and last letters
 								//   2. Make sure the "temp" string at least contains all the correct letters
-								//   3. Look at x,y coords of these
+								//   3. Look at x,y coords of these (TODO if necessary)
 								
 								// STEVE: JUST MAKE EVERYTHING LOWER CASE TO BEGIN WITH
 								char first_lett = temp.toLowerCase().charAt(0);
@@ -1760,16 +1760,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								String entry2 = ent.getWord().toLowerCase();
 								
 								if( entry2.charAt(0)==first_lett  && entry2.charAt(entry2.length()-1)==last_lett  ){
-									
 									boolean containsAllLetters=true;
 									//check temp contains all letters in word
 									for( int c=0; c<entry2.length(); c++ ){
 										if( !temp.toLowerCase().contains( ""+entry2.charAt(c) ) ){
 											containsAllLetters=false;
 										}
-									}
-								
-									
+									}								
 									if(containsAllLetters && !struckThrough.contains( entry2.toUpperCase() )){
 										struckThrough.add( entry2.toUpperCase()   );
 										resetSizes();
