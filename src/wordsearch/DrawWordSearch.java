@@ -67,6 +67,7 @@ import wordsearch.Coord;
 public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
 	public String toCountry = "English";
 	public String fromCountry = "English";
+	public String fromTopic = "None";
 	public String currentFont = "Century Gothic";
 	SpinnerNumberModel model;
 	WordSearchGenerator wordsearch;
@@ -136,7 +137,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		this.difficulty = difficulty;
 		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
-		String [] wordTopics = {"Animals", "Household", "Nature", "Workplaces", "Time", "Verbs"};
+		String [] wordTopics = {"None", "Animals", "Household", "Nature", "Time", "Verbs", "Workplaces"};
 		this.countries = countries;
 		this.wordTopics = wordTopics;
 		font3 = new Font(currentFont, Font.PLAIN, 14);
@@ -228,7 +229,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 		
 		for(int j = 0; j < wordTopics.length; j++){
+			
 			topicItem[j] = new JMenuItem(wordTopics[j]);
+			if(wordTopics[j].equals(fromTopic)){
+				topicItem[j].setBorder(border2);
+			}
+			topicItem[j].addActionListener(this);
 			topics.add(topicItem[j]);
 		}
 		
@@ -1499,6 +1505,20 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			}
 	}
 	
+		for(int i = 0 ; i < topicItem.length; i++){
+			if(e.getSource() == topicItem[i]){
+				for(int j = 0; j < topicItem.length; j++){
+					topicItem[j].setBorder(null);
+					topicItem[j].setOpaque(false);
+				}
+				fromTopic = wordTopics[i];
+				System.out.println("Topic: "+ fromTopic);
+				//country1[i].setBackground(new Color(20, 240, 20));
+				topicItem[i].setOpaque(true);
+				topicItem[i].setBorder(border2);
+			}
+	}
+		
 	for(int i = 0 ; i < countries.length; i++){
 		if(e.getSource() == country2[i]){
 			for(int j = 0; j < country2.length; j++){
