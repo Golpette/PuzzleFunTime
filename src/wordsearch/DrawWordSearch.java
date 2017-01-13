@@ -121,7 +121,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DrawWordSearch(String[][] grid, int x, int y, ArrayList<String> cluesAcross, ArrayList<String> cluesDown,
-			ArrayList<Entry> entries, int difficulty) throws IOException {
+			ArrayList<Entry> entries, int difficulty, String fromCountry, String toCountry, String fromTopic) throws IOException {
 		
 		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
@@ -134,7 +134,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				"Magenta", "Pink", "Orange", "Red", "Yellow", "White"};
 		this.colours = colours;
 		currentColour = Color.BLACK;
-		
+		this.fromCountry = fromCountry;
+		this.toCountry = toCountry;
+		this.fromTopic = fromTopic;
 		this.difficulty = difficulty;
 		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
 		String [] wordTopics = {"None", "Animals", "Household", "Nature", "Time", "Verbs", "Workplaces"};
@@ -1420,7 +1422,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			try {
 				frame.dispose();
 				System.out.println("spinner value: "+(Integer)spinner.getValue());
-				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
+				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty, fromCountry, toCountry, fromTopic);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

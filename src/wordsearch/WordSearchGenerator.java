@@ -15,8 +15,9 @@ public class WordSearchGenerator{
 	ArrayList<String> acrossClues;
 	ArrayList<String> downClues;
 	ArrayList<Word> words;	
+	String fromLanguage, toLanguage, topic;
 	
-	public WordSearchGenerator(int wordsearchSize, int difficulty) throws IOException{
+	public WordSearchGenerator(int wordsearchSize, int difficulty, String fromLanguage, String toLanguage, String topic) throws IOException{
 		this.difficulty = difficulty;
 		this.wordsearchSize = wordsearchSize;
 		gridSize = wordsearchSize + 2;
@@ -27,7 +28,9 @@ public class WordSearchGenerator{
 		downClues = new ArrayList<String>();
 		ArrayList<Word> words = new ArrayList<Word>();
 		words = crossword.ReadWords.getWordsandDefs("words_cambridge.txt");		
-		
+		this.toLanguage = toLanguage;
+		this.fromLanguage = fromLanguage;
+		this.topic = topic;
 		
 		
 		grid = new String[x][y];		
@@ -104,6 +107,6 @@ public class WordSearchGenerator{
 					}				
 				}
 			}	
-		new DrawWordSearch(grid, x, y, acrossClues, downClues, entries, difficulty);
+		new DrawWordSearch(grid, x, y, acrossClues, downClues, entries, difficulty, fromLanguage, toLanguage, topic);
 	}
 }
