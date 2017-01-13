@@ -64,12 +64,13 @@ import wordsearch.Coord;
 /**
  * Class to draw a word search
  */
-public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener {
+public class DrawWordSearch extends JComponent implements ActionListener, MouseWheelListener, MouseListener {
 	public String toCountry = "English";
 	public String fromCountry = "English";
 	public String fromTopic = "None";
 	public String currentFont = "Century Gothic";
 	SpinnerNumberModel model;
+	int startWordX,startWordY;
 	WordSearchGenerator wordsearch;
 	JCheckBoxMenuItem clickSound;
 	JSpinner spinner;
@@ -80,10 +81,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JMenuItem [] fontList, colourList, country1, country2, topicItem;
 	Icon [] flags;
 	SetUpImages imageSetUp; 
-	
+	boolean mouseHeld;
 	SetUpImages setImages, tempImage, tempHead;
 	//Logger logger;
 	JFrame frame;
+	ArrayList<Character> trail;
 	JLayeredPane layer, layer2, extra;
 	JPanel panel, main, clues;
 	@SuppressWarnings({ "rawtypes" })
@@ -127,16 +129,22 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
 		this.fontNames = fontNames;
 		thisWord = "";
-		
+		mouseHeld = false;
+		startWordX = 0;
+		startWordY = 0;
 		Color [] colours = {Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN,
 				Color.MAGENTA, Color.PINK,  Color.ORANGE, Color.RED, Color.YELLOW, Color.WHITE};
 		String [] colourNames = {"Black", "Blue", "Cyan", "Gray", "Green", 
 				"Magenta", "Pink", "Orange", "Red", "Yellow", "White"};
 		this.colours = colours;
 		currentColour = Color.BLACK;
+
 		this.fromCountry = fromCountry;
 		this.toCountry = toCountry;
 		this.fromTopic = fromTopic;
+
+		trail = new ArrayList<>();
+
 		this.difficulty = difficulty;
 		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
 		String [] wordTopics = {"None", "Animals", "Household", "Nature", "Time", "Verbs", "Workplaces"};
@@ -240,7 +248,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			topics.add(topicItem[j]);
 		}
 		
-		file.add(save);
+		//file.add(save);
 		file.add(newGame);
 		file.add(exit);
 		
@@ -294,9 +302,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		menuBar.add(file);
 		menuBar.add(diff);
 		menuBar.add(size);
-		menuBar.add(options);
+		//menuBar.add(options);
 		
-		
+		frame = new JFrame("Auto Word Search");
+		frame.setBackground(new Color(255, 255, 255, 255));
+		frame.setMinimumSize(new Dimension(550, 400));
 		System.out.println("Started again");
 		this.x = x;
 		this.y = y;
@@ -304,9 +314,37 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.entries = entries;
 		this.cluesAcross = cluesAcross;
 		this.cluesDown = cluesDown;
-		scale = 10.0;
-		this.normalisedScale = scale / 20;
 		squareSize = 40;
+		scale = 10;
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screenSize.getWidth();
+		height = screenSize.getHeight();
+		
+		if (squareSize * (x + 6) > width && squareSize * (y + 4) > height - 30) {
+			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
+		} else if (squareSize * (x + 6) > width) {
+			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 2)));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
+		} else if (squareSize * (y + 4) > height - 30) {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 6), (int) height - 30));
+			squareSize = (int) (height/(x*1.2));
+			scale = squareSize/4;
+		} else {
+			frame.setPreferredSize(new Dimension(squareSize * (x + 6), squareSize * (y + 4)));
+			squareSize = 43;
+//			scale = squareSize/4;
+		}
+		//14,16,18 ... don't work right
+		
+//		if(squareSize*x > frame.getHeight()){
+//			
+//		}
+		
+		this.normalisedScale = scale / 20;
+		
 		layer = new JLayeredPane();
 		//layer.setSize((x-2)*squareSize, (x-2)*squareSize);
 		tempLayerX = layer.getWidth();
@@ -362,9 +400,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 
 		//logger.addHandler(null);
-		frame = new JFrame("Auto Word Search");
-		frame.setBackground(new Color(255, 255, 255, 255));
-		frame.setMinimumSize(new Dimension(550, 400));
+		
 		//frame.setPreferredSize(new Dimension(550, 400));
 		grey = new Color(200, 200, 200, 255);
 		wordLength = 0;
@@ -374,9 +410,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		area = new JScrollPane();
 		clear = new Color(255, 255, 255, 255);
 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		width = screenSize.getWidth();
-		height = screenSize.getHeight();
+	
 
 		border = BorderFactory.createLineBorder(Color.GREEN);
 		//layer = new JLayeredPane();
@@ -459,7 +493,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		extra.add(clues, c);
 
 		main = new JPanel(new GridBagLayout());
-		TestPanel main2 = new TestPanel();
+		//TestPanel main2 = new TestPanel();
 		
 		main.setBackground(clear);
 		main.setVisible(true);
@@ -527,15 +561,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		c.ipady = 10;
 //		panel.add(solution, c);
 
-		if (squareSize * (x + 6) > width && squareSize * (y + 3) > height - 30) {
-			frame.setPreferredSize(new Dimension((int) width, (int) height - 30));
-		} else if (squareSize * (x + 6) > width) {
-			frame.setPreferredSize(new Dimension((int) width, squareSize * (y + 2)));
-		} else if (squareSize * (y + 3) > height - 30) {
-			frame.setPreferredSize(new Dimension(squareSize * (x + 6), (int) height - 30));
-		} else {
-			frame.setPreferredSize(new Dimension(squareSize * (x + 6), squareSize * (y + 3)));
-		}
+		
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setBackground(clear);
@@ -715,7 +741,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				labels[i][j].setBounds(squareSize, squareSize, squareSize * (x - 2), squareSize * (y - 2));
 				labels[i][j].setHorizontalAlignment(JTextField.CENTER);
 				labels[i][j].setVerticalAlignment(JTextField.CENTER);
-				mouseActionlabel(labels[i][j]);
+				//mouseActionlabel(labels[i][j]);
+				labels[i][j].addMouseListener(this);
 				layer.add(labels[i][j]);
 			}
 		}
@@ -1431,46 +1458,21 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		if(e.getSource()==thick){
 			System.out.println("Thick mode enabled");
 			difficulty = 2;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==normal){
 			System.out.println("Normal mode enabled");
 			difficulty = 4;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==smart){
 			System.out.println("Smart mode enabled");
 			difficulty = 8;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 		
 		if(e.getSource()==genius){
 			System.out.println("Genius mode enabled");
 			difficulty = 16;
-//			try {
-//				frame.dispose();
-//				wordsearch = new WordSearchGenerator((Integer)spinner.getValue(), difficulty);
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-			
 		}
 		
 		for(int i = 0; i < fontList.length; i++){
@@ -1544,78 +1546,27 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	private void showClue() {
 		// TODO Auto-generated method stub
-		if(!sorted.isEmpty()){
-			int hintClue = 0;
-		//final int hintClue = rand.nextInt(sorted.size());
-			for(int i = 0; i < allClues.size(); i++){
-				if(allClues.get(i).getText().equals(thisWord)){
-				hintClue = i;
+			if(!sorted.isEmpty()){
+				int hintClue = 0;
+			//final int hintClue = rand.nextInt(sorted.size());
+				for(int i = 0; i < allClues.size(); i++){
+					if(allClues.get(i).getText().equals(thisWord)){
+					hintClue = i;
+					}
+					
 				}
-				
-			}
-			final int thisClue = hintClue;
-		for(final Entry ent: entries){	
-			if(ent.getWord().toUpperCase().equals(thisWord)){
-				
-				
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					   @Override
-					   
-					   protected Void doInBackground() throws Exception {
-						   if(currentColour!= Color.BLUE){
-							   allClues.get(thisClue).setForeground(Color.BLUE);
-						   }
-						   else{
-							   allClues.get(thisClue).setForeground(Color.GREEN);
-						   }
-						   long current = System.currentTimeMillis();
-						   long counter = 0;
-						   long next;
-						   loopAroundWord2(ent);
-//						   for (int i = 1; i < x - 1; i++) {
-//								for (int j = 1; j < y - 1; j++) {
-//									struckOffList(i,j);
-//								}
-//						   }
-						   clue.setEnabled(false);
-						   while(counter<2000){
-							   next = System.currentTimeMillis();
-							   counter = next - current;
-						   }
-						   letters = ent.getLetterCoords();
-							for (int i = 1; i < x - 1; i++) {
-								for (int j = 1; j < y - 1; j++) {
-									// loopAroundWord(i, j, ent);
-									 
-									for (JLabel[][] lab : allLetters) {
-										for(Coord co: letters){
-											if(co.xcoord == i && co.ycoord == j){
-												System.out.println("IDK: " + i+ " "+j);
-												//Need to remove all of the images from diagonals too (ie corners)
-												temporaryIcons2.get(allLetters.indexOf(lab))[j-1][i-1] = null;
-											}
-										}
-										
-										//if(temporaryIcons.get(allLetters.indexOf(lab))[i][j].equals(null)){
-										//lab[i][j].setIcon(null);
-										//}
-									}
-								}
-							}
-							allClues.get(thisClue).setOpaque(false);
-						   allClues.get(thisClue).setForeground(currentColour);
-							clue.setEnabled(true); 
-							//resetSizes();
-						 //  allClues.get(hintClue).setIcon(null);
-					    return null;
+				final int thisClue = hintClue;
+				for(final Entry ent: entries){	
+					if(ent.getWord().toUpperCase().equals(thisWord)){
+					   if(!struckThrough.contains(ent.getWord().toUpperCase())){
+						   struckThrough.add(ent.getWord().toUpperCase());
 					   }
-					  };
-					  worker.execute();
-					  //resetSizes();
-//					  loopAroundWord(i, j, ent);
+				   loopAroundWord2(ent);
+				   resetSizes();
+				   setUpClues();
+				}
 			}
 		}
-	}
 	}
 
 	private void showHint() {
@@ -1638,7 +1589,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			   		long current = System.currentTimeMillis();
 					long counter = 0;
 					long next;
-					int shake = rand.nextInt(2);
+					int shake = rand.nextInt(1);
+					shake = 0;
 					hint.setEnabled(false);
 					boolean started = false;
 					
@@ -1649,11 +1601,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								int currentLetterX = letterCoords.get(letterInWord).getX();
 								int currentLetterY = letterCoords.get(letterInWord).getY();
 								started = true;
-								while(counter<1200){
+								while(counter<800){
 						
 							
 							//works
-							if(shake == 0){
+							if(shake == 1){
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setForeground(Color.WHITE);
@@ -1675,7 +1627,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 								Thread.sleep(80);
 							}
 							
-							if(shake == 1){
+							if(shake == 0){
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setOpaque(true);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setBackground(Color.GREEN);
 								allLetters.get(0)[currentLetterY-1][currentLetterX-1].setVerticalAlignment(JLabel.BOTTOM);
@@ -1741,9 +1693,12 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		tempLayerY = layer.getY();
 		tempLayerWidth = layer.getWidth();
 		tempLayerHeight = layer.getHeight();
-		font = new Font(currentFont, Font.PLAIN, squareSize / 5 * 3);
+		//font = new Font(currentFont, Font.PLAIN, squareSize / 5 * 3);
+		font = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
+//		squareSize = (int) (height/(x*1.2));
+//		scale = squareSize/4;
 		normalisedScale = scale / 20;
-		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE);
+		squareSize = (int) (normalisedScale * INITIAL_SQUARE_SIZE+3);
 		main.revalidate();
 		//font3 = new Font("Century Gothic", Font.PLAIN, (int)(18*normalisedScale));
 		font2 = new Font(currentFont, Font.PLAIN, (int) (normalisedScale * INITIAL_SQUARE_SIZE / 5 * 3));
@@ -1753,5 +1708,124 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 		System.out.println("tempLayerX: "+tempLayerX + " tempLayerY: " +tempLayerY +" tempLayerWidth: "+tempLayerWidth
 				+" tempLayerHeight: " +tempLayerHeight+"\n\n");
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		//mouseHeld = false;
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						trail.add(allLetters.get(0)[i][j].getText().charAt(0));
+					}
+				}
+			}
+		}else{
+			trail.clear();
+		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(!mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						startWordX = i;
+						startWordY = j;
+						trail.clear();	
+						mouseHeld = true;
+						trail.add(allLetters.get(0)[i][j].getText().charAt(0));
+						System.out.println("trail: "+ trail);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if(mouseHeld){
+			for(int i = 0; i < x-2; i++){
+				for(int j  = 0; j < y-2; j++){
+					if(e.getSource() == allLetters.get(0)[i][j]){
+						mouseHeld = false;
+						System.out.println("trail: "+ trail);
+						//check word here
+						StringBuilder str = new StringBuilder();
+						for(Character a: trail){
+							str.append(a);
+						}
+						String temp = str.toString(); // SC: this is what we have clicked and dragged
+						System.out.println("temp: "+ temp.toLowerCase());
+						for(Entry ent: entries){
+							//System.out.println("ent: "+ent.getWord());								
+							if (ent.getWord().equals(temp.toLowerCase())){
+								if(!struckThrough.contains(temp)){
+									struckThrough.add(temp);
+									resetSizes();
+									setUpClues();
+									loopAroundWord2(ent);
+									System.out.println("EQUAL");
+								}
+							}
+							else if( ent.isDiagonal ){
+								
+								// STEVE: Diagonal words will not likely contain correct letters since it's impossible to
+								// exactly move diagonally. Here, we need a second method to catch these potential diagonals
+								// This should be enough:
+								//   1. Look at first and last letters
+								//   2. Make sure the "temp" string at least contains all the correct letters
+								//   3. Look at x,y coords of these (TODO if necessary)
+								
+								// STEVE: JUST MAKE EVERYTHING LOWER CASE TO BEGIN WITH
+								char first_lett = temp.toLowerCase().charAt(0);
+								char last_lett = temp.toLowerCase().charAt( temp.length()-1  );
+								String entry2 = ent.getWord().toLowerCase();
+								
+								if( entry2.charAt(0)==first_lett  && entry2.charAt(entry2.length()-1)==last_lett  ){
+									boolean containsAllLetters=true;
+									//check temp contains all letters in word
+									for( int c=0; c<entry2.length(); c++ ){
+										if( !temp.toLowerCase().contains( ""+entry2.charAt(c) ) ){
+											containsAllLetters=false;
+										}
+									}								
+									if(containsAllLetters && !struckThrough.contains( entry2.toUpperCase() )){
+										struckThrough.add( entry2.toUpperCase()   );
+										resetSizes();
+										setUpClues();
+										loopAroundWord2(ent);
+									}
+								}
+								
+							}
+							
+							
+						}
+						
+						
+						
+						trail.clear();
+					}
+				}
+			}
+			trail.clear();
+		}else{
+			trail.clear();
+		}
+		
 	}
 }
