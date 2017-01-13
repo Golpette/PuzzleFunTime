@@ -558,7 +558,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			mouseActionlabel(temp);
 			temp.setFont(new Font(currentFont, Font.PLAIN, 18));
 			temp.setFont(font3);
-			temp.setHorizontalAlignment(SwingConstants.LEFT);
+			//temp.setHorizontalAlignment(SwingConstants.LEFT);
+			temp.setHorizontalTextPosition(SwingConstants.LEADING);
 			temp.setVerticalAlignment(SwingConstants.TOP);
 			allClues.add(temp);
 			}
@@ -572,8 +573,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 			fontAttr.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 			font4 = new Font(fontAttr);
 			temp2.setFont(font4);
-			temp2.setHorizontalAlignment(SwingConstants.LEFT);
+			//temp2.setHorizontalAlignment(SwingConstants.LEFT);
 			temp2.setVerticalAlignment(SwingConstants.TOP);
+			temp2.setHorizontalTextPosition(SwingConstants.LEADING);
 			allClues.add(temp2);
 		}
 		
@@ -628,6 +630,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		d.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		clues.setAlignmentX(SwingConstants.LEFT);
+		
 	}
 
 
