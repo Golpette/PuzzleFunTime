@@ -108,6 +108,7 @@ public class Entry {
 		} else if (direction.equals("snaking")){
 			end_x = letterCoords.get(wordLength-1).xcoord;
 			end_y = letterCoords.get(wordLength-1).ycoord;
+			isDiagonal = false;
 		}
 	}
 	
