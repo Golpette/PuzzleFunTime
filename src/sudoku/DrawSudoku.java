@@ -750,7 +750,19 @@ public class DrawSudoku extends JComponent implements ActionListener, MouseListe
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
+				//STEVE: for some reason we can delete non-editable TextFields but can
+				//  never add anything back. Easy fix: just redraw the intitial config every time
+				//  a key has been pushed
+				for (int i = 0; i < x-2; i++){
+					for (int j = 0; j < y-2; j++){
+						if( initial_config[i][j] != 0 ){
+							nums[i][j].setText( Integer.toString(initial_config[i][j]) );
+						}
+					}
+				}
+				
+				// Check if puzzle is successfully complete
 				complete = true;
 				for (int row = 0; row < gridsize ; row++) {
 					for (int col = 0; col < gridsize ; col++) {	
