@@ -23,6 +23,7 @@ import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 //import java.util.logging.Handler;
@@ -69,6 +70,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	SpinnerNumberModel model;
 	int startWordX,startWordY;
 	String dictionary = "words_cambridge.txt";
+	String [] dictionaries;
 	WordSearchGenerator wordsearch;
 	JCheckBoxMenuItem clickSound;
 	JSpinner spinner;
@@ -126,7 +128,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		String [] fontNames = {"Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas", 
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script","Times New Roman"};
+		//HashMap<String, String> dicts = new HashMap<String, String>();
+		String [] dictionaries = {"English_", "en_fr_", "en_de_", "en_it_", "en_pt_", "en_es_"};
 		this.fontNames = fontNames;
+		this.dictionaries = dictionaries;
 		thisWord = "";
 		mouseHeld = false;
 		startWordX = 0;
@@ -142,8 +147,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		currentColour = Color.BLACK;
 		trail = new ArrayList<>();
 		this.difficulty = difficulty;
-		String [] countries = {"English",  "French",  "German", "Italian","Spanish"};
-		String [] topicWords = {"None", "Animals", "Household", "Nature", "Time", "Verbs", "Workplaces"};
+		String [] countries = {"English",  "French",  "German", "Italian", "Portuguese", "Spanish"};
+		String [] topicWords = {"None", "Animals", "House", "Nature", "Places", "Time", "Verbs"};
 		this.countries = countries;
 		this.topicWords = topicWords;
 		font3 = new Font(currentFont, Font.PLAIN, 14);
@@ -159,7 +164,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //			fonts.add(new Font (fontNames[i], Font.PLAIN, 14));
 		}
 		
-		flags = new Icon [5];
+		flags = new Icon [countries.length];
 		imageSetUp = new SetUpImages(countries, 20, 30, flags, 0);
 		UIManager.put("Menu.font", font3);
 		UIManager.put("MenuItem.font", font3);
@@ -1511,6 +1516,14 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					topics[j].setOpaque(false);
 				}
 				currentTopic = topicWords[i];
+				//this needs current country in it
+				for(int j = 0; j < countries.length; j++){
+					if(countries[j].equals(languageTo)){
+						dictionary = dictionaries[j]+topicWords[i].toLowerCase()+".txt";
+						System.out.println("Dict: "+dictionary);
+					}
+				}
+				
 				topics[i].setOpaque(true);
 				topics[i].setBorder(border2);
 			}
