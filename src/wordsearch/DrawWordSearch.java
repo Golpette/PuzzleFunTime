@@ -859,7 +859,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	
 	
 	/**
-	 * Method for looping around clues when you click on them (first and then last letter)
+	 * Method for looping around clues when you click on them 
 	 * @param i
 	 * @param j
 	 * @param a
@@ -1576,7 +1576,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	}
 
 	private void showHint() {
-		// TODO Auto-generated method stub
+		//If word is already selected, use this as hintClue
 		final int hintClue = rand.nextInt(sorted.size());
 		
 		//do for 3 seconds
@@ -1720,7 +1720,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		//mouseHeld = false;
-
 	}
 
 	@Override
@@ -1816,14 +1815,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 										loopAroundWord2(ent);
 									}
 								}
-								
 							}
-							
-							
 						}
-						
-						
-						
 						trail.clear();
 					}
 				}
@@ -1832,6 +1825,5 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}else{
 			trail.clear();
 		}
-		
 	}
 }
