@@ -1519,6 +1519,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				//this needs current country in it
 				for(int j = 0; j < countries.length; j++){
 					if(countries[j].equals(languageTo)){
+						//Need to have two dictionaries, one for from language, one for to
 						dictionary = dictionaries[j]+topicWords[i].toLowerCase()+".txt";
 						System.out.println("Dict: "+dictionary);
 					}
