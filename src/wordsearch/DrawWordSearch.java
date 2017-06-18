@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.font.TextAttribute;
@@ -87,12 +89,13 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	JFrame frame;
 	ArrayList<Character> trail;
 	JLayeredPane layer, layer2, extra;
-	JPanel panel, main, clues;
+	JPanel panel, main, clues, mouseTrail;
 	@SuppressWarnings({ "rawtypes" })
 	JComboBox orderClues;
 	JButton solution, hint , clue;
 	JScrollPane area;
 	ArrayList<Coord> letters;
+	Point pointStart, pointEnd;
 	GridBagConstraints c, d;
 	ArrayList<String> fullGrid, tempStrikethrough, struckThrough, solutions, clueText, sorted, cluesAcross, cluesDown,
 			randomLetters;
@@ -120,6 +123,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 	Color [] colours;
 	Color currentColour;
 	String thisWord;
+	Entry dynamicEntry;
 	String currentTopic = "None", languageFrom = "English", languageTo = "English";
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -307,7 +311,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame = new JFrame("Auto Word Search");
 		frame.setBackground(new Color(255, 255, 255, 255));
 		frame.setMinimumSize(new Dimension(550, 400));
-		System.out.println("Started again");
+		//System.out.println("Started again");
 		this.x = x;
 		this.y = y;
 		this.grid = grid;
@@ -344,7 +348,20 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 //		}
 		
 		this.normalisedScale = scale / 20;
-		
+		mouseTrail = new JPanel(); 
+		mouseTrail.setBackground(clear);
+		mouseTrail.setVisible(true);
+		mouseTrail.setOpaque(true);
+		mouseTrail.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseMoved(MouseEvent e) {
+                pointEnd = e.getPoint();
+            }
+
+            public void mouseDragged(MouseEvent e) {
+                pointEnd = e.getPoint();
+                repaint();
+            }
+        });
 		layer = new JLayeredPane();
 		//layer.setSize((x-2)*squareSize, (x-2)*squareSize);
 		tempLayerX = layer.getWidth();
@@ -377,7 +394,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		temporaryIcons = new ArrayList<Icon[][]>();
 		temporaryIcons2 = new ArrayList<Icon[][]>();
 		int test = (int) (3 * INITIAL_SQUARE_SIZE * normalisedScale / 5);
-		System.out.println("Test: " + test);
+		//System.out.println("Test: " + test);
 		font3 = new Font(currentFont, Font.PLAIN, 18);
 		font6 = new Font(currentFont, Font.BOLD, 18);
 		font7 = new Font(currentFont, Font.PLAIN, 16);
@@ -397,7 +414,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		Point mouseCoord = MouseInfo.getPointerInfo().getLocation();
 		double mouseX = mouseCoord.getX();
 		double mouseY = mouseCoord.getY();
-		System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
+		//System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 
 		//logger.addHandler(null);
 		
@@ -638,8 +655,8 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}else{
 			columnSize = (int) (x*1.55);
 		}
-		System.out.println("allClues: "+allClues.size());
-		System.out.println("Column size: "+ columnSize);
+		//System.out.println("allClues: "+allClues.size());
+		//System.out.println("Column size: "+ columnSize);
 		int cols = allClues.size()/columnSize+1;
 		for(int k = 0; k < cols; k++){	
 			
@@ -744,6 +761,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				//mouseActionlabel(labels[i][j]);
 				labels[i][j].addMouseListener(this);
 				layer.add(labels[i][j]);
+				layer.add(mouseTrail);
 			}
 		}
 		return layer;
@@ -889,11 +907,11 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 							setImages = new SetUpImages(images, squareSize, squareSize, icons, 0);
 							tempImage = new SetUpImages(loopDirections, squareSize, squareSize, icons2, 0);
 							if(a.direction.equals("snaking")){
-								System.out.println("Looping snaking style!");
+								//System.out.println("Looping snaking style!");
 								ArrayList<Coord> letterCoords = a.getLetterCoords();
 								//set up snake head image
 								int x = letterCoords.get(0).xcoord;
-								System.out.println("xcoord in snake: "+ x);
+								//System.out.println("xcoord in snake: "+ x);
 								int y = letterCoords.get(0).ycoord;
 								int nextX = letterCoords.get(1).xcoord;
 								int nextY = letterCoords.get(1).ycoord;
@@ -1430,7 +1448,15 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		
 		if(e.getSource()==hint){
 			System.out.println("hint");
-			showHint();
+			int hintClue = 0;
+			for(int i = 0; i < allClues.size(); i++){
+				if(allClues.get(i).getText().equals(thisWord)){
+					hintClue = i;
+				}else{
+					hintClue = rand.nextInt(sorted.size());
+				}
+			}
+			showHint(hintClue);
 
 		}
 		if(e.getSource()==clue){
@@ -1567,8 +1593,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 					if(ent.getWord().toUpperCase().equals(thisWord)){
 					   if(!struckThrough.contains(ent.getWord().toUpperCase())){
 						   struckThrough.add(ent.getWord().toUpperCase());
+						   loopAroundWord2(ent);
 					   }
-				   loopAroundWord2(ent);
+				   
 				   resetSizes();
 				   setUpClues();
 				}
@@ -1576,9 +1603,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		}
 	}
 
-	private void showHint() {
+	private void showHint(int clue) {
 		//If word is already selected, use this as hintClue
-		final int hintClue = rand.nextInt(sorted.size());
+		final int hintClue = clue;
 		
 		//do for 3 seconds
 		//need this on another worker thread
@@ -1745,16 +1772,20 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		
+		pointStart = e.getPoint();
 		if(!mouseHeld){
 			for(int i = 0; i < x-2; i++){
 				for(int j  = 0; j < y-2; j++){
 					if(e.getSource() == allLetters.get(0)[i][j]){
 						startWordX = i;
 						startWordY = j;
+						//dynamicEntry = new Entry(i,j,false,allLetters.get(0)[i][j].getText(),"");
 						trail.clear();	
 						mouseHeld = true;
 						trail.add(allLetters.get(0)[i][j].getText().charAt(0));
 						System.out.println("trail: "+ trail);
+						//System.out.println("End, start points: {" + pointStart.getX() + ", " + pointStart.getY() + "}, "+ "{ "+ pointEnd.getX() +  pointEnd.getY());
 					}
 				}
 			}
@@ -1768,7 +1799,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 				for(int j  = 0; j < y-2; j++){
 					if(e.getSource() == allLetters.get(0)[i][j]){
 						mouseHeld = false;
-						System.out.println("trail: "+ trail);
+						//System.out.println("trail: "+ trail);
 						//check word here
 						StringBuilder str = new StringBuilder();
 						for(Character a: trail){
@@ -1776,6 +1807,9 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						}
 						String temp = str.toString(); // SC: this is what we have clicked and dragged
 						System.out.println("temp: "+ temp.toLowerCase());
+						//dynamicEntry.setWord(dynamicEntry.getWord()+allLetters.get(0)[i][j].getText());
+						//int start_x, int start_y, boolean across, String word, String definition) 
+						//loopAroundWord2(dynamicEntry);
 						for(Entry ent: entries){
 							//System.out.println("ent: "+ent.getWord());								
 							if (ent.getWord().equals(temp.toLowerCase())){
@@ -1784,7 +1818,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 									resetSizes();
 									setUpClues();
 									loopAroundWord2(ent);
-									System.out.println("EQUAL");
+									//System.out.println("EQUAL");
 								}
 							}
 							else if( ent.isDiagonal ){
