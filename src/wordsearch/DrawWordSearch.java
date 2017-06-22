@@ -1437,18 +1437,10 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						while (counter < 800) {
 							ImageIcon icon = new ImageIcon("CentreGreen.png");
 							Image img = ResourceLoader.getImage("CentreGreen.png");
-							Image newimg = img.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH ) ; 
+							Image newimg = img.getScaledInstance((int)(74*normalisedScale), (int)(74*normalisedScale), java.awt.Image.SCALE_SMOOTH ) ; 
 							icon = new ImageIcon(newimg);
-							
-							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(true);
-							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.GREEN);
 							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setIcon(icon);
-							
-						
-							
 							Thread.sleep(200);
-							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(false);
-							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.WHITE);
 							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setIcon(null);
 							Thread.sleep(200);
 							counter = System.currentTimeMillis() - current;
