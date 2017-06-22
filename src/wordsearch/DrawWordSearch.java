@@ -21,12 +21,15 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.font.TextAttribute;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -56,6 +59,7 @@ import javax.swing.border.Border;
 
 import crossword.Entry;
 import crossword.SetUpImages;
+import resources.ResourceLoader;
 import wordsearch.Coord;
 
 /**
@@ -120,7 +124,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 
 		String[] fontNames = { "Agency FB", "Arial", "Broadway", "Calibri", "Castellar", "Century Gothic", "Consolas",
 				"Courier New", "Copperplate Gothic Bold", "French Script MT", "Segoe Script", "Times New Roman" };
-		String[] dictionaries = { "English_", "en_fr_", "en_de_", "en_it_", "en_pt_", "en_es_" };
+		String[] dictionaries = { "English_", "en_fr_", "en_de_", "en_it_", "en_pt_", "en_es_" };	
 		currentFont = "Century Gothic";
 		dictionary = "words_cambridge.txt";
 		currentTopic = "None";
@@ -135,9 +139,7 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		this.currentTopic = currentTopic;
 		this.languageFrom = languageFrom;
 		this.languageTo = languageTo;
-		Color[] colours = { Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN, Color.MAGENTA, Color.PINK,
-				Color.ORANGE, Color.RED, Color.YELLOW, Color.WHITE };
-		this.colours = colours;
+	
 		currentColour = Color.BLACK;
 		trail = new ArrayList<>();
 		this.difficulty = difficulty;
@@ -173,33 +175,30 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		diff.setMnemonic(KeyEvent.VK_D);
 		size.setMnemonic(KeyEvent.VK_S);
 
-		save = new JMenuItem("Save");
-		save.addActionListener(this);
-		newGame = new JMenuItem("New");
-		newGame.addActionListener(this);
-		exit = new JMenuItem("Exit");
-		exit.addActionListener(this);
+		save = setUpMenus("Save", null, null, null);
+		newGame = setUpMenus("New", null, null, file);
+		exit = setUpMenus("Exit", null, null, file);
+		
 
 		languages = new JMenu("Clue Language");
 		languages2 = new JMenu("Grid Language");
 		topic = new JMenu("Topics");
 		border2 = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 
+		
+		
+		
 		for (int i = 0; i < countries.length; i++) {
-			country1[i] = new JMenuItem(countries[i], flags[i]);
-			country2[i] = new JMenuItem(countries[i], flags[i]);
-			country1[i].addActionListener(this);
-			country2[i].addActionListener(this);
+			country1[i] = setUpMenus(countries[i], flags[i], null, languages);
+			country2[i] = setUpMenus(countries[i], flags[i], null, languages2);
 			if (countries[i].equals(languageFrom)) {
 				country1[i].setBorder(border2);
 			}
 			if (countries[i].equals(languageTo)) {
 				country2[i].setBorder(border2);
 			}
-			languages.add(country1[i]);
-			languages2.add(country2[i]);
 		}
-
+		
 		for (int i = 0; i < topicWords.length; i++) {
 			topics[i] = new JMenuItem(topicWords[i]);
 			topics[i].addActionListener(this);
@@ -459,13 +458,6 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		c.ipady = 10;
 		panel.add(clue, c);
 
-		// c.weightx = 1.0;
-		// c.weighty = 0.0;
-		// c.gridx = 2;
-		// c.gridy = 1;
-		// c.ipady = 10;
-		// panel.add(solution, c);
-
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setBackground(clear);
@@ -475,6 +467,16 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 		frame.setJMenuBar(menuBar);
 	}
 
+	public JMenuItem setUpMenus(String itemName, Icon itemIcon, Border itemBorder, JMenu menu){
+		JMenuItem  menuItem = new JMenuItem(itemName, itemIcon);
+		menuItem.addActionListener(this);
+		menuItem.setBorder(itemBorder);
+		if(menu != null){
+			menu.add(menuItem);
+		}
+		return menuItem;
+	}
+	
 	private void setUpLetters(ArrayList<JLabel[][]> allLetters) {
 		JLabel[][] letters = new JLabel[x - 2][y - 2];
 		allLetters.add(letters);
@@ -1433,11 +1435,21 @@ public class DrawWordSearch extends JComponent implements ActionListener, MouseW
 						int currentLetterY = letterCoords.get(letterInWord).getY();
 						started = true;
 						while (counter < 800) {
-							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(true);
-							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.GREEN);
+							ImageIcon icon = new ImageIcon("CentreGreen.png");
+							Image img = ResourceLoader.getImage("CentreGreen.png");
+							Image newimg = img.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH ) ; 
+							icon = new ImageIcon(newimg);
+							
+							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(true);
+							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.GREEN);
+							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setIcon(icon);
+							
+						
+							
 							Thread.sleep(200);
-							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(false);
-							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.WHITE);
+							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setOpaque(false);
+							//allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setBackground(Color.WHITE);
+							allLetters.get(0)[currentLetterY - 1][currentLetterX - 1].setIcon(null);
 							Thread.sleep(200);
 							counter = System.currentTimeMillis() - current;
 						}
