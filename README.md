@@ -1,29 +1,14 @@
 # Puzzle generator
-By AndrewRigg and Golpette.
+By Golpette and AndrewRigg
 
-&nbsp;
-&nbsp;
+It's puzzle game adventure fun time madness. This program generates crosswords, wordsearches and sudokus.
 
-It's puzzle game adventure fun time madness. No longer restricted to crosswords, this program also generates wordsearches and
-(soon) sudokus too.
-
-&nbsp;
-&nbsp;
-&nbsp;    
-     
-
-Program written in Java. Using the program in its current form:
-
-Choose your puzzle, size and difficulty from the initial screen. 
-(Languages are currently obsolete, as is sudoku and the crossword difficulty).
+Choose your puzzle from the initial screen then difficulty/size from the drop-down menu.
+(Languages are currently obsolete).
 
 Crosswords: generated randomly using an English word list of ~17,000 words with clues corresponding to dictionary definitions. 
-Scroll through the puzzle with arrow keys or mouse and enter solution using keyboard. Check your solution with the 
-"Show solution" button, or get hints by hovering over the space below the clues and clicking "Hint".
+Scroll through the puzzle with arrow keys or mouse and enter solution using keyboard. Get an anagram "Hint", "Check" your answers or cheat and "Reveal" the selected entry. 
 
-Wordsearch: to highlight word, click on the initial letter, followed by the final letter of the word. You can cheat using 
-the "Show solution" button. Difficulty levels restrict word directionality (only vertical and horizontal for easy to
-the inclusion of "word snakes" for expert. Word snakes are not restricted to straight lines but can snake around in the up/down/left/right directions... though you can't actually highlight these yet). Hover over the word list
-to re-order them as you like.
+Wordsearch: to highlight word, click on the initial letter and drag mouse over the word til the final letter (there is no visualization of this atm). You can cheat using the "Show solution" button. Difficulty levels restrict word directionality: only vertical and horizontal directions for easy to the inclusion of "word snakes" for expert. Word snakes are not restricted to straight lines but can snake around in the up/down/left/right directions! 
 
-Sudoku: to do.
+Sudoku: generates easy or medium sudoku puzzles and can provide hints.  
